@@ -1,20 +1,20 @@
-BODY {
+body {
 	margin-top: 0px ;
 	margin-left: 140px ;
 	background-color: #FFFFFF;
 	color: #000000;
 }
 
-A {
+a {
 	text-decoration: none;
 	color: #DD3322;
 }
 
-A.hover {
+a.hover {
 	text-decoration: underline;
 }
 
-BLOCKQUOTE {
+blockquote, pre {
 	color: #000000 ;
 	border: 1px #0000CC solid ;
 	background-color: #C0C0FF ;
@@ -27,21 +27,21 @@ BLOCKQUOTE {
 	width: 100%;
 }
 
-H1 {
+h1 {
 	font-size: 1.4em;
 	border-bottom: 1px #111166 solid ;
 	width: 100%;
 	padding-top: 5px;
 }
 
-H2 {
+h2 {
 	font-size: 1.2em;
 	border-bottom: 1px #999999 solid ;
 	width: 100%;
 	padding-left: 3px;
 }
 
-H3 {
+h3 {
 	font-size: 1.1em;
 	padding-left: 6px;
 }
@@ -51,20 +51,22 @@ H3 {
 	margin-left: 20px;
 }
 
-.navbar-left {
+.navbar-left
+{
 	font-size: 0.8em
 	color: #000000 ;
 	background-color: #EDEDFF ;
 	position: absolute ;
 	float: left;
 	left: 0px ;
+	top: 0px ;
 	width: 130px ;
 	border: 1px #A0A0A0 solid ;
+	text-align: center;
 }
 
 .navbar-smalltext {
 	font-size: 0.7em;
-	text-align: center;
 	font-style: italic;
 }
 
@@ -72,21 +74,18 @@ H3 {
 	font-size: 1.0em;
 	color: #151111;
 	background-color: transparent;
-	text-align: center;
 }
 
 .navbar-item {
 	font-size: 1.0em ;
 	color: #303010 ;
 	background-color: #FFFFFF ;
-	border: 1px #EDEDFF solid ;
+	border: 0px #EDEDFF solid ;
 	margin-top: 0px;
-	padding: 1px;
-	text-align: center;
+	padding: 0px;
 }
 
 .img-right {
-	padding: 1px;
 	float: right;
 	color: #209040;
 	text-align: center;

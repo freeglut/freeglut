@@ -1,10 +1,5 @@
-<?PHP 
-# Freeglut Web Page
-# This block ensures that template.php is always hit, no matter what subdirectory 
-$slashes=substr_count ( $_SERVER['PHP_SELF'], "/");
-for (;$slashes>1; $slashes--) { $require_target .= "../"; }
-$require_target .= "template.php";
-require($require_target);
+<?php
+require("../template.php");
 
 # Now set the title of the page:
 setPageTitle("Installation Instructions");
@@ -25,17 +20,17 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <div class="textheader">Untar and configure the packages</div>
 <p>Copy the tarball you downloaded into a temporary directory. Untar it as follows:</p>
-<tt><blockquote>bzcat freeglut-2.2.0.tar.bz2 | tar -vxf -</blockquote></tt>
+<pre>bzcat freeglut-2.2.0.tar.bz2 | tar -vxf -</pre>
 
 <div class="textheader">Change to the resulting directory:</div>
-<tt><blockquote>cd freeglut-2.X.X</blockquote></tt>
+<pre>cd freeglut-2.X.X</pre>
  
 <div class="textheader">Now, configure the packages:</div>
-<tt><blockquote>./configure</blockquote></tt>
+<pre>./configure</pre>
 
 <p>NetBSD users may need a slightly different command:</p>
 
-<blockquote><tt>LDFLAGS=-Wl,-R/usr/X11R6/lib ./configure</tt></blockquote>
+<pre>LDFLAGS=-Wl,-R/usr/X11R6/lib ./configure</pre>
 
 <p>...to properly handle things.</p>
 
@@ -44,17 +39,19 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <p>This is as simple as:</p>
 
-<tt><blockquote>make all<br>
-make install</blockquote></tt>
+<pre>
+make all
+make install
+</pre>
 
 
 <div class="textheader">(Optional) Making symlinks to replace GLUT</div>
 <p>Make a symlink from libfreeglut.so.0.2.0 to libglut.so.3, libglut.so.3.7 and libglut.so.3.7.0</p>
 
-<tt><blockquote>ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3<br>
-ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3.7<br>
-ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3.7.0</blockquote></tt>
+<pre>
+ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3
+ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3.7
+ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3.7.0
+</pre>
 
-<?PHP
-generateFooter();
-?>
+<?php generateFooter(); ?>
