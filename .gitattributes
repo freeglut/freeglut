@@ -35,6 +35,7 @@ freeglut/freeglut/install-sh svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/mkinstalldirs svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/CallbackMaker/CallbackMaker.c svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/progs/demos/CallbackMaker/CallbackMaker.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/CallbackMaker/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/Fractals/Fractals.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/Fractals/Makefile.am svn_keywords=Author+Date+Id+Revision
