@@ -1,12 +1,13 @@
 BODY {
 	margin-top: 0px ;
+	margin-left: 140px ;
 	background-color: #FFFFFF;
 	color: #000000;
 }
 
 A {
 	text-decoration: none;
-	color: #DDAADD;
+	color: #DD3322;
 }
 
 A.hover {
@@ -14,9 +15,9 @@ A.hover {
 }
 
 BLOCKQUOTE {
-	color: #FFFFFF ;
-	border: 2px #222222 solid ;
-	background-color: #333333 ;
+	color: #000000 ;
+	border: 1px #0000CC solid ;
+	background-color: #C0C0FF ;
 	padding: 3px;
 }
 
@@ -26,64 +27,70 @@ BLOCKQUOTE {
 	width: 100%;
 }
 
+.indent {
+	margin-left: 20px;
+}
+
 .navbar-left {
+	font-size: 0.8em
 	color: #000000 ;
-	background-color: #333333 ;
+	background-color: #EDEDFF ;
 	position: absolute ;
+	float: left;
 	left: 0px ;
-	width: 100px ;
-	float: left ;
-	border: 2px #222222 solid ;
+	width: 130px ;
+	border: 1px #A0A0A0 solid ;
+}
+
+.navbar-smalltext {
+	font-size: 0.7em;
+	text-align: center;
+	font-style: italic;
 }
 
 .navbar-header {
-	font-size: 1.2em;
-	color: #AAAAAA;
+	font-size: 1.0em;
+	color: #151111;
 	background-color: transparent;
 	text-align: center;
 }
 
 .navbar-item {
 	font-size: 1.0em ;
-	color: #FFFF00 ;
-	background-color: transparent ;
-	border: 1px #111111 solid ;
+	color: #303010 ;
+	background-color: #FFFFFF ;
+	border: 1px #EDEDFF solid ;
 	margin-top: 0px;
-	padding: 3px;
+	padding: 1px;
 	text-align: center;
 }
 
-.smallblock {
-	font-size: 1.0em;
-	color: #FFFFFF;
-	background-color: #221A22;
-	border: 1px #111111 solid ;
-	padding: 2px;
-}
-
-.main-side {
-	margin-left: 110px;
-	margin-right: 10px;
-}
-
-.title {
-	font-size: 1.8em;
-	color: #FFFFFF;
-	background-color: transparent;
-	padding: 5px;
+.img-right {
+	padding: 1px;
+	float: right;
+	color: #209040;
 	text-align: center;
 }
 
-.block {
-	font-size: 1.0em;
-	border: 2px #333333 solid ;
-	padding: 3px;
-	background-color: #111111;
+.news-item {
+	border: 1px #000000 solid ;
+	margin-bottom: 5px;
+	padding: 8px;
+	background-color: #EFEFFF;
+	color: #000000;
 }
 
-.block-title {
+.news-header {
 	font-size: 1.4em;
-	border: 2px #665533 solid ;
-	padding: 3px;
-	background-color: #333333;
+	border: 1px #111166 solid ;
+	background-color: #FEFEFF;
+	color: #000000;
+	padding: 5px;
+	width: 90%;
+}
+
+.news-subheader {
+	font-size: 1.1em;
+	border-bottom: 1px #111166 solid ;
+	width: 100%;
 }
