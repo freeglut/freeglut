@@ -10,6 +10,13 @@ freeglut/TODO svn_keywords=Author+Date+Id+Revision
 freeglut/acconfig.h svn_keywords=Author+Date+Id+Revision
 freeglut/aclocal.m4 svn_keywords=Author+Date+Id+Revision
 freeglut/configure.in svn_keywords=Author+Date+Id+Revision
+freeglut/doc/download.html svn_keywords=Author+Date+Id+Revision
+freeglut/doc/freeglut.html svn_keywords=Author+Date+Id+Revision
+freeglut/doc/freeglut_logo.png -text
+freeglut/doc/index.html svn_keywords=Author+Date+Id+Revision
+freeglut/doc/ogl_sm.png -text
+freeglut/doc/progress.html svn_keywords=Author+Date+Id+Revision
+freeglut/doc/structure.html svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut-1.3/.deps/freeglut_callbacks.P svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut-1.3/.deps/freeglut_cursor.P svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut-1.3/.deps/freeglut_display.P svn_keywords=Author+Date+Id+Revision
