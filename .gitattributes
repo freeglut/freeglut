@@ -80,6 +80,7 @@ freeglut/freeglut/src/freeglut_stroke_mono_roman.c svn_keywords=Author+Date+Id+R
 freeglut/freeglut/src/freeglut_stroke_roman.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_structure.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_teapot.c svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/src/freeglut_teapot_data.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_videoresize.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_window.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglutdll.def svn_keywords=Author+Date+Id+Revision
