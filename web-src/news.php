@@ -14,6 +14,11 @@ generateHeader($_SERVER['PHP_SELF']);
 ?>
 
 <div class="news-item">
+<div class="news-header">API is now online! [30 Decmber 2003]</div>
+<p>The <a href="/docs/api.php">Application Programming Interface</a> documentation is now online, in addition to being distributed with the tarball. There have been a few changes to freeglut since the last update to the API documentation, and if anyone would like to make the appropriate updates, the whole project would appreciate it. Despite that, it's nearly wholly up-to-date. Please make good use of it.</p>
+</div>
+
+<div class="news-item">
 <div class="news-header">freeglut 2.2.0 Released [12 Decmber 2003]</div>
 <p>The freeglut Project proudly announces freeglut 2.2.0. This version contains:</p>
 <ul>

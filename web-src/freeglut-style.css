@@ -27,6 +27,26 @@ BLOCKQUOTE {
 	width: 100%;
 }
 
+H1 {
+	font-size: 1.4em;
+	border-bottom: 1px #111166 solid ;
+	width: 100%;
+	padding-top: 5px;
+}
+
+H2 {
+	font-size: 1.2em;
+	border-bottom: 1px #999999 solid ;
+	width: 100%;
+	padding-left: 3px;
+}
+
+H3 {
+	font-size: 1.1em;
+	padding-left: 6px;
+}
+
+
 .indent {
 	margin-left: 20px;
 }
