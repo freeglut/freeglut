@@ -51,7 +51,7 @@ generateHeader($_SERVER['PHP_SELF']);
 	<div class="textheader">Development Releases</div>
 	<p>
 		<a href="http://freeglut.sourceforge.net/dist/current.tgz">Nightly CVS Tarball</a><br/>
-		<a href="/dinfo.php#cvs">Anonymous CVS Instructions</a>
+		<a href="http://sourceforge.net/cvs/?group_id=1032">Anonymous CVS Instructions</a>
 	</p>
 </div>
 
