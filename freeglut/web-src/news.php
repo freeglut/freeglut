@@ -44,7 +44,7 @@ A cake one of our developers<BR>
 (John Fay) received in honor<BR>
 of his freeglut work.</div>
 
-<p>freeglut 2.0.0 marks the first true departure from Mark Kilgard's original GLUT library, adding much-requested features while still retaining not only 100% backward compatibility with older implementations of GLUT, but all the polish of the original -- and more!</p>
+<p>freeglut 2.0.0 marks the first true departure from Mark Kilgard's original GLUT library, adding much-requested features while still retaining not only high backward compatibility with older implementations of GLUT, but all the polish of the original -- and more!</p>
 
 <div class="news-subheader">What have we done? A lot.</div>
 <p>This isn't the GLUT you remember.</p>
