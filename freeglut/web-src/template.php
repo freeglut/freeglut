@@ -21,7 +21,7 @@ $sidebarentries = array(0, # We skip this entry anyway...
 	array(name=>"Report a Bug", page=>"http://sourceforge.net/tracker/?func=add&group_id=1032&atid=101032"),
 	array(name=>"Request a Feature", page=>"http://sourceforge.net/tracker/?func=add&group_id=1032&atid=351032"),
 	1,
-	array(name=>"Go to SourceForge", page=>"http://freeglut.sourceforge.net/fg/index.php?id=408")
+	array(name=>"Project Interface", page=>"http://sourceforge.net/projects/freeglut/")
 	
 );
 
