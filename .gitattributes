@@ -73,6 +73,7 @@ freeglut/freeglut/progs/demos/Lorenz/lorenz.c svn_keywords=Author+Date+Id+Revisi
 freeglut/freeglut/progs/demos/Lorenz/lorenz.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/One/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/One/one.c svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/progs/demos/One/one.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_callbacks.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_cursor.c svn_keywords=Author+Date+Id+Revision
