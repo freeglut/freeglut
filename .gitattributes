@@ -85,9 +85,12 @@ freeglut/src/templates/cpp_template svn_keywords=Author+Date+Id+Revision
 freeglut/src/templates/header_template svn_keywords=Author+Date+Id+Revision
 freeglut/stamp-h svn_keywords=Author+Date+Id+Revision
 freeglut/stamp-h.in svn_keywords=Author+Date+Id+Revision
+web-src/basic_page.php svn_keywords=Author+Date+Id+Revision
+web-src/dinfo.php svn_keywords=Author+Date+Id+Revision
 web-src/docs/api.php svn_keywords=Author+Date+Id+Revision
 web-src/docs/install.php svn_keywords=Author+Date+Id+Revision
 web-src/freeglut-style.css svn_keywords=Author+Date+Id+Revision
+web-src/help.php svn_keywords=Author+Date+Id+Revision
 web-src/images/OGL.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
 web-src/images/chessdemo.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
 web-src/images/freeglut_logo.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
@@ -95,4 +98,7 @@ web-src/images/freeglut_logo.xcf svneol=native#unset svn_keywords=Author+Date+Id
 web-src/images/freeglut_text.xcf svneol=native#unset svn_keywords=Author+Date+Id+Revision
 web-src/images/tuxcake.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
 web-src/index.php svn_keywords=Author+Date+Id+Revision
+web-src/news.php svn_keywords=Author+Date+Id+Revision
+web-src/progress.php svn_keywords=Author+Date+Id+Revision
 web-src/template.php svn_keywords=Author+Date+Id+Revision
+web-src/uinfo.php svn_keywords=Author+Date+Id+Revision
