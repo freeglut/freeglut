@@ -1,4 +1,4 @@
-<?PHP
+<?php
 global $site_title, $title, $sidebarentries;
 $site_title = "The freeglut Project";
 $title = $site_title . " :: The Next Generation of GLUT";
@@ -8,90 +8,109 @@ $title = $site_title . " :: The Next Generation of GLUT";
 # array(name=>"Name of Page", page=>"Filename/URL"), 
 #
 $sidebarentries = array(0, # We skip this entry anyway...
-	array(name=>"About freeglut", page=>"/index.php"), 
-	array(name=>"Latest News", page=>"/news.php"), 
-	array(name=>"Info for Users", page=>"/uinfo.php"),
-	array(name=>"Info for Developers", page=>"/dinfo.php"),
+	array("name"=>"About",        "page"=>"/index.php"), 
+	array("name"=>"News",         "page"=>"/news.php"), 
+	array("name"=>"Progress",     "page"=>"/progress.php"),
 	1,
-	array(name=>"Download", page=>"/index.php#download"),
+	array("name"=>"Download",     "page"=>"/index.php#download"),
 	1,
-	array(name=>"How You Can Help", page=>"/help.php"),
-	array(name=>"Look at Progress", page=>"/progress.php"),
+	array("name"=>"Install",      "page"=>"/docs/install.php"),
+	array("name"=>"API",          "page"=>"/docs/api.php"),
 	1,
-	array(name=>"Report a Bug", page=>"http://sourceforge.net/tracker/?func=add&group_id=1032&atid=101032"),
-	array(name=>"Request a Feature", page=>"http://sourceforge.net/tracker/?func=add&group_id=1032&atid=351032"),
-	1,
-	array(name=>"Project Interface", page=>"http://sourceforge.net/projects/freeglut/")
-	
+	array("name"=>"Help Out",     "page"=>"/help.php"),
+	array("name"=>"Report a Bug",        "page"=>"http://sourceforge.net/tracker/?func=browse&amp;group_id=1032&amp;atid=101032"),
+	array("name"=>"Request a Feature",   "page"=>"http://sourceforge.net/tracker/?func=browse&amp;group_id=1032&amp;atid=351032"),
+	array("name"=>"Project Interface",   "page"=>"http://sourceforge.net/projects/freeglut/")
 );
 
-function generateHeader($self) {
+function generateHeader($self) 
+{
 	global $title;
-	?>
-<HTML>
-<HEAD>
+
+	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	echo "<?xml-stylesheet href=\"freeglut-style.css\" type=\"text/css\"?>\n";
+	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
+
+?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="freeglut-style.css" />
 	<title><? echo $title ?></title>
-	<link rel="stylesheet" type="text/css" href="/freeglut-style.css">
-</HEAD>
-<BODY>
-	<?
+</head>
+<body>
+<?
 	generateSideBar($self);
 }
 
-function generateFooter() {
+function generateFooter() 
+{
 	?>
-</BODY>
-</HTML>
+</body>
+</html>
 	<?
 }
 
-function printMenuItem($item, $current_page) {
+function printMenuItem($item, $current_page) 
+{
 	if ($item == 1)
-		echo "<br>";
-	else if ($current_page == $item[page])
-		echo "<div class=\"navbar-item\"><i>$item[name]</i></div>";	
+		echo "\t<br/>\n";
+	else if ($current_page == $item["page"])
+		echo "\t<div class=\"navbar-item\"><i>$item[name]</i></div>\n";	
 	else
-		echo "<a href=\"$item[page]\"><div class=\"navbar-item\">$item[name]</div></a>";	
+		echo "\t<div class=\"navbar-item\"><a class=\"navbar-item\" href=\"$item[page]\">$item[name]</a></div>\n";	
 }
 
-function generateSideBar($current_page) {
+function generateSideBar($current_page) 
+{
 	global $sidebarentries;
-	echo "<div class=\"navbar-left\">"; # Open the navbar
-	
-	# Print out the logo!
-	echo "<div class=\"navbar-header\"><a href=\"/\"><img src=\"/images/freeglut_logo.png\" border=\"0\"></a></div>
-	<div class=\"navbar-smalltext\">The Free OpenGL Utility Toolkit</div><br>";
-	
+
+	# Print out the logo and title
+?>
+<div class="navbar-left">
+	<span class="navbar-header"><a href="/"><img src="images/freeglut_logo.png" alt="freeglut logo" style="border: 0;" /></a></span><br/>
+	<span class="navbar-smalltext">The Free OpenGL Utility Toolkit</span><br/><br/>
+<?
 	# Print out each sidebar entry one by one...
 	reset($sidebarentries);
-	while (next($sidebarentries)) {
+	while (next($sidebarentries))
 		printMenuItem(current($sidebarentries), $current_page);
-	}
 	
 	# This allows a user to view our PHP source... it's in CVS anyway, and why not spread the love of
 	# slick web page design? ;)
 	$cvs_location = "http://cvs.sourceforge.net/viewcvs.py/freeglut/freeglut/web-src$current_page?view=auto";
 	
 	# Print the SourceForge logo button and the "View source" link	
-	echo "
-	<br>
-	<div class=\"navbar-header\">
-		<a href=\"http://sourceforge.net/\"><img src=\"http://sourceforge.net/sflogo.php?group_id=1032&type=4\" border=\"0\"></a>
-	</div>
-	<br>
-	<div class=\"navbar-smalltext\" style=\"font-style: normal;\">
-		<a href=\"$cvs_location\">View PHP Source</a>
-	</div>
-	";
-
-	echo "</div>"; # Close the navbar.
-	
+?>
+	<br/>
+	<span class="navbar-header">
+		<a href="http://www.opengl.org/">
+		<img src="/images/opengl.png" alt="OpenGL.org" height="31" width="88" style="border: 0;"/></a>
+	</span>
+	<span class="navbar-header">
+		<a href="http://sourceforge.net/">
+ 		<img src="http://sourceforge.net/sflogo.php?group_id=1032" width="88" height="31" alt="SourceForge" style="border: 0;" /></a>
+	</span>
+	<span class="navbar-header">
+		<a href="http://freshmeat.net/">
+ 		<img src="/images/freshmeat.png" width="88" height="31" alt="SourceForge" style="border: 0;" /></a>
+	</span>
+	<span class="navbar-header">
+		<a href="http://validator.w3.org/check/referer">
+		<img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" style="border: 0;"/></a>
+	</span>
+	<br/><br/>
+	<span class="navbar-smalltext" style="font-style: normal;">
+	<? echo "\t<a href=\"$cvs_location\">View PHP Source</a>"; ?>
+	</span>
+</div>
+<?
 }
 
-function setPageTitle($title_inc) {
+function setPageTitle($title_inc) 
+{
 	global $site_title, $title;
 	$title = $site_title . " :: " . $title_inc;
 }
 
 ?>
-

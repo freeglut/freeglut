@@ -1,10 +1,5 @@
-<?PHP 
-# Freeglut Web Page
-# This block ensures that template.php is always hit, no matter what subdirectory 
-$slashes=substr_count ( $_SERVER['PHP_SELF'], "/");
-for (;$slashes>1; $slashes--) { $require_target .= "../"; }
-$require_target .= "template.php";
-require($require_target);
+<?php
+require("template.php");
 
 # Now set the title of the page:
 setPageTitle("About");
@@ -12,11 +7,13 @@ setPageTitle("About");
 # Make the header.
 generateHeader($_SERVER['PHP_SELF']);
 ?>
+<div class="img-right">
+	<img src="images/chessdemo.png" alt="chess demo"/><br/>
+	GLUT's "Chess" demo<br/>
+	running with freeglut.
+</div>
 
-<div class="img-right"><img src="/images/chessdemo.png"><BR>
-GLUT's "Chess" demo<BR>
-running with freeglut.</div>
-
+<p></p>
 
 <div class="textheader">What?</div>
 <p>freeglut is a completely OpenSourced alternative to the OpenGL Utility Toolkit (GLUT) library. GLUT was originally written by Mark Kilgard to support the sample programs in the second edition OpenGL 'RedBook'. Since then, GLUT has been used in a wide variety of practical applications because it is simple, widely available and highly portable.</p>
@@ -30,32 +27,32 @@ running with freeglut.</div>
 <p>freeglut was originally written by Pawel W. Olszta with contributions from Andreas Umbach and Steve Baker. Steve is now the official owner/maintainer of freeglut.</p>
 
 <div class="textheader">When?</div>
-<p>Pawel started freeglut development on December 1st, 1999. The project is now virtually a 100% replacement for the original GLUT with only a few departures (such as the abandonment of SGI-specific features such as the Dials&Buttons box and Dynamic Video Resolution) and a shrinking set of bugs.</p>
+<p>Pawel started freeglut development on December 1st, 1999. The project is now virtually a 100% replacement for the original GLUT with only a few departures (such as the abandonment of SGI-specific features such as the Dials&amp;Buttons box and Dynamic Video Resolution) and a shrinking set of bugs.</p>
 
-<a name="download"></a>
-<div class="textheader">Downloads...</div>
+<div class="textheader"><a name="download"></a>Downloads...</div>
 <p>Below are file links for the freeglut project. README files are included. You can also check the install documentation. Have fun!</p>
+
 <div class="indent">
-<div class="textheader">Stable Releases</div>
-<p>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.0.1.tar.gz?download">Freeglut 2.0.1</a> [<i>Released: 23 October 2003</i>]
-</p>
-
-<div class="textheader">Prepackaged Releases</div>
-<p>The freeglut project does not support packaged versions of freeglut excepting, of course, the tarballs distributed here. However, various members of the community have put time and effort into providing source or binary rollups, and we thank them for their efforts. Here's a list which is likely incomplete:</p>
-<p>
-	Andy Piper's <a href="http://jumpgate.homelinux.net/random/freeglut-fedora/">RedHat Fedora RPMs</a><br>
-	Gentoo <a href="http://bugs.gentoo.org/show_bug.cgi?id=36783">freeglut-2.2.0.ebuild</a><br>
-	Nigel Stewart's <a href="http://www.nigels.com/glt/devpak/">DevPak</a> for <a href="http://www.bloodshed.net/dev/devcpp.html">Dev C++</a>
-</p>
-<p>If you have problems with these packages, please contact their maintainers - we of the freeglut team probably can't help.</p>
-
-<div class="textheader">Development Releases</div>
-<p>
-	<a href="http://freeglut.sourceforge.net/dist/current.tgz">Nightly CVS Tarball</a><br>
-	<a href="/dinfo.php#cvs">Anonymous CVS Instructions</a>
-</p>
+	<div class="textheader">Stable Releases</div>
+	<p>
+		<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
+		<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.0.1.tar.gz?download">Freeglut 2.0.1</a> [<i>Released: 23 October 2003</i>]
+	</p>
+	
+	<div class="textheader">Prepackaged Releases</div>
+	<p>The freeglut project does not support packaged versions of freeglut excepting, of course, the tarballs distributed here. However, various members of the community have put time and effort into providing source or binary rollups, and we thank them for their efforts. Here's a list which is likely incomplete:</p>
+	<p>
+		Andy Piper's <a href="http://jumpgate.homelinux.net/random/freeglut-fedora/">RedHat Fedora RPMs</a><br/>
+		Gentoo <a href="http://bugs.gentoo.org/show_bug.cgi?id=36783">freeglut-2.2.0.ebuild</a><br/>
+		Nigel Stewart's <a href="http://www.nigels.com/glt/devpak/">DevPak</a> for <a href="http://www.bloodshed.net/dev/devcpp.html">Dev C++</a>
+	</p>
+	<p>If you have problems with these packages, please contact their maintainers - we of the freeglut team probably can't help.</p>
+	
+	<div class="textheader">Development Releases</div>
+	<p>
+		<a href="http://freeglut.sourceforge.net/dist/current.tgz">Nightly CVS Tarball</a><br/>
+		<a href="/dinfo.php#cvs">Anonymous CVS Instructions</a>
+	</p>
 </div>
 
 <div class="textheader">Questions?</div>
@@ -68,8 +65,4 @@ running with freeglut.</div>
 	<li><a href="freeglut-bugs@lists.sourceforge.net">freeglut-bugs</a> [<a href="http://lists.sourceforge.net/lists/listinfo/freeglut-bugs">Subscribe</a>]</li>
 </ul>
 
-
-
-<?PHP
-generateFooter();
-?>
+<?php generateFooter(); ?>
