@@ -31,6 +31,7 @@ freeglut/freeglut/freeglutstatic.dsw svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/freeglut.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/freeglut_ext.h svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/include/GL/freeglut_std.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/glut.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/install-sh svn_keywords=Author+Date+Id+Revision
