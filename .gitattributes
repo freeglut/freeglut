@@ -85,6 +85,14 @@ freeglut/freeglut/src/templates/cpp_template svn_keywords=Author+Date+Id+Revisio
 freeglut/freeglut/src/templates/header_template svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/stamp-h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/stamp-h.in svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/docs/api.php svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/docs/install.php svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/freeglut-style.css svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/images/OGL.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/images/chessdemo.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/images/freeglut_logo.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/images/freeglut_logo.xcf svneol=native#unset svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/images/freeglut_text.xcf svneol=native#unset svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/images/tuxcake.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/index.php svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/template.php svn_keywords=Author+Date+Id+Revision
