@@ -32,7 +32,7 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <div class="news-item">
 <div class="news-header">freeglut 2.0.1 Released [23 October 2003]</div>
-<p>2.0.1 fixes a number of bugs with menus, especially in Linux.</p>
+<p>2.0.1 fixes a number of bugs with menus, especially in the UNIX_X11.</p>
 </div>
 
 
