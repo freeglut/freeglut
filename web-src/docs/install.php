@@ -34,7 +34,7 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <p>This is as simple as:</p>
 
-<blockquote>make all
+<blockquote>make all<br>
 make install</blockquote>
 
 
