@@ -96,6 +96,8 @@ web-src/images/chessdemo.png svneol=native#unset svn_keywords=Author+Date+Id+Rev
 web-src/images/freeglut_logo.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
 web-src/images/freeglut_logo.xcf svneol=native#unset svn_keywords=Author+Date+Id+Revision
 web-src/images/freeglut_text.xcf svneol=native#unset svn_keywords=Author+Date+Id+Revision
+web-src/images/freshmeat.png -text
+web-src/images/opengl.png -text
 web-src/images/tuxcake.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
 web-src/index.php svn_keywords=Author+Date+Id+Revision
 web-src/news.php svn_keywords=Author+Date+Id+Revision
