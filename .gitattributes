@@ -13,6 +13,7 @@ freeglut/configure.in svn_keywords=Author+Date+Id+Revision
 freeglut/doc/download.html svn_keywords=Author+Date+Id+Revision
 freeglut/doc/freeglut.html svn_keywords=Author+Date+Id+Revision
 freeglut/doc/freeglut_logo.png -text
+freeglut/doc/freeglut_user_interface.html svn_keywords=Author+Date+Id+Revision
 freeglut/doc/index.html svn_keywords=Author+Date+Id+Revision
 freeglut/doc/ogl_sm.png -text
 freeglut/doc/progress.html svn_keywords=Author+Date+Id+Revision
