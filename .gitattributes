@@ -24,6 +24,7 @@ freeglut/freeglut/freeglut-1.3/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut-1.3/freeglut_callbacks.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut-1.3/freeglut_cursor.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut-1.3/freeglut_display.c svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/freeglut-1.3/freeglut_ext.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut-1.3/freeglut_font.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut-1.3/freeglut_font_data.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut-1.3/freeglut_gamemode.c svn_keywords=Author+Date+Id+Revision
