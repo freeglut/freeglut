@@ -49,6 +49,7 @@ freeglut/freeglut/freeglut.kdevprj svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut.lsm svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut13.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut13.plg svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/freeglutdll.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglutstatic.dsw svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/genfonts/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/genfonts/Roman.src svn_keywords=Author+Date+Id+Revision
