@@ -11,6 +11,7 @@ freeglut/config.sub
 freeglut/configure
 freeglut/doc/Makefile
 freeglut/doc/Makefile.in
+freeglut/freeglut-*.tar.gz
 freeglut/include/GL/Makefile
 freeglut/include/GL/Makefile.in
 freeglut/include/Makefile
