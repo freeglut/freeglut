@@ -25,13 +25,13 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <div class="textheader">Untar and configure the packages</div>
 <p>Copy the tarball you downloaded into a temporary directory. Untar it as follows:</p>
-<blockquote>tar -jvxf freeglut-2.X.X.tar.bz2</blockquote>
+<tt><blockquote>bzcat freeglut-2.2.0.tar.bz2 | tar -vxf -</blockquote></tt>
 
 <div class="textheader">Change to the resulting directory:</div>
-<blockquote>cd freeglut-2.X.X</blockquote>
+<tt><blockquote>cd freeglut-2.X.X</blockquote></tt>
  
 <div class="textheader">Now, configure the packages:</div>
-<blockquote>./configure</blockquote>
+<tt><blockquote>./configure</blockquote></tt>
 
 <p>NetBSD users may need a slightly different command:</p>
 
@@ -51,9 +51,9 @@ make install</blockquote>
 <div class="textheader">(Optional) Making symlinks to replace GLUT</div>
 <p>Make a symlink from libfreeglut.so.0.2.0 to libglut.so.3, libglut.so.3.7 and libglut.so.3.7.0</p>
 
-<blockquote>ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3<br>
+<tt><blockquote>ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3<br>
 ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3.7<br>
-ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3.7.0</blockquote>
+ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3.7.0</blockquote></tt>
 
 <?PHP
 generateFooter();
