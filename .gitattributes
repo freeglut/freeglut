@@ -9,6 +9,7 @@ freeglut/freeglut/README svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/TODO svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/acconfig.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/aclocal.m4 svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/autogen.sh svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/configure.in svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/doc/download.html svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/doc/freeglut.html svn_keywords=Author+Date+Id+Revision
