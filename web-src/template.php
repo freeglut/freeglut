@@ -56,20 +56,36 @@ function printMenuItem($item, $current_page) {
 
 function generateSideBar($current_page) {
 	global $sidebarentries;
-	echo "<div class=\"navbar-left\">";
+	echo "<div class=\"navbar-left\">"; # Open the navbar
 	
+	# Print out the logo!
 	echo "<div class=\"navbar-header\"><a href=\"/\"><img src=\"/images/freeglut_logo.png\" border=\"0\"></a></div>
 	<div class=\"navbar-smalltext\">The Free OpenGL Utility Toolkit</div><br>";
 	
+	# Print out each sidebar entry one by one...
 	reset($sidebarentries);
 	while (next($sidebarentries)) {
 		printMenuItem(current($sidebarentries), $current_page);
 	}
 	
-	echo "<br>
-	<div class=\"navbar-header\"><a href=\"http://sourceforge.net/\"><img src=\"http://sourceforge.net/sflogo.php?group_id=1032&type=4\" border=\"0\"></a></div>";
+	# This allows a user to view our PHP source... it's in CVS anyway, and why not spread the love of
+	# slick web page design? ;)
+	$cvs_location = "http://cvs.sourceforge.net/viewcvs.py/freeglut/freeglut/web-src$current_page?view=auto";
 	
-	echo "</div>";
+	# Print the SourceForge logo button and the "View source" link	
+	echo "
+	<br>
+	<div class=\"navbar-header\">
+		<a href=\"http://sourceforge.net/\"><img src=\"http://sourceforge.net/sflogo.php?group_id=1032&type=4\" border=\"0\"></a>
+	</div>
+	<br>
+	<div class=\"navbar-smalltext\" style=\"font-style: normal;\">
+		<a href=\"$cvs_location\">View PHP Source</a>
+	</div>
+	";
+
+	echo "</div>"; # Close the navbar.
+	
 }
 
 function setPageTitle($title_inc) {
@@ -78,3 +94,4 @@ function setPageTitle($title_inc) {
 }
 
 ?>
+
