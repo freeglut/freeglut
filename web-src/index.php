@@ -21,7 +21,7 @@ generateHeader($_SERVER['PHP_SELF']);
 <p>freeglut is released under the X-Consortium license.</p>
 
 <div class="textheader">Why?</div>
-<p>The original GLUT library seems to have been abandoned with the most recent version (3.7) dating back to August 1998. Its license does not allow anyone to distribute modified library code. This would be OK, if not for the fact that GLUT is getting old and really needs improvement. Also, GLUT's license is incompatible with some software distributions (e.g., Xfree86).</p>
+<p>The original GLUT library seems to have been abandoned with the most recent version (3.7) dating back to August 1998. Its license does not allow anyone to distribute modified library code. This would be OK, if not for the fact that GLUT is getting old and really needs improvement. Also, GLUT's license is incompatible with some software distributions (e.g., XFree86).</p>
 
 <div class="textheader">Who?</div>
 <p>freeglut was originally written by Pawel W. Olszta with contributions from Andreas Umbach and Steve Baker. Steve is now the official owner/maintainer of freeglut.</p>
@@ -64,5 +64,8 @@ generateHeader($_SERVER['PHP_SELF']);
 	<li><a href="mailto:freeglut-announce@lists.sourceforge.net">freeglut-announce</a> [<a href="http://lists.sourceforge.net/lists/listinfo/freeglut-announce">Subscribe</a>], and</li>
 	<li><a href="mailto:freeglut-bugs@lists.sourceforge.net">freeglut-bugs</a> [<a href="http://lists.sourceforge.net/lists/listinfo/freeglut-bugs">Subscribe</a>]</li>
 </ul>
+
+<p>Please note that <a href="http://sourceforge.net/mail/?group_id=1032">you must subscribe before you can post</a> to our mailing lists. Sorry for the inconvenience.</p>
+
 
 <?php generateFooter(); ?>
