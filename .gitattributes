@@ -55,6 +55,7 @@ freeglut/progs/demos/One/one.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/demos.dsw svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/shapes/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/shapes/shapes.c svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/shapes/shapes.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/src/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/src/freeglut_callbacks.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/freeglut_cursor.c svn_keywords=Author+Date+Id+Revision
