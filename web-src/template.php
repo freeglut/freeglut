@@ -45,10 +45,10 @@ function generateHeader($self)
 
 function generateFooter() 
 {
-	?>
+?>
 </body>
 </html>
-	<?
+<?
 }
 
 function printMenuItem($item, $current_page) 
