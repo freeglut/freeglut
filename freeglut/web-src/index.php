@@ -45,7 +45,8 @@ running with freeglut.</div>
 <div class="textheader">Prepackaged Releases</div>
 <p>The freeglut project does not support packaged versions of freeglut excepting, of course, the tarballs distributed here. However, various members of the community have put time and effort into providing source or binary rollups, and we thank them for their efforts. Here's a list which is likely incomplete:</p>
 <p>
-	<a href="http://jumpgate.homelinux.net/random/freeglut-fedora/">Andy Piper's RedHat Fedora RPMs</a>
+	Andy Piper's <a href="http://jumpgate.homelinux.net/random/freeglut-fedora/">RedHat Fedora RPMs</a><br>
+	Nigel Stewart's <a href="http://www.nigels.com/glt/devpak/">DevPak</a> for <a href="http://www.bloodshed.net/dev/devcpp.html">Dev C++</a>
 </p>
 <p>If you have problems with these packages, please contact their maintainers - we of the freeglut team probably can't help.</p>
 
