@@ -33,10 +33,11 @@ Or
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/freeglut co freeglut</blockquote>
 
 <div class="textheader">Documentation</div>
-<p>Installation<br>
-<a href="/docs/install.php">How to install freeglut on various platforms</a></p>
-<p>Programming API<br>
-<a href="/docs/api.php">How to use freeglut in your applications</a></p>
+<h2><a href="/docs/install.php">The Installation Instructions.</a></h2>
+<p class="indent">How to install freeglut on various platforms.</p>
+
+<h2><a href="/docs/api.php">The Application Programming Interface Documentation</a></h2>
+<p class="indent">How to use freeglut in your applications.</p>
 
 <?PHP
 generateFooter();
