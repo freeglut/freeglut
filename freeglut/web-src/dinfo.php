@@ -20,7 +20,9 @@ generateHeader($_SERVER['PHP_SELF']);
 <p><a href="/help.php">How You Can Help</a></p>
 
 <div class="textheader">Go to SourceForge and...</div>
-<p><a href="http://freeglut.sourceforge.net/fg/index.php?id=402">Review current feature requests</a>
+<p><a href="http://freeglut.sourceforge.net/fg/index.php?id=402">Review current feature requests</a><br>
+Or
+<br>
 <a href="http://freeglut.sourceforge.net/fg/index.php?id=403">Review current bug reports</a></p>
 
 <a name="cvs"></a>
