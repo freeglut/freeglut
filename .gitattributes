@@ -8,7 +8,6 @@ freeglut/NEWS svn_keywords=Author+Date+Id+Revision
 freeglut/README svn_keywords=Author+Date+Id+Revision
 freeglut/TODO svn_keywords=Author+Date+Id+Revision
 freeglut/acconfig.h svn_keywords=Author+Date+Id+Revision
-freeglut/aclocal.m4 svn_keywords=Author+Date+Id+Revision
 freeglut/autogen.sh svn_keywords=Author+Date+Id+Revision
 freeglut/configure.in svn_keywords=Author+Date+Id+Revision
 freeglut/doc/download.html svn_keywords=Author+Date+Id+Revision
