@@ -85,3 +85,6 @@ freeglut/freeglut/src/templates/cpp_template svn_keywords=Author+Date+Id+Revisio
 freeglut/freeglut/src/templates/header_template svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/stamp-h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/stamp-h.in svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/freeglut-style.css svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/index.php svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/template.php svn_keywords=Author+Date+Id+Revision
