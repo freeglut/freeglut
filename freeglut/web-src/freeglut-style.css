@@ -10,7 +10,7 @@ a {
 	color: #DD3322;
 }
 
-a.hover {
+a:hover {
 	text-decoration: underline;
 }
 
