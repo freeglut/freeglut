@@ -1,0 +1,89 @@
+BODY {
+	margin-top: 0px ;
+	background-color: #FFFFFF;
+	color: #000000;
+}
+
+A {
+	text-decoration: none;
+	color: #DDAADD;
+}
+
+A.hover {
+	text-decoration: underline;
+}
+
+BLOCKQUOTE {
+	color: #FFFFFF ;
+	border: 2px #222222 solid ;
+	background-color: #333333 ;
+	padding: 3px;
+}
+
+.textheader {
+	font-size: 1.4em;
+	border-bottom: 1px #111166 solid ;
+	width: 100%;
+}
+
+.navbar-left {
+	color: #000000 ;
+	background-color: #333333 ;
+	position: absolute ;
+	left: 0px ;
+	width: 100px ;
+	float: left ;
+	border: 2px #222222 solid ;
+}
+
+.navbar-header {
+	font-size: 1.2em;
+	color: #AAAAAA;
+	background-color: transparent;
+	text-align: center;
+}
+
+.navbar-item {
+	font-size: 1.0em ;
+	color: #FFFF00 ;
+	background-color: transparent ;
+	border: 1px #111111 solid ;
+	margin-top: 0px;
+	padding: 3px;
+	text-align: center;
+}
+
+.smallblock {
+	font-size: 1.0em;
+	color: #FFFFFF;
+	background-color: #221A22;
+	border: 1px #111111 solid ;
+	padding: 2px;
+}
+
+.main-side {
+	margin-left: 110px;
+	margin-right: 10px;
+}
+
+.title {
+	font-size: 1.8em;
+	color: #FFFFFF;
+	background-color: transparent;
+	padding: 5px;
+	text-align: center;
+}
+
+.block {
+	font-size: 1.0em;
+	border: 2px #333333 solid ;
+	padding: 3px;
+	background-color: #111111;
+}
+
+.block-title {
+	font-size: 1.4em;
+	border: 2px #665533 solid ;
+	padding: 3px;
+	background-color: #333333;
+}
