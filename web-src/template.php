@@ -28,14 +28,14 @@ function generateHeader($self)
 	global $title;
 
 	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-	echo "<?xml-stylesheet href=\"freeglut-style.css\" type=\"text/css\"?>\n";
+	echo "<?xml-stylesheet href=\"http://freeglut.sourceforge.net/freeglut-style.css\" type=\"text/css\"?>\n";
 	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
 
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" type="text/css" href="freeglut-style.css" />
+	<link rel="stylesheet" type="text/css" href="http://freeglut.sourceforge.net/freeglut-style.css" />
 	<title><? echo $title ?></title>
 </head>
 <body>
