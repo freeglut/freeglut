@@ -44,8 +44,8 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <p>This is as simple as:</p>
 
-<blockquote>make all<br>
-make install</blockquote>
+<tt><blockquote>make all<br>
+make install</blockquote></tt>
 
 
 <div class="textheader">(Optional) Making symlinks to replace GLUT</div>
