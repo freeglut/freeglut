@@ -68,7 +68,7 @@ function generateSideBar($current_page)
 	# Print out the logo and title
 ?>
 <div class="navbar-left">
-	<span class="navbar-header"><a href="/"><img src="images/freeglut_logo.png" alt="freeglut logo" style="border: 0;" /></a></span><br/>
+	<span class="navbar-header"><a href="/"><img src="/images/freeglut_logo.png" alt="freeglut logo" style="border: 0;" /></a></span><br/>
 	<span class="navbar-smalltext">The Free OpenGL Utility Toolkit</span><br/><br/>
 <?
 	# Print out each sidebar entry one by one...
