@@ -35,7 +35,7 @@ generateHeader($_SERVER['PHP_SELF']);
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
 	<p>
-                <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0-rc2.tar.gz?download">Freeglut 2.4.0 Release Candidate 2</a> [<i>Released: 15 May 2005</i>]<br/>
+                <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0-rc3.tar.gz?download">Freeglut 2.4.0 Release Candidate 3</a> [<i>Released: 19 May 2005</i>]<br/>
         </p>
 </div>
 <div class="indent">
