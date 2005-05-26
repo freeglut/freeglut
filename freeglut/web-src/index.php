@@ -30,12 +30,12 @@ generateHeader($_SERVER['PHP_SELF']);
 <p>Pawel started freeglut development on December 1st, 1999. The project is now virtually a 100% replacement for the original GLUT with only a few departures (such as the abandonment of SGI-specific features such as the Dials&amp;Buttons box and Dynamic Video Resolution) and a shrinking set of bugs.</p>
 
 <div class="textheader"><a name="download"></a>Downloads...</div>
-<p>Below are file links for the freeglut project. README files are included. You can also check the install documentation. Have fun!</p>
+<p>Below are file links for the freeglut project. README files are included. You can also check the install documentation. The <a href="http://cvs.sourceforge.net/viewcvs.py/freeglut/freeglut/freeglut/ChangeLog?view=markup">up-to-date freeglut ChangeLog is available here</a>. Have fun!</p>
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
 	<p>
-                <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0-rc3.tar.gz?download">Freeglut 2.4.0 Release Candidate 3</a> [<i>Released: 19 May 2005</i>]<br/>
+                <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0-rc4.tar.gz?download">Freeglut 2.4.0 Release Candidate 4</a> [<i>Released: 25 May 2005</i>]<br/>
         </p>
 </div>
 <div class="indent">
