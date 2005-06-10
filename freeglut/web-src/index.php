@@ -32,15 +32,17 @@ generateHeader($_SERVER['PHP_SELF']);
 <div class="textheader"><a name="download"></a>Downloads...</div>
 <p>Below are file links for the freeglut project. README files are included. You can also check the install documentation. The <a href="http://cvs.sourceforge.net/viewcvs.py/freeglut/freeglut/freeglut/ChangeLog?view=markup">up-to-date freeglut ChangeLog is available here</a>. Have fun!</p>
 
-<div class="indent">
+<!--<div class="indent">
 	<div class="textheader">Testing Releases</div>
 	<p>
                 <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0-rc5.tar.gz?download">Freeglut 2.4.0 Release Candidate 5</a> [<i>Released: 2 Jun 2005</i>]<br/>
         </p>
 </div>
+-->
 <div class="indent">
         <div class="textheader">Stable Releases</div>
         <p>
+                <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">Freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>]<br/>
 		<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
 		<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.0.1.tar.gz?download">Freeglut 2.0.1</a> [<i>Released: 23 October 2003</i>]
 	</p>
