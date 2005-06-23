@@ -47,6 +47,7 @@ freeglut/progs/demos/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/CallbackMaker/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/CallbackMaker/CallbackMaker.c svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/CallbackMaker/CallbackMaker.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/CallbackMaker/CallbackMakerStatic.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/CallbackMaker/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals/Fractals.dsp svn_keywords=Author+Date+Id+Revision
