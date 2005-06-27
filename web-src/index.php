@@ -42,7 +42,7 @@ generateHeader($_SERVER['PHP_SELF']);
 <div class="indent">
         <div class="textheader">Stable Releases</div>
         <p>
-                <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">Freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">Freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>] [<a href="http://sourceforge.net/mailarchive/message.php?msg_id=12050832"><b>Release Announcement</b></a>]<br/>
 		<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
 		<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.0.1.tar.gz?download">Freeglut 2.0.1</a> [<i>Released: 23 October 2003</i>]
 	</p>
