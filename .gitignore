@@ -11,6 +11,8 @@ freeglut/freeglut/config.status
 freeglut/freeglut/config.sub
 freeglut/freeglut/configure
 freeglut/freeglut/configure.scan
+freeglut/freeglut/debugfiles.list
+freeglut/freeglut/debugsources.list
 freeglut/freeglut/doc/Makefile
 freeglut/freeglut/doc/Makefile.in
 freeglut/freeglut/freeglut-*.tar.gz
@@ -20,6 +22,7 @@ freeglut/freeglut/include/Makefile
 freeglut/freeglut/include/Makefile.in
 freeglut/freeglut/libtool
 freeglut/freeglut/ltmain.sh
+freeglut/freeglut/man-pages
 freeglut/freeglut/progs/Makefile
 freeglut/freeglut/progs/Makefile.in
 freeglut/freeglut/progs/demos/CallbackMaker/.deps
