@@ -3,6 +3,7 @@ freeglut/Makefile.in
 freeglut/aclocal.m4
 freeglut/autom4te.cache
 freeglut/autoscan.log
+freeglut/compile
 freeglut/config.guess
 freeglut/config.h
 freeglut/config.h.in
@@ -13,6 +14,7 @@ freeglut/configure
 freeglut/configure.scan
 freeglut/debugfiles.list
 freeglut/debugsources.list
+freeglut/depcomp
 freeglut/doc/Makefile
 freeglut/doc/Makefile.in
 freeglut/freeglut-*.tar.gz
@@ -23,6 +25,7 @@ freeglut/include/Makefile.in
 freeglut/libtool
 freeglut/ltmain.sh
 freeglut/man-pages
+freeglut/missing
 freeglut/progs/Makefile
 freeglut/progs/Makefile.in
 freeglut/progs/demos/CallbackMaker/.deps
