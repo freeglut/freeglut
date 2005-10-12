@@ -1,3 +1,4 @@
+freeglut/freeglut/INSTALL
 freeglut/freeglut/Makefile
 freeglut/freeglut/Makefile.in
 freeglut/freeglut/aclocal.m4
@@ -22,6 +23,7 @@ freeglut/freeglut/include/GL/Makefile
 freeglut/freeglut/include/GL/Makefile.in
 freeglut/freeglut/include/Makefile
 freeglut/freeglut/include/Makefile.in
+freeglut/freeglut/install-sh
 freeglut/freeglut/libtool
 freeglut/freeglut/ltmain.sh
 freeglut/freeglut/man-pages
