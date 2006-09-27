@@ -21,8 +21,8 @@ freeglut/doc/index.html svn_keywords=Author+Date+Id+Revision
 freeglut/doc/ogl_sm.png -text
 freeglut/doc/progress.html svn_keywords=Author+Date+Id+Revision
 freeglut/doc/structure.html svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
-freeglut/freeglut.dsw svn_keywords=Author+Date+Id+Revision eol=crlf
+freeglut/freeglut.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut.dsw svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut.kdevelop svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut.kdevprj svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut.lsm svn_keywords=Author+Date+Id+Revision
@@ -32,7 +32,7 @@ freeglut/freeglut.tgt svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut.wpj svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut_evc4.vcp svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut_evc4.vcw svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut_static.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
+freeglut/freeglut_static.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut_static.tgt svn_keywords=Author+Date+Id+Revision
 freeglut/include/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/include/GL/.cvsignore svn_keywords=Author+Date+Id+Revision
@@ -47,38 +47,38 @@ freeglut/progs/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/CallbackMaker/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/CallbackMaker/CallbackMaker.c svn_keywords=Author+Date+Id+Revision
-freeglut/progs/demos/CallbackMaker/CallbackMaker.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
-freeglut/progs/demos/CallbackMaker/CallbackMakerStatic.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
+freeglut/progs/demos/CallbackMaker/CallbackMaker.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/CallbackMaker/CallbackMakerStatic.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/CallbackMaker/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals/.cvsignore svn_keywords=Author+Date+Id+Revision
-freeglut/progs/demos/Fractals/Fractals.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
-freeglut/progs/demos/Fractals/FractalsStatic.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
+freeglut/progs/demos/Fractals/Fractals.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/Fractals/FractalsStatic.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals/fractals.c svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals/fractals.dat svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals_random/.cvsignore svn_keywords=Author+Date+Id+Revision
-freeglut/progs/demos/Fractals_random/Fractals_random.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
-freeglut/progs/demos/Fractals_random/Fractals_randomStatic.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
+freeglut/progs/demos/Fractals_random/Fractals_random.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/Fractals_random/Fractals_randomStatic.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals_random/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals_random/fractals.dat svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Fractals_random/fractals_random.c svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Lorenz/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Lorenz/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Lorenz/lorenz.c svn_keywords=Author+Date+Id+Revision
-freeglut/progs/demos/Lorenz/lorenz.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
-freeglut/progs/demos/Lorenz/lorenzStatic.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
+freeglut/progs/demos/Lorenz/lorenz.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/Lorenz/lorenzStatic.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/One/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/One/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/One/one.c svn_keywords=Author+Date+Id+Revision
-freeglut/progs/demos/One/one.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
-freeglut/progs/demos/One/oneStatic.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
-freeglut/progs/demos/demos.dsw svn_keywords=Author+Date+Id+Revision eol=crlf
+freeglut/progs/demos/One/one.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/One/oneStatic.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/demos.dsw svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/shapes/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/shapes/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/shapes/shapes.c svn_keywords=Author+Date+Id+Revision
-freeglut/progs/demos/shapes/shapes.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
-freeglut/progs/demos/shapes/shapesStatic.dsp svn_keywords=Author+Date+Id+Revision eol=crlf
+freeglut/progs/demos/shapes/shapes.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/shapes/shapesStatic.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/src/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/src/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/src/freeglut_callbacks.c svn_keywords=Author+Date+Id+Revision
