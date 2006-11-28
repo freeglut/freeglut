@@ -3,6 +3,7 @@ freeglut/freeglut/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/AUTHORS svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/COPYING svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/ChangeLog svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/FrequentlyAskedQuestions -text
 freeglut/freeglut/LISEZ_MOI svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/NEWS svn_keywords=Author+Date+Id+Revision
