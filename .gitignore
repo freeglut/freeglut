@@ -9,6 +9,7 @@ freeglut/freeglut/config.guess
 freeglut/freeglut/config.h
 freeglut/freeglut/config.h.in
 freeglut/freeglut/config.log
+freeglut/freeglut/config.lt
 freeglut/freeglut/config.status
 freeglut/freeglut/config.sub
 freeglut/freeglut/configure
