@@ -69,6 +69,11 @@ freeglut/freeglut/progs/demos/shapes/Makefile
 freeglut/freeglut/progs/demos/shapes/Makefile.in
 freeglut/freeglut/progs/demos/shapes/shapes
 freeglut/freeglut/progs/demos/shapes/shapes.exe
+freeglut/freeglut/progs/demos/smooth_opengl3/.deps
+freeglut/freeglut/progs/demos/smooth_opengl3/Makefile
+freeglut/freeglut/progs/demos/smooth_opengl3/Makefile.in
+freeglut/freeglut/progs/demos/smooth_opengl3/smooth_opengl3
+freeglut/freeglut/progs/demos/smooth_opengl3/smooth_opengl3.exe
 freeglut/freeglut/src/*.la
 freeglut/freeglut/src/*.lo
 freeglut/freeglut/src/.deps

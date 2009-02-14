@@ -84,6 +84,10 @@ freeglut/freeglut/progs/demos/shapes/Makefile.am svn_keywords=Author+Date+Id+Rev
 freeglut/freeglut/progs/demos/shapes/shapes.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/shapes/shapes.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/shapes/shapesStatic.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/progs/demos/smooth_opengl3/Makefile.am -text
+freeglut/freeglut/progs/demos/smooth_opengl3/smooth_opengl3.c -text
+freeglut/freeglut/progs/demos/smooth_opengl3/smooth_opengl3.dsp -text
+freeglut/freeglut/progs/demos/smooth_opengl3/smooth_opengl3Static.dsp -text
 freeglut/freeglut/src/.cvsignore svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_callbacks.c svn_keywords=Author+Date+Id+Revision
