@@ -58,7 +58,7 @@ generateHeader($_SERVER['PHP_SELF']);
 	
 	<div class="textheader">Development Releases</div>
 	<p>
-		<a href="http://freeglut.sourceforge.net/dist/freeglut-nightly.tar.gz">Nightly SVN Tarball</a><br/>
+		<a href="http://freeglut.sourceforge.net/dist/freeglut-nightly.tar.gz">Nightly SVN Tarball</a> -- This is currently disabled<br/>
 		<a href="http://sourceforge.net/svn/?group_id=1032">Anonymous SVN Instructions</a>
 	</p>
 </div>
