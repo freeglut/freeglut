@@ -40,6 +40,7 @@ freeglut/freeglut/freeglut_static.tgt svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut_static_vs2008.vcproj -text
 freeglut/freeglut/freeglut_vs2008.sln -text
 freeglut/freeglut/freeglut_vs2008.vcproj -text
+freeglut/freeglut/freeglut_vs2008_static.sln -text
 freeglut/freeglut/include/GL/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/freeglut.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/freeglut_ext.h svn_keywords=Author+Date+Id+Revision

@@ -1,8 +1,12 @@
+freeglut/freeglut/*.ncb
+freeglut/freeglut/*.suo
 freeglut/freeglut/Debug
+freeglut/freeglut/DebugStatic
 freeglut/freeglut/INSTALL
 freeglut/freeglut/Makefile
 freeglut/freeglut/Makefile.in
 freeglut/freeglut/Release
+freeglut/freeglut/ReleaseStatic
 freeglut/freeglut/aclocal.m4
 freeglut/freeglut/autom4te.cache
 freeglut/freeglut/autoscan.log
@@ -23,8 +27,6 @@ freeglut/freeglut/doc/Makefile
 freeglut/freeglut/doc/Makefile.in
 freeglut/freeglut/freeglut-*.tar.gz
 freeglut/freeglut/freeglut_static_vs2008.vcproj.*.user
-freeglut/freeglut/freeglut_vs2008.ncb
-freeglut/freeglut/freeglut_vs2008.suo
 freeglut/freeglut/freeglut_vs2008.vcproj.*.user
 freeglut/freeglut/include/GL/Makefile
 freeglut/freeglut/include/GL/Makefile.in
