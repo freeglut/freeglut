@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
-	Name="freeglut_static"
+	Version="9,00"
+	Name="freeglut"
 	ProjectGUID="{71AF75A0-52B6-4C1B-8E56-CB31C6741A18}"
 	TargetFrameworkVersion="0"
 	>
@@ -16,8 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\DebugStatic"
-			IntermediateDirectory=".\DebugStatic"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -42,15 +42,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="include"
+				AdditionalIncludeDirectories="..\include"
 				PreprocessorDefinitions="_DEBUG;FREEGLUT_STATIC;WIN32;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\DebugStatic/freeglut_static.pch"
-				AssemblerListingLocation=".\DebugStatic/"
-				ObjectFile=".\DebugStatic/"
-				ProgramDataBaseFileName=".\DebugStatic/"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -69,8 +65,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\DebugStatic\freeglut_static.lib"
-				SuppressStartupBanner="true"
+				OutputFile="$(OutDir)\freeglut_static.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -80,8 +75,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\DebugStatic/freeglut_static.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -92,8 +85,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\ReleaseStatic"
-			IntermediateDirectory=".\ReleaseStatic"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -119,15 +112,11 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="include"
+				AdditionalIncludeDirectories="..\include"
 				PreprocessorDefinitions="NDEBUG;FREEGLUT_STATIC;WIN32;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\ReleaseStatic/freeglut_static.pch"
-				AssemblerListingLocation=".\ReleaseStatic/"
-				ObjectFile=".\ReleaseStatic/"
-				ProgramDataBaseFileName=".\ReleaseStatic/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -144,8 +133,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\ReleaseStatic\freeglut_static.lib"
-				SuppressStartupBanner="true"
+				OutputFile="$(OutDir)\freeglut_static.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -155,8 +143,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\ReleaseStatic/freeglut_static.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -174,7 +160,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="src\freeglut_callbacks.c"
+				RelativePath="..\src\freeglut_callbacks.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -196,7 +182,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_cursor.c"
+				RelativePath="..\src\freeglut_cursor.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -218,7 +204,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_display.c"
+				RelativePath="..\src\freeglut_display.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -240,7 +226,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_ext.c"
+				RelativePath="..\src\freeglut_ext.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -262,7 +248,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_font.c"
+				RelativePath="..\src\freeglut_font.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -284,7 +270,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_font_data.c"
+				RelativePath="..\src\freeglut_font_data.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -306,7 +292,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_gamemode.c"
+				RelativePath="..\src\freeglut_gamemode.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -328,7 +314,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_geometry.c"
+				RelativePath="..\src\freeglut_geometry.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -350,7 +336,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_glutfont_definitions.c"
+				RelativePath="..\src\freeglut_glutfont_definitions.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -372,7 +358,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_init.c"
+				RelativePath="..\src\freeglut_init.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -394,7 +380,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_input_devices.c"
+				RelativePath="..\src\freeglut_input_devices.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -416,7 +402,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_joystick.c"
+				RelativePath="..\src\freeglut_joystick.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -438,7 +424,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_main.c"
+				RelativePath="..\src\freeglut_main.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -460,7 +446,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_menu.c"
+				RelativePath="..\src\freeglut_menu.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -482,7 +468,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_misc.c"
+				RelativePath="..\src\freeglut_misc.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -504,7 +490,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_overlay.c"
+				RelativePath="..\src\freeglut_overlay.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -526,7 +512,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_state.c"
+				RelativePath="..\src\freeglut_state.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -548,7 +534,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_stroke_mono_roman.c"
+				RelativePath="..\src\freeglut_stroke_mono_roman.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -570,7 +556,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_stroke_roman.c"
+				RelativePath="..\src\freeglut_stroke_roman.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -592,7 +578,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_structure.c"
+				RelativePath="..\src\freeglut_structure.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -614,7 +600,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_teapot.c"
+				RelativePath="..\src\freeglut_teapot.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -636,7 +622,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_videoresize.c"
+				RelativePath="..\src\freeglut_videoresize.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -658,7 +644,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\freeglut_window.c"
+				RelativePath="..\src\freeglut_window.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -685,27 +671,27 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="include\GL\freeglut.h"
+				RelativePath="..\include\GL\freeglut.h"
 				>
 			</File>
 			<File
-				RelativePath="include\GL\freeglut_ext.h"
+				RelativePath="..\include\GL\freeglut_ext.h"
 				>
 			</File>
 			<File
-				RelativePath="src\freeglut_internal.h"
+				RelativePath="..\src\freeglut_internal.h"
 				>
 			</File>
 			<File
-				RelativePath="include\GL\freeglut_std.h"
+				RelativePath="..\include\GL\freeglut_std.h"
 				>
 			</File>
 			<File
-				RelativePath="src\freeglut_teapot_data.h"
+				RelativePath="..\src\freeglut_teapot_data.h"
 				>
 			</File>
 			<File
-				RelativePath="include\GL\glut.h"
+				RelativePath="..\include\GL\glut.h"
 				>
 			</File>
 		</Filter>
