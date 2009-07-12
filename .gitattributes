@@ -3,11 +3,13 @@ freeglut/freeglut/AUTHORS svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/COPYING svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/ChangeLog svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/FrequentlyAskedQuestions -text
+freeglut/freeglut/LISEZMOI.cygwin_mingw -text
 freeglut/freeglut/LISEZ_MOI svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/Makefile.wat -text
 freeglut/freeglut/NEWS svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/README svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/README.cygwin_mingw -text
 freeglut/freeglut/README.win32 svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/TODO svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/VisualStudio2008/CallbackMaker/CallbackMaker.vcproj -text
