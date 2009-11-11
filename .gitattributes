@@ -97,6 +97,7 @@ freeglut/progs/demos/smooth_opengl3/smooth_opengl3Static.dsp -text
 freeglut/progs/demos/spaceball/Makefile.am -text
 freeglut/progs/demos/spaceball/spaceball.c -text
 freeglut/progs/demos/spaceball/spaceball.dsp -text
+freeglut/progs/demos/spaceball/spaceball_static.dsp -text
 freeglut/progs/demos/spaceball/vmath.c -text
 freeglut/progs/demos/spaceball/vmath.h -text
 freeglut/progs/demos/spaceball/vmath.inl -text
