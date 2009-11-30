@@ -28,32 +28,43 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <div class="textheader">When?</div>
 <p>Pawel started freeglut development on December 1st, 1999. The project is now virtually a 100% replacement for the original GLUT with only a few departures (such as the abandonment of SGI-specific features such as the Dials&amp;Buttons box and Dynamic Video Resolution) and a shrinking set of bugs.</p>
+<p>There are some additional features such as a larger set of predefined shapes for use in applications.</p>
 
 <div class="textheader"><a name="download"></a>Downloads...</div>
 <p>Below are file links for the freeglut project. README files are included. You can also check the install documentation. The <a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut/ChangeLog?view=log">up-to-date freeglut ChangeLog is available here</a>. Have fun!</p>
 
 <!--<div class="indent">
 	<div class="textheader">Testing Releases</div>
+	<p>No versions are currently being tested because we have just released 2.6.0 on November 27, 2009.</p>
 	<p>
-                <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0-rc5.tar.gz?download">Freeglut 2.4.0 Release Candidate 5</a> [<i>Released: 2 Jun 2005</i>]<br/>
+                <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.6.0-rc1.tar.gz?download">Freeglut 2.6.0 Release Candidate 1</a> [<i>Released: 23 Apr 2009</i>]<br/>
         </p>
 </div>
 -->
+
 <div class="indent">
         <div class="textheader">Stable Releases</div>
         <p>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">Freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>] [<a href="http://sourceforge.net/mailarchive/message.php?msg_name=56AE2E7F3B660B4E9089ED4D520050EE0245C31D%40mail14.eglin.af.mil"><b>Release Announcement</b></a>]<br/>
-		<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
-		<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.0.1.tar.gz?download">Freeglut 2.0.1</a> [<i>Released: 23 October 2003</i>]
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.6.0.tar.gz?download">Freeglut 2.6.0</a> [<i>Released: 27 November 2009</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">Freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.0.1.tar.gz?download">Freeglut 2.0.1</a> [<i>Released: 23 October 2003</i>]
 	</p>
-	
+
 	<div class="textheader">Prepackaged Releases</div>
 	<p>The freeglut project does not support packaged versions of freeglut excepting, of course, the tarballs distributed here. However, various members of the community have put time and effort into providing source or binary rollups, and we thank them for their efforts. Here's a list which is likely incomplete:</p>
+<!--
 	<p>
 		Andy Piper's <a href="http://jumpgate.homelinux.net/random/freeglut-fedora/">RedHat Fedora RPMs</a><br/>
 		Gentoo <a href="http://bugs.gentoo.org/show_bug.cgi?id=36783">freeglut-2.2.0.ebuild</a><br/>
 		Nigel Stewart's <a href="http://www.nigels.com/glt/devpak/">DevPak</a> for <a href="http://www.bloodshed.net/dev/devcpp.html">Dev C++</a>
 	</p>
+-->
+	<p>
+		<a href="http://www.transmissionzero.co.uk/software/freeglut-devel/">Martin Payne's Windows binaries</a><br/>
+		<a href="http://tisch.sf.net/freeglut-2.6.0-mpx-latest.patch">Florian Echtler's MPX Patch</a>
+	</p>
+
 	<p>If you have problems with these packages, please contact their maintainers - we of the freeglut team probably can't help.</p>
 	
 	<div class="textheader">Development Releases</div>
