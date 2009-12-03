@@ -76,9 +76,9 @@ function generateSideBar($current_page)
 	while (next($sidebarentries))
 		printMenuItem(current($sidebarentries), $current_page);
 	
-	# This allows a user to view our PHP source... it's in CVS anyway, and why not spread the love of
+	# This allows a user to view our PHP source... it's in SVN anyway, and why not spread the love of
 	# slick web page design? ;)
-	$cvs_location = "http://cvs.sourceforge.net/viewcvs.py/freeglut/freeglut/web-src$current_page?view=auto";
+	$svn_location = "http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/web-src$current_page?view=markup";
 	
 	# Print the SourceForge logo button and the "View source" link	
 ?>
@@ -101,7 +101,7 @@ function generateSideBar($current_page)
 	</span>
 	<br/><br/>
 	<span class="navbar-smalltext" style="font-style: normal;">
-	<? echo "\t<a href=\"$cvs_location\">View PHP Source</a>"; ?>
+	<? echo "\t<a href=\"$svn_location\">View PHP Source</a>"; ?>
 	</span>
 </div>
 <?

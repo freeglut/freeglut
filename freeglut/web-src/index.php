@@ -61,7 +61,7 @@ generateHeader($_SERVER['PHP_SELF']);
 	</p>
 -->
 	<p>
-		<a href="http://www.transmissionzero.co.uk/software/freeglut-devel/">Martin Payne's Windows binaries</a><br/>
+		<a href="http://www.transmissionzero.co.uk/software/freeglut-devel/">Martin Payne's Windows binaries (MSVC and MinGW)</a><br/>
 		<a href="http://tisch.sf.net/freeglut-2.6.0-mpx-latest.patch">Florian Echtler's MPX Patch</a>
 	</p>
 
@@ -69,8 +69,8 @@ generateHeader($_SERVER['PHP_SELF']);
 	
 	<div class="textheader">Development Releases</div>
 	<p>
-		<a href="http://freeglut.sourceforge.net/dist/freeglut-nightly.tar.gz">Nightly SVN Tarball</a> -- This is currently disabled<br/>
-		<a href="http://sourceforge.net/svn/?group_id=1032">Anonymous SVN Instructions</a>
+		<a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut.tar.gz?view=tar">SVN trunk tarball</a><br/>
+		<a href="help.php#svn">Anonymous SVN Instructions</a>
 	</p>
 </div>
 
