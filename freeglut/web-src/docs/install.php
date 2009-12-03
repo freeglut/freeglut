@@ -20,7 +20,7 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <div class="textheader">Untar and configure the packages</div>
 <p>Copy the tarball you downloaded into a temporary directory. Untar it as follows:</p>
-<pre>bzcat freeglut-2.2.0.tar.bz2 | tar -vxf -</pre>
+<pre>zcat freeglut-2.2.0.tar.bz2 | tar -vxf -</pre>
 
 <div class="textheader">Change to the resulting directory:</div>
 <pre>cd freeglut-2.X.X</pre>
@@ -44,14 +44,6 @@ make all
 make install
 </pre>
 
-
-<div class="textheader">(Optional) Making symlinks to replace GLUT</div>
-<p>Make a symlink from libfreeglut.so.0.2.0 to libglut.so.3, libglut.so.3.7 and libglut.so.3.7.0</p>
-
-<pre>
-ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3
-ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3.7
-ln -s /usr/lib/libfreeglut.so.0.2.0 /usr/lib/libglut.so.3.7.0
-</pre>
+<p>This will install the libraries, headers, and symlinks to replace GLUT.</p>
 
 <?php generateFooter(); ?>

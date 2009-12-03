@@ -9,12 +9,25 @@ generateHeader($_SERVER['PHP_SELF']);
 ?>
 
 <div class="news-item">
-<div class="news-header">API is now online! [30 Decmber 2003]</div>
+<div class="news-header">freeglut 2.6.0 Released [27 November 2009]</div>
+<p>The long awaited 2.6.0 release has arrived! This release features:</p>
+<ul>
+<li>Truly full screen windows under X11 when calling <code>glutFullScreen()</code>.</li>
+<li>Spaceball support on Linux.</li>
+<li>Addition of the "atexit" hack, making the freeglut Windows DLL binary compatible with GLUT.</li>
+<li>Addition of Visual Studio 2008 projects &amp; solutions.</li>
+<li>Many other fixes.</li>
+</ul>
+<p>Visit the downloads section to get your hands on the latest release.</p>
+</div>
+
+<div class="news-item">
+<div class="news-header">API is now online! [30 December 2003]</div>
 <p>The <a href="/docs/api.php">Application Programming Interface</a> documentation is now online, in addition to being distributed with the tarball. There have been a few changes to freeglut since the last update to the API documentation, and if anyone would like to make the appropriate updates, the whole project would appreciate it. Despite that, it's nearly wholly up-to-date. Please make good use of it.</p>
 </div>
 
 <div class="news-item">
-<div class="news-header">freeglut 2.2.0 Released [12 Decmber 2003]</div>
+<div class="news-header">freeglut 2.2.0 Released [12 December 2003]</div>
 <p>The freeglut Project proudly announces freeglut 2.2.0. This version contains:</p>
 <ul>
 <li>Mousewheel Support for Win32 &amp; X11</li>
@@ -69,7 +82,7 @@ of his freeglut work.</div>
 </ul>
 
 <p>XFree86 GameMode improvements:</p>
-<ul><li>force re-establishment of the original video mode by the X server even if the applicatiton exits immediately after leaving game mode</li>
+<ul><li>force re-establishment of the original video mode by the X server even if the application exits immediately after leaving game mode</li>
 <li>make sure that the X server has finished game mode preparations before continuing; fixes window sliding(missed mouse grab) and application exits.</li>
 <li>fix support for game mode resolution equal to maximum screen resolution</li>
 <li>restore original view port and Pointer position when leaving game mode</li></ul>
