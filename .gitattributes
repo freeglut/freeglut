@@ -132,7 +132,6 @@ freeglut/src/freeglutdll.def svn_keywords=Author+Date+Id+Revision
 freeglut/src/templates/cpp_template svn_keywords=Author+Date+Id+Revision
 freeglut/src/templates/header_template svn_keywords=Author+Date+Id+Revision
 web-src/basic_page.php svn_keywords=Author+Date+Id+Revision
-web-src/dinfo.php svn_keywords=Author+Date+Id+Revision
 web-src/docs/api.php svn_keywords=Author+Date+Id+Revision
 web-src/docs/install.php svn_keywords=Author+Date+Id+Revision
 web-src/freeglut-style.css svn_keywords=Author+Date+Id+Revision
