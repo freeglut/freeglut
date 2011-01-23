@@ -10,6 +10,7 @@ freeglut/Makefile.wat -text
 freeglut/NEWS svn_keywords=Author+Date+Id+Revision
 freeglut/README svn_keywords=Author+Date+Id+Revision
 freeglut/README.cygwin_mingw -text
+freeglut/README.mac -text
 freeglut/README.win32 svn_keywords=Author+Date+Id+Revision
 freeglut/TODO svn_keywords=Author+Date+Id+Revision
 freeglut/VisualStudio2008/CallbackMaker/CallbackMaker.vcproj -text
