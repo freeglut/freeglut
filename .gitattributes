@@ -158,6 +158,7 @@ freeglut/freeglut/src/freeglut_teapot.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_teapot_data.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_videoresize.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/freeglut_window.c svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/src/freeglut_xinput.c -text
 freeglut/freeglut/src/freeglutdll.def svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/templates/cpp_template svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/templates/header_template svn_keywords=Author+Date+Id+Revision
