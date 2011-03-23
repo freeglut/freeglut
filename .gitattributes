@@ -22,6 +22,7 @@ freeglut/VisualStudio/2008/freeglut.sln -text
 freeglut/VisualStudio/2008/freeglut.vcproj -text
 freeglut/VisualStudio/2008/shapes/shapes.vcproj -text
 freeglut/VisualStudio/2008/smooth_opengl3/smooth_opengl3.vcproj -text
+freeglut/VisualStudio/2008/subwin/subwin.vcproj -text
 freeglut/VisualStudio/2010/CallbackMaker/CallbackMaker.vcxproj -text
 freeglut/VisualStudio/2010/CallbackMaker/CallbackMaker.vcxproj.filters -text
 freeglut/VisualStudio/2010/Fractals/Fractals.vcxproj -text
