@@ -40,6 +40,8 @@ freeglut/VisualStudio/2010/shapes/shapes.vcxproj -text
 freeglut/VisualStudio/2010/shapes/shapes.vcxproj.filters -text
 freeglut/VisualStudio/2010/smooth_opengl3/smooth_opengl3.vcxproj -text
 freeglut/VisualStudio/2010/smooth_opengl3/smooth_opengl3.vcxproj.filters -text
+freeglut/VisualStudio/2010/subwin/subwin.vcxproj -text
+freeglut/VisualStudio/2010/subwin/subwin.vcxproj.filters -text
 freeglut/VisualStudio2008/CallbackMaker/CallbackMaker.vcproj -text
 freeglut/VisualStudio2008/Fractals/Fractals.vcproj -text
 freeglut/VisualStudio2008/Fractals_random/Fractals_random.vcproj -text
