@@ -134,6 +134,7 @@ freeglut/progs/demos/spaceball/vmath.inl -text
 freeglut/progs/demos/subwin/Makefile.am -text
 freeglut/progs/demos/subwin/subwin.c -text
 freeglut/progs/demos/subwin/subwin.dsp -text
+freeglut/progs/demos/subwin/subwinStatic.dsp -text
 freeglut/src/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/src/freeglut_callbacks.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/freeglut_cursor.c svn_keywords=Author+Date+Id+Revision
