@@ -18,6 +18,7 @@ freeglut/VisualStudio/2008/Fractals/Fractals.vcproj -text
 freeglut/VisualStudio/2008/Fractals_random/Fractals_random.vcproj -text
 freeglut/VisualStudio/2008/Lorenz/Lorenz.vcproj -text
 freeglut/VisualStudio/2008/One/One.vcproj -text
+freeglut/VisualStudio/2008/Resizer/Resizer.vcproj -text
 freeglut/VisualStudio/2008/freeglut.sln -text
 freeglut/VisualStudio/2008/freeglut.vcproj -text
 freeglut/VisualStudio/2008/shapes/shapes.vcproj -text
@@ -33,6 +34,8 @@ freeglut/VisualStudio/2010/Lorenz/Lorenz.vcxproj -text
 freeglut/VisualStudio/2010/Lorenz/Lorenz.vcxproj.filters -text
 freeglut/VisualStudio/2010/One/One.vcxproj -text
 freeglut/VisualStudio/2010/One/One.vcxproj.filters -text
+freeglut/VisualStudio/2010/Resizer/Resizer.vcxproj -text
+freeglut/VisualStudio/2010/Resizer/Resizer.vcxproj.filters -text
 freeglut/VisualStudio/2010/freeglut.sln -text
 freeglut/VisualStudio/2010/freeglut.vcxproj -text
 freeglut/VisualStudio/2010/freeglut.vcxproj.filters -text
@@ -115,6 +118,8 @@ freeglut/progs/demos/One/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/One/one.c svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/One/one.dsp svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/One/oneStatic.dsp svn_keywords=Author+Date+Id+Revision
+freeglut/progs/demos/Resizer/Resizer.cpp -text
+freeglut/progs/demos/Resizer/Resizer.dsp -text
 freeglut/progs/demos/demos.dsw svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/shapes/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/shapes/shapes.c svn_keywords=Author+Date+Id+Revision
