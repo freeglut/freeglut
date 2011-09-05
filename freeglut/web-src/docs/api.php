@@ -80,7 +80,7 @@ contained herein.
 			<li>glutPositionWindow</li>
 			<li>glutShowWindow, glutHideWindow, glutIconifyWindow</li>
 			<li>glutPushWindow, glutPopWindow</li>
-			<li>glutFullScreen</li>
+			<li>glutFullScreen, glutLeaveFullScreen, glutFullScreenToggle</li>
 		</ol>
 	</li>
 	<li><a href="#Display">Display Functions</a>
@@ -261,7 +261,36 @@ specifies the application program interface to the <i>freeglut</i> library.
 
 <h2>3.1 Design Philosophy</h2>
 
-<h2>3.2 Conventions</h2>
+<h2>3.2 <a name="Conventions"></a>Conventions</h2>
+
+<p>
+In developing the <i>freeglut</i> library, we have taken careful steps
+to ensure consistency in function operation across the board, in such a
+manner as to maintain compatibility with GLUT's behavior whenever
+possible. In this section some of the important conventions of FreeGLUT,
+and their compatibility with GLUT, are made explicit.
+</p>
+
+<h3>3.2.1 Window placement and size</h3>
+
+<p>
+There is considerable confusion about the "right thing to do" concerning
+window  size and position.  GLUT itself is not consistent between
+Windows and UNIX/X11; since platform independence is a virtue for
+<i>freeglut</i>, we decided to break with GLUT's behaviour. <br>
+Under UNIX/X11, it is apparently not possible to get the window border
+sizes in order to subtract them off the window's initial position until
+some time after the window has been created.  Therefore we decided on
+the following behavior, both under Windows and under UNIX/X11:
+<ul><li>When you create a window with position (x,y) and size (w,h), the
+upper left hand corner of the outside of the window is at (x,y) and the
+size of the drawable area is (w,h).
+<li>When you query the size and position of the window <i>freeglut</i>
+will return the size of the drawable area--the (w,h) that you specified
+when you created the window--and the coordinates of the upper left hand
+corner of the drawable area--which is <u>NOT</u> the (x,y) position of
+the window you specified when you created it.</ul>
+</p>
 
 <h2>3.3 Terminology</h2>
 
@@ -299,7 +328,15 @@ continue, whether GLUT should return control to the main program, or whether
 GLUT should simply exit (the default).
 </p>
 
-<h3>3.4.3 Changes to Callbacks</h3>
+<h3>3.4.3 Fullscreen windows</h3>
+
+<p>
+Function to leave fullscreen window mode, <tt>glutLeaveFullScreen</tt>,
+or to toggle between fullscreen and normal window mode,
+<tt>glutFullScreenToggle</tt>, have been added.
+</p>
+
+<h3>3.4.4 Changes to Callbacks</h3>
 
 <p>
 Several new callbacks have been added and several callbacks which were specific
@@ -315,7 +352,7 @@ callbacks.  If the user has a need for an unsupported callback he should
 contact the <i>freeglut</i> development team.
 </p>
 
-<h3>3.4.4 String Rendering</h3>
+<h3>3.4.5 String Rendering</h3>
 
 <p>
 New functions have been added to render full character strings (including
@@ -324,14 +361,14 @@ functions return the widths of character strings and the font heights, in
 pixels for bitmapped fonts and in OpenGL units for the stroke fonts.
 </p>
 
-<h3>3.4.5  Geometry Rendering</h3>
+<h3>3.4.6  Geometry Rendering</h3>
 
 <p>
 Two functions have been added to render a wireframe and a solid rhombic
 dodecahedron.
 </p>
 
-<h3>3.4.5  Extension Function Queries</h3>
+<h3>3.4.7  Extension Function Queries</h3>
 
 <p>
 glutGetProcAddress is a wrapper for the glXGetProcAddressARB and wglGetProcAddress
@@ -364,8 +401,8 @@ functions specify a desired position and size for windows that
 The position is measured in pixels from the upper left hand corner of the
 screen, with "x" increasing to the right and "y" increasing towards the bottom
 of the screen.  The size is measured in pixels.  <i>Freeglut</i>
-  does not promise to follow these specifications in creating its windows,
-it certainly makes an attempt to.
+does not promise to follow these specifications in creating its windows,
+but it certainly makes an attempt to.
 </p>
 
 <p>
@@ -373,10 +410,14 @@ The position and size of a window are a matter of some subtlety.  Most
 windows have a usable area surrounded by a border and with a title bar
 on the top.  The border and title bar are commonly called "decorations."
 The position of the window unfortunately varies with the operating system.
-On Linux, it is the coordinates of the upper left-hand corner of its
-decorations.  On Windows, it is the coordinates of the upper left hand
-corner of its usable interior.  For both operating systems, the size of
-the window is the size of the usable interior.
+On both Linux and Windows, you specify the coordinates of the upper
+left-hand corner of the window's decorations. Also for both operating
+systems, the size of the window is the size of the usable interior.<br>
+With <tt>glutGet</tt> information can be acquired about the current
+window's size, position and decorations. Note however that according to
+<a href="#Conventions">FreeGLUT's conventions</a>, the information
+returned about the window coordinates does not correspond to the
+coordinates used when setting window position.
 </p>
 
 <p>
@@ -535,7 +576,40 @@ Consortium and ask for the code to be fixed.
 
 <h2>6.9 glutPushWindow, glutPopWindow</h2>
 
-<h2>6.10 glutFullScreen</h2>
+<h2>6.10 glutFullScreen, glutLeaveFullScreen, glutFullScreenToggle</h2>
+
+<p>
+The <tt>glutFullScreen</tt>, <tt>glutLeaveFullScreen</tt> and
+<tt>glutFullScreenToggle</tt> functions are used to transition the
+current window between fullscreen and normal mode.
+</p>
+
+<p><b>Usage</b></p>
+
+<p><tt>void glutFullScreen ( void );</tt><br>
+<tt>void glutLeaveFullScreen ( void );</tt><br>
+<tt>void glutFullScreenToggle ( void );</tt>
+ </p>
+
+<p><b>Description</b></p>
+
+<p>
+The <tt>glutFullScreen</tt> function causes the current window to enter
+fullscreen mode, <tt>glutLeaveFullScreen</tt> to go back to the window
+size and position as it was before entering fullscreen mode, and
+<tt>glutFullScreenToggle</tt> toggles between fullscreen and normal
+mode.<br>
+In multi-monitor setups on Windows 2000 and newer, the window will
+become fullscreen on the monitor that it overlaps the most.<br>
+Calls to these functions are ignored for gamemode and child windows.<br>
+Use <tt>glutGet(GLUT_FULL_SCREEN)</tt> to query fullscreen state of
+current window.
+</p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>GLUT does not include the <tt>glutLeaveFullScreen</tt> and
+<tt>glutFullScreenToggle</tt> functions.</p>
 
 <h1>7. <a name="Display"></a>Display Functions</h1>
 
@@ -1133,14 +1207,21 @@ The returned value is an integer.
 </p>
 
 <p>
+example:<br>
+<tt>int windowLeft = glutGet(GLUT_WINDOW_X);</tt>
+</p>
+
+<p>
 These queries are with respect to the current window:
 </p>
 
 <ul>
-<li>GLUT_WINDOW_X - window X position</li>
-<li>GLUT_WINDOW_Y - window Y position</li>
-<li>GLUT_WINDOW_WIDTH - window width</li>
-<li>GLUT_WINDOW_HEIGHT - window height</li>
+<li>GLUT_WINDOW_X - window X position, see <a href="#Conventions">FreeGLUT's conventions</a></li>
+<li>GLUT_WINDOW_Y - window Y position, see <a href="#Conventions">FreeGLUT's conventions</a></li>
+<li>GLUT_WINDOW_WIDTH - window width, see <a href="#Conventions">FreeGLUT's conventions</a></li>
+<li>GLUT_WINDOW_HEIGHT - window height, see <a href="#Conventions">FreeGLUT's conventions</a></li>
+<li>GLUT_WINDOW_BORDER_WIDTH - window border width</li>
+<li>GLUT_WINDOW_BORDER_HEIGHT - window border height</li>
 <li>GLUT_WINDOW_BUFFER_SIZE - number of color or color index bits per pixel</li>
 <li>GLUT_WINDOW_STENCIL_SIZE - number of bits per stencil value</li>
 <li>GLUT_WINDOW_DEPTH_SIZE - number of bits per depth value</li>
@@ -1161,6 +1242,7 @@ These queries are with respect to the current window:
 <li>GLUT_WINDOW_STEREO - 1 if the window supports stereo, 0 otherwise</li>
 <li>GLUT_WINDOW_CURSOR - current cursor</li>
 <li>GLUT_WINDOW_FORMAT_ID - on Windows, return the pixel format number of the current window</li>
+<li>GLUT_FULL_SCREEN - 1 if window is currently in fullscreen mode</li>
 </ul>
 
 <p>
@@ -1180,7 +1262,8 @@ These queries do not depend on the current window.
 <li>GLUT_INIT_WINDOW_HEIGHT - height last set by glutInitWindowSize</li>
 <li>GLUT_INIT_DISPLAY_MODE - display mode last set by glutInitDisplayMode</li>
 <li>GLUT_ELAPSED_TIME - time (in milliseconds) elapsed since glutInit or glutGet(GLUT_ELAPSED_TIME) was first called</li>
-<li>GLUT_INIT_STATE - ?</li>
+<li>GLUT_INIT_STATE - 1 if <i>freeglut</i> has been initialized through
+    a call to <tt>glutInit</tt></li>
 <li>GLUT_VERSION - Return value will be X*10000+Y*100+Z where X is the
     major version, Y is the minor version and Z is the patch level.
     This query is only supported in <i>freeglut</i> (version 2.0.0 or later).</li>
@@ -1964,11 +2047,76 @@ at the origin.  This is the famous OpenGL teapot [add reference]. </p>
 
 <h2>16.1 glutGameModeString</h2>
 
+<p>
+Specify the display mode that should be entered when GameMode is
+entered. Default is the current display mode of the monitor on which the
+GameMode screen will be opened.
+</p>
+
+<p><b>Usage</b><br>
+A string is passed to this function that specifies a combination of
+resolution, pixel depth (ignored on Linux) and refresh rate. Valid
+formats are:
+<ul>
+<li>WxH:D@R</li>
+<li>WxH:D</li>
+<li>WxH@R</li>
+<li>WxH</li>
+<li>:D@R</li>
+<li>:D</li>
+<li>@R</li>
+</ul>
+Where W, H, D and R are placeholders for horizontal resolution, vertical
+resolution, pixel depth and refresh rate respectively, as integers. Note
+the "x", ":" and "@" characters.
+</p>
+
 <h2>16.2 glutEnterGameMode, glutLeaveGameMode</h2>
+
+<p>
+Attempt to change to the requested display mode and open the GameMode
+window, or close the GameMode window and return to the original display
+mode.
+For multi-monitor display setups, <i>freeglut</i> can be told on which
+monitor the gamemode window should be opened by providing the
+<tt>-display</tt> command line option to <tt>glutInit</tt>.
+</p>
 
 <h2>16.3 glutGameModeGet</h2>
 
+<p>
+The following state variables may be queried with <tt>glutGet</tt>.
+The returned value is an integer.
+</p>
+
+<p>
+example:<br>
+<tt>int windowLeft = glutGet(GLUT_WINDOW_X);</tt>
+</p>
+
+<ul>
+<li>GLUT_GAME_MODE_ACTIVE - 1 if currently in GameMode</li>
+<li>GLUT_GAME_MODE_DISPLAY_CHANGED - 1 if currently in GameMode</li>
+<li>GLUT_GAME_MODE_POSSIBLE - 1 if display mode requested with
+    <tt>glutGameModeString</tt> is possible</li>
+</ul>
+
+<p>
+These queries return information about the current display mode if in
+GameMode, or about the requested display mode <u>before</u> entering
+GameMode:
+</p>
+
+<ul>
+<li>GLUT_GAME_MODE_WIDTH - (requested) width of GameMode window</li>
+<li>GLUT_GAME_MODE_HEIGHT - (requested) height of GameMode window</li>
+<li>GLUT_GAME_MODE_PIXEL_DEPTH - (requested) pixel depth of GameMode window</li>
+<li>GLUT_GAME_MODE_REFRESH_RATE - (requested) refresh rate of GameMode window</li>
+</ul>
+
 <h1>17. <a name="VideoResize"></a>Video Resize Functions</h1>
+
+<p>These functions are not implemented in <i>freeglut</i>.</p>
 
 <h2>17.1 glutVideoResizeGet</h2>
 
