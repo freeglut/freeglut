@@ -35,9 +35,9 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
-	<p>Version 2.8.0, Release Candidate 2 was released on Sunday, November 6, 2011.</p>
+	<p>Version 2.8.0, Release Candidate 3 was released on Sunday, December 18, 2011.</p>
 	<p>
-                <a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/tags/FG_2_8_0_RC2.tar.gz">Freeglut 2.8.0 Release Candidate 2</a> [<i>Released: 6 NOV 2011</i>]<br/>
+                <a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/tags/FG_2_8_0_RC3.tar.gz">Freeglut 2.8.0 Release Candidate 3</a> [<i>Released: 18 Dec 2011</i>]<br/>
         </p>
 </div>
 
