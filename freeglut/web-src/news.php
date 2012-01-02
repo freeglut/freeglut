@@ -9,6 +9,19 @@ generateHeader($_SERVER['PHP_SELF']);
 ?>
 
 <div class="news-item">
+<div class="news-header">freeglut 2.8.0 Released [2 January 2012]</div>
+<p>After two years of quiet maintenance, a new version of "freeglut" has been released.  Here are some of the major changes:</p>
+<ul>
+<li>There are now callbacks to support multitouch capability.</li>
+<li>Solaris and OSX support have improved.</li>
+<li>Fullscreen mode and Game mode behave better.</li>
+<li>Addition of Visual Studio 2010 projects &amp; solutions.</li>
+<li>Many bugs have been fixed.</li>
+</ul>
+<p>Visit the downloads section to get your hands on the latest release.</p>
+</div>
+
+<div class="news-item">
 <div class="news-header">freeglut 2.6.0 Released [27 November 2009]</div>
 <p>The long awaited 2.6.0 release has arrived! This release features:</p>
 <ul>
@@ -18,7 +31,6 @@ generateHeader($_SERVER['PHP_SELF']);
 <li>Addition of Visual Studio 2008 projects &amp; solutions.</li>
 <li>Many other fixes.</li>
 </ul>
-<p>Visit the downloads section to get your hands on the latest release.</p>
 </div>
 
 <div class="news-item">

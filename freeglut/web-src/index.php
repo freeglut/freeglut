@@ -31,20 +31,25 @@ generateHeader($_SERVER['PHP_SELF']);
 <p>There are some additional features such as a larger set of predefined shapes for use in applications.</p>
 
 <div class="textheader"><a name="download"></a>Downloads...</div>
-<p>Below are file links for the freeglut project. README files are included. You can also check the install documentation. The <a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut/ChangeLog?view=log">up-to-date freeglut ChangeLog is available here</a>. Have fun!</p>
+<p>Below are file links for the freeglut project. README files are included. You can also check the install documentation. The not-quite <a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut/ChangeLog?view=log">up-to-date freeglut ChangeLog is available here</a>. Have fun!</p>
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
+<!--
 	<p>Version 2.8.0, Release Candidate 4 was released on Wednesday, December 21, 2011.</p>
 	<p>
                 <a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/tags/FG_2_8_0_RC4.tar.gz">Freeglut 2.8.0 Release Candidate 4</a> [<i>Released: 21 Dec 2011</i>]<br/>
         </p>
+-->
+	<p>There are no presently active testing releases.
+	</p>
 </div>
 
 
 <div class="indent">
         <div class="textheader">Stable Releases</div>
         <p>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.0.tar.gz?download">Freeglut 2.8.0</a> [<i>Released: 2 January 2012</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.6.0.tar.gz?download">Freeglut 2.6.0</a> [<i>Released: 27 November 2009</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">Freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
