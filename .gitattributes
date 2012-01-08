@@ -1,5 +1,6 @@
 * text=auto !eol
 freeglut/freeglut/AUTHORS svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/CMakeLists.txt -text
 freeglut/freeglut/COPYING svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/ChangeLog svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/FrequentlyAskedQuestions -text
@@ -46,6 +47,7 @@ freeglut/freeglut/VisualStudio/2010/smooth_opengl3/smooth_opengl3.vcxproj.filter
 freeglut/freeglut/VisualStudio/2010/subwin/subwin.vcxproj -text
 freeglut/freeglut/VisualStudio/2010/subwin/subwin.vcxproj.filters -text
 freeglut/freeglut/autogen.sh svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/config.h.in -text
 freeglut/freeglut/configure.ac svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/doc/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/doc/download.html svn_keywords=Author+Date+Id+Revision
