@@ -173,6 +173,7 @@ freeglut/freeglut/src/x11/freeglut_cursor_x11.c -text
 freeglut/freeglut/src/x11/freeglut_display_x11.c -text
 freeglut/freeglut/src/x11/freeglut_ext_x11.c -text
 freeglut/freeglut/src/x11/freeglut_gamemode_x11.c -text
+freeglut/freeglut/src/x11/freeglut_glutfont_definitions_x11.c -text
 freeglut/freeglut/src/x11/freeglut_init_x11.c -text
 freeglut/freeglut/src/x11/freeglut_input_devices_x11.c -text
 freeglut/freeglut/src/x11/freeglut_internal_x11.h -text
