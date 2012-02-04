@@ -132,7 +132,6 @@ freeglut/freeglut/src/Common/freeglut_font.c -text
 freeglut/freeglut/src/Common/freeglut_font_data.c -text
 freeglut/freeglut/src/Common/freeglut_gamemode.c -text
 freeglut/freeglut/src/Common/freeglut_geometry.c -text
-freeglut/freeglut/src/Common/freeglut_glutfont_definitions.c -text
 freeglut/freeglut/src/Common/freeglut_init.c -text
 freeglut/freeglut/src/Common/freeglut_input_devices.c -text
 freeglut/freeglut/src/Common/freeglut_internal.h -text
