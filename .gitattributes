@@ -150,7 +150,6 @@ freeglut/src/Common/freeglut_teapot.c -text
 freeglut/src/Common/freeglut_teapot_data.h -text
 freeglut/src/Common/freeglut_videoresize.c -text
 freeglut/src/Common/freeglut_window.c -text
-freeglut/src/Common/freeglut_xinput.c -text
 freeglut/src/Common/freeglutdll.def -text
 freeglut/src/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/src/mswin/freeglut_cursor_mswin.c -text
@@ -184,6 +183,7 @@ freeglut/src/x11/freeglut_spaceball_x11.c -text
 freeglut/src/x11/freeglut_state_x11.c -text
 freeglut/src/x11/freeglut_structure_x11.c -text
 freeglut/src/x11/freeglut_window_x11.c -text
+freeglut/src/x11/freeglut_xinput_x11.c -text
 web-src/basic_page.php svn_keywords=Author+Date+Id+Revision
 web-src/docs/api.php svn_keywords=Author+Date+Id+Revision
 web-src/docs/install.php svn_keywords=Author+Date+Id+Revision
