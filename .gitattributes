@@ -12,6 +12,7 @@ freeglut/NEWS svn_keywords=Author+Date+Id+Revision
 freeglut/README svn_keywords=Author+Date+Id+Revision
 freeglut/README.cygwin_mingw -text
 freeglut/README.mac -text
+freeglut/README.mingw_cross -text
 freeglut/README.win32 svn_keywords=Author+Date+Id+Revision
 freeglut/TODO svn_keywords=Author+Date+Id+Revision
 freeglut/VisualStudio/2008/CallbackMaker/CallbackMaker.vcproj -text
