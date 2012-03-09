@@ -79,6 +79,7 @@ freeglut/freeglut/include/GL/freeglut_ext.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/freeglut_std.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/glut.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/Makefile.am svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/mingw_cross_toolchain.cmake -text
 freeglut/freeglut/progs/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/CallbackMaker/CallbackMaker.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/CallbackMaker/CallbackMaker.dsp svn_keywords=Author+Date+Id+Revision
