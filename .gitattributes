@@ -152,6 +152,8 @@ freeglut/src/Common/freeglut_teapot_data.h svn_keywords=Author+Date+Id+Revision
 freeglut/src/Common/freeglut_videoresize.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/Common/freeglut_window.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/Common/freeglutdll.def svn_keywords=Author+Date+Id+Revision
+freeglut/src/Common/xparsegeometry_repl.c -text
+freeglut/src/Common/xparsegeometry_repl.h -text
 freeglut/src/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/src/mswin/freeglut_cursor_mswin.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/mswin/freeglut_display_mswin.c svn_keywords=Author+Date+Id+Revision
