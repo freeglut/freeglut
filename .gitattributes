@@ -126,6 +126,7 @@ freeglut/progs/demos/subwin/Makefile.am -text
 freeglut/progs/demos/subwin/subwin.c -text
 freeglut/progs/demos/subwin/subwin.dsp -text
 freeglut/progs/demos/subwin/subwinStatic.dsp -text
+freeglut/progs/demos/timer/timer.c -text
 freeglut/src/Common/freeglut_callbacks.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/Common/freeglut_cursor.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/Common/freeglut_display.c svn_keywords=Author+Date+Id+Revision
