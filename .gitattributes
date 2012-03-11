@@ -10,6 +10,7 @@ freeglut/freeglut/Makefile.am svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/Makefile.wat svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/NEWS svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/README svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/README.android -text
 freeglut/freeglut/README.cygwin_mingw svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/README.mac -text
 freeglut/freeglut/README.mingw_cross svn_keywords=Author+Date+Id+Revision
@@ -49,6 +50,7 @@ freeglut/freeglut/VisualStudio/2010/subwin/subwin.vcxproj -text
 freeglut/freeglut/VisualStudio/2010/subwin/subwin.vcxproj.filters -text
 freeglut/freeglut/android/Android.mk -text
 freeglut/freeglut/android/README -text
+freeglut/freeglut/android_toolchain.cmake -text
 freeglut/freeglut/autogen.sh svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/config.h.in svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/configure.ac svn_keywords=Author+Date+Id+Revision
