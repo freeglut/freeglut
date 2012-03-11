@@ -14,6 +14,8 @@ freeglut/config.status
 freeglut/config.sub
 freeglut/configure
 freeglut/configure.scan
+freeglut/cross-android
+freeglut/cross-woe
 freeglut/debugfiles.list
 freeglut/debugsources.list
 freeglut/depcomp
@@ -29,6 +31,7 @@ freeglut/libtool
 freeglut/ltmain.sh
 freeglut/man-pages
 freeglut/missing
+freeglut/native
 freeglut/progs/Makefile
 freeglut/progs/Makefile.in
 freeglut/progs/demos/CallbackMaker/.deps
