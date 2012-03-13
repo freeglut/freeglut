@@ -11,6 +11,7 @@ freeglut/Makefile.wat svn_keywords=Author+Date+Id+Revision
 freeglut/NEWS svn_keywords=Author+Date+Id+Revision
 freeglut/README svn_keywords=Author+Date+Id+Revision
 freeglut/README.android -text
+freeglut/README.cmake -text
 freeglut/README.cygwin_mingw svn_keywords=Author+Date+Id+Revision
 freeglut/README.mac -text
 freeglut/README.mingw_cross svn_keywords=Author+Date+Id+Revision
