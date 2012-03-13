@@ -18,7 +18,6 @@ freeglut/freeglut/TODO svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/android/Android.mk -text
 freeglut/freeglut/android/README -text
 freeglut/freeglut/android_toolchain.cmake -text
-freeglut/freeglut/autogen.sh svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/config.h.in svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/doc/download.html svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/doc/freeglut.html svn_keywords=Author+Date+Id+Revision
@@ -28,17 +27,9 @@ freeglut/freeglut/doc/index.html svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/doc/ogl_sm.png -text
 freeglut/freeglut/doc/progress.html svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/doc/structure.html svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/freeglut.dep -text
-freeglut/freeglut/freeglut.kdevelop svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/freeglut.kdevprj svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut.lsm svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/freeglut.mak -text
 freeglut/freeglut/freeglut.rc svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut.spec svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/freeglut_evc4.vcp svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/freeglut_evc4.vcw svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/freeglut_static.dep -text
-freeglut/freeglut/freeglut_static.mak -text
 freeglut/freeglut/include/GL/freeglut.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/freeglut_ext.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/freeglut_std.h svn_keywords=Author+Date+Id+Revision
