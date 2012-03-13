@@ -4,10 +4,10 @@ freeglut/freeglut/Makefile.in
 freeglut/freeglut/aclocal.m4
 freeglut/freeglut/autom4te.cache
 freeglut/freeglut/autoscan.log
+freeglut/freeglut/build
 freeglut/freeglut/compile
 freeglut/freeglut/config.guess
 freeglut/freeglut/config.h
-freeglut/freeglut/config.h.in
 freeglut/freeglut/config.log
 freeglut/freeglut/config.lt
 freeglut/freeglut/config.status
