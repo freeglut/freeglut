@@ -5,6 +5,7 @@ freeglut/freeglut/aclocal.m4
 freeglut/freeglut/autom4te.cache
 freeglut/freeglut/autoscan.log
 freeglut/freeglut/build
+freeglut/freeglut/build64
 freeglut/freeglut/compile
 freeglut/freeglut/config.guess
 freeglut/freeglut/config.h
