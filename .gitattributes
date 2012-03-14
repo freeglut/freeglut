@@ -109,8 +109,6 @@ freeglut/freeglut/src/mswin/fg_spaceball_mswin.c svn_keywords=Author+Date+Id+Rev
 freeglut/freeglut/src/mswin/fg_state_mswin.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/mswin/fg_structure_mswin.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/mswin/fg_window_mswin.c svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/src/templates/cpp_template svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/src/templates/header_template svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/util/xparsegeometry_repl.c -text
 freeglut/freeglut/src/util/xparsegeometry_repl.h -text
 freeglut/freeglut/src/x11 svnc_svn_005fkeywords=Author+Date+Id+Revision
