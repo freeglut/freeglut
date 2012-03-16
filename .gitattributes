@@ -70,6 +70,7 @@ freeglut/freeglut/src/egl/fg_init_egl.c -text
 freeglut/freeglut/src/egl/fg_internal_egl.h -text
 freeglut/freeglut/src/egl/fg_structure_egl.c -text
 freeglut/freeglut/src/egl/fg_window_egl.c -text
+freeglut/freeglut/src/egl/fg_window_egl.h -text
 freeglut/freeglut/src/fg_callbacks.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/fg_cursor.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/fg_display.c svn_keywords=Author+Date+Id+Revision
