@@ -69,6 +69,7 @@ freeglut/src/android/native_app_glue/android_native_app_glue.h -text
 freeglut/src/egl/fg_display_egl.c -text
 freeglut/src/egl/fg_init_egl.c -text
 freeglut/src/egl/fg_internal_egl.h -text
+freeglut/src/egl/fg_state_egl.c -text
 freeglut/src/egl/fg_structure_egl.c -text
 freeglut/src/egl/fg_structure_egl.h -text
 freeglut/src/egl/fg_window_egl.c -text
