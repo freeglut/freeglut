@@ -65,7 +65,6 @@ freeglut/src/android/fg_window_android.c -text
 freeglut/src/android/native_app_glue/README -text
 freeglut/src/android/native_app_glue/android_native_app_glue.c -text
 freeglut/src/android/native_app_glue/android_native_app_glue.h -text
-freeglut/src/android/opengles_stubs.c -text
 freeglut/src/egl/fg_display_egl.c -text
 freeglut/src/egl/fg_init_egl.c -text
 freeglut/src/egl/fg_internal_egl.h -text
@@ -98,6 +97,7 @@ freeglut/src/fg_teapot_data.h svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_videoresize.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_window.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/freeglutdll.def.in svn_keywords=Author+Date+Id+Revision
+freeglut/src/gles_stubs.c -text
 freeglut/src/mswin/fg_cursor_mswin.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/mswin/fg_display_mswin.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/mswin/fg_ext_mswin.c svn_keywords=Author+Date+Id+Revision
