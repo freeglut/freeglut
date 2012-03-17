@@ -53,6 +53,7 @@ freeglut/progs/demos/spaceball/vmath.inl -text
 freeglut/progs/demos/subwin/subwin.c -text
 freeglut/progs/demos/timer/timer.c -text
 freeglut/src/android/fg_gamemode_android.c -text
+freeglut/src/android/fg_init_android.c -text
 freeglut/src/android/fg_input_devices_android.c -text
 freeglut/src/android/fg_internal_android.h -text
 freeglut/src/android/fg_joystick_android.c -text
