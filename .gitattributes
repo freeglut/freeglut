@@ -61,6 +61,7 @@ freeglut/freeglut/src/android/fg_main_android.c -text
 freeglut/freeglut/src/android/fg_runtime_android.c -text
 freeglut/freeglut/src/android/fg_spaceball_android.c -text
 freeglut/freeglut/src/android/fg_state_android.c -text
+freeglut/freeglut/src/android/fg_structure_android.c -text
 freeglut/freeglut/src/android/fg_window_android.c -text
 freeglut/freeglut/src/android/native_app_glue/README -text
 freeglut/freeglut/src/android/native_app_glue/android_native_app_glue.c -text
@@ -69,6 +70,7 @@ freeglut/freeglut/src/egl/fg_display_egl.c -text
 freeglut/freeglut/src/egl/fg_init_egl.c -text
 freeglut/freeglut/src/egl/fg_internal_egl.h -text
 freeglut/freeglut/src/egl/fg_structure_egl.c -text
+freeglut/freeglut/src/egl/fg_structure_egl.h -text
 freeglut/freeglut/src/egl/fg_window_egl.c -text
 freeglut/freeglut/src/egl/fg_window_egl.h -text
 freeglut/freeglut/src/fg_callbacks.c svn_keywords=Author+Date+Id+Revision
