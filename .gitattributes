@@ -119,20 +119,24 @@ freeglut/freeglut/src/util/xparsegeometry_repl.c -text
 freeglut/freeglut/src/util/xparsegeometry_repl.h -text
 freeglut/freeglut/src/x11 svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_cursor_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
-freeglut/freeglut/src/x11/fg_display_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
+freeglut/freeglut/src/x11/fg_display_x11_glx.c -text
 freeglut/freeglut/src/x11/fg_ext_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_gamemode_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_glutfont_definitions_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_init_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_input_devices_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_internal_x11.h svnc_svn_005fkeywords=Author+Date+Id+Revision
+freeglut/freeglut/src/x11/fg_internal_x11_glx.h -text
 freeglut/freeglut/src/x11/fg_joystick_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_main_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_menu_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_spaceball_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_state_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
+freeglut/freeglut/src/x11/fg_state_x11_glx.c -text
 freeglut/freeglut/src/x11/fg_structure_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_window_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
+freeglut/freeglut/src/x11/fg_window_x11_glx.c -text
+freeglut/freeglut/src/x11/fg_window_x11_glx.h -text
 freeglut/freeglut/src/x11/fg_xinput_x11.c -text svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/web-src/basic_page.php svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/docs/api.php svn_keywords=Author+Date+Id+Revision
