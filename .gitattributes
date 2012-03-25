@@ -143,14 +143,14 @@ web-src/docs/api.php svn_keywords=Author+Date+Id+Revision
 web-src/docs/install.php svn_keywords=Author+Date+Id+Revision
 web-src/freeglut-style.css svn_keywords=Author+Date+Id+Revision
 web-src/help.php svn_keywords=Author+Date+Id+Revision
-web-src/images/OGL.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
-web-src/images/chessdemo.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
-web-src/images/freeglut_logo.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
-web-src/images/freeglut_logo.xcf svneol=native#unset svn_keywords=Author+Date+Id+Revision
-web-src/images/freeglut_text.xcf svneol=native#unset svn_keywords=Author+Date+Id+Revision
+web-src/images/OGL.png -text
+web-src/images/chessdemo.png -text
+web-src/images/freeglut_logo.png -text
+web-src/images/freeglut_logo.xcf -text
+web-src/images/freeglut_text.xcf -text
 web-src/images/freshmeat.png -text
 web-src/images/opengl.png -text
-web-src/images/tuxcake.png svneol=native#unset svn_keywords=Author+Date+Id+Revision
+web-src/images/tuxcake.png -text
 web-src/index.php svn_keywords=Author+Date+Id+Revision
 web-src/news.php svn_keywords=Author+Date+Id+Revision
 web-src/progress.php svn_keywords=Author+Date+Id+Revision
