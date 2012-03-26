@@ -1720,26 +1720,21 @@ The <tt>glutWireSphere</tt> and <tt>glutSolidSphere</tt> functions
 draw a wireframe and solid sphere respectively.
 </p>
 
-<p><b>Usage</b></p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireSphere ( GLdouble dRadius,
-GLint slices, GLint stacks );</tt> </p>
+<p><tt>
+void glutWireSphere (GLdouble dRadius, GLint slices, GLint stacks);<br>
+void glutSolidSphere(GLdouble dRadius, GLint slices, GLint stacks);</tt> </p>
 
-<p><tt>void glutSolidSphere ( GLdouble dRadius,
-GLint slices, GLint stacks );</tt> </p>
+<p><b>Arguments</b></p>
+<p><tt>dRadius&nbsp;&nbsp;</tt>The desired radius of the sphere </p>
 
-<p><tt>dRadius
-</tt>The desired radius of the sphere </p>
-
-<p><tt>slices
-</tt>The desired number of slices (divisions
+<p><tt>slices&nbsp;&nbsp;&nbsp;</tt>The desired number of slices (divisions
 in the longitudinal direction) in the sphere </p>
 
-<p><tt>stacks
-</tt>The desired number of stacks (divisions
+<p><tt>stacks&nbsp;&nbsp;&nbsp;</tt>The desired number of stacks (divisions
 in the latitudinal direction) in the sphere.  The number of points in
-this direction, including the north and south poles, is <tt>stacks+1</tt>
-  </p>
+this direction, including the north and south poles, is <tt>stacks+1</tt></p>
 
 <p><b>Description</b></p>
 
@@ -1761,28 +1756,25 @@ The <tt>glutWireTorus</tt> and <tt>glutSolidTorus</tt> functions draw
 a wireframe and solid torus (donut shape) respectively.
 </p>
 
-<p><b>Usage</b></p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireTorus ( GLdouble dInnerRadius,
-GLdouble dOuterRadius, GLint nSides, GLint nRings );</tt> </p>
+<p><tt>
+void glutWireTorus (GLdouble dInnerRadius, GLdouble dOuterRadius, GLint
+nSides, GLint nRings);<br>
+void glutSolidTorus(GLdouble dInnerRadius, GLdouble dOuterRadius, GLint
+nSides, GLint nRings);</tt> </p>
 
-<p><tt>void glutSolidTorus ( GLdouble dInnerRadius,
-GLdouble dOuterRadius, GLint nSides, GLint nRings );</tt> </p>
-
-<p><tt>dInnerRadius
-</tt>The desired inner radius of the torus,
+<p><b>Arguments</b></p>
+<p><tt>dInnerRadius&nbsp;&nbsp;</tt>The desired inner radius of the torus,
 from the origin to the circle defining the centers of the outer circles </p>
 
-<p><tt>dOuterRadius
-</tt>The desired outer radius of the torus,
+<p><tt>dOuterRadius&nbsp;&nbsp;</tt>The desired outer radius of the torus,
 from the center of the outer circle to the actual surface of the torus </p>
 
-<p><tt>nSides
-</tt>The desired number of segments in a
+<p><tt>nSides&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>The desired number of segments in a
 single outer circle of the torus </p>
 
-<p><tt>nRings
-</tt>The desired number of outer circles
+<p><tt>nRings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>The desired number of outer circles
 around the origin of the torus </p>
 
 <p><b>Description</b></p>
@@ -1796,34 +1788,57 @@ the Z-axis and starts at the positive X-axis. </p>
 
 <p>None that we know of. </p>
 
-<h2>15.3 glutWireCone, glutSolidCone</h2>
+<h2>15.3 glutWireCylinder, glutSolidCylinder</h2>
+
+<p>
+The <tt>glutWireCylinder</tt> and <tt>glutSolidCylinder</tt> functions draw
+a wireframe and solid cone respectively.
+</p>
+
+<p><b>Definition</b></p>
+
+<p><tt>
+void glutWireCylinder (GLdouble base, GLdouble height, GLint slices, GLint
+stacks);<br>
+void glutSolidCylinder(GLdouble base, GLdouble height, GLint slices, GLint
+stacks);</tt> </p>
+
+<p><b>Arguments</b></p>
+<p><tt>radius&nbsp;&nbsp;</tt>The desired radius of the cylinder </p>
+
+<p><tt>height&nbsp;&nbsp;</tt>The desired height of the cylinder </p>
+
+<p><tt>slices&nbsp;&nbsp;</tt>The desired number of slices around
+the cylinder </p>
+
+<p><tt>stacks&nbsp;&nbsp;</tt>The desired number of segments between
+the base and the top of the cylinder (the number of points, including
+the tip, is <tt>stacks + 1</tt>) </p>
+
+<h2>15.4 glutWireCone, glutSolidCone</h2>
 
 <p>
 The <tt>glutWireCone</tt> and <tt>glutSolidCone</tt> functions draw
 a wireframe and solid cone respectively.
 </p>
 
-<p><b>Usage</b></p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireCone ( GLdouble base,
-GLdouble height, GLint slices, GLint stacks );</tt> </p>
+<p><tt>
+void glutWireCone (GLdouble base, GLdouble height, GLint slices, GLint
+stacks);<br>
+void glutSolidCone(GLdouble base, GLdouble height, GLint slices, GLint
+stacks);</tt> </p>
 
-<p><tt>void glutSolidCone ( GLdouble base,
-GLdouble height, GLint slices, GLint stacks );</tt> </p>
+<p><b>Arguments</b></p>
+<p><tt>base&nbsp;&nbsp;&nbsp;&nbsp;</tt>The desired radius of the base of the cone </p>
 
-<p><tt>base
-</tt>The desired radius of the base of the
-cone </p>
+<p><tt>height&nbsp;&nbsp;</tt>The desired height of the cone </p>
 
-<p><tt>height
-</tt>The desired height of the cone </p>
-
-<p><tt>slices
-</tt>The desired number of slices around
+<p><tt>slices&nbsp;&nbsp;</tt>The desired number of slices around
 the base of the cone </p>
 
-<p><tt>stacks
-</tt>The desired number of segments between
+<p><tt>stacks&nbsp;&nbsp;</tt>The desired number of segments between
 the base and the tip of the cone (the number of points, including the tip,
 is <tt>stacks + 1</tt>) </p>
 
@@ -1838,24 +1853,21 @@ The wire cone is rendered with triangular elements. </p>
 
 <p>None that we know of. </p>
 
-<h2>15.4 glutWireCube, glutSolidCube</h2>
+<h2>15.5 glutWireCube, glutSolidCube</h2>
 
 <p>
 The <tt>glutWireCube</tt> and <tt>glutSolidCube</tt> functions draw a
 wireframe and solid cube respectively.
 </p>
 
-<p><b>Usage</b></p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireCube ( GLdouble dSize
-);</tt> </p>
+<p><tt>
+void glutWireCube (GLdouble dSize);<br>
+void glutSolidCube(GLdouble dSize);</tt> </p>
 
-<p><tt>void glutSolidCube ( GLdouble dSize
-);</tt> </p>
-
-<p><tt>dSize
-</tt>The desired length of an edge of the
-cube </p>
+<p><b>Arguments</b></p>
+<p><tt>dSize&nbsp;&nbsp;</tt>The desired length of an edge of the cube</p>
 
 <p><b>Description</b></p>
 
@@ -1867,7 +1879,7 @@ at the origin. Its faces are normal to the coordinate directions. </p>
 
 <p>None that we know of. </p>
 
-<h2>15.5 glutWireTetrahedron, glutSolidTetrahedron</h2>
+<h2>15.6 glutWireTetrahedron, glutSolidTetrahedron</h2>
 
 <p>
 The <tt>glutWireTetrahedron</tt> and <tt>glutSolidTetrahedron</tt>
@@ -1875,13 +1887,11 @@ functions draw a wireframe and solid tetrahedron (four-sided Platonic solid)
 respectively.
 </p>
 
-<p><b>Usage</b></p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireTetrahedron ( void )
-;</tt> </p>
-
-<p><tt>void glutSolidTetrahedron ( void
-);</tt> </p>
+<p><tt>
+void glutWireTetrahedron (void);<br>
+void glutSolidTetrahedron(void);</tt></p>
 
 <p><b>Description</b></p>
 
@@ -1895,20 +1905,18 @@ in the X-Y plane with a positive Y-coordinate. </p>
 
 <p>None that we know of. </p>
 
-<h2>15.6 glutWireOctahedron, glutSolidOctahedron</h2>
+<h2>15.7 glutWireOctahedron, glutSolidOctahedron</h2>
 
 <p>
 The <tt>glutWireOctahedron</tt> and <tt>glutSolidOctahedron</tt> functions
 draw a wireframe and solid octahedron (eight-sided Platonic solid) respectively.
 </p>
 
-<p><b>Usage</b></p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireOctahedron ( void )
-;</tt> </p>
-
-<p><tt>void glutSolidOctahedron ( void )
-;</tt> </p>
+<p><tt>
+void glutWireOctahedron (void);<br>
+void glutSolidOctahedron(void);</tt></p>
 
 <p><b>Description</b></p>
 
@@ -1922,7 +1930,7 @@ axes. </p>
 
 <p>None that we know of. </p>
 
-<h2>15.7 glutWireDodecahedron, glutSolidDodecahedron</h2>
+<h2>15.8 glutWireDodecahedron, glutSolidDodecahedron</h2>
 
 <p>
 The <tt>glutWireDodecahedron</tt> and <tt>glutSolidDodecahedron</tt>
@@ -1930,13 +1938,11 @@ functions draw a wireframe and solid dodecahedron (twelve-sided Platonic
 solid) respectively.
 </p>
 
-<p><b>Usage</b></p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireDodecahedron ( void
-);</tt> </p>
-
-<p><tt>void glutSolidDodecahedron ( void
-);</tt> </p>
+<p><tt>
+void glutWireDodecahedron (void);<br>
+void glutSolidDodecahedron(void);</tt></p>
 
 <p><b>Description</b></p>
 
@@ -1951,7 +1957,7 @@ eight of them coincide with the corners of a cube with sizes of length 2.
 
 <p>None that we know of. </p>
 
-<h2>15.8  glutWireIcosahedron, glutSolidIcosahedron</h2>
+<h2>15.9  glutWireIcosahedron, glutSolidIcosahedron</h2>
 
 <p>
 The <tt>glutWireIcosahedron</tt> and <tt>glutSolidIcosahedron</tt>
@@ -1959,13 +1965,11 @@ functions draw a wireframe and solid icosahedron (twenty-sided Platonic solid)
 respectively.
 </p>
 
-<p><b>Usage</b> </p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireIcosahedron ( void )
-;</tt> </p>
-
-<p><tt>void glutSolidIcosahedron ( void
-);</tt> </p>
+<p><tt>
+void glutWireIcosahedron (void);<br>
+void glutSolidIcosahedron(void);</tt></p>
 
 <p><b>Description</b></p>
 
@@ -1981,7 +1985,7 @@ negative X-axes.
 
 <p>None that we know of. </p>
 
-<h2>15.7 glutWireRhombicDodecahedron, glutSolidRhombicDodecahedron</h2>
+<h2>15.10 glutWireRhombicDodecahedron, glutSolidRhombicDodecahedron</h2>
 
 <p>
 The <tt>glutWireRhombicDodecahedron</tt> and <tt>glutSolidRhombicDodecahedron</tt>
@@ -1989,13 +1993,11 @@ functions draw a wireframe and solid rhombic dodecahedron (twelve-sided
 semi-regular solid) respectively.
 </p>
 
-<p><b>Usage</b></p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireRhombicDodecahedron
-( void );</tt> </p>
-
-<p><tt>void glutSolidRhombicDodecahedron
-( void );</tt> </p>
+<p><tt>
+void glutWireRhombicDodecahedron (void);<br>
+void glutSolidRhombicDodecahedron(void);</tt></p>
 
 <p><b>Description</b></p>
 
@@ -2015,23 +2017,21 @@ at which four faces meet are found at (0, 0, +/- 1) and (+/- sqrt(2)/2,
 <p>GLUT does not include these functions.
  </p>
 
-<h2>15.10  glutWireTeapot, glutSolidTeapot</h2>
+<h2>15.11  glutWireTeapot, glutSolidTeapot</h2>
 
 <p>
 The <tt>glutWireTeapot</tt> and <tt>glutSolidTeapot</tt> functions
 draw a wireframe and solid teapot respectively.
 </p>
 
-<p><b>Usage</b></p>
+<p><b>Definition</b></p>
 
-<p><tt>void glutWireTeapot ( GLdouble dSize
-);</tt> </p>
+<p><tt>
+void glutWireTeapot (GLdouble dSize);<br>
+void glutSolidTeapot(GLdouble dSize);</tt></p>
 
-<p><tt>void glutSolidTeapot ( GLdouble dSize
-);</tt> </p>
-
-<p><tt>dSize
-</tt>The desired size of the teapot </p>
+<p><b>Arguments</b></p>
+<p><tt>dSize&nbsp;&nbsp;</tt>The desired size of the teapot </p>
 
 <p><b>Description</b></p>
 
