@@ -2036,8 +2036,23 @@ draw a wireframe and solid teapot respectively.
 <p><b>Description</b></p>
 
 <p>The <tt>glutWireTeapot</tt> and <tt>
-  glutSolidTeapot</tt> functions render a teapot of the desired size, centered
-at the origin.  This is the famous OpenGL teapot [add reference]. </p>
+  glutSolidTeapot</tt> functions render a teapot of the desired size,
+  centered at the origin.  This is the famous OpenGL teapot [add
+  reference]. </p>
+
+<p><b>Bugs</b></p>
+<p>OpenGL's default <tt>glFrontFace</tt> state assumes that front facing
+polygons (for the purpose of face culling) have vertices that wind
+counter clockwise when projected into window space. This teapot is
+rendered with its front facing polygon vertices winding clockwise. For
+OpenGL's default back face culling to work, you should use:</p>
+
+<p><tt>&nbsp;&nbsp;glFrontFace(GL_CW);<br>
+&nbsp;&nbsp;glutSolidTeapot(size);<br>
+&nbsp;&nbsp;glFrontFace(GL_CCW);</tt></p>
+
+<p>Both these bugs reflect issues in the original aux toolkit's teapot
+rendering routines (GLUT used the same teapot rendering routine).</p>
 
 <p><b>Changes From GLUT</b></p>
 
