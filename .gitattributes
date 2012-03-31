@@ -83,6 +83,8 @@ freeglut/src/fg_font.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_font_data.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_gamemode.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_geometry.c svn_keywords=Author+Date+Id+Revision
+freeglut/src/fg_gl2.c -text
+freeglut/src/fg_gl2.h -text
 freeglut/src/fg_init.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_input_devices.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_internal.h svn_keywords=Author+Date+Id+Revision
