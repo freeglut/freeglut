@@ -15,8 +15,9 @@ freeglut/README.mac -text
 freeglut/README.mingw_cross svn_keywords=Author+Date+Id+Revision
 freeglut/README.win32 svn_keywords=Author+Date+Id+Revision
 freeglut/TODO svn_keywords=Author+Date+Id+Revision
-freeglut/android/Android.mk -text
 freeglut/android/README -text
+freeglut/android/gles1/Android.mk -text
+freeglut/android/gles2/Android.mk -text
 freeglut/android_toolchain.cmake -text
 freeglut/config.h.in svn_keywords=Author+Date+Id+Revision
 freeglut/doc/download.html svn_keywords=Author+Date+Id+Revision
