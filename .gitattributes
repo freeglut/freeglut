@@ -146,6 +146,7 @@ freeglut/freeglut/src/x11/fg_xinput_x11.c -text svnc_svn_005fkeywords=Author+Dat
 freeglut/web-src/basic_page.php svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/docs/android.php -text
 freeglut/web-src/docs/api.php svn_keywords=Author+Date+Id+Revision
+freeglut/web-src/docs/gles.php -text
 freeglut/web-src/docs/install.php svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/freeglut-style.css svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/help.php svn_keywords=Author+Date+Id+Revision
