@@ -38,7 +38,23 @@ cd /usr/src/freeglut-3.0.0/
 mkdir native-gles2/ && cd native-gles2/
 cmake \
   -DCMAKE_INSTALL_PREFIX=/tmp/freeglut-native-gles2 \
+  -D CMAKE_BUILD_TYPE=Debug \
   -DFREEGLUT_GLES2=ON \
+  -DFREEGLUT_BUILD_DEMOS=NO \
+  ..
+make
+make install
+</pre>
+
+<p>For GLES1:</p>
+
+<pre>
+cd /usr/src/freeglut-3.0.0/
+mkdir native-gles1/ && cd native-gles1/
+cmake \
+  -DCMAKE_INSTALL_PREFIX=/tmp/freeglut-native-gles1 \
+  -D CMAKE_BUILD_TYPE=Debug \
+  -DFREEGLUT_GLES1=ON \
   -DFREEGLUT_BUILD_DEMOS=NO \
   ..
 make
@@ -68,5 +84,8 @@ cd your_project/
 mkdir native-gles2/ && cd native-gles2/
 PKG_CONFIG_PATH=/tmp/freeglut-native-gles2/share/pkgconfig/ cmake ..
 </pre>
+
+<p>See for instance <code>progs/test-shapes-gles1/</code> in the source distribution:
+it is a standalone CMake app that uses FreeGLUT GLES1.</p>
 
 <?php generateFooter(); ?>
