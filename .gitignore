@@ -16,6 +16,9 @@ freeglut/freeglut/config.sub
 freeglut/freeglut/configure
 freeglut/freeglut/configure.scan
 freeglut/freeglut/cross-android
+freeglut/freeglut/cross-android-module-gles1
+freeglut/freeglut/cross-android-toolchain-gles1
+freeglut/freeglut/cross-android-toolchain-gles2
 freeglut/freeglut/cross-woe
 freeglut/freeglut/debugfiles.list
 freeglut/freeglut/debugsources.list
@@ -33,6 +36,8 @@ freeglut/freeglut/ltmain.sh
 freeglut/freeglut/man-pages
 freeglut/freeglut/missing
 freeglut/freeglut/native
+freeglut/freeglut/native-gles1
+freeglut/freeglut/native-gles2
 freeglut/freeglut/progs/Makefile
 freeglut/freeglut/progs/Makefile.in
 freeglut/freeglut/progs/demos/CallbackMaker/.deps
