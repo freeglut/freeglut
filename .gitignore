@@ -83,6 +83,8 @@ freeglut/progs/demos/smooth_opengl3/Makefile
 freeglut/progs/demos/smooth_opengl3/Makefile.in
 freeglut/progs/demos/smooth_opengl3/smooth_opengl3
 freeglut/progs/demos/smooth_opengl3/smooth_opengl3.exe
+freeglut/progs/test-shapes-gles1/cross-android
+freeglut/progs/test-shapes-gles1/native
 freeglut/src/*.la
 freeglut/src/*.lo
 freeglut/src/.deps

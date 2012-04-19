@@ -53,6 +53,13 @@ freeglut/progs/demos/spaceball/vmath.h -text
 freeglut/progs/demos/spaceball/vmath.inl -text
 freeglut/progs/demos/subwin/subwin.c -text
 freeglut/progs/demos/timer/timer.c -text
+freeglut/progs/test-shapes-gles1/AndroidManifest.xml -text
+freeglut/progs/test-shapes-gles1/CMakeLists.txt -text
+freeglut/progs/test-shapes-gles1/android_toolchain.cmake -text
+freeglut/progs/test-shapes-gles1/ndk/AndroidManifest.xml -text
+freeglut/progs/test-shapes-gles1/ndk/jni/Android.mk -text
+freeglut/progs/test-shapes-gles1/ndk/jni/Application.mk -text
+freeglut/progs/test-shapes-gles1/test-shapes-gles1.c -text
 freeglut/src/android/fg_cursor_android.c -text
 freeglut/src/android/fg_ext_android.c -text
 freeglut/src/android/fg_gamemode_android.c -text
