@@ -99,6 +99,7 @@ freeglut/freeglut/src/fg_geometry.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/fg_gl2.c -text
 freeglut/freeglut/src/fg_gl2.h -text
 freeglut/freeglut/src/fg_init.c svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/src/fg_init.h -text
 freeglut/freeglut/src/fg_input_devices.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/fg_internal.h svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/src/fg_joystick.c svn_keywords=Author+Date+Id+Revision
@@ -150,6 +151,7 @@ freeglut/freeglut/src/x11/fg_menu_x11.c svnc_svn_005fkeywords=Author+Date+Id+Rev
 freeglut/freeglut/src/x11/fg_spaceball_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_state_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_state_x11_glx.c -text
+freeglut/freeglut/src/x11/fg_state_x11_glx.h -text
 freeglut/freeglut/src/x11/fg_structure_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_window_x11.c svnc_svn_005fkeywords=Author+Date+Id+Revision
 freeglut/freeglut/src/x11/fg_window_x11_glx.c -text
