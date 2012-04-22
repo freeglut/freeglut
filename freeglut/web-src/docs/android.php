@@ -13,6 +13,7 @@ generateHeader($_SERVER['PHP_SELF']);
 <li><a href="#api">New API</a></li>
 <li><a href="#compiling">Compiling</a></li>
 <li><a href="#using">Using in your projects</a></li>
+<li><a href="#links">Links</a></li>
 </ul>
 
 
@@ -66,5 +67,17 @@ New functions will be necessary to :
 
 <a name="using"></a>
 <h1>Using in your projects</h1>
+
+<a name="links"></a>
+<h1>Links</h1>
+
+<ul>
+
+  <li>http://pygame.renpy.org/ : Pygame Subset for Android, it
+    designed an API for managing Android app lifecycle
+    (<code>android.check_pause</code> and
+    <code>android.wait_for_resume</code>)</li>
+
+</u>
 
 <?php generateFooter(); ?>
