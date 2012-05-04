@@ -15,11 +15,8 @@ freeglut/freeglut/config.status
 freeglut/freeglut/config.sub
 freeglut/freeglut/configure
 freeglut/freeglut/configure.scan
-freeglut/freeglut/cross-android
-freeglut/freeglut/cross-android-module-gles1
-freeglut/freeglut/cross-android-module-gles2
-freeglut/freeglut/cross-android-toolchain-gles1
-freeglut/freeglut/cross-android-toolchain-gles2
+freeglut/freeglut/cross-android-gles1
+freeglut/freeglut/cross-android-gles2
 freeglut/freeglut/cross-woe
 freeglut/freeglut/debugfiles.list
 freeglut/freeglut/debugsources.list
