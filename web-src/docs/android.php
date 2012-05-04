@@ -30,22 +30,24 @@ Done:
 <li>Make EGL support reusable by Mesa X11</li>
 <li>freeglut_std.h can be used with GLES1 or GLES2 or non-ES headers<br />
 (using -DFREEGLUT_GLES1 and -DFREEGLUT_GLES2)</li>
-</ul>
-
-In progress:
-<ul>
-<li>GLES2 support for geometry, menus and basic fonts
-(possibly also GLES1)</li>
+<li>GLES1 and GLES2 support for geometry</li>
+<li>Pause/resume application support</li>
 </ul>
 
 TODO:
 <ul>
 <li>Open new windows (if that's possible)</li>
-<li>Cursor support</li>
 <li>Joystick support (xperia play...)</li>
 <li>Display translucent keys on virtual keypad</li>
 <li>API to detect touchscreen presence</li>
 <li>API to disable assets extraction</li>
+<li>Callback to reload OpenGL resources lost during a pause</li>
+<li>Callback for pause/resume notifications</li>
+</ul>
+
+Possibly implemented later:
+<ul>
+<li>Support for menus and basic fonts</li>
 </ul>
 
 <a name="api"></a>
