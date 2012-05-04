@@ -10,14 +10,6 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <link rel=stylesheet href="../freeglut-style.css">
 
-<ul>
-<li><a href="#compiling">Compiling</a></li>
-<li><a href="#using">Using in your projects</a></li>
-<li><a href="#roadmap">Roadmap</a></li>
-<li><a href="#api">New API</a></li>
-<li><a href="#links">Links</a></li>
-</ul>
-
 <p>
 
   FreeGLUT 3.0 introduces support for the Android platform.<br />
@@ -27,6 +19,16 @@ generateHeader($_SERVER['PHP_SELF']);
   Here's how:
 
 </p>
+
+
+<ul>
+<li><a href="#compiling">Compiling</a></li>
+<li><a href="#using">Using in your projects</a></li>
+<li><a href="#roadmap">Roadmap</a></li>
+<li><a href="#api">New API</a></li>
+<li><a href="#links">Links</a></li>
+</ul>
+
 
 <a name="compiling"></a>
 <h1>Compiling</h1>
