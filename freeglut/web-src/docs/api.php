@@ -346,8 +346,7 @@ but did not make it into the documentation.  The new callbacks consist
 of regular and special key release callbacks, a joystick callback, a menu
 state callback (with one argument, distinct from the menu status callback
 which has three arguments), and a window status callback
- (also with one argument).  Unsupported callbacks are the three Spaceball
-callbacks, the ButtonBox callback, the Dials callback, and the two Tablet
+ (also with one argument).  Unsupported callbacks are the two Tablet
 callbacks.  If the user has a need for an unsupported callback he should
 contact the <i>freeglut</i> development team.
 </p>
@@ -1030,10 +1029,10 @@ have them fixed.
 <h2>12.14 glutSpaceballMotionFunc</h2>
 
 <p>
-The <tt>glutSpaceballMotionFunc</tt> function is not implemented in
-<i>freeglut</i>, although the library does
-"answer the mail" to the extent that a call to the function will not produce
-an error..
+The <tt>glutSpaceballMotionFunc</tt> function is implemented in
+<i>freeglut</i> on X11 only.  On other platforms, function stubs are
+provided so that GLUT-based programs can compile and link against
+<i>freeglut</i> without modification.
 </p>
 
 <p><b>Usage</b></p>
@@ -1043,21 +1042,15 @@ an error..
 
 <p><b>Description</b></p>
 
-<p>
-The <tt>glutSpaceballMotionFunc</tt> function is not implemented in <i>freeglut</i>.
-</p>
-
-<p><b>Changes From GLUT</b></p>
-
-<p>GLUT implements this function. </p>
+<p>TODO</p>
 
 <h2>12.15 glutSpaceballRotateFunc</h2>
 
 <p>
-The <tt>glutSpaceballRotateFunc</tt> function is not implemented in
-<i>freeglut</i>, although the library does
-"answer the mail" to the extent that a call to the function will not produce
-an error..
+The <tt>glutSpaceballRotateFunc</tt> function is implemented in
+<i>freeglut</i> on X11 only.  On other platforms, function stubs are
+provided so that GLUT-based programs can compile and link against
+<i>freeglut</i> without modification.
 </p>
 
 <p><b>Usage</b></p>
@@ -1067,21 +1060,15 @@ an error..
 
 <p><b>Description</b></p>
 
-<p>
-The <tt>glutSpaceballRotateFunc</tt> function is not implemented in <i>freeglut</i>.
-</p>
-
-<p><b>Changes From GLUT</b></p>
-
-<p>GLUT implements this function. </p>
+<p>TODO</p>
 
 <h2>12.16 glutSpaceballButtonFunc</h2>
 
 <p>
-The <tt>glutSpaceballButtonFunc</tt> function is not implemented in
-<i>freeglut</i>, although the library does
-"answer the mail" to the extent that a call to the function will not produce
-an error..
+The <tt>glutSpaceballButtonFunc</tt> function is implemented in
+<i>freeglut</i> on X11 only.  On other platforms, function stubs are
+provided so that GLUT-based programs can compile and link against
+<i>freeglut</i> without modification.
 </p>
 
 <p><b>Usage</b></p>
@@ -1091,42 +1078,37 @@ an error..
 
 <p><b>Description</b></p>
 
-<p>The <tt>glutSpaceballButtonFunc</tt> function is not implemented in <i>freeglut</i>. </p>
-
-<p><b>Changes From GLUT</b></p>
-
-<p>GLUT implements this function. </p>
+<p>TODO</p>
 
 <h2>12.17 glutButtonBoxFunc</h2>
 
 <p>
-The <tt>glutSpaceballButtonBoxFunc</tt> function is not implemented
-in <i>freeglut</i>, although the library does "answer the mail" to the extent
-that a call to the function will not produce an error..
+The <tt>glutDialsFunc</tt> function sets the global dials&buttons box callback. Freeglut calls the callback when there is input from the box buttons.
 </p>
 
 <p><b>Usage</b></p>
 
 <p>
-<tt>void glutSpaceballButtonBoxFunc ( void (* callback)( int button, int updown ) );</tt>
+<tt>void glutButtonBoxFunc ( void (* callback)( int button, int updown ) );</tt>
 </p>
 
 <p><b>Description</b></p>
 
 <p>
-The <tt>glutSpaceballButtonBoxFunc</tt> function is not implemented in <i>freeglut</i>.
+The Dials&Buttons box is an ancient device presenting several pushable
+or rotatable buttons, sending the events to the computer via serial
+I/O.<br />
+
+See <a
+href="http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg">http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg</a>
+[<a href="http://www.nekochan.net/reputable/sgipix.html">1</a>]
+for instance.
 </p>
-
-<p><b>Changes From GLUT</b></p>
-
-<p>GLUT implements this function. </p>
 
 <h2>12.18 glutDialsFunc</h2>
 
 <p>
-The <tt>glutDialsFunc</tt> function is not implemented in <i>freeglut</i>,
-although the library does "answer the mail" to the extent that a call
-to the function will not produce an error..
+The <tt>glutDialsFunc</tt> function sets the global dials&buttons box callback. Freeglut calls the callback when there is input from the box dials.
 </p>
 
 <p><b>Usage</b></p>
@@ -1136,12 +1118,16 @@ int dial, int value )</tt><tt> );</tt></p>
 
 <p><b>Description</b></p>
 
-<p>The <tt>glutDialsFunc</tt> function
-is not implemented in <i>freeglut</i>. </p>
+<p>
+The Dials&Buttons box is an ancient device presenting several pushable
+or rotatable buttons, sending the events to the computer via serial
+I/O.<br />
 
-<p><b>Changes From GLUT</b></p>
-
-<p>GLUT implements this function. </p>
+See <a
+href="http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg">http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg</a>
+[<a href="http://www.nekochan.net/reputable/sgipix.html">1</a>]
+for instance.
+</p>
 
 <h2>12.19 glutTabletMotionFunc</h2>
 
