@@ -8,8 +8,6 @@ setPageTitle("Android");
 generateHeader($_SERVER['PHP_SELF']);
 ?>
 
-<link rel=stylesheet href="../freeglut-style.css">
-
 <p>
 
   FreeGLUT 3.0 introduces support for the Android platform.<br />
@@ -26,6 +24,7 @@ generateHeader($_SERVER['PHP_SELF']);
 <li><a href="#using">Using in your projects</a></li>
 <li><a href="#roadmap">Roadmap</a></li>
 <li><a href="#api">New API</a></li>
+<li><a href="#notes">Notes</a></li>
 <li><a href="#links">Links</a></li>
 </ul>
 
@@ -177,8 +176,10 @@ TODO:
 <li>Open new windows (if that's possible)</li>
 <li>Joystick support (xperia play...)</li>
 <li>Display translucent keys on virtual keypad</li>
+<li>API to access raw JVM structure and raw Activity(ies?)
+  structure</li>
 <li>API to detect touchscreen presence</li>
-<li>API to disable assets extraction</li>
+<li>API (or configuration file?) to disable assets extraction</li>
 <li>Callback to reload OpenGL resources lost during a pause</li>
 <li>Callback for pause/resume notifications</li>
 </ul>
@@ -198,6 +199,46 @@ New functions will be necessary to :
 </ul>
 
 (Work In Progress)
+
+<a name="notes"></a>
+<h1>Notes</h1>
+
+<ul>
+
+  <li>
+    Android never truly kills an application, even when pressing the
+    Back button, even when the application
+    is <code>onDestroy</code>'d: the process is still running and
+    ready to accept <code>onCreate</code> event to become active
+    again.<br />
+
+    By default, FreeGLUT <code>exit()</code>s when the last window is
+    closed (without returning to your <code>main</code>).  But this
+    behavior can be changed
+    with <code>glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, ...)</code>,
+    in which case your have to either <code>exit()</code> yourself at
+    the end of your <code>main</code>, or make sure
+    your <code>main</code> can be called multiple times (in
+    particular: beware of <code>static</code> variables that won't be
+    reinitialized).
+  </li>
+
+  <li>
+    When a key is repeated, down and up events happen most often at
+    the exact same time.  This makes it impossible to animate based on
+    key press time.<br />
+
+    e.g. down/up/wait/down/up rather than down/wait/down/wait/up<br/>
+
+    This looks like a bug in the Android virtual keyboard system :/
+    Real buttons such as the Back button appear to work correctly
+    (series of down events with proper getRepeatCount value).<br />
+
+    To work around this, FreeGLUT provides its own minimal virtual
+    keypad.  It may be replaced by a virtual (touchscreen) joystick.
+  </li>
+
+</ul>
 
 <a name="links"></a>
 <h1>Links</h1>
