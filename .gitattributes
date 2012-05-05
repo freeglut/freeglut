@@ -28,10 +28,8 @@ freeglut/doc/index.html svn_keywords=Author+Date+Id+Revision
 freeglut/doc/ogl_sm.png -text
 freeglut/doc/progress.html svn_keywords=Author+Date+Id+Revision
 freeglut/doc/structure.html svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut.lsm svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut.pc.in -text
 freeglut/freeglut.rc.in svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut.spec svn_keywords=Author+Date+Id+Revision
 freeglut/include/GL/freeglut.h svn_keywords=Author+Date+Id+Revision
 freeglut/include/GL/freeglut_ext.h svn_keywords=Author+Date+Id+Revision
 freeglut/include/GL/freeglut_std.h svn_keywords=Author+Date+Id+Revision
