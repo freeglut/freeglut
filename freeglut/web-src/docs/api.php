@@ -209,6 +209,14 @@ contained herein.
 			<li>glutCopyColormap</li>
 		</ol>
 	</li>
+	<li><a href="#MultiTouch">MultiTouch Functions</a>
+		<ol>
+			<li>glutMultiEntryFunc(id, GLUT_ENTERED|GLUT_LEFT)</li>
+			<li>glutMultiButtonFunc(id, x, y, button, GLUT_DOWN|GLUT_UP)</li>
+			<li>glutMultiMotionFunc(id, x, y)</li>
+			<li>glutMultiPassiveFunc(id, x, y)</li>
+		</ol>
+	</li>
 	<li><a href="#Miscellaneous">Miscellaneous Functions</a>
 		<ol>
 			<li>glutIgnoreKeyRepeat, glutSetKeyRepeat</li>
@@ -2133,6 +2141,29 @@ glutStopVideoResizing</h2>
 <h2>18.1 glutSetColor, glutGetColor</h2>
 
 <h2>18.2 glutCopyColormap</h2>
+
+<h1><a name="MultiTouch"></a>MultiTouch Functions</h1>
+
+MultiTouch callbacks are used to handle environments with multiple
+inputs, such as a multi-touch touchpad.<br />
+
+TODO: it seems this supports multiple mouses on X11
+(<code>id=XIDeviceEvent->deviceid</code>), as opposed to multiple
+contact points on Windows (<code>id=TOUCHINPUT->id</code>).
+
+<h2>glutMultiEntryFunc(id, GLUT_ENTERED|GLUT_LEFT)</h2>
+<h2>glutMultiButtonFunc(id, x, y, button, GLUT_DOWN|GLUT_UP)</h2>
+<h2>glutMultiMotionFunc(id, x, y)</h2>
+<h2>glutMultiPassiveFunc(id, x, y)</h2>
+
+These functions work like their non-multi variants, with an additional
+'deviceid' parameter describing the current input device.<br />
+
+Exception: in MultiButtonFunc, the order of callback parameters is
+different (x,y,button,state instead of button,state,x,y).<br />
+
+The non-multi callback variants are also called on X11.<br />
+TODO: are both callbacks called on Windows as well?
 
 <h1>19. <a name="Miscellaneous"></a>Miscellaneous Functions</h1>
 

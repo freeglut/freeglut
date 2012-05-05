@@ -173,8 +173,7 @@ Done:
 
 TODO:
 <ul>
-<li>Open new windows (if that's possible)</li>
-<li>Joystick support (xperia play...)</li>
+<li>Multi-touch support (glutMultiMotionFunc & al.)</li>
 <li>Display translucent keys on virtual keypad</li>
 <li>API to access raw JVM structure and raw Activity(ies?)
   structure</li>
@@ -182,11 +181,15 @@ TODO:
 <li>API (or configuration file?) to disable assets extraction</li>
 <li>Callback to reload OpenGL resources lost during a pause</li>
 <li>Callback for pause/resume notifications</li>
+<li>Accelerometer?</li>
 </ul>
 
 Possibly implemented later:
 <ul>
 <li>Support for menus and basic fonts</li>
+<li>Open new windows (if that's possible)</li>
+<li>Joystick support (note: xperia play doesn't have a joystick, but a
+  touchpad)</li>
 </ul>
 
 <a name="api"></a>
