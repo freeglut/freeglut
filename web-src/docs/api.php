@@ -2145,11 +2145,8 @@ glutStopVideoResizing</h2>
 <h1><a name="MultiTouch"></a>MultiTouch Functions</h1>
 
 MultiTouch callbacks are used to handle environments with multiple
-inputs, such as a multi-touch touchpad.<br />
-
-TODO: it seems this supports multiple mouses on X11
-(<code>id=XIDeviceEvent->deviceid</code>), as opposed to multiple
-contact points on Windows (<code>id=TOUCHINPUT->id</code>).
+inputs, such as a multi-touch screen, multi-touch touchpad, or
+multiple mouses.<br />
 
 <h2>glutMultiEntryFunc(id, GLUT_ENTERED|GLUT_LEFT)</h2>
 <h2>glutMultiButtonFunc(id, x, y, button, GLUT_DOWN|GLUT_UP)</h2>
@@ -2157,13 +2154,36 @@ contact points on Windows (<code>id=TOUCHINPUT->id</code>).
 <h2>glutMultiPassiveFunc(id, x, y)</h2>
 
 These functions work like their non-multi variants, with an additional
-'deviceid' parameter describing the current input device.<br />
+'deviceid' parameter describing the current input device (mouse or
+finger).<br />
 
 Exception: in MultiButtonFunc, the order of callback parameters is
 different (x,y,button,state instead of button,state,x,y).<br />
 
 The non-multi callback variants are also called on X11.<br />
-TODO: are both callbacks called on Windows as well?
+TODO: are both callbacks called on Windows as well?<br />
+
+<br />
+
+Limitation: currently on the cursor id is provided.  It may be
+desirable to get the device id as well in the following situations:
+
+<ul>
+
+  <li>Support a 2-fingers gesture such as pinch-to-zoom on the
+  touchscreen, while the mouse pointer or touchpad is performing an
+  unrelated action, not part of the touchscreen gesture (may not be
+  possible on some platforms).</li>
+
+  <li>To investigate: avoid touch id conflicts between touchpad and
+  touchscreen on Android; a possible work-around is to shift the
+  device id in the touch id.</li>
+
+</ul>
+
+Since this extra support comes at the cost of extra complexity, we're
+considering whether/how to implement it.
+
 
 <h1>19. <a name="Miscellaneous"></a>Miscellaneous Functions</h1>
 
