@@ -2160,8 +2160,12 @@ finger).<br />
 Exception: in MultiButtonFunc, the order of callback parameters is
 different (x,y,button,state instead of button,state,x,y).<br />
 
-The non-multi callback variants are also called on X11.<br />
-TODO: are both callbacks called on Windows as well?<br />
+Currently, under X11, the non-multi callback variants are also called
+on X11 for each event.<br />
+
+Currently, under windows, the first (oldest) touch point also controls
+the mouse cursor, which triggers the non-multi callbacks as
+usual.<br />
 
 <br />
 
@@ -2175,8 +2179,8 @@ desirable to get the device id as well in the following situations:
   unrelated action, not part of the touchscreen gesture (may not be
   possible on some platforms).</li>
 
-  <li>To investigate: avoid touch id conflicts between touchpad and
-  touchscreen on Android; a possible work-around is to shift the
+  <li>Avoid touch id conflicts between touchscreen and
+  touchpad/gamepad on Android; a possible work-around is to shift the
   device id in the touch id.</li>
 
 </ul>
