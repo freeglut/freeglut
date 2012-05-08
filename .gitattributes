@@ -43,6 +43,7 @@ freeglut/progs/demos/Fractals_random/fractals_random.c svn_keywords=Author+Date+
 freeglut/progs/demos/Lorenz/lorenz.c svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/One/one.c svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/Resizer/Resizer.cpp -text
+freeglut/progs/demos/multi-touch/multi-touch.c -text
 freeglut/progs/demos/shapes/shapes.c svn_keywords=Author+Date+Id+Revision
 freeglut/progs/demos/smooth_opengl3/smooth_opengl3.c -text
 freeglut/progs/demos/spaceball/spaceball.c -text
