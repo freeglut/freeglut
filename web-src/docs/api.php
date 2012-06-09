@@ -2236,18 +2236,11 @@ Programs which use the <i>freeglut</i>-specific extensions to GLUT should includ
 </pre>
 
 <p>
-Compile-time <i>freeglut</i> version testing can be done as follows:
-</p>
-
-<pre>
-#ifdef FREEGLUT_VERSION_2_0
-  code specific to freeglut 2.0 or later here
-#endif
-</pre>
-
-<p>
-In future releases, FREEGLUT_VERSION_2_1, FREEGLUT_VERSION_2_2, etc will
-be defined.  This scheme mimics OpenGL conventions.
+It was initially planned to
+define <code>FREEGLUT_VERSION_2_0</code>, <code>FREEGLUT_VERSION_2_1</code>, <code>FREEGLUT_VERSION_2_2</code>,
+etc., but this was only done for <code>FREEGLUT_VERSION_2_0</code>.
+This constant still exist in recent FreeGLUT releases but is
+deprecated.
 </p>
 
 <p>
