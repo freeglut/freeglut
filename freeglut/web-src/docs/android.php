@@ -169,6 +169,8 @@ Done:
 (using -DFREEGLUT_GLES1 and -DFREEGLUT_GLES2)</li>
 <li>GLES1 and GLES2 support for geometry</li>
 <li>Pause/resume application support</li>
+<li>Callback to reload OpenGL resources lost during a pause</li>
+<li>Callback for pause/resume notifications</li>
 </ul>
 
 TODO:
@@ -179,9 +181,7 @@ TODO:
   structure</li>
 <li>API to detect touchscreen presence</li>
 <li>API (or configuration file?) to disable assets extraction</li>
-<li>Callback to reload OpenGL resources lost during a pause</li>
-<li>Callback for pause/resume notifications</li>
-<li>Accelerometer?</li>
+<li>Accelerometer as a joystick input</li>
 </ul>
 
 Possibly implemented later:
@@ -194,6 +194,16 @@ Possibly implemented later:
 
 <a name="api"></a>
 <h1>New API</h1>
+
+These new callbacks were added :
+<ul>
+<li><code>glutInitContextFunc <- void</code> : called when the context
+is initialized or re-initialized (e.g. after a pause)</li>
+<li><code>glutPauseFunc <- void</code> : called when the application
+goes on a pause (or a stop)</li>
+<li><code>glutResumeFunc <- void</code> : called when the application
+comes back from a pause (after <code>glutInitContextFunc</code>)</li>
+</ul>
 
 New functions will be necessary to :
 <ul>
