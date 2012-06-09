@@ -2186,7 +2186,8 @@ desirable to get the device id as well in the following situations:
 </ul>
 
 Since this extra support comes at the cost of extra complexity, we're
-considering whether/how to implement it.
+<a href="http://sourceforge.net/mailarchive/forum.php?thread_name=20120518071314.GA28061%40perso.beuc.net&forum_name=freeglut-developer">considering</a>
+whether/how to implement it.
 
 
 <h1>19. <a name="Miscellaneous"></a>Miscellaneous Functions</h1>
