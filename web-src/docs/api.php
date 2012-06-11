@@ -211,10 +211,17 @@ contained herein.
 	</li>
 	<li><a href="#MultiTouch">MultiTouch Functions</a>
 		<ol>
-			<li>glutMultiEntryFunc(id, GLUT_ENTERED|GLUT_LEFT)</li>
-			<li>glutMultiButtonFunc(id, x, y, button, GLUT_DOWN|GLUT_UP)</li>
-			<li>glutMultiMotionFunc(id, x, y)</li>
-			<li>glutMultiPassiveFunc(id, x, y)</li>
+			<li>glutMultiEntryFunc &larr; id, GLUT_ENTERED|GLUT_LEFT</li>
+			<li>glutMultiButtonFunc &larr; id, x, y, button, GLUT_DOWN|GLUT_UP</li>
+			<li>glutMultiMotionFunc &larr; id, x, y</li>
+			<li>glutMultiPassiveFunc &larr; id, x, y</li>
+		</ol>
+	</li>
+	<li><a href="#Android">Android functions</a>
+		<ol>
+			<li>glutInitContextFunc &larr; void</li>
+			<li>glutPauseFunc &larr; void</li>
+			<li>glutResumeFunc &larr; void</li>
 		</ol>
 	</li>
 	<li><a href="#Miscellaneous">Miscellaneous Functions</a>
@@ -2148,10 +2155,10 @@ MultiTouch callbacks are used to handle environments with multiple
 inputs, such as a multi-touch screen, multi-touch touchpad, or
 multiple mouses.<br />
 
-<h2>glutMultiEntryFunc(id, GLUT_ENTERED|GLUT_LEFT)</h2>
-<h2>glutMultiButtonFunc(id, x, y, button, GLUT_DOWN|GLUT_UP)</h2>
-<h2>glutMultiMotionFunc(id, x, y)</h2>
-<h2>glutMultiPassiveFunc(id, x, y)</h2>
+<h2>glutMultiEntryFunc &larr; id, GLUT_ENTERED|GLUT_LEFT</h2>
+<h2>glutMultiButtonFunc &larr; id, x, y, button, GLUT_DOWN|GLUT_UP</h2>
+<h2>glutMultiMotionFunc &larr; id, x, y</h2>
+<h2>glutMultiPassiveFunc &larr; id, x, y</h2>
 
 These functions work like their non-multi variants, with an additional
 'deviceid' parameter describing the current input device (mouse or
@@ -2189,6 +2196,21 @@ Since this extra support comes at the cost of extra complexity, we're
 <a href="http://sourceforge.net/mailarchive/forum.php?thread_name=20120518071314.GA28061%40perso.beuc.net&forum_name=freeglut-developer">considering</a>
 whether/how to implement it.
 
+<h1><a name="Android"></a>Android Functions</h1>
+
+<p>These new callbacks were added:</p>
+
+<ul>
+<li><code>glutInitContextFunc &larr; void</code> : called when the context
+is initialized or re-initialized (e.g. after a pause)</li>
+<li><code>glutPauseFunc &larr; void</code> : called when the application
+goes on a pause (or a stop)</li>
+<li><code>glutResumeFunc &larr; void</code> : called when the application
+comes back from a pause (after <code>glutInitContextFunc</code>)</li>
+</ul>
+
+<p>Android support is further described at
+the <a href="android.php">Android page</a>.</p>
 
 <h1>19. <a name="Miscellaneous"></a>Miscellaneous Functions</h1>
 

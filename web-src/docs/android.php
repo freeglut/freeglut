@@ -195,15 +195,7 @@ Possibly implemented later:
 <a name="api"></a>
 <h1>New API</h1>
 
-These new callbacks were added :
-<ul>
-<li><code>glutInitContextFunc <- void</code> : called when the context
-is initialized or re-initialized (e.g. after a pause)</li>
-<li><code>glutPauseFunc <- void</code> : called when the application
-goes on a pause (or a stop)</li>
-<li><code>glutResumeFunc <- void</code> : called when the application
-comes back from a pause (after <code>glutInitContextFunc</code>)</li>
-</ul>
+New callbacks were added : see <a href="api.php#Android">API page</a>.
 
 New functions will be necessary to :
 <ul>

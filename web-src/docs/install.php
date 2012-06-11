@@ -46,4 +46,9 @@ make install
 
 <p>This will install the libraries, headers, and symlinks to replace GLUT.</p>
 
+<p>For Android, please see the dedicated <a href="android.php">Android page</a>.</p>
+
+<p>For OpenGL ES support (1.x and 2.x), please see the
+dedicated <a href="gles.php">GLES page</a>.</p>
+
 <?php generateFooter(); ?>
