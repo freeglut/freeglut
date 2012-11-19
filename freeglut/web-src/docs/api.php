@@ -1711,8 +1711,9 @@ line of code a three-dimensional object which can be used to test a variety
 of OpenGL functionality.  None of the routines generates a display list
 for the object which it draws.  The functions generate normals appropriate
 for lighting but, except for the teapon functions, do not generate texture
-coordinates. Depth testing (GL_LESS) should be enabled for the correct
-drawing of some of the objects.
+coordinates. Do note that depth testing (GL_LESS) should be enabled for
+the correct drawing of the nonconvex objects, i.e., the glutTorus,
+glutSierpinskiSponge and glutTeapot.
 </p>
 
 <h2>15.1  glutWireSphere, glutSolidSphere</h2>
