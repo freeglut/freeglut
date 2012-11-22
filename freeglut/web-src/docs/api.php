@@ -117,12 +117,15 @@ contained herein.
 			<li>glutChangeToSubMenu</li>
 			<li>glutRemoveMenuItem</li>
 			<li>glutAttachMenu, glutDetachMenu</li>
+            <li>glutMenuDestroyFunc</li>
 		</ol>
 	</li>
 	<li><a href="#GlobalCallback">Global Callback Registration Functions</a>
 		<ol>
 			<li>glutTimerFunc</li>
 			<li>glutIdleFunc</li>
+            <li>glutMenuStatusFunc</li>
+            <li>glutMenuStateFunc</li>
 		</ol>
 	</li>
 	<li><a href="#WindowCallback">Window-Specific Callback Registration Functions</a>
@@ -145,7 +148,6 @@ contained herein.
 			<li>glutDialsFunc</li>
 			<li>glutTabletMotionFunc</li>
 			<li>glutTabletButtonFunc</li>
-			<li>glutMenuStatusFunc</li>
 			<li>glutWindowStatusFunc</li>
 		</ol>
 	</li>
@@ -801,6 +803,8 @@ The <tt>glutShowOverlay</tt> and <tt>glutHideOverlay</tt> functions are not impl
 
 <h2>10.9 glutAttachMenu, glutDetachMenu</h2>
 
+<h2>10.10 glutMenuDestroyFunc</h2>
+
 <h1>11. <a name="GlobalCallback"></a>Global Callback Registration Functions</h1>
 
 <h2>11.1 glutTimerFunc</h2>
@@ -851,6 +855,10 @@ the window header bar.  If the idle callback renders a particular window
 (this is considered bad form but is frequently done anyway), the programmer
 should supply a window closure callback for that window which changes or disables
 the idle callback. </p>
+
+<h2>11.3 glutMenuStatusFunc</h2>
+
+<h2>11.4 glutMenuStateFunc</h2>
 
 <h1>12. <a name="WindowCallback"></a>Window-Specific Callback Registration Functions</h1>
 
@@ -1191,9 +1199,7 @@ is not implemented in <i>freeglut</i>.
 
 <p>GLUT implements this function. </p>
 
-<h2>12.21 glutMenuStatusFunc</h2>
-
-<h2>12.22 glutWindowStatusFunc</h2>
+<h2>12.21 glutWindowStatusFunc</h2>
 
 <h1>13. <a name="StateSetting"></a>State Setting and Retrieval Functions</h1>
 
