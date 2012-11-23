@@ -133,6 +133,7 @@ contained herein.
 			<li>glutDisplayFunc</li>
 			<li>glutOverlayDisplayFunc</li>
 			<li>glutReshapeFunc</li>
+			<li>glutCloseFunc</li>
 			<li>glutKeyboardFunc</li>
 			<li>glutSpecialFunc</li>
 			<li>glutKeyboardUpFunc</li>
@@ -896,6 +897,10 @@ is not invoked from the <tt>glutDestroyWindow</tt> call, but at a
 later time point.
 <i>Freeglut</i> sets the <i>current window</i> to the window
 which is about to be closed when the callback is invoked.
+Please note that other further developments of <i>GLUT</i> provide a
+<tt>glutWMCloseFunc</tt>. For compatibility, <i>FreeGLUT</i> also
+provides this function. It is however an alias to
+<tt>glutCloseFunc</tt>.
 
 <p><b>Changes From GLUT</b></p>
 
