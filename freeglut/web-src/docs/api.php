@@ -888,19 +888,26 @@ about to be destroyed.
 
 <p>
 The <tt>glutCloseFunc</tt> function specifies the function
-that <i>freeglut</i> will call when a window is about to be closed,
-either because it is requested using <tt>glutDestroyWindow</tt>,
-because the user clicked on the "x" in the window header
-(for top-level windows only), or due to a pending closure of a
-subwindow's parent window. In the first case, the closure callback
+that <i>freeglut</i> will call to notify the application that a window
+is about to be closed, either because it is requested using
+<tt>glutDestroyWindow</tt>, because the user clicked on the "x" in the
+window header (for top-level windows only), or due to a pending closure
+of a subwindow's parent window. In the first case, the closure callback
 is not invoked from the <tt>glutDestroyWindow</tt> call, but at a
-later time point.
+later time point.<br />
 <i>Freeglut</i> sets the <i>current window</i> to the window
-which is about to be closed when the callback is invoked.
+which is about to be closed when the callback is invoked. The window can
+thus be retrieved in the callback using <tt>glutGetWindow</tt>.<br />
 Please note that other further developments of <i>GLUT</i> provide a
 <tt>glutWMCloseFunc</tt>. For compatibility, <i>FreeGLUT</i> also
 provides this function. It is however an alias to
-<tt>glutCloseFunc</tt>.
+<tt>glutCloseFunc</tt>. Users looking to prevent <i>FreeGLUT</i> from
+exiting when a window is closed, as was made possible with
+<tt>glutWMCloseFunc</tt> by that callback's designer should look into
+using glutSetOption to set <tt>GLUT_ACTION_ON_WINDOW_CLOSE</tt> to
+<tt>GLUT_ACTION_GLUTMAINLOOP_RETURNS</tt> or
+<tt>GLUT_ACTION_CONTINUE_EXECUTION</tt>. This will prevent the
+application from exiting when a window is closed.
 
 <p><b>Changes From GLUT</b></p>
 
