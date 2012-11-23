@@ -870,6 +870,37 @@ the idle callback. </p>
 
 <h2>12.4 glutCloseFunc</h2>
 
+<p>
+The <tt>glutCloseFunc</tt> function sets the window's close
+callback. <i>Freeglut</i> calls the close callback when the window is
+about to be destroyed.
+</p>
+
+<p><b>Usage</b></p>
+
+<p><tt>void glutCloseFunc ( void (*func) ( void ) );</tt> </p>
+
+<p><tt>func </tt>The window's new closure callback function <br/>
+</p>
+
+<p><b>Description</b></p>
+
+<p>
+The <tt>glutCloseFunc</tt> function specifies the function
+that <i>freeglut</i> will call when a window is about to be closed,
+either because it is requested using <tt>glutDestroyWindow</tt>,
+because the user clicked on the "x" in the window header
+(for top-level windows only), or due to a pending closure of a
+subwindow's parent window. In the first case, the closure callback
+is not invoked from the <tt>glutDestroyWindow</tt> call, but at a
+later time point.
+<i>Freeglut</i> sets the <i>current window</i> to the window
+which is about to be closed when the callback is invoked.
+
+<p><b>Changes From GLUT</b></p>
+
+<p>This function is not implemented in GLUT.</p>
+
 <h2>12.5 glutKeyboardFunc</h2>
 
 <h2>12.6 glutSpecialFunc</h2>
