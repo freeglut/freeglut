@@ -12,7 +12,7 @@ generateHeader($_SERVER['PHP_SELF']);
 <div style="font-size: 1.6em; font-weight: bold; text-align: center;">
 The Open-Source<br/>
 OpenGL Utility Toolkit<br/>
-(<i>freeglut</i> 2.0.0)<br/>
+(<i>freeglut</i> 3.0.0)<br/>
 Application Programming Interface
 </div>
 
@@ -24,7 +24,7 @@ Version 4.0
 <p></p>
 <div style="font-size: 1.2em; font-weight: bold; text-align: center;">
 The <i>freeglut</i> Programming Consortium<br/>
-July, 2003
+January, 2013
 </div>
 
 <p>
