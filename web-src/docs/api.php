@@ -898,16 +898,12 @@ later time point.<br />
 <i>Freeglut</i> sets the <i>current window</i> to the window
 which is about to be closed when the callback is invoked. The window can
 thus be retrieved in the callback using <tt>glutGetWindow</tt>.<br />
-Please note that other further developments of <i>GLUT</i> provide a
-<tt>glutWMCloseFunc</tt>. For compatibility, <i>FreeGLUT</i> also
-provides this function. It is however an alias to
-<tt>glutCloseFunc</tt>. Users looking to prevent <i>FreeGLUT</i> from
-exiting when a window is closed, as was made possible with
-<tt>glutWMCloseFunc</tt> by that callback's designer should look into
-using glutSetOption to set <tt>GLUT_ACTION_ON_WINDOW_CLOSE</tt> to
-<tt>GLUT_ACTION_GLUTMAINLOOP_RETURNS</tt> or
-<tt>GLUT_ACTION_CONTINUE_EXECUTION</tt>. This will prevent the
-application from exiting when a window is closed.
+Users looking to prevent <i>FreeGLUT</i> from exiting when a window is
+closed, should look into using glutSetOption to set
+<tt>GLUT_ACTION_ON_WINDOW_CLOSE</tt>. Some settings will prevent the
+application from exiting when a window is closed.<br />
+Please note that <tt>glutWMCloseFunc</tt>, a deprecated function, is an
+alias to <tt>glutCloseFunc</tt>.
 
 <p><b>Changes From GLUT</b></p>
 
