@@ -75,7 +75,7 @@ contained herein.
 			<li>glutCreateSubwindow</li>
 			<li>glutDestroyWindow</li>
 			<li>glutSetWindow, glutGetWindow</li>
-			<li>glutSetWindowTitle, glutSetIconTitlew</li>
+			<li>glutSetWindowTitle, glutSetIconTitle</li>
 			<li>glutReshapeWindow</li>
 			<li>glutPositionWindow</li>
 			<li>glutShowWindow, glutHideWindow, glutIconifyWindow</li>
@@ -133,13 +133,15 @@ contained herein.
 			<li>glutDisplayFunc</li>
 			<li>glutOverlayDisplayFunc</li>
 			<li>glutReshapeFunc</li>
+			<li>glutPositionFunc</li>
 			<li>glutCloseFunc</li>
 			<li>glutKeyboardFunc</li>
 			<li>glutSpecialFunc</li>
 			<li>glutKeyboardUpFunc</li>
 			<li>glutSpecialUpFunc</li>
 			<li>glutMotionFunc, glutPassiveMotionFunc</li>
-			<li>glutVisibilityFunc</li>
+            <li>glutMouseFunc</li>
+            <li>glutMouseWheelFunc</li>
 			<li>glutEntryFunc</li>
 			<li>glutJoystickFunc</li>
 			<li>glutSpaceballMotionFunc</li>
@@ -149,7 +151,7 @@ contained herein.
 			<li>glutDialsFunc</li>
 			<li>glutTabletMotionFunc</li>
 			<li>glutTabletButtonFunc</li>
-			<li>glutWindowStatusFunc</li>
+			<li>glutVisibilityFunc, glutWindowStatusFunc</li>
 		</ol>
 	</li>
 	<li><a href="#StateSetting">State Setting and Retrieval Functions</a>
@@ -869,7 +871,24 @@ the idle callback. </p>
 
 <h2>12.3 glutReshapeFunc</h2>
 
-<h2>12.4 glutCloseFunc</h2>
+<h2>12.4 glutPositionFunc</h2>
+
+<p>
+The <tt>glutPositionFunc</tt> function sets the window's position
+callback. <i>Freeglut</i> calls the position callback when the window is
+repositioned/moved programatically or by the user.
+</p>
+
+<p><b>Usage</b></p>
+
+<p><tt>void glutPositionFunc ( void
+(* callback)( int x, int y) );</tt></p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>This function is not implemented in GLUT.</p>
+
+<h2>12.5 glutCloseFunc</h2>
 
 <p>
 The <tt>glutCloseFunc</tt> function sets the window's close
@@ -881,7 +900,7 @@ about to be destroyed.
 
 <p><tt>void glutCloseFunc ( void (*func) ( void ) );</tt> </p>
 
-<p><tt>func </tt>The window's new closure callback function <br/>
+<p><tt>func</tt> The window's new closure callback function <br/>
 </p>
 
 <p><b>Description</b></p>
@@ -909,9 +928,9 @@ alias to <tt>glutCloseFunc</tt>.
 
 <p>This function is not implemented in GLUT.</p>
 
-<h2>12.5 glutKeyboardFunc</h2>
+<h2>12.6 glutKeyboardFunc</h2>
 
-<h2>12.6 glutSpecialFunc</h2>
+<h2>12.7 glutSpecialFunc</h2>
 
 <p>
 The <tt>glutSpecialFunc</tt> function sets the window's special key press
@@ -966,7 +985,7 @@ The <tt>key</tt> argument may take one of the following defined constant values:
 
 <p>None.</p>
 
-<h2>12.7 glutKeyboardUpFunc</h2>
+<h2>12.8 glutKeyboardUpFunc</h2>
 
 <p>
 The <tt>glutKeyboardUpFunc</tt> function sets the window's key release
@@ -998,18 +1017,18 @@ function specifies the function that <i>freeglut</i> will call when the
 user releases a key from the keyboard.  The callback function has one
 argument:  the name of the function to be invoked ("called back") at
 the time at which the key is released.  The function returns no value.
-<i>Freeglut</i> sets the <i>current window</i>
-  to the window which is active when the callback is invoked. <br/>
-  While <i>freeglut</i> checks for upper or lower case
-letters, it does not do so for non-alphabetical characters.  Nor does
-it account for the Caps-Lock key being on.  The operating system may
-send some unexpected characters to <i>freeglut</i>, such as "8" when the
-user is pressing the Shift key.  <i>Freeglut</i> also invokes the callback
-when the user releases the Control, Alt, or Shift keys, among others.
-Releasing the Delete key causes this function to be invoked with a value
-of 127 for <tt>key</tt>. <br/>
-Calling <tt>glutKeyboardUpFunc</tt> with a NULL argument
-disables the call to the window's key release callback. </p>
+<i>Freeglut</i> sets the <i>current window</i> to the window which is
+active when the callback is invoked. <br/> While <i>freeglut</i> checks
+for upper or lower case letters, it does not do so for non-alphabetical
+characters.  Nor does it account for the Caps-Lock key being on.
+The operating system may send some unexpected characters to
+<i>freeglut</i>, such as "8" when the user is pressing the Shift
+key.  <i>Freeglut</i> also invokes the callback when the user
+releases the Control, Alt, or Shift keys, among others.  Releasing
+the Delete key causes this function to be invoked with a value of
+127 for <tt>key</tt>. <br/> Calling <tt>glutKeyboardUpFunc</tt> with
+a NULL argument disables the call to the window's key release callback.
+</p>
 
 <p><b>Changes From GLUT</b></p>
 
@@ -1018,7 +1037,7 @@ versions before Version 4.  It has been designed to be as close to GLUT
 as possible.  Users who find differences should contact the
 <i>freeglut</i> Programming Consortium to have them fixed. </p>
 
-<h2>12.8 glutSpecialUpFunc</h2>
+<h2>12.9 glutSpecialUpFunc</h2>
 
 <p>
 The <tt>glutSpecialUpFunc</tt> function sets the window's special key
@@ -1077,17 +1096,42 @@ as possible.  Users who find differences should contact the
 have them fixed.
 </p>
 
-<h2>12.9 glutMouseFunc</h2>
-
 <h2>12.10 glutMotionFunc, glutPassiveMotionFunc</h2>
 
-<h2>12.11 glutVisibilityFunc</h2>
+<h2>12.11 glutMouseFunc</h2>
 
-<h2>12.12 glutEntryFunc</h2>
+<h2>12.12 glutMouseWheelFunc</h2>
 
-<h2>12.13 glutJoystickFunc</h2>
+<p>
+The <tt>glutMouseWheelFunc</tt> function sets the window's mouse wheel
+callback. <i>Freeglut</i> calls the mouse wheel callback when the user
+spins the mouse wheel.
+</p>
 
-<h2>12.14 glutSpaceballMotionFunc</h2>
+<p><b>Usage</b></p>
+
+<p><tt>void glutMouseWheelFunc ( void( *callback )( int wheel, int
+direction, int x, int y ));</tt></p>
+
+<p><b>Description</b></p>
+
+<p>If the mouse wheel is spun over your (sub)window, <i>FreeGLUT</i>
+will report this via the MouseWheel callback. <tt>wheel</tt> is the wheel
+number, <tt>direction</tt> is +/- 1, and <tt>x</tt> and <tt>y</tt> are
+the mouse coordinates.<br><br>
+If you do not register a wheel callback, wheel events will be reported
+as mouse buttons.
+</p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>This function is not implemented in GLUT.</p>
+
+<h2>12.13 glutEntryFunc</h2>
+
+<h2>12.14 glutJoystickFunc</h2>
+
+<h2>12.15 glutSpaceballMotionFunc</h2>
 
 <p>
 The <tt>glutSpaceballMotionFunc</tt> function is implemented in
@@ -1105,7 +1149,7 @@ provided so that GLUT-based programs can compile and link against
 
 <p>TODO</p>
 
-<h2>12.15 glutSpaceballRotateFunc</h2>
+<h2>12.16 glutSpaceballRotateFunc</h2>
 
 <p>
 The <tt>glutSpaceballRotateFunc</tt> function is implemented in
@@ -1123,7 +1167,7 @@ provided so that GLUT-based programs can compile and link against
 
 <p>TODO</p>
 
-<h2>12.16 glutSpaceballButtonFunc</h2>
+<h2>12.17 glutSpaceballButtonFunc</h2>
 
 <p>
 The <tt>glutSpaceballButtonFunc</tt> function is implemented in
@@ -1141,7 +1185,7 @@ provided so that GLUT-based programs can compile and link against
 
 <p>TODO</p>
 
-<h2>12.17 glutButtonBoxFunc</h2>
+<h2>12.18 glutButtonBoxFunc</h2>
 
 <p>
 The <tt>glutDialsFunc</tt> function sets the global dials&buttons box callback. Freeglut calls the callback when there is input from the box buttons.
@@ -1166,7 +1210,7 @@ href="http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg">http://www.reputable
 for instance.
 </p>
 
-<h2>12.18 glutDialsFunc</h2>
+<h2>12.19 glutDialsFunc</h2>
 
 <p>
 The <tt>glutDialsFunc</tt> function sets the global dials&buttons box callback. Freeglut calls the callback when there is input from the box dials.
@@ -1190,7 +1234,7 @@ href="http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg">http://www.reputable
 for instance.
 </p>
 
-<h2>12.19 glutTabletMotionFunc</h2>
+<h2>12.20 glutTabletMotionFunc</h2>
 
 <p>
 The <tt>glutTabletMotionFunc</tt> function is not implemented in <i>
@@ -1213,7 +1257,7 @@ is not implemented in <i>freeglut</i>. </p>
 
 <p>GLUT implements this function. </p>
 
-<h2>12.20 glutTabletButtonFunc</h2>
+<h2>12.21 glutTabletButtonFunc</h2>
 
 <p>
 The <tt>glutTabletButtonFunc</tt> function is not implemented in <i>
@@ -1237,11 +1281,61 @@ is not implemented in <i>freeglut</i>.
 
 <p>GLUT implements this function. </p>
 
-<h2>12.21 glutWindowStatusFunc</h2>
+<h2>12.22 glutVisibilityFunc, glutWindowStatusFunc</h2>
 
 <h1>13. <a name="StateSetting"></a>State Setting and Retrieval Functions</h1>
 
 <h2>13.1 glutSetOption</h2>
+
+<p>
+Allows you to set some general state/option variables.
+</p>
+
+<p><b>Usage</b></p>
+
+<p>
+<tt>void glutSetOption ( GLenum eWhat, int value );</tt>
+</p>
+
+<p><b>Description</b></p>
+
+<p>Stores the <tt>value</tt> into a state variable named by
+<tt>eWhat</tt>.</p>
+<p>
+The following state variables can be set:
+<ul>
+<li>GLUT_ACTION_ON_WINDOW_CLOSE - Controls what happens when a window is
+closed by the user or system. GLUT_ACTION_EXIT will immediately exit the
+application (default, GLUT's behavior). GLUT_ACTION_GLUTMAINLOOP_RETURNS
+will immediately return from the main loop.
+GLUT_ACTION_CONTINUE_EXECUTION will contine execution of remaining
+windows.</li>
+<li>GLUT_INIT_DISPLAY_MODE - Set the display mode for a new window, see
+<tt>glutInitDisplayMode</tt></li>
+<li>GLUT_INIT_WINDOW_X - Set the initial horizontal position of new
+windows.</li>
+<li>GLUT_INIT_WINDOW_Y - Set the initial vertical position of new
+windows.</li>
+<li>GLUT_INIT_WINDOW_WIDTH - Set the width of new windows.</li>
+<li>GLUT_INIT_WINDOW_HEIGHT - Set the height of new windows.</li>
+<li>GLUT_RENDERING_CONTEXT - Set to either GLUT_CREATE_NEW_CONTEXT or
+GLUT_USE_CURRENT_CONTEXT to indicate whether to share the current OpenGL
+rendering context with new windows.</li>
+<li>GLUT_WINDOW_CURSOR - Set the current window's cursor as if by
+glutSetCursor().</li>
+<li>GLUT_AUX - Set the number of auxiliary buffers requested for new
+windows if GLUT_AUX was set in the displayMode.</li>
+<li>GLUT_MULTISAMPLE - Set the number of samples to request for new
+windows if GLUT_MULTISAMPLE was set in the displayMode.</li>
+<li>GLUT_GEOMETRY_VISUALIZE_NORMALS - Set whether <a
+href="#GeometricObject"><i>FreeGLUT</i>'s geometric object rendering
+functions</a> also visualize the object's normals or not.</li>
+</ul>
+</p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>This function is not implemented in GLUT.</p>
 
 <h2>13.2 glutGet</h2>
 
@@ -1305,7 +1399,8 @@ These queries do not depend on the current window.
 <li>GLUT_INIT_WINDOW_Y - Y position last set by glutInitWindowPosition</li>
 <li>GLUT_INIT_WINDOW_WIDTH - width last set by glutInitWindowSize</li>
 <li>GLUT_INIT_WINDOW_HEIGHT - height last set by glutInitWindowSize</li>
-<li>GLUT_INIT_DISPLAY_MODE - display mode last set by glutInitDisplayMode</li>
+<li>GLUT_INIT_DISPLAY_MODE - display mode last set by
+glutInitDisplayMode or glutSetOption(GLUT_INIT_DISPLAY_MODE, value)</li>
 <li>GLUT_ELAPSED_TIME - time (in milliseconds) elapsed since glutInit or glutGet(GLUT_ELAPSED_TIME) was first called</li>
 <li>GLUT_INIT_STATE - 1 if <i>freeglut</i> has been initialized through
     a call to <tt>glutInit</tt></li>
@@ -1746,18 +1841,21 @@ are designed such that all characters have (nominally) the same height. </p>
 <h1>15. <a name="GeometricObject"></a>Geometric Object Rendering Functions</h1>
 
 <p>
-<i>Freeglut</i> includes eighteen routines for generating easily-recognizable
- 3-d geometric objects.  These routines are effectively the same ones
- that are included in the GLUT library, and reflect the functionality available
- in the <i>aux</i> toolkit described in the <i>OpenGL Programmer's Guide</i>
-  . They are included to allow programmers to create with a single
-line of code a three-dimensional object which can be used to test a variety
-of OpenGL functionality.  None of the routines generates a display list
-for the object which it draws.  The functions generate normals appropriate
-for lighting but, except for the teapon functions, do not generate texture
-coordinates. Do note that depth testing (GL_LESS) should be enabled for
-the correct drawing of the nonconvex objects, i.e., the glutTorus,
-glutSierpinskiSponge and glutTeapot.
+<i>Freeglut</i> includes eighteen routines for generating
+easily-recognizable 3-d geometric objects.  These routines are
+effectively the same ones that are included in the GLUT library, and
+reflect the functionality available in the <i>aux</i> toolkit described
+in the <i>OpenGL Programmer's Guide</i>. They are included to allow
+programmers to create with a single line of code a three-dimensional
+object which can be used to test a variety of OpenGL functionality.
+None of the routines generates a display list for the object which it
+draws.  The functions generate normals appropriate for lighting but,
+except for the teapot functions, do not generate texture coordinates. Do
+note that depth testing (GL_LESS) should be enabled for the correct
+drawing of the nonconvex objects, i.e., the glutTorus,
+glutSierpinskiSponge and glutTeapot.<br>
+Also see the <tt>GLUT_GEOMETRY_VISUALIZE_NORMALS</tt> option that can be
+set with <tt>glutSetOption</tt>.
 </p>
 
 <h2>15.1  glutWireSphere, glutSolidSphere</h2>
