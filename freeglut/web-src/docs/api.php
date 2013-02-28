@@ -1016,8 +1016,7 @@ disables the call to the window's key release callback. </p>
 <p>This function is not implemented in GLUT
 versions before Version 4.  It has been designed to be as close to GLUT
 as possible.  Users who find differences should contact the
-                          <i>freeglut</i>Programming Consortium  to
-have them fixed. </p>
+<i>freeglut</i> Programming Consortium to have them fixed. </p>
 
 <h2>12.8 glutSpecialUpFunc</h2>
 
@@ -1268,7 +1267,7 @@ These queries are with respect to the current window:
 <li>GLUT_WINDOW_HEIGHT - window height, see <a href="#Conventions">FreeGLUT's conventions</a></li>
 <li>GLUT_WINDOW_BORDER_WIDTH - window border width</li>
 <li>GLUT_WINDOW_BORDER_HEIGHT - window border height</li>
-<li>GLUT_WINDOW_BUFFER_SIZE - number of color or color index bits per pixel</li>
+<li>GLUT_WINDOW_BUFFER_SIZE - number of color (including alpha) or color index bits per pixel</li>
 <li>GLUT_WINDOW_STENCIL_SIZE - number of bits per stencil value</li>
 <li>GLUT_WINDOW_DEPTH_SIZE - number of bits per depth value</li>
 <li>GLUT_WINDOW_RED_SIZE - number of bits per red value</li>
@@ -2355,7 +2354,7 @@ Programs which use the <i>freeglut</i>-specific extensions to GLUT should includ
 It was initially planned to
 define <code>FREEGLUT_VERSION_2_0</code>, <code>FREEGLUT_VERSION_2_1</code>, <code>FREEGLUT_VERSION_2_2</code>,
 etc., but this was only done for <code>FREEGLUT_VERSION_2_0</code>.
-This constant still exist in recent FreeGLUT releases but is
+This constant still exist in current FreeGLUT releases but is
 deprecated.
 </p>
 
