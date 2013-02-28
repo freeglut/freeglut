@@ -41,7 +41,9 @@ freeglut/freeglut/progs/demos/Fractals/fractals.dat svn_keywords=Author+Date+Id+
 freeglut/freeglut/progs/demos/Fractals_random/fractals.dat svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/Fractals_random/fractals_random.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/Lorenz/lorenz.c svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/progs/demos/One/objects.ico -text
 freeglut/freeglut/progs/demos/One/one.c svn_keywords=Author+Date+Id+Revision
+freeglut/freeglut/progs/demos/One/one.rc -text
 freeglut/freeglut/progs/demos/Resizer/Resizer.cpp -text
 freeglut/freeglut/progs/demos/multi-touch/multi-touch.c -text
 freeglut/freeglut/progs/demos/shapes/glmatrix.c -text
