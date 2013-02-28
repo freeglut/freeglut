@@ -2318,9 +2318,17 @@ are recognized by <i>freeglut</i>:
 	if FREEGLUT_FPS is set to 5000, every 5 seconds a message will be printed
 	to stderr showing the current frame rate.  The frame rate is measured by counting
 	the number of times glutSwapBuffers() is called over the time interval.</li>
-  <li>GLUT_ICON - specifies the icon that
-	goes in the upper left-hand corner of the <i>freeglut</i><i> </i>windows </li>
 </ul>
+
+<p>
+Furthermore, on windows, there is a resource file identifier GLUT_ICON
+that you can specify for your executable file. It specifies the icon
+that goes in the upper left-hand corner of the <i>freeglut</i> windows.
+Your application's resource file should contain the line:<br>
+<tt>GLUT_ICON   ICON    DISCARDABLE     "icon.ico"</tt><br>, where
+icon.ico is the filename of your icon. The One demo includes such an
+icon as an example.
+</p>
 
 <h1>21. <a name="ImplementationNotes"></a>Implementation Notes</h1>
 
