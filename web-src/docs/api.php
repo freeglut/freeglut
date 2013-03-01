@@ -592,6 +592,36 @@ Consortium and ask for the code to be fixed.
 
 <h2>6.5 glutSetWindowTitle, glutSetIconTitle</h2>
 
+<p>
+The <tt>glutSetWindowTitle</tt>, <tt>glutSetIconTitle</tt> set the
+window title for when the window is in a visible state and when it is in
+an iconified state respectively.
+</p>
+
+<p><b>Usage</b></p>
+
+<p><tt>glutSetWindowTitle(const char* title);</tt><br>
+<tt>glutSetIconTitle(const char* title);</tt>
+</p>
+
+<p><b>Description</b></p>
+
+<p>
+Normally a window system displays a title for every top-level window in
+the system. The initial title is set when you call glutCreateWindow().
+By means of the <tt>glutSetWindowTitle</tt> function you can set the
+titles for your top-level <i>FreeGLUT</i> windows. If you just want one
+title for the window over the window's entire life, you should set it
+when you open the window with glutCreateWindow().<br>
+<tt>glutSetIconTitle</tt> set the title to be displayed for the window
+when it is in iconified (minimized) state.
+</p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p><tt>glutSetIconTitle</tt> does nothing in GLUT on Windows, Windows is
+supported by <i>FreeGLUT</i>.</p>
+
 <h2>6.6 glutReshapeWindow</h2>
 
 <h2>6.7 glutPositionWindow</h2>
