@@ -1283,6 +1283,65 @@ is not implemented in <i>freeglut</i>.
 
 <h2>12.22 glutVisibilityFunc, glutWindowStatusFunc</h2>
 
+<p>
+The <tt>glutVisibilityFunc</tt> and the <tt>glutWindowStatusFunc</tt>
+functions set the window's visibility and windowStatus callbacks for the
+current window. Setting one supersedes the other. <i>Freeglut</i> calls
+these callbacks when the visibility status of a window changes.
+</p>
+
+<p><b>Usage</b></p>
+
+<p><tt>void glutVisibilityFunc ( void( *callback )( int state ));</tt>
+<br><tt>void glutWindowStatusFunc ( void( *callback )( int state ));</tt>
+</p>
+
+<p><b>Description</b></p>
+
+<p>
+The state callback parameter is one of GLUT_HIDDEN, GLUT_FULLY_RETAINED,
+GLUT_PARTIALLY_RETAINED, or GLUT_FULLY_COVERED depending on the current
+window status of the window. GLUT_HIDDEN means that the window is not
+shown (often meaning that the window is iconified). GLUT_FULLY_RETAINED
+means that the window is fully retained (no pixels belonging to the
+window are covered by other windows). GLUT_PARTIALLY_RETAINED means that
+the window is partially retained (some but not all pixels belonging to
+the window are covered by other windows). GLUT_FULLY_COVERED means the
+window is shown but no part of the window is visible, i.e., until the
+window's status changes, all further rendering to the window is
+discarded.<br>
+GLUT considers a window visible if any pixel of the window is visible or
+any pixel of any descendant window is visible on the screen.<br>
+GLUT applications are encouraged to disable rendering and/or animation
+when windows have a status of either GLUT_HIDDEN or
+GLUT_FULLY_COVERED.<br>
+If the window status callback for a window is disabled and later
+re-enabled, the window status of the window is undefined; any change in
+window window status will be reported, that is if you disable a window
+status callback and re-enable the callback, you are guaranteed the next
+window status change will be reported.<br>
+Setting the window status callback for a window disables the visibility
+callback set for the window (and vice versa). The visibility callback is
+set with <tt>glutVisibilityFunc</tt>. <tt>glutVisibilityFunc</tt> is
+deprecated in favor of the more informative
+<tt>glutWindowStatusFunc</tt>. For <tt>glutVisibilityFunc</tt>, the
+state callback parameter is either GLUT_NOT_VISIBLE or GLUT_VISIBLE
+depending on the current visibility of the window. GLUT_VISIBLE does not
+distinguish a window being totally versus partially visible.
+GLUT_NOT_VISIBLE means no part of the window is visible, i.e., until the
+window's visibility changes, all further rendering to the window is
+discarded.<br>
+Not all window managers support such finegrained callback messages or
+can even ensure basic correctness. On Windows, there are no
+notifications if the visibility status of a window changes and
+<i>FreeGLUT</i> might be in visible state even if the window is fully
+obscured by other windows.
+</p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>None.</p>
+
 <h1>13. <a name="StateSetting"></a>State Setting and Retrieval Functions</h1>
 
 <h2>13.1 glutSetOption</h2>
