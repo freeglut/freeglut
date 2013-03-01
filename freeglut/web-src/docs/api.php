@@ -303,13 +303,18 @@ sizes in order to subtract them off the window's initial position until
 some time after the window has been created.  Therefore we decided on
 the following behavior, both under Windows and under UNIX/X11:
 <ul><li>When you create a window with position (x,y) and size (w,h), the
-upper left hand corner of the outside of the window is at (x,y) and the
-size of the drawable area is (w,h).
-<li>When you query the size and position of the window <i>freeglut</i>
-will return the size of the drawable area--the (w,h) that you specified
-when you created the window--and the coordinates of the upper left hand
-corner of the drawable area--which is <u>NOT</u> the (x,y) position of
-the window you specified when you created it.</ul>
+upper left hand corner of the outside of the window (the non-client
+area) is at (x,y) and the size of the drawable (client) area is (w,h).
+The coordinates taken by <tt>glutInitPosition</tt> and
+<tt>glutPositionWindow</tt>, as well as the coordinates provided by
+<i>FreeGLUT</i> when it calls the <tt>glutPositionFunc</tt> callback,
+specify the top-left of the non-client area of the window.</li>
+<li>When you query the size and position of the window using
+<tt>glutGet</tt>, <i>FreeGLUT</i> will return the size of the drawable
+area--the (w,h) that you specified when you created the window--and the
+coordinates of the upper left hand corner of the drawable (client)
+area--which is <u>NOT</u> the (x,y) position of the window you specified
+when you created it.</ul>
 </p>
 
 <h2>3.3 Terminology</h2>
@@ -883,6 +888,16 @@ repositioned/moved programatically or by the user.
 
 <p><tt>void glutPositionFunc ( void
 (* callback)( int x, int y) );</tt></p>
+
+<p><b>Description</b></p>
+
+<p>When <i>FreeGLUT</i> calls this callback, it provides the new
+position on the screen of the top-left of the <u>non-client area</u>,
+that is, the same coordinates used by <tt>glutInitPosition</tt> and
+<tt>glutPositionWindow</tt>. To get the position on the screen of the
+top-left of the client area, use <tt>glutGet(GLUT_WINDOW_X)</tt> and
+<tt>glutGet(GLUT_WINDOW_Y)</tt>. See <a href="#Conventions">FreeGLUT's
+conventions</a> for more information.</p>
 
 <p><b>Changes From GLUT</b></p>
 
