@@ -107,7 +107,6 @@ freeglut/src/fg_input_devices.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_internal.h svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_joystick.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_main.c svn_keywords=Author+Date+Id+Revision
-freeglut/src/fg_main.h -text
 freeglut/src/fg_menu.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_misc.c svn_keywords=Author+Date+Id+Revision
 freeglut/src/fg_overlay.c svn_keywords=Author+Date+Id+Revision
