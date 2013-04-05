@@ -13,9 +13,16 @@ generateHeader($_SERVER['PHP_SELF']);
 <p>A new bugfix release of "freeglut" is now available. Here is a
 incomplete list of fixes and enhancements:</p>
 <ul>
-<li>Visual Studio 2012 project files, and a fix for the dissapearing
+<li>Visual Studio 2012 project files, and a fix for the disappearing
 windows with this toolset.</li>
-<li>X11 menu regression fixed.</li>
+<li>X11 menu regression fixed, menu behavior improved on Windows.</li>
+<li>Now using monotonic clock on X11.</li>
+<li>GameMode now doesn't attempt to change unspecified display params to
+arbitrary defaults, and not changing display mode when unnecessary to
+avoid flicker.</li>
+<li>On Windows, windows no longer attain focus as soon as the mouse
+enters them</li>
+<li>Various demo enhancements.</li>
 <li>Many bugs have been fixed.</li>
 </ul>
 </div>
