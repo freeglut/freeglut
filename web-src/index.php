@@ -30,8 +30,22 @@ generateHeader($_SERVER['PHP_SELF']);
 <p>Pawel started freeglut development on December 1st, 1999. The project is now virtually a 100% replacement for the original GLUT with only a few departures (such as the abandonment of SGI-specific features such as the Dials&amp;Buttons box and Dynamic Video Resolution) and a shrinking set of bugs.</p>
 <p>There are some additional features such as a larger set of predefined shapes for use in applications.</p>
 
+<div class="textheader"><a name="download"></a>Help out!</div>
+<p>FreeGLUT 3.0 is in active development, and will feature a port to
+Android as well as a host of other enhancements. We are looking for
+developers to help out with further work on the Android port.
+Furthermore, ports to Cocoa/Carbon on OSX, and maybe even Wayland are
+planned. For more information, see the <a href="help.php">Help Out
+page</a> and <a
+href="http://lists.sourceforge.net/lists/listinfo/freeglut-developer">join</a>
+the <a
+href="mailto:freeglut-developer@lists.sourceforge.net">freeglut-developer</a>
+mailing list.<br>Note that the FreeGLUT 3.0 enhancements are already in
+the API docs on the website, some of these will not work with the
+currently available 2.8.1 release.</p>
+
 <div class="textheader"><a name="download"></a>Downloads...</div>
-<p>Below are file links for the freeglut project. README files are included. You can also check the install documentation. The not-quite <a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut/ChangeLog?view=log">up-to-date freeglut ChangeLog is available here</a>. Have fun!</p>
+<p>Below are file links for the freeglut project. README files are included. Have fun!</p>
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
