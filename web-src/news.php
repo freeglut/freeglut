@@ -9,6 +9,18 @@ generateHeader($_SERVER['PHP_SELF']);
 ?>
 
 <div class="news-item">
+<div class="news-header">freeglut 2.8.1 Released [5 April 2013]</div>
+<p>A new bugfix release of "freeglut" is now available. Here is a
+incomplete list of fixes and enhancements:</p>
+<ul>
+<li>Visual Studio 2012 project files, and a fix for the dissapearing
+windows with this toolset.</li>
+<li>X11 menu regression fixed.</li>
+<li>Many bugs have been fixed.</li>
+</ul>
+</div>
+
+<div class="news-item">
 <div class="news-header">freeglut 2.8.0 Released [2 January 2012]</div>
 <p>After two years of quiet maintenance, a new version of "freeglut" has been released.  Here are some of the major changes:</p>
 <ul>
