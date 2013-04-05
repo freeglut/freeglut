@@ -122,6 +122,7 @@ will thus not work with the currently available 2.8.1 release.
 			<li>glutAddSubMenu</li>
 			<li>glutChangeToMenuEntry</li>
 			<li>glutChangeToSubMenu</li>
+            <li>glutSetMenuFont</li>
 			<li>glutRemoveMenuItem</li>
 			<li>glutAttachMenu, glutDetachMenu</li>
             <li>glutMenuDestroyFunc</li>
@@ -887,11 +888,34 @@ The <tt>glutShowOverlay</tt> and <tt>glutHideOverlay</tt> functions are not impl
 
 <h2>10.7 glutChangeToSubMenu</h2>
 
-<h2>10.8 glutRemoveMenuItem</h2>
+<h2>10.8 glutSetMenuFont</h2>
+<p>
+<tt>glutSetMenuFont</tt> sets the (bitmap) font to be used for drawing
+the specified menu.
+</p>
 
-<h2>10.9 glutAttachMenu, glutDetachMenu</h2>
+<p><b>Usage</b></p>
 
-<h2>10.10 glutMenuDestroyFunc</h2>
+<p><tt>void glutSetMenuFont( int menuID, void* fontID );</tt>
+  </p>
+
+<p><b>Description</b></p>
+
+<p>
+Only bitmap fonts (<tt>GLUT_BITMAP_xxx</tt>) can be used as menu fonts.
+A warning is issued if the supplied font is a stroke font, or an unknown
+font and the request will be ignored.
+</p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>GLUT does not provide this function.</p>
+
+<h2>10.9 glutRemoveMenuItem</h2>
+
+<h2>10.10 glutAttachMenu, glutDetachMenu</h2>
+
+<h2>10.11 glutMenuDestroyFunc</h2>
 
 <h1>11. <a name="GlobalCallback"></a>Global Callback Registration Functions</h1>
 
