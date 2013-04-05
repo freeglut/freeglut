@@ -52,6 +52,14 @@ might one to port to Cocoa first or even forget about Carbon all
 together.</td><td>Undecided</td></tr>
 
 <tr><td>Wayland port</td><td>Not started.</td><td>Undecided</td></tr>
+
+<tr><td>Complete glutInitDisplayString support</td><td>FreeGLUT now only
+partially supports glutInitDisplayString, any spec (comparator and
+value) after each token are ignored. This is a significant way in which
+FreeGLUT is not compatible with GLUT. Could be a nice project for
+someone who want to become familiar with the intricacies of requesting
+specific display formats on at least one of the various window servers
+(Windows and X11 at the moment).
 </table>
 </p>
 
