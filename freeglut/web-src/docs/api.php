@@ -465,6 +465,16 @@ call <tt>glutReshapeWindow</tt> and make a window narrower again.
 <h2>4.3 glutInitDisplayMode</h2>
 
 <h2>4.4 glutInitDisplayString</h2>
+<p><b>Changes From GLUT</b></p>
+
+<p>
+glutInitDisplayString support is limited: any of the tokens recognized
+by GLUT are also recognized by <i>FreeGLUT</i>, but any statements with
+comparators cannot (yet: do <a href="../help.php">help develop
+this!</a>) be handled. Any spec (comparator and value) after the token
+is ignored. Many of these values can however be set with glutSetOption
+for now however...
+</p>
 
 <h1>5. <a name="EventProcessing"></a>Event Processing Functions</h1>
 
