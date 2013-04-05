@@ -35,14 +35,14 @@ generateHeader($_SERVER['PHP_SELF']);
 Android as well as a host of other enhancements. We are looking for
 developers to help out with further work on the Android port.
 Furthermore, ports to Cocoa/Carbon on OSX, and maybe even Wayland are
-planned. For more information, see the <a href="help.php">Help Out
-page</a> and <a
+planned, along with some enhancements to the API and implementation. See
+<a href="progress.php">here</a> for an overview of the major point on
+our todo list. For more information about helping out, see the <a
+href="help.php">Help Out page</a> and <a
 href="http://lists.sourceforge.net/lists/listinfo/freeglut-developer">join</a>
 the <a
 href="mailto:freeglut-developer@lists.sourceforge.net">freeglut-developer</a>
-mailing list.<br>Note that the FreeGLUT 3.0 enhancements are already in
-the API docs on the website, some of these will not work with the
-currently available 2.8.1 release.</p>
+mailing list.</p>
 
 <div class="textheader"><a name="download"></a>Downloads...</div>
 <p>Below are file links for the freeglut project. README files are included. Have fun!</p>

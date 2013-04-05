@@ -11,6 +11,7 @@ $sidebarentries = array(0, # We skip this entry anyway...
 	array("name"=>"About",        "page"=>"/index.php"), 
 	array("name"=>"News",         "page"=>"/news.php"), 
 	array("name"=>"Progress",     "page"=>"/progress.php"),
+	array("name"=>"Help Out",     "page"=>"/help.php"),
 	1,
 	array("name"=>"Download",     "page"=>"/index.php#download"),
 	1,
@@ -18,7 +19,6 @@ $sidebarentries = array(0, # We skip this entry anyway...
 	array("name"=>"API",          "page"=>"/docs/api.php"),
 	array("name"=>"OpenGL Wikibook",     "page"=>"http://en.wikibooks.org/wiki/OpenGL_Programming"),
 	1,
-	array("name"=>"Help Out",     "page"=>"/help.php"),
 	array("name"=>"Report a Bug",        "page"=>"http://sourceforge.net/tracker/?func=browse&amp;group_id=1032&amp;atid=101032"),
 	array("name"=>"Request a Feature",   "page"=>"http://sourceforge.net/tracker/?func=browse&amp;group_id=1032&amp;atid=351032"),
 	array("name"=>"Project Interface",   "page"=>"http://sourceforge.net/projects/freeglut/")
