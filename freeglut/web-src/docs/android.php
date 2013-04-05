@@ -170,7 +170,7 @@ Done:
 <li>GLES1 and GLES2 support for geometry</li>
 <li>Pause/resume application support</li>
 <li>Callback to reload OpenGL resources lost during a pause</li>
-<li>Callback for pause/resume notifications</li>
+<li>Callback for application status (pause/resume) notifications</li>
 </ul>
 
 TODO:
