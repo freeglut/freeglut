@@ -497,23 +497,24 @@ from the library can be handled by the user.
 </p>
 
 <p><b>Usage</b></p>
-<p><tt>void glutInitErrorFunc   ( void (* callback)( const char *fmt, va_list ap) );</tt> <br/>
-   <tt>void glutInitWarningFunc ( void (* callback)( const char *fmt, va_list ap) );</tt> </p>
+<p><tt>void glutInitErrorFunc&nbsp;&nbsp;&nbsp;( void (* callback)( const char *fmt, va_list ap) );</tt><br/>
+<tt>void glutInitWarningFunc&nbsp;( void (* callback)( const char *fmt, va_list ap) );</tt> </p>
 
 <p><b>Description</b></p>
 <p>
 The users callback is passed a format string and a variable argument
 list that can be passed to functions such as <tt>printf</tt>.<br />
 Note that there are the preprocessor definitions
-<tt>FREEGLUT_PRINT_ERRORS</tt> and <tt>FREEGLUT_PRINT_WARNINGS</tt>. If
-defined at library (not client app!) compile time, which is default,
-warnings and errors are printed to <tt>stderr</tt>. If not defined,
-warnings and errors are muted (not printed to stderr), though errors
-still trigger deinitialization and exit. Whether
-<tt>FREEGLUT_PRINT_ERRORS</tt> and <tt>FREEGLUT_PRINT_WARNINGS</tt> is
-defined does not affect whether the client callback is called, it only
-affects whether warnings and errors are printed to <tt>stderr</tt> when
-no callback is defined.
+<tt>FREEGLUT_PRINT_ERRORS</tt> and <tt>FREEGLUT_PRINT_WARNINGS</tt>,
+which affect <i>FreeGLUT</i>'s warning and error behavior when no user
+callback is defined. If defined at library (not client app!) compile
+time--by default it is, warnings and errors are printed to
+<tt>stderr</tt>. If not defined, warnings and errors are muted (not
+printed to stderr), though errors still trigger deinitialization and
+exit. Whether <tt>FREEGLUT_PRINT_ERRORS</tt> and
+<tt>FREEGLUT_PRINT_WARNINGS</tt> is defined does not affect whether the
+client callback is called, it only affects whether warnings and errors
+are printed to <tt>stderr</tt> when no callback is defined.
 </p>
 
 <p><b>Changes From GLUT</b></p>
@@ -903,9 +904,10 @@ the specified menu.
 <p><b>Description</b></p>
 
 <p>
-Only bitmap fonts (<tt>GLUT_BITMAP_xxx</tt>) can be used as menu fonts.
-A warning is issued if the supplied font is a stroke font, or an unknown
-font and the request will be ignored.
+Only bitmap fonts (<tt>GLUT_BITMAP_xxx</tt>, see <a
+href="#FontRendering">here</a> for a list) can be used as menu fonts.  A
+warning is issued and the request is ignored if the supplied font is a
+stroke font, or an unknown font.
 </p>
 
 <p><b>Changes From GLUT</b></p>
@@ -1406,7 +1408,7 @@ is not implemented in <i>freeglut</i>.
 <p>
 The <tt>glutVisibilityFunc</tt> and the <tt>glutWindowStatusFunc</tt>
 functions set the window's visibility and windowStatus callbacks for the
-current window. Setting one supersedes the other. <i>Freeglut</i> calls
+current window. Setting one overwrites the other. <i>Freeglut</i> calls
 these callbacks when the visibility status of a window changes.
 </p>
 
@@ -1419,17 +1421,19 @@ these callbacks when the visibility status of a window changes.
 <p><b>Description</b></p>
 
 <p>
-The state callback parameter is one of GLUT_HIDDEN, GLUT_FULLY_RETAINED,
-GLUT_PARTIALLY_RETAINED, or GLUT_FULLY_COVERED depending on the current
-window status of the window. GLUT_HIDDEN means that the window is not
-shown (often meaning that the window is iconified). GLUT_FULLY_RETAINED
-means that the window is fully retained (no pixels belonging to the
-window are covered by other windows). GLUT_PARTIALLY_RETAINED means that
-the window is partially retained (some but not all pixels belonging to
-the window are covered by other windows). GLUT_FULLY_COVERED means the
-window is shown but no part of the window is visible, i.e., until the
-window's status changes, all further rendering to the window is
-discarded.<br>
+<tt>glutVisibilityFunc</tt> is deprecated and superseded by the more
+informative <tt>glutWindowStatusFunc</tt>.<br>
+For <tt>glutWindowStatusFunc</tt>, the state callback parameter is one
+of GLUT_HIDDEN, GLUT_FULLY_RETAINED, GLUT_PARTIALLY_RETAINED, or
+GLUT_FULLY_COVERED depending on the current window status of the window.
+GLUT_HIDDEN means that the window is not shown (often meaning that the
+window is iconified). GLUT_FULLY_RETAINED means that the window is fully
+retained (no pixels belonging to the window are covered by other
+windows). GLUT_PARTIALLY_RETAINED means that the window is partially
+retained (some but not all pixels belonging to the window are covered by
+other windows). GLUT_FULLY_COVERED means the window is shown but no part
+of the window is visible, i.e., until the window's status changes, all
+further rendering to the window is discarded.<br>
 GLUT considers a window visible if any pixel of the window is visible or
 any pixel of any descendant window is visible on the screen.<br>
 GLUT applications are encouraged to disable rendering and/or animation
@@ -1442,9 +1446,7 @@ status callback and re-enable the callback, you are guaranteed the next
 window status change will be reported.<br>
 Setting the window status callback for a window disables the visibility
 callback set for the window (and vice versa). The visibility callback is
-set with <tt>glutVisibilityFunc</tt>. <tt>glutVisibilityFunc</tt> is
-deprecated in favor of the more informative
-<tt>glutWindowStatusFunc</tt>. For <tt>glutVisibilityFunc</tt>, the
+set with <tt>glutVisibilityFunc</tt>, and its
 state callback parameter is either GLUT_NOT_VISIBLE or GLUT_VISIBLE
 depending on the current visibility of the window. GLUT_VISIBLE does not
 distinguish a window being totally versus partially visible.
@@ -2032,7 +2034,7 @@ draws.  The functions generate normals appropriate for lighting but,
 except for the teapot functions, do not generate texture coordinates. Do
 note that depth testing (GL_LESS) should be enabled for the correct
 drawing of the nonconvex objects, i.e., the glutTorus,
-glutSierpinskiSponge and glutTeapot.<br>
+glutSierpinskiSponge, glutTeapot, glutTeacup and glutTeaspoon.<br>
 Also see the <tt>GLUT_GEOMETRY_VISUALIZE_NORMALS</tt> option that can be
 set with <tt>glutSetOption</tt>.
 </p>
@@ -2386,8 +2388,8 @@ should use:</p>
 &nbsp;&nbsp;glutSolidTeapot(size);<br>
 &nbsp;&nbsp;glFrontFace(GL_CCW);</tt></p>
 
-<p>Both these bugs reflect issues in the original teaset's vertex data
-(and are thus present in GLUT too).</p>
+<p>This bug reflect issues in the original teaset's vertex data
+(and is thus present in GLUT too).</p>
 
 <p><b>Changes From GLUT</b></p>
 
