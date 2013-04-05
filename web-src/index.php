@@ -36,8 +36,9 @@ generateHeader($_SERVER['PHP_SELF']);
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
     <p>The port to Andriod as well as other API and implementation
-    enhancements (e.g., VBO support for geometry) are currently only
-    available in trunk. Feel free to test by downloading a <a
+    enhancements (e.g., move to CMake build system, VBO support for
+    geometry) are currently only available in trunk. Feel free to test
+    by downloading a <a
     href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut.tar.gz?view=tar">tarball
     of current trunk</a>, or <a href="help.php#svn">grabbing a copy from
     svn</a>, and give us feedback on how it worked for you. All this
