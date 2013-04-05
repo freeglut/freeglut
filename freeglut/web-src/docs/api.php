@@ -66,6 +66,7 @@ will thus not work with the currently available 2.8.1 release.
 			<li>glutInitWindowPosition, glutInitWindowSize</li>
 			<li>glutInitDisplayMode</li>
 			<li>glutInitDisplayString</li>
+            <li>glutInitErrorFunc, glutInitWarningFunc</li>
 		</ol>
 	</li>
 	<li><a href="#EventProcessing">Event Processing Functions</a>
@@ -481,6 +482,40 @@ this!</a>) be handled. Any spec (comparator and value) after the token
 is ignored. Many of these values can however be set with glutSetOption
 for now however...
 </p>
+
+<h2>4.5 glutInitErrorFunc, glutInitWarningFunc</h2>
+<p>
+The <tt>glutInitErrorFunc</tt> and <tt>glutInitWarningFunc</tt>
+functions specify callbacks that will be called upon warnings and errors
+issued from within <i>FreeGLUT</i> so that the user can deal with these.
+Useful for rerouting to another output sink (e.g., logging) and also to
+avoid exit(1) being called upon error. As with other glutInit*
+functions, these can be set before glutInit is called, so any output
+from the library can be handled by the user.
+</p>
+
+<p><b>Usage</b></p>
+<p><tt>void glutInitErrorFunc   ( void (* callback)( const char *fmt, va_list ap) );</tt> <br/>
+   <tt>void glutInitWarningFunc ( void (* callback)( const char *fmt, va_list ap) );</tt> </p>
+
+<p><b>Description</b></p>
+<p>
+The users callback is passed a format string and a variable argument
+list that can be passed to functions such as <tt>printf</tt>.<br />
+Note that there are the preprocessor definitions
+<tt>FREEGLUT_PRINT_ERRORS</tt> and <tt>FREEGLUT_PRINT_WARNINGS</tt>. If
+defined at library (not client app!) compile time, which is default,
+warnings and errors are printed to <tt>stderr</tt>. If not defined,
+warnings and errors are muted (not printed to stderr), though errors
+still trigger deinitialization and exit. Whether
+<tt>FREEGLUT_PRINT_ERRORS</tt> and <tt>FREEGLUT_PRINT_WARNINGS</tt> is
+defined does not affect whether the client callback is called, it only
+affects whether warnings and errors are printed to <tt>stderr</tt> when
+no callback is defined.
+</p>
+
+<p><b>Changes From GLUT</b></p>
+<p>GLUT does not provide these functions.</p>
 
 <h1>5. <a name="EventProcessing"></a>Event Processing Functions</h1>
 
