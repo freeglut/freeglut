@@ -225,8 +225,7 @@ contained herein.
 	<li><a href="#Android">Android functions</a>
 		<ol>
 			<li>glutInitContextFunc &larr; void</li>
-			<li>glutPauseFunc &larr; void</li>
-			<li>glutResumeFunc &larr; void</li>
+			<li>glutAppStatusFunc &larr; event</li>
 		</ol>
 	</li>
 	<li><a href="#Miscellaneous">Miscellaneous Functions</a>
@@ -613,14 +612,14 @@ By means of the <tt>glutSetWindowTitle</tt> function you can set the
 titles for your top-level <i>FreeGLUT</i> windows. If you just want one
 title for the window over the window's entire life, you should set it
 when you open the window with glutCreateWindow().<br>
-<tt>glutSetIconTitle</tt> set the title to be displayed for the window
+<tt>glutSetIconTitle</tt> sets the title to be displayed for the window
 when it is in iconified (minimized) state.
 </p>
 
 <p><b>Changes From GLUT</b></p>
 
-<p><tt>glutSetIconTitle</tt> does nothing in GLUT on Windows, Windows is
-supported by <i>FreeGLUT</i>.</p>
+<p><tt>glutSetIconTitle</tt> does nothing in GLUT on Windows, but is
+emulated on Windows by <i>FreeGLUT</i>.</p>
 
 <h2>6.6 glutReshapeWindow</h2>
 
@@ -2451,10 +2450,13 @@ whether/how to implement it.
 <ul>
 <li><code>glutInitContextFunc &larr; void</code> : called when the context
 is initialized or re-initialized (e.g. after a pause)</li>
-<li><code>glutPauseFunc &larr; void</code> : called when the application
-goes on a pause (or a stop)</li>
-<li><code>glutResumeFunc &larr; void</code> : called when the application
-comes back from a pause (after <code>glutInitContextFunc</code>)</li>
+<li><code>glutAppStatusFunc &larr; event</code> : called when the
+application's status changes, with event identifying the state entered.
+Possible states:
+<ul>
+<li>application goes on a pause (or a stop) &rarr; GLUT_APPSTATUS_PAUSE</li>
+<li>application comes back from a pause &rarr; GLUT_APPSTATUS_RESUME. Is
+called after the <code>glutInitContextFunc</code> callback.</li>
 </ul>
 
 <p>Android support is further described at
