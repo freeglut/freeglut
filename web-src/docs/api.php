@@ -198,7 +198,8 @@ will thus not work with the currently available 2.8.1 release.
 			<li>glutWireDodecahedron, glutSolidDodecahedron</li>
 			<li>glutWireIcosahedron, glutSolidIcosahedron</li>
 			<li>glutWireRhombicDodecahedron, glutSolidRhombicDodecahedron</li>
-			<li>glutWireTeapot, glutSolidTeapot</li>
+			<li>glutWireTeapot, glutSolidTeapot, glutWireTeacup,
+            glutSolidTeacup, glutWireTeaspoon, glutSolidTeaspoon</li>
 		</ol>
 	</li>
 	<li><a href="#GameMode">Game Mode Functions</a>
@@ -2339,46 +2340,58 @@ at which four faces meet are found at (0, 0, +/- 1) and (+/- sqrt(2)/2,
 <p>GLUT does not include these functions.
  </p>
 
-<h2>15.11  glutWireTeapot, glutSolidTeapot</h2>
+<h2>15.11 glutWireTeapot, glutSolidTeapot, glutWireTeacup,
+glutSolidTeacup, glutWireTeaspoon, glutSolidTeaspoon</h2>
 
 <p>
-The <tt>glutWireTeapot</tt> and <tt>glutSolidTeapot</tt> functions
-draw a wireframe and solid teapot respectively.
+The <tt>glutWireTeapot</tt> and <tt>glutSolidTeapot</tt> functions draw
+a wireframe and solid teapot respectively, the <tt>glutWireTeacup</tt>
+and <tt>glutSolidTeacup</tt> functions a wireframe and solid teacup, and
+the <tt>glutWireTeaspoon</tt> and <tt>glutSolidTeaspoon</tt> functions a
+wireframe and solid teaspoon.
 </p>
 
 <p><b>Definition</b></p>
 
 <p><tt>
-void glutWireTeapot (double dSize);<br>
-void glutSolidTeapot(double dSize);</tt></p>
+void glutWireTeapot&nbsp;&nbsp;&nbsp;(double dSize);<br>
+void glutSolidTeapot&nbsp;&nbsp;(double dSize);<br>
+void glutWireTeacup&nbsp;&nbsp;&nbsp;(double dSize);<br>
+void glutSolidTeacup&nbsp;&nbsp;(double dSize);<br>
+void glutWireTeaspoon&nbsp;(double dSize);<br>
+void glutSolidTeaspoon(double dSize);</tt></p>
 
 <p><b>Arguments</b></p>
-<p><tt>dSize&nbsp;&nbsp;</tt>The desired size of the teapot </p>
+<p><tt>dSize&nbsp;&nbsp;</tt>The desired size of the teapot, teacup and
+teaspoon - relative to a "standard" size</p>
 
 <p><b>Description</b></p>
 
-<p>The <tt>glutWireTeapot</tt> and <tt>
-  glutSolidTeapot</tt> functions render a teapot of the desired size,
-  centered at the origin.  This is the famous OpenGL teapot [add
-  reference]. </p>
+<p>The <tt>glutWireTeapot</tt> and <tt> glutSolidTeapot</tt> functions
+render a teapot of the desired size, centered at the origin. This is the
+famous teapot created by Martin Newell. The other functions render the
+teacup and teaspoon he used in the table scene figure in his PhD thesis.
+Vertex data retrieved from: <a
+href="ftp://ftp.funet.fi/pub/sci/graphics/packages/objects/teasetorig.gz">ftp://ftp.funet.fi/pub/sci/graphics/packages/objects/teasetorig.gz</a>.</p>
 
 <p><b>Bugs</b></p>
 <p>OpenGL's default <tt>glFrontFace</tt> state assumes that front facing
 polygons (for the purpose of face culling) have vertices that wind
-counter clockwise when projected into window space. This teapot is
-rendered with its front facing polygon vertices winding clockwise. For
-OpenGL's default back face culling to work, you should use:</p>
+counter clockwise when projected into window space. This teapot, teacup
+and teaspoon are rendered with their front facing polygon vertices
+winding clockwise. For OpenGL's default back face culling to work, you
+should use:</p>
 
 <p><tt>&nbsp;&nbsp;glFrontFace(GL_CW);<br>
 &nbsp;&nbsp;glutSolidTeapot(size);<br>
 &nbsp;&nbsp;glFrontFace(GL_CCW);</tt></p>
 
-<p>Both these bugs reflect issues in the original aux toolkit's teapot
-rendering routines (GLUT used the same teapot rendering routine).</p>
+<p>Both these bugs reflect issues in the original teaset's vertex data
+(and are thus present in GLUT too).</p>
 
 <p><b>Changes From GLUT</b></p>
 
-<p>None that we know of. </p>
+<p>GLUT only has the teapot and misses the rest of the teaset. </p>
 
 <h1>16. <a name="GameMode"></a>Game Mode Functions</h1>
 
