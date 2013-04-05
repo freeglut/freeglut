@@ -39,7 +39,7 @@ would be nice, but not essential.</td></tr>
 
 <tr><td>Code reorganized such that platform-specific and display
 server-specific code are decoupled</td><td>Done, thanks John Fay! This
-already lead to a port to Android and support for GLES 1/2 on X11
+already led to a port to Android and support for GLES 1/2 on X11
 (thanks Sylvain for both!), and paves the way for implementing native
 OSX and Wayland support</td><td>3.0</td></tr>
 
@@ -60,7 +60,8 @@ value) after each token are ignored. This is a significant way in which
 FreeGLUT is not compatible with GLUT. Could be a nice project for
 someone who want to become familiar with the intricacies of requesting
 specific display formats on at least one of the various window servers
-(Windows and X11 at the moment).</td><td>Undecided</td></tr>
+(Windows, X11 and Android/EGL at the
+moment).</td><td>Undecided</td></tr>
 </table>
 </p>
 
