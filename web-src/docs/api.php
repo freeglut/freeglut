@@ -41,6 +41,12 @@ damages in connection with or arising from the use of information or programs
 contained herein.
 </p>
 
+<p>
+Note that the FreeGLUT 3.0 enhancements and additions are already
+mentioned in this API document. Some of the functions described here
+will thus not work with the currently available 2.8.1 release.
+</p>
+
 <h1>1. <a name="Contents"></a>Contents</h1>
 
 <ol>

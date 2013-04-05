@@ -27,6 +27,8 @@ Contributions can be nearly anything.  The point is involvement!</p>
 
 <p>Examples:
 <ul>
+    <li>Attack one of the <a href="progress.php">points on our todo
+    list</a></li>
 	<li>Use freeglut in your projects!</li>
 	<li>Tell us what you like.</li>
 	<li>Tell us what you'd change.</li>
