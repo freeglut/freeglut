@@ -1971,8 +1971,8 @@ draw a wireframe and solid sphere respectively.
 <p><b>Definition</b></p>
 
 <p><tt>
-void glutWireSphere (GLdouble dRadius, GLint slices, GLint stacks);<br>
-void glutSolidSphere(GLdouble dRadius, GLint slices, GLint stacks);</tt> </p>
+void glutWireSphere (double dRadius, GLint slices, GLint stacks);<br>
+void glutSolidSphere(double dRadius, GLint slices, GLint stacks);</tt> </p>
 
 <p><b>Arguments</b></p>
 <p><tt>dRadius&nbsp;&nbsp;</tt>The desired radius of the sphere </p>
@@ -2007,17 +2007,16 @@ a wireframe and solid torus (donut shape) respectively.
 <p><b>Definition</b></p>
 
 <p><tt>
-void glutWireTorus (GLdouble dInnerRadius, GLdouble dOuterRadius, GLint
+void glutWireTorus (double dInnerRadius, double dOuterRadius, GLint
 nSides, GLint nRings);<br>
-void glutSolidTorus(GLdouble dInnerRadius, GLdouble dOuterRadius, GLint
+void glutSolidTorus(double dInnerRadius, double dOuterRadius, GLint
 nSides, GLint nRings);</tt> </p>
 
 <p><b>Arguments</b></p>
-<p><tt>dInnerRadius&nbsp;&nbsp;</tt>The desired inner radius of the torus,
-from the origin to the circle defining the centers of the outer circles </p>
+<p><tt>dInnerRadius&nbsp;&nbsp;</tt>The radius of the tube.</p>
 
-<p><tt>dOuterRadius&nbsp;&nbsp;</tt>The desired outer radius of the torus,
-from the center of the outer circle to the actual surface of the torus </p>
+<p><tt>dOuterRadius&nbsp;&nbsp;</tt>The distance from the center of the
+Torus to the center of the tube.</p>
 
 <p><tt>nSides&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>The desired number of segments in a
 single outer circle of the torus </p>
@@ -2046,9 +2045,9 @@ a wireframe and solid cone respectively.
 <p><b>Definition</b></p>
 
 <p><tt>
-void glutWireCylinder (GLdouble base, GLdouble height, GLint slices, GLint
+void glutWireCylinder (double base, double height, GLint slices, GLint
 stacks);<br>
-void glutSolidCylinder(GLdouble base, GLdouble height, GLint slices, GLint
+void glutSolidCylinder(double base, double height, GLint slices, GLint
 stacks);</tt> </p>
 
 <p><b>Arguments</b></p>
@@ -2073,9 +2072,9 @@ a wireframe and solid cone respectively.
 <p><b>Definition</b></p>
 
 <p><tt>
-void glutWireCone (GLdouble base, GLdouble height, GLint slices, GLint
+void glutWireCone (double base, double height, GLint slices, GLint
 stacks);<br>
-void glutSolidCone(GLdouble base, GLdouble height, GLint slices, GLint
+void glutSolidCone(double base, double height, GLint slices, GLint
 stacks);</tt> </p>
 
 <p><b>Arguments</b></p>
@@ -2111,8 +2110,8 @@ wireframe and solid cube respectively.
 <p><b>Definition</b></p>
 
 <p><tt>
-void glutWireCube (GLdouble dSize);<br>
-void glutSolidCube(GLdouble dSize);</tt> </p>
+void glutWireCube (double dSize);<br>
+void glutSolidCube(double dSize);</tt> </p>
 
 <p><b>Arguments</b></p>
 <p><tt>dSize&nbsp;&nbsp;</tt>The desired length of an edge of the cube</p>
@@ -2275,8 +2274,8 @@ draw a wireframe and solid teapot respectively.
 <p><b>Definition</b></p>
 
 <p><tt>
-void glutWireTeapot (GLdouble dSize);<br>
-void glutSolidTeapot(GLdouble dSize);</tt></p>
+void glutWireTeapot (double dSize);<br>
+void glutSolidTeapot(double dSize);</tt></p>
 
 <p><b>Arguments</b></p>
 <p><tt>dSize&nbsp;&nbsp;</tt>The desired size of the teapot </p>
