@@ -35,21 +35,29 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
+    <p>The port to Andriod as well as other API and implementation
+    enhancements (e.g., VBO support for geometry) are currently only
+    available in trunk. Feel free to test by downloading a <a
+    href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut.tar.gz?view=tar">tarball
+    of current trunk</a>, or <a href="help.php#svn">grabbing a copy from
+    svn</a>, and give us feedback on how it worked for you. All this
+    will eventually become a FreeGLUT 3.0 release.</p>
 <!--
 	<p>Version 2.8.0, Release Candidate 4 was released on Wednesday, December 21, 2011.</p>
 	<p>
                 <a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/tags/FG_2_8_0_RC4.tar.gz">Freeglut 2.8.0 Release Candidate 4</a> [<i>Released: 21 Dec 2011</i>]<br/>
         </p>
--->
 	<p>There are no presently active testing releases.
 	</p>
+-->
 </div>
 
 
 <div class="indent">
         <div class="textheader">Stable Releases</div>
         <p>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.0.tar.gz?download">Freeglut 2.8.0</a> [<i>Released: 2 January 2012</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.1.tar.gz?download">Freeglut 2.8.1</a> [<i>Released: 5 April 2013</i>]<br/>
+    <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.0.tar.gz?download">Freeglut 2.8.0</a> [<i>Released: 2 January 2012</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.6.0.tar.gz?download">Freeglut 2.6.0</a> [<i>Released: 27 November 2009</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">Freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
