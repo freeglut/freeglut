@@ -2546,7 +2546,7 @@ Programs which use the <i>freeglut</i>-specific extensions to GLUT should includ
 
 <pre>
 #ifdef FREEGLUT
-#include &lt;GL/freeglut_ext.h&gt;
+#include &lt;GL/freeglut.h&gt;
 #else
 #include &lt;GL/glut.h&gt;
 #endif
