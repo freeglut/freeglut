@@ -52,11 +52,11 @@ int fghChooseConfig(GLXFBConfig* fbconfig)
     ATTRIB_VAL( GLX_RENDER_TYPE, GLX_COLOR_INDEX_BIT );
     wantIndexedMode = GL_TRUE;
   } else {
-    ATTRIB_VAL( GLX_RED_SIZE,   1 );
-    ATTRIB_VAL( GLX_GREEN_SIZE, 1 );
-    ATTRIB_VAL( GLX_BLUE_SIZE,  1 );
+    ATTRIB_VAL( GLX_RED_SIZE,   fgState.RedBits );
+    ATTRIB_VAL( GLX_GREEN_SIZE, fgState.GreenBits );
+    ATTRIB_VAL( GLX_BLUE_SIZE,  fgState.BlueBits );
     if( fgState.DisplayMode & GLUT_ALPHA ) {
-      ATTRIB_VAL( GLX_ALPHA_SIZE, 1 );
+      ATTRIB_VAL( GLX_ALPHA_SIZE, fgState.AlphaBits );
     }
   }
 
@@ -69,11 +69,11 @@ int fghChooseConfig(GLXFBConfig* fbconfig)
   }
 
   if( fgState.DisplayMode & GLUT_DEPTH ) {
-    ATTRIB_VAL( GLX_DEPTH_SIZE, 1 );
+    ATTRIB_VAL( GLX_DEPTH_SIZE, fgState.DepthBits );
   }
 
   if( fgState.DisplayMode & GLUT_STENCIL ) {
-    ATTRIB_VAL( GLX_STENCIL_SIZE, 1 );
+    ATTRIB_VAL( GLX_STENCIL_SIZE, fgState.StencilBits );
   }
 
   if( fgState.DisplayMode & GLUT_ACCUM ) {

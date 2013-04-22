@@ -301,12 +301,19 @@ int main( int argc, char** argv )
     int menuID, subMenuA, subMenuB;
 
     glutInitDisplayString( "stencil~2 rgb double depth>=16 samples" );
-    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
+    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE );
     glutInitWindowPosition( 100, 100 );
 
     glutInit( &argc, argv );
 
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+    glutSetOption(GLUT_WINDOW_RED_SIZE,8);
+    glutSetOption(GLUT_WINDOW_GREEN_SIZE,8);
+    glutSetOption(GLUT_WINDOW_BLUE_SIZE,8);
+    glutSetOption(GLUT_WINDOW_ALPHA_SIZE,8);
+    glutSetOption(GLUT_WINDOW_DEPTH_SIZE,32);
+    glutSetOption(GLUT_WINDOW_STENCIL_SIZE,0);
+    glutSetOption(GLUT_MULTISAMPLE,4);
     glutMenuStatusFunc( SampleMenuStatus );
     glutIdleFunc( SampleIdle );
 

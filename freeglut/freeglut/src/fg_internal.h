@@ -277,7 +277,14 @@ struct tagSFG_State
 {
     SFG_XYUse        Position;             /* The default windows' position  */
     SFG_XYUse        Size;                 /* The default windows' size      */
+
     unsigned int     DisplayMode;          /* Display mode for new windows   */
+    unsigned int     RedBits;              /* Red bit depth requested        */
+    unsigned int     GreenBits;            /* Green bit depth requested      */
+    unsigned int     BlueBits;             /* Blue bit depth requested       */
+    unsigned int     AlphaBits;            /* Alpha bit depth requested      */
+    unsigned int     DepthBits;            /* Depth bit depth requested      */
+    unsigned int     StencilBits;          /* Stencil bit depth requested    */
 
     GLboolean        Initialised;          /* freeglut has been initialised  */
 

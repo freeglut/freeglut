@@ -109,6 +109,25 @@ void FGAPIENTRY glutSetOption( GLenum eWhat, int value )
       fgState.SampleNumber = value;
       break;
 
+    case GLUT_WINDOW_RED_SIZE:
+        fgState.RedBits = value;
+        break;
+    case GLUT_WINDOW_GREEN_SIZE:
+        fgState.GreenBits = value;
+        break;
+    case GLUT_WINDOW_BLUE_SIZE:
+        fgState.BlueBits = value;
+        break;
+    case GLUT_WINDOW_ALPHA_SIZE:
+        fgState.AlphaBits = value;
+        break;
+    case GLUT_WINDOW_DEPTH_SIZE:
+        fgState.DepthBits = value;
+        break;
+    case GLUT_WINDOW_STENCIL_SIZE:
+        fgState.StencilBits = value;
+        break;
+
     case GLUT_SKIP_STALE_MOTION_EVENTS:
       fgState.SkipStaleMotion = value;
       break;

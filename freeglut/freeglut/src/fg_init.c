@@ -55,6 +55,12 @@ SFG_Display fgDisplay;
 SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       { 300, 300, GL_TRUE }, /* Size */
                       GLUT_RGBA | GLUT_SINGLE | GLUT_DEPTH,  /* DisplayMode */
+                      8,                     /* Red bit depth requested */
+                      8,                     /* Green bit depth requested */
+                      8,                     /* Blue bit depth requested */
+                      8,                     /* Alpha bit depth requested */
+                      24,                    /* Depth bit depth requested */
+                      8,                     /* Stencil bit depth requested */
                       GL_FALSE,              /* Initialised */
                       GLUT_TRY_DIRECT_CONTEXT,  /* DirectContext */
                       GL_FALSE,              /* ForceIconic */
@@ -276,6 +282,12 @@ void fgDeinitialize( void )
     fgState.Size.Use = GL_TRUE;
 
     fgState.DisplayMode = GLUT_RGBA | GLUT_SINGLE | GLUT_DEPTH;
+    fgState.RedBits     = 8;
+    fgState.GreenBits   = 8;
+    fgState.BlueBits    = 8;
+    fgState.AlphaBits   = 8;
+    fgState.DepthBits   = 24;
+    fgState.StencilBits = 8;
 
     fgState.DirectContext  = GLUT_TRY_DIRECT_CONTEXT;
     fgState.ForceIconic         = GL_FALSE;

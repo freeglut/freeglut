@@ -44,6 +44,9 @@ typedef BOOL (WINAPI * PFNWGLCHOOSEPIXELFORMATARBPROC) (HDC hdc, const int *piAt
 #define WGL_SUPPORT_OPENGL_ARB         0x2010
 #define WGL_DOUBLE_BUFFER_ARB          0x2011
 #define WGL_COLOR_BITS_ARB             0x2014
+#define WGL_RED_BITS_ARB               0x2015
+#define WGL_GREEN_BITS_ARB             0x2017
+#define WGL_BLUE_BITS_ARB              0x2019
 #define WGL_ALPHA_BITS_ARB             0x201B
 #define WGL_DEPTH_BITS_ARB             0x2022
 #define WGL_STENCIL_BITS_ARB           0x2023
@@ -195,10 +198,6 @@ static void fghFillPFD( PIXELFORMATDESCRIPTOR *ppfd, HDC hdc, unsigned char laye
     flags |= PFD_STEREO;
   }
 
-#if defined(_MSC_VER)
-#pragma message( "fgSetupPixelFormat(): there is still some work to do here!" )
-#endif
-
   /* Specify which pixel format do we opt for... */
   ppfd->nSize = sizeof(PIXELFORMATDESCRIPTOR);
   ppfd->nVersion = 1;
@@ -206,41 +205,40 @@ static void fghFillPFD( PIXELFORMATDESCRIPTOR *ppfd, HDC hdc, unsigned char laye
 
   if( fgState.DisplayMode & GLUT_INDEX ) {
     ppfd->iPixelType = PFD_TYPE_COLORINDEX;
-    ppfd->cRedBits = 0;
-    ppfd->cGreenBits = 0;
-    ppfd->cBlueBits = 0;
+    ppfd->cColorBits = (BYTE) GetDeviceCaps( hdc, BITSPIXEL );
     ppfd->cAlphaBits = 0;
   } else {
     ppfd->iPixelType = PFD_TYPE_RGBA;
-    ppfd->cRedBits = 8;
-    ppfd->cGreenBits = 8;
-    ppfd->cBlueBits = 8;
-    ppfd->cAlphaBits = ( fgState.DisplayMode & GLUT_ALPHA ) ? 8 : 0;
+    ppfd->cColorBits = fgState.RedBits+fgState.GreenBits+fgState.BlueBits;
+    ppfd->cAlphaBits = ( fgState.DisplayMode & GLUT_ALPHA ) ? fgState.AlphaBits : 0;
   }
 
-  ppfd->cColorBits = 24;
+  ppfd->cDepthBits   = ( fgState.DisplayMode & GLUT_DEPTH ) ? fgState.DepthBits : 0;
+  ppfd->cStencilBits = ( fgState.DisplayMode & GLUT_STENCIL ) ? fgState.StencilBits : 0;
+
+  ppfd->cAccumBits   = ( fgState.DisplayMode & GLUT_ACCUM ) ? 1 : 0;
+  
+  ppfd->cAuxBuffers  = fghNumberOfAuxBuffersRequested();
+  ppfd->iLayerType   = layer_type;
+
+  /* According to docs, leave all these to zero, they are ignored */
+  ppfd->cRedBits = 0;
   ppfd->cRedShift = 0;
+  ppfd->cGreenBits = 0;
   ppfd->cGreenShift = 0;
+  ppfd->cBlueBits = 0;
   ppfd->cBlueShift = 0;
   ppfd->cAlphaShift = 0;
-  ppfd->cAccumBits = ( fgState.DisplayMode & GLUT_ACCUM ) ? 1 : 0;
+
   ppfd->cAccumRedBits = 0;
   ppfd->cAccumGreenBits = 0;
   ppfd->cAccumBlueBits = 0;
   ppfd->cAccumAlphaBits = 0;
 
-  /* Hmmm, or 32/0 instead of 24/8? */
-  ppfd->cDepthBits = 24;
-  ppfd->cStencilBits = 8;
-
-  ppfd->cAuxBuffers = fghNumberOfAuxBuffersRequested();
-  ppfd->iLayerType = layer_type;
   ppfd->bReserved = 0;
   ppfd->dwLayerMask = 0;
   ppfd->dwVisibleMask = 0;
   ppfd->dwDamageMask = 0;
-  
-  ppfd->cColorBits = (BYTE) GetDeviceCaps( hdc, BITSPIXEL );
 }
 
 static void fghFillPixelFormatAttributes( int *attributes, const PIXELFORMATDESCRIPTOR *ppfd )
@@ -252,6 +250,10 @@ static void fghFillPixelFormatAttributes( int *attributes, const PIXELFORMATDESC
   ATTRIB_VAL( WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB );
 
   ATTRIB_VAL( WGL_COLOR_BITS_ARB, ppfd->cColorBits );
+  /* Should this be uncommented? Probably */
+  //ATTRIB_VAL( WGL_RED_BITS_ARB, fgState.RedBits );
+  //ATTRIB_VAL( WGL_GREEN_BITS_ARB, fgState.GreenBits );
+  //ATTRIB_VAL( WGL_BLUE_BITS_ARB, fgState.BlueBits );
   ATTRIB_VAL( WGL_ALPHA_BITS_ARB, ppfd->cAlphaBits );
   ATTRIB_VAL( WGL_DEPTH_BITS_ARB, ppfd->cDepthBits );
   ATTRIB_VAL( WGL_STENCIL_BITS_ARB, ppfd->cStencilBits );
@@ -326,6 +328,7 @@ GLboolean fgSetupPixelFormat( SFG_Window* window, GLboolean checkOnly,
                 fghFillPixelFormatAttributes( attributes, ppfd );
                 bValid = wglChoosePixelFormatARBProc(hDC, attributes, fAttributes, 1, &iPixelFormat, &numFormats);
 
+                printf("bValid: %i, numFormats: %i\n",bValid, numFormats);
                 if ( bValid && numFormats > 0 )
                 {
                     pixelformat = iPixelFormat;
@@ -341,6 +344,15 @@ GLboolean fgSetupPixelFormat( SFG_Window* window, GLboolean checkOnly,
     }
 
     success = ( pixelformat != 0 ) && ( checkOnly || SetPixelFormat( current_hDC, pixelformat, ppfd ) );
+
+
+    /*printf("The current window has %i red bits, %i green bits, %i blue bits and %i alpha bits\n",ppfd->cRedBits,ppfd->cGreenBits,ppfd->cBlueBits,ppfd->cAlphaBits);
+    printf("It furthermore has %i depth bits and %i stencil bits\n",ppfd->cDepthBits,ppfd->cStencilBits);
+    printf("----------\n");
+    DescribePixelFormat(current_hDC, pixelformat, sizeof(PIXELFORMATDESCRIPTOR), ppfd);
+    printf("The current window has %i red bits, %i green bits, %i blue bits and %i alpha bits\n",ppfd->cRedBits,ppfd->cGreenBits,ppfd->cBlueBits,ppfd->cAlphaBits);
+    printf("It furthermore has %i depth bits and %i stencil bits\n",ppfd->cDepthBits,ppfd->cStencilBits);
+    printf("==========\n");*/
 
     if (checkOnly)
         DeleteDC(current_hDC);

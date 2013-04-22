@@ -36,12 +36,12 @@ int fghChooseConfig(EGLConfig* config) {
 #else
     EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
 #endif
-    EGL_BLUE_SIZE, 1,
-    EGL_GREEN_SIZE, 1,
-    EGL_RED_SIZE, 1,
-    EGL_ALPHA_SIZE, (fgState.DisplayMode & GLUT_ALPHA) ? 1 : 0,
-    EGL_DEPTH_SIZE, (fgState.DisplayMode & GLUT_DEPTH) ? 1 : 0,
-    EGL_STENCIL_SIZE, (fgState.DisplayMode & GLUT_STENCIL) ? 1 : 0,
+    EGL_BLUE_SIZE, fgState.BlueBits,
+    EGL_GREEN_SIZE, fgState.GreenBits,
+    EGL_RED_SIZE, fgState.RedBits,
+    EGL_ALPHA_SIZE, (fgState.DisplayMode & GLUT_ALPHA) ? fgState.AlphaBits : 0,
+    EGL_DEPTH_SIZE, (fgState.DisplayMode & GLUT_DEPTH) ? fgState.DepthBits : 0,
+    EGL_STENCIL_SIZE, (fgState.DisplayMode & GLUT_STENCIL) ? fgState.StencilBits : 0,
     EGL_SAMPLE_BUFFERS, (fgState.DisplayMode & GLUT_MULTISAMPLE) ? 1 : 0,
     EGL_SAMPLES, (fgState.DisplayMode & GLUT_MULTISAMPLE) ? fgState.SampleNumber : 0,
     EGL_NONE

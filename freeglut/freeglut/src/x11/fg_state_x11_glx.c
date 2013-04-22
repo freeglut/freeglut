@@ -86,7 +86,6 @@ int fghPlatformGlutGetGLX ( GLenum eWhat )
 
 #   undef GLX_QUERY
 
-    /* I do not know yet if there will be a fgChooseVisual() function for Win32 */
     case GLUT_DISPLAY_MODE_POSSIBLE:
     {
         /*  We should not have to call fghChooseConfig again here.  */
@@ -94,7 +93,6 @@ int fghPlatformGlutGetGLX ( GLenum eWhat )
         return fghChooseConfig(&config);
     }
 
-    /* This is system-dependant */
     case GLUT_WINDOW_FORMAT_ID:
         if( fgStructure.CurrentWindow == NULL )
             return 0;
