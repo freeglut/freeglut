@@ -60,10 +60,10 @@ else are very welcome!
 </ul>
 
 <div class="textheader"><a name="svn"></a>Anonymous SVN Access</div>
-<p>To check out the most up to date development copy of freeglut, issue the following commands at your command line. See also <a href="http://sourceforge.net/svn/?group_id=1032">SourceForge's Anonymous SVN Instructions</a>.</p>
+<p>To check out the most up to date development copy of freeglut, issue the following commands at your command line. See also <a href="http://sourceforge.net/p/freeglut/code/HEAD/tree/">SourceForge's Anonymous SVN Instructions</a>.</p>
 
 <pre>
-svn co https://freeglut.svn.sourceforge.net/svnroot/freeglut/trunk/freeglut/freeglut freeglut
+svn co http://svn.code.sf.net/p/freeglut/code/trunk/freeglut/freeglut freeglut
 </pre>
 
 <?php generateFooter(); ?>
