@@ -34,6 +34,7 @@ incompatible library for each version (e.g. -lGLESv1_CM and -lGLESv2).</p>
 <p>Here's how to compile FreeGLUT for GLES2:</p>
 
 <pre>
+aptitude install libgles2-mesa-dev
 cd /usr/src/freeglut-3.0.0/
 mkdir native-gles2/ && cd native-gles2/
 cmake \
@@ -49,6 +50,7 @@ make install
 <p>For GLES1:</p>
 
 <pre>
+aptitude install libgles1-mesa-dev
 cd /usr/src/freeglut-3.0.0/
 mkdir native-gles1/ && cd native-gles1/
 cmake \
