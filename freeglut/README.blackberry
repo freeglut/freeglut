@@ -1,0 +1,21 @@
+# ------------------------------------------------------------------------------
+#  BlackBerry CMake toolchain file, for use with the BlackBerry 10 NDK 
+#  Requires cmake 2.6.3 or newer (2.8.3 or newer is recommended).
+#
+#  Usage Linux:
+#   $ source /absolute/path/to/the/bbndk/bbndk-env.sh
+#   $ mkdir build
+#   $ cd build
+#   $ cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES2=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
+#   $ make -j8
+#
+#  Usage Mac:
+#   Same as the steps on Linux
+#
+#  Usage Windows:
+#   > /absolute/path/to/the/bbndk/bbndk-env.bat
+#   > mkdir build
+#   > cd build
+#   > cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES2=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
+#   > make -j8
+#
