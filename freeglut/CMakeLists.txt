@@ -123,7 +123,6 @@ ELSEIF(ANDROID OR BLACKBERRY)
         src/android/fg_cursor_android.c
         src/android/fg_ext_android.c
         src/android/fg_gamemode_android.c
-        src/android/fg_init_android.c
         src/android/fg_input_devices_android.c
         src/android/fg_joystick_android.c
         src/android/fg_spaceball_android.c
@@ -133,6 +132,7 @@ ELSEIF(ANDROID OR BLACKBERRY)
         LIST(APPEND FREEGLUT_SRCS
             src/android/native_app_glue/android_native_app_glue.c
             src/android/native_app_glue/android_native_app_glue.h
+            src/android/fg_init_android.c
             src/android/fg_internal_android.h
             src/android/fg_main_android.c
             src/android/fg_main_android.h
@@ -143,12 +143,13 @@ ELSEIF(ANDROID OR BLACKBERRY)
     ELSE()
         LIST(APPEND FREEGLUT_SRCS
             # TODO: Anything similar to Android's app_glue?
+            src/blackberry/fg_init_blackberry.c
             src/blackberry/fg_internal_blackberry.h
             # TODO: src/blackberry/fg_main_blackberry.c
             src/blackberry/fg_main_blackberry.h
             # TODO: Anything similar to fg_spaceball_android.c needed?
             src/blackberry/fg_state_blackberry.c
-            # TODO: src/blackberry/fg_window_blackberry.c
+            src/blackberry/fg_window_blackberry.c
         )
     ENDIF()
 ELSE()
