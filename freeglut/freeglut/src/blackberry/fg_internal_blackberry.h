@@ -32,6 +32,7 @@
 /* -- PLATFORM-SPECIFIC INCLUDES ------------------------------------------- */
 /* BlackBerry OpenGL ES is accessed through EGL */
 #include "egl/fg_internal_egl.h"
+#include <screen/screen.h>
 
 /* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
 /* The structure used by display initialization in freeglut_init.c */
@@ -47,6 +48,7 @@ typedef struct tagSFG_PlatformContext SFG_PlatformContext;
 struct tagSFG_PlatformContext
 {
   struct tagSFG_PlatformContextEGL egl;
+  screen_context_t screenContext;
 };
 
 
