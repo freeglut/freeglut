@@ -35,6 +35,11 @@
 #define LOGI(...) ((void)slog2fa(NULL, 1337, SLOG2_INFO, __VA_ARGS__))
 #define LOGW(...) ((void)slog2fa(NULL, 1337, SLOG2_WARNING, __VA_ARGS__))
 #include <sys/keycodes.h>
+#include <input/screen_helpers.h>
+#include <bps/bps.h>
+#include <bps/event.h>
+#include <bps/screen.h>
+#include <bps/navigator.h>
 
 extern void fghOnReshapeNotify(SFG_Window *window, int width, int height, GLboolean forceNotify);
 extern void fghOnPositionNotify(SFG_Window *window, int x, int y, GLboolean forceNotify);
@@ -48,414 +53,375 @@ extern void fgPlatformIconifyWindow( SFG_Window *window );
 extern void fgPlatformShowWindow( SFG_Window *window );
 
 static struct touchscreen touchscreen;
-static unsigned char key_a2fg[256];
 
-/**
- * Initialize BlackBerry keycode to GLUT keycode mapping
- */
-static void key_init() {
-  memset(key_a2fg, 0, sizeof(key_a2fg));
-
-  //XXX Any others?
-
-  key_a2fg[KEYCODE_F1]  = GLUT_KEY_F1;
-  key_a2fg[KEYCODE_F2]  = GLUT_KEY_F2;
-  key_a2fg[KEYCODE_F3]  = GLUT_KEY_F3;
-  key_a2fg[KEYCODE_F4]  = GLUT_KEY_F4;
-  key_a2fg[KEYCODE_F5]  = GLUT_KEY_F5;
-  key_a2fg[KEYCODE_F6]  = GLUT_KEY_F6;
-  key_a2fg[KEYCODE_F7]  = GLUT_KEY_F7;
-  key_a2fg[KEYCODE_F8]  = GLUT_KEY_F8;
-  key_a2fg[KEYCODE_F9]  = GLUT_KEY_F9;
-  key_a2fg[KEYCODE_F10] = GLUT_KEY_F10;
-  key_a2fg[KEYCODE_F11] = GLUT_KEY_F11;
-  key_a2fg[KEYCODE_F12] = GLUT_KEY_F12;
-
-  key_a2fg[KEYCODE_PG_UP]   = GLUT_KEY_PAGE_UP;
-  key_a2fg[KEYCODE_PG_DOWN] = GLUT_KEY_PAGE_DOWN;
-  key_a2fg[KEYCODE_HOME]    = GLUT_KEY_HOME;
-  key_a2fg[KEYCODE_END]     = GLUT_KEY_END;
-  key_a2fg[KEYCODE_INSERT]  = GLUT_KEY_INSERT;
-
-  key_a2fg[KEYCODE_UP]    = GLUT_KEY_UP;
-  key_a2fg[KEYCODE_DOWN]  = GLUT_KEY_DOWN;
-  key_a2fg[KEYCODE_LEFT]  = GLUT_KEY_LEFT;
-  key_a2fg[KEYCODE_RIGHT] = GLUT_KEY_RIGHT;
-
-  key_a2fg[KEYCODE_LEFT_ALT]    = GLUT_KEY_ALT_L;
-  key_a2fg[KEYCODE_RIGHT_ALT]   = GLUT_KEY_ALT_R;
-  key_a2fg[KEYCODE_LEFT_SHIFT]  = GLUT_KEY_SHIFT_L;
-  key_a2fg[KEYCODE_RIGHT_SHIFT] = GLUT_KEY_SHIFT_R;
-  key_a2fg[KEYCODE_LEFT_CTRL]   = GLUT_KEY_CTRL_L;
-  key_a2fg[KEYCODE_RIGHT_CTRL]  = GLUT_KEY_CTRL_R;
-}
-
-//XXX
-/* *
- * Convert an Android key event to ASCII.
- * /
-static unsigned char key_ascii(struct android_app* app, AInputEvent* event) {
-  int32_t code = AKeyEvent_getKeyCode(event);
-
-  /* Handle a few special cases: * /
-  switch (code) {
-  case AKEYCODE_DEL:
-    return 8;
-  case AKEYCODE_FORWARD_DEL:
-    return 127;
-  case AKEYCODE_ESCAPE:
-    return 27;
+unsigned int key_special(int qnxKeycode)
+{
+  switch(qnxKeycode) {
+  case KEYCODE_F1:
+	return GLUT_KEY_F1;
+  case KEYCODE_F2:
+  	return GLUT_KEY_F2;
+  case KEYCODE_F3:
+  	return GLUT_KEY_F3;
+  case KEYCODE_F4:
+    return GLUT_KEY_F4;
+  case KEYCODE_F5:
+  	return GLUT_KEY_F5;
+  case KEYCODE_F6:
+	return GLUT_KEY_F6;
+  case KEYCODE_F7:
+	return GLUT_KEY_F7;
+  case KEYCODE_F8:
+	return GLUT_KEY_F8;
+  case KEYCODE_F9:
+  	return GLUT_KEY_F9;
+  case KEYCODE_F10:
+    return GLUT_KEY_F10;
+  case KEYCODE_F11:
+    return GLUT_KEY_F11;
+  case KEYCODE_F12:
+    return GLUT_KEY_F12;
+  case KEYCODE_PG_UP:
+    return GLUT_KEY_PAGE_UP;
+  case KEYCODE_PG_DOWN:
+    return GLUT_KEY_PAGE_DOWN;
+  case KEYCODE_HOME:
+    return GLUT_KEY_HOME;
+  case KEYCODE_END:
+    return GLUT_KEY_END;
+  case KEYCODE_INSERT:
+    return GLUT_KEY_INSERT;
+  case KEYCODE_UP:
+  //case KEYCODE_KP_UP:
+    return GLUT_KEY_UP;
+  case KEYCODE_DOWN:
+  //case KEYCODE_KP_DOWN:
+	return GLUT_KEY_DOWN;
+  case KEYCODE_LEFT:
+  //case KEYCODE_KP_LEFT:
+    return GLUT_KEY_LEFT;
+  case KEYCODE_RIGHT:
+  //case KEYCODE_KP_RIGHT:
+  	return GLUT_KEY_RIGHT;
+  case KEYCODE_NUM_LOCK:
+    return GLUT_KEY_NUM_LOCK;
+  case KEYCODE_LEFT_ALT:
+    return GLUT_KEY_ALT_L;
+  case KEYCODE_RIGHT_ALT:
+    return GLUT_KEY_ALT_R;
+  case KEYCODE_LEFT_SHIFT:
+    return GLUT_KEY_SHIFT_L;
+  case KEYCODE_RIGHT_SHIFT:
+    return GLUT_KEY_SHIFT_R;
+  case KEYCODE_LEFT_CTRL:
+    return GLUT_KEY_CTRL_L;
+  case KEYCODE_RIGHT_CTRL:
+    return GLUT_KEY_CTRL_R;
   }
-
-  /* Get usable JNI context * /
-  JNIEnv* env = app->activity->env;
-  JavaVM* vm = app->activity->vm;
-  (*vm)->AttachCurrentThread(vm, &env, NULL);
-
-  jclass KeyEventClass = (*env)->FindClass(env, "android/view/KeyEvent");
-  jmethodID KeyEventConstructor = (*env)->GetMethodID(env, KeyEventClass, "<init>", "(II)V");
-  jobject keyEvent = (*env)->NewObject(env, KeyEventClass, KeyEventConstructor,
-				       AKeyEvent_getAction(event), AKeyEvent_getKeyCode(event));
-  jmethodID KeyEvent_getUnicodeChar = (*env)->GetMethodID(env, KeyEventClass, "getUnicodeChar", "(I)I");
-  int ascii = (*env)->CallIntMethod(env, keyEvent, KeyEvent_getUnicodeChar, AKeyEvent_getMetaState(event));
-
-  /* LOGI("getUnicodeChar(%d) = %d ('%c')", AKeyEvent_getKeyCode(event), ascii, ascii); * /
-  (*vm)->DetachCurrentThread(vm);
-
-  return ascii;
+  return 0;
 }
-*/
+
+unsigned char key_ascii(int qnxKeycode)
+{
+  if (qnxKeycode >= KEYCODE_PC_KEYS && qnxKeycode <= UNICODE_PRIVATE_USE_AREA_LAST) {
+	switch (qnxKeycode) {
+	case KEYCODE_BACKSPACE:
+	  return 0x0008;
+	case KEYCODE_TAB:
+	  return 0x0009;
+	case KEYCODE_KP_ENTER:
+	case KEYCODE_RETURN:
+	  return 0x000A;
+	case KEYCODE_ESCAPE:
+	  return 0x001B;
+	}
+  }
+  return qnxKeycode;
+}
 
 uint64_t fgPlatformSystemTime ( void )
 {
-  struct timeval now;
-  gettimeofday( &now, NULL );
-  return now.tv_usec / 1000 + now.tv_sec * 1000;
+  struct timespec now;
+  clock_gettime(CLOCK_REALTIME, &now);
+  return (1000 * now.tv_sec) + (now.tv_nsec / 1000000);
 }
 
 /*
  * Does the magic required to relinquish the CPU until something interesting
  * happens.
  */
-void fgPlatformSleepForEvents( long msec )
+void fgPlatformSleepForEvents( uint64_t msec )
 {
-	//TODO
+  //XXX: Is this right? Is there a more direct way to access the context?
+  if(bps_get_event(&fgStructure.CurrentWindow->Window.pContext.event, (int)msec) != BPS_SUCCESS) {
+    LOGW("BPS couldn't get event");
+  }
 }
 
-/* *
- * Process the next input event.
- * /
-int32_t handle_input(struct android_app* app, AInputEvent* event) {
-  SFG_Window* window = fgWindowByHandle(app->window);
-  if (window == NULL)
-    return EVENT_NOT_HANDLED;
+void handle_left_mouse(int x, int y, int height, int eventType, SFG_Window* window)
+{
+	bool handled = false;
+	/* Virtual arrows PAD */
+	/* Don't interfere with existing mouse move event */
+	if (!touchscreen.in_mmotion) {
+	  struct vpad_state prev_vpad = touchscreen.vpad;
+	  touchscreen.vpad.left = touchscreen.vpad.right = touchscreen.vpad.up = touchscreen.vpad.down = false;
 
-  /* FIXME: in Android, when a key is repeated, down
-     and up events happen most often at the exact same time.  This
-     makes it impossible to animate based on key press time. * /
-  /* e.g. down/up/wait/down/up rather than down/wait/down/wait/up * /
-  /* This looks like a bug in the Android virtual keyboard system :/
-     Real buttons such as the Back button appear to work correctly
-     (series of down events with proper getRepeatCount value). * /
+	  if (eventType == SCREEN_EVENT_MTOUCH_TOUCH || eventType == SCREEN_EVENT_MTOUCH_MOVE) {
+		if ((x > 0 && x < 100) && (y > (height - 100) && y < height))
+		{
+		  touchscreen.vpad.left = true;
+		}
+		if ((x > 200 && x < 300) && (y > (height - 100) && y < height))
+		{
+		  touchscreen.vpad.right = true;
+		}
+		if ((x > 100 && x < 200) && (y > (height - 100) && y < height))
+		{
+		  touchscreen.vpad.down = true;
+		}
+		if ((x > 100 && x < 200) && (y > (height - 200) && y < (height - 100)))
+		{
+		  touchscreen.vpad.up = true;
+		}
+	  }
 
-  if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY) {
-    /* LOGI("action: %d", AKeyEvent_getAction(event)); */
-    /* LOGI("keycode: %d", code); * /
-    int32_t code = AKeyEvent_getKeyCode(event);
+	  if (eventType == SCREEN_EVENT_MTOUCH_TOUCH &&
+			  (touchscreen.vpad.left || touchscreen.vpad.right || touchscreen.vpad.down || touchscreen.vpad.up)) {
+		touchscreen.vpad.on = true;
+	  }
+	  if (eventType == SCREEN_EVENT_MTOUCH_RELEASE) {
+		touchscreen.vpad.on = false;
+	  }
 
-    if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN) {
-      int32_t keypress = 0;
-      unsigned char ascii = 0;
-      if ((keypress = key_a2fg[code]) && FETCH_WCB(*window, Special)) {
-	INVOKE_WCB(*window, Special, (keypress, window->State.MouseX, window->State.MouseY));
-	return EVENT_HANDLED;
-      } else if ((ascii = key_ascii(app, event)) && FETCH_WCB(*window, Keyboard)) {
-	INVOKE_WCB(*window, Keyboard, (ascii, window->State.MouseX, window->State.MouseY));
-	return EVENT_HANDLED;
-      }
-    }
-    else if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_UP) {
-      int32_t keypress = 0;
-      unsigned char ascii = 0;
-      if ((keypress = key_a2fg[code]) && FETCH_WCB(*window, Special)) {
-	INVOKE_WCB(*window, SpecialUp, (keypress, window->State.MouseX, window->State.MouseY));
-	return EVENT_HANDLED;
-      } else if ((ascii = key_ascii(app, event)) && FETCH_WCB(*window, Keyboard)) {
-	INVOKE_WCB(*window, KeyboardUp, (ascii, window->State.MouseX, window->State.MouseY));
-	return EVENT_HANDLED;
-      }
-    }
-  }
-
-  int32_t source = AInputEvent_getSource(event);
-  if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION
-      && source == AINPUT_SOURCE_TOUCHSCREEN) {
-    int32_t action = AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
-    /* Pointer ID for clicks * /
-    int32_t pidx = AMotionEvent_getAction(event) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-    /* TODO: Handle multi-touch; also handle multiple sources/devices */
-    /* cf. http://sourceforge.net/mailarchive/forum.php?thread_name=20120518071314.GA28061%40perso.beuc.net&forum_name=freeglut-developer * /
-    if (0) {
-      LOGI("motion action=%d index=%d source=%d", action, pidx, source);
-      int count = AMotionEvent_getPointerCount(event);
-      int i;
-      for (i = 0; i < count; i++) {
-        LOGI("multi(%d): %.01f,%.01f",
-             AMotionEvent_getPointerId(event, i),
-             AMotionEvent_getX(event, i), AMotionEvent_getY(event, i));
-      }
-    }
-    float x = AMotionEvent_getX(event, 0);
-    float y = AMotionEvent_getY(event, 0);
-
-    /* Virtual arrows PAD */
-    /* Don't interfere with existing mouse move event * /
-    if (!touchscreen.in_mmotion) {
-      struct vpad_state prev_vpad = touchscreen.vpad;
-      touchscreen.vpad.left = touchscreen.vpad.right
-	= touchscreen.vpad.up = touchscreen.vpad.down = false;
-
-      /* int32_t width = ANativeWindow_getWidth(window->Window.Handle); * /
-      int32_t height = ANativeWindow_getHeight(window->Window.Handle);
-      if (action == AMOTION_EVENT_ACTION_DOWN || action == AMOTION_EVENT_ACTION_MOVE) {
-	if ((x > 0 && x < 100) && (y > (height - 100) && y < height))
-	  touchscreen.vpad.left = true;
-	if ((x > 200 && x < 300) && (y > (height - 100) && y < height))
-	  touchscreen.vpad.right = true;
-	if ((x > 100 && x < 200) && (y > (height - 100) && y < height))
-	  touchscreen.vpad.down = true;
-	if ((x > 100 && x < 200) && (y > (height - 200) && y < (height - 100)))
-	  touchscreen.vpad.up = true;
-      }
-      if (action == AMOTION_EVENT_ACTION_DOWN &&
-	  (touchscreen.vpad.left || touchscreen.vpad.right || touchscreen.vpad.down || touchscreen.vpad.up))
-	touchscreen.vpad.on = true;
-      if (action == AMOTION_EVENT_ACTION_UP)
-	touchscreen.vpad.on = false;
-      if (prev_vpad.left != touchscreen.vpad.left
-	  || prev_vpad.right != touchscreen.vpad.right
-	  || prev_vpad.up != touchscreen.vpad.up
-	  || prev_vpad.down != touchscreen.vpad.down
-	  || prev_vpad.on != touchscreen.vpad.on) {
-	if (FETCH_WCB(*window, Special)) {
-	  if (prev_vpad.left == false && touchscreen.vpad.left == true)
-	    INVOKE_WCB(*window, Special, (GLUT_KEY_LEFT, x, y));
-	  else if (prev_vpad.right == false && touchscreen.vpad.right == true)
-	    INVOKE_WCB(*window, Special, (GLUT_KEY_RIGHT, x, y));
-	  else if (prev_vpad.up == false && touchscreen.vpad.up == true)
-	    INVOKE_WCB(*window, Special, (GLUT_KEY_UP, x, y));
-	  else if (prev_vpad.down == false && touchscreen.vpad.down == true)
-	    INVOKE_WCB(*window, Special, (GLUT_KEY_DOWN, x, y));
+	  if (prev_vpad.left != touchscreen.vpad.left
+		  || prev_vpad.right != touchscreen.vpad.right
+		  || prev_vpad.up != touchscreen.vpad.up
+		  || prev_vpad.down != touchscreen.vpad.down
+		  || prev_vpad.on != touchscreen.vpad.on) {
+		if (FETCH_WCB(*window, Special)) {
+		  if (prev_vpad.left == false && touchscreen.vpad.left == true) {
+			INVOKE_WCB(*window, Special, (GLUT_KEY_LEFT, x, y));
+		  }
+		  else if (prev_vpad.right == false && touchscreen.vpad.right == true) {
+			INVOKE_WCB(*window, Special, (GLUT_KEY_RIGHT, x, y));
+		  }
+		  else if (prev_vpad.up == false && touchscreen.vpad.up == true) {
+			INVOKE_WCB(*window, Special, (GLUT_KEY_UP, x, y));
+		  }
+		  else if (prev_vpad.down == false && touchscreen.vpad.down == true) {
+			INVOKE_WCB(*window, Special, (GLUT_KEY_DOWN, x, y));
+		  }
+		}
+		if (FETCH_WCB(*window, SpecialUp)) {
+		  if (prev_vpad.left == true && touchscreen.vpad.left == false) {
+			INVOKE_WCB(*window, SpecialUp, (GLUT_KEY_LEFT, x, y));
+		  }
+		  if (prev_vpad.right == true && touchscreen.vpad.right == false) {
+			INVOKE_WCB(*window, SpecialUp, (GLUT_KEY_RIGHT, x, y));
+		  }
+		  if (prev_vpad.up == true && touchscreen.vpad.up == false) {
+			INVOKE_WCB(*window, SpecialUp, (GLUT_KEY_UP, x, y));
+		  }
+		  if (prev_vpad.down == true && touchscreen.vpad.down == false) {
+			INVOKE_WCB(*window, SpecialUp, (GLUT_KEY_DOWN, x, y));
+		  }
+		}
+		handled = true;
+	  }
 	}
-	if (FETCH_WCB(*window, SpecialUp)) {
-	  if (prev_vpad.left == true && touchscreen.vpad.left == false)
-	    INVOKE_WCB(*window, SpecialUp, (GLUT_KEY_LEFT, x, y));
-	  if (prev_vpad.right == true && touchscreen.vpad.right == false)
-	    INVOKE_WCB(*window, SpecialUp, (GLUT_KEY_RIGHT, x, y));
-	  if (prev_vpad.up == true && touchscreen.vpad.up == false)
-	    INVOKE_WCB(*window, SpecialUp, (GLUT_KEY_UP, x, y));
-	  if (prev_vpad.down == true && touchscreen.vpad.down == false)
-	    INVOKE_WCB(*window, SpecialUp, (GLUT_KEY_DOWN, x, y));
+
+	/* Normal mouse events */
+	if (!handled && !touchscreen.vpad.on) {
+	  window->State.MouseX = x;
+	  window->State.MouseY = y;
+
+	  if(eventType == SCREEN_EVENT_MTOUCH_MOVE) {
+		INVOKE_WCB(*window, Motion, (x, y));
+	  } else if(FETCH_WCB(*window, Mouse)) {
+		touchscreen.in_mmotion = eventType == SCREEN_EVENT_MTOUCH_TOUCH;
+		int glutTouchType = eventType == SCREEN_EVENT_MTOUCH_TOUCH ? GLUT_DOWN : GLUT_UP;
+		INVOKE_WCB(*window, Mouse, (GLUT_LEFT_BUTTON, glutTouchType, x, y));
+	  }
 	}
-	return EVENT_HANDLED;
-      }
-    }
-
-    /* Normal mouse events * /
-    if (!touchscreen.vpad.on) {
-      window->State.MouseX = x;
-      window->State.MouseY = y;
-      if (action == AMOTION_EVENT_ACTION_DOWN && FETCH_WCB(*window, Mouse)) {
-	touchscreen.in_mmotion = true;
-	INVOKE_WCB(*window, Mouse, (GLUT_LEFT_BUTTON, GLUT_DOWN, x, y));
-      } else if (action == AMOTION_EVENT_ACTION_UP && FETCH_WCB(*window, Mouse)) {
-	touchscreen.in_mmotion = false;
-	INVOKE_WCB(*window, Mouse, (GLUT_LEFT_BUTTON, GLUT_UP, x, y));
-      } else if (action == AMOTION_EVENT_ACTION_MOVE && FETCH_WCB(*window, Motion)) {
-	INVOKE_WCB(*window, Motion, (x, y));
-      }
-    }
-
-    return EVENT_HANDLED;
-  }
-
-  /* Let Android handle other events (e.g. Back and Menu buttons) * /
-  return EVENT_NOT_HANDLED;
 }
-*/
-
-/* *
- * Process the next main command.
- * /
-void handle_cmd(struct android_app* app, int32_t cmd) {
-  SFG_Window* window = fgWindowByHandle(app->window);  /* may be NULL * /
-  switch (cmd) {
-  /* App life cycle, in that order: * /
-  case APP_CMD_START:
-    LOGI("handle_cmd: APP_CMD_START");
-    break;
-  case APP_CMD_RESUME:
-    LOGI("handle_cmd: APP_CMD_RESUME");
-    /* Cf. fgPlatformProcessSingleEvent * /
-    break;
-  case APP_CMD_INIT_WINDOW: /* surfaceCreated * /
-    /* The window is being shown, get it ready. * /
-    LOGI("handle_cmd: APP_CMD_INIT_WINDOW %p", app->window);
-    fgDisplay.pDisplay.single_native_window = app->window;
-    /* start|resume: glPlatformOpenWindow was waiting for Handle to be
-       defined and will now continue processing * /
-    break;
-  case APP_CMD_GAINED_FOCUS:
-    LOGI("handle_cmd: APP_CMD_GAINED_FOCUS");
-    break;
-  case APP_CMD_WINDOW_RESIZED:
-    LOGI("handle_cmd: APP_CMD_WINDOW_RESIZED");
-    if (window->Window.pContext.egl.Surface != EGL_NO_SURFACE)
-      /* Make ProcessSingleEvent detect the new size, only available
-	 after the next SwapBuffer * /
-      glutPostRedisplay();
-    break;
-
-  case APP_CMD_SAVE_STATE: /* onSaveInstanceState */
-    /* The system has asked us to save our current state, when it
-       pauses the application without destroying it right after. * /
-    app->savedState = strdup("Detect me as non-NULL on next android_main");
-    app->savedStateSize = strlen(app->savedState) + 1;
-    LOGI("handle_cmd: APP_CMD_SAVE_STATE");
-    break;
-  case APP_CMD_PAUSE:
-    LOGI("handle_cmd: APP_CMD_PAUSE");
-    /* Cf. fgPlatformProcessSingleEvent * /
-    break;
-  case APP_CMD_LOST_FOCUS:
-    LOGI("handle_cmd: APP_CMD_LOST_FOCUS");
-    break;
-  case APP_CMD_TERM_WINDOW: /* surfaceDestroyed * /
-    /* The application is being hidden, but may be restored * /
-    LOGI("handle_cmd: APP_CMD_TERM_WINDOW");
-    fghPlatformCloseWindowEGL(window);
-    fgDisplay.pDisplay.single_native_window = NULL;
-    break;
-  case APP_CMD_STOP:
-    LOGI("handle_cmd: APP_CMD_STOP");
-    break;
-  case APP_CMD_DESTROY: /* Activity.onDestroy * /
-    LOGI("handle_cmd: APP_CMD_DESTROY");
-    /* User closed the application for good, let's kill the window * /
-    {
-      /* Can't use fgWindowByHandle as app->window is NULL * /
-      SFG_Window* window = fgStructure.CurrentWindow;
-      if (window != NULL) {
-        fgDestroyWindow(window);
-      } else {
-        LOGI("APP_CMD_DESTROY: No current window");
-      }
-    }
-    /* glue has already set android_app->destroyRequested=1 * /
-    break;
-
-  case APP_CMD_CONFIG_CHANGED:
-    /* Handle rotation / orientation change * /
-    LOGI("handle_cmd: APP_CMD_CONFIG_CHANGED");
-    break;
-  case APP_CMD_LOW_MEMORY:
-    LOGI("handle_cmd: APP_CMD_LOW_MEMORY");
-    break;
-  default:
-    LOGI("handle_cmd: unhandled cmd=%d", cmd);
-  }
-}
-*/
-
-void fgPlatformOpenWindow( SFG_Window* window, const char* title,
-                           GLboolean positionUse, int x, int y,
-                           GLboolean sizeUse, int w, int h,
-                           GLboolean gameMode, GLboolean isSubWindow );
 
 void fgPlatformProcessSingleEvent ( void )
 {
-  //TODO
-  //--------------------------------
-  /* When the screen is resized, the window handle still points to the
-     old window until the next SwapBuffer, while it's crucial to set
-     the size (onShape) correctly before the next onDisplay callback.
-     Plus we don't know if the next SwapBuffer already occurred at the
-     time we process the event (e.g. during onDisplay). * /
-  /* So we do the check each time rather than on event. * /
-  /* Interestingly, on a Samsung Galaxy S/PowerVR SGX540 GPU/Android
-     2.3, that next SwapBuffer is fake (but still necessary to get the
-     new size). * /
-  SFG_Window* window = fgStructure.CurrentWindow;
-  if (window != NULL && window->Window.Handle != NULL) {
-    int32_t width = ANativeWindow_getWidth(window->Window.Handle);
-    int32_t height = ANativeWindow_getHeight(window->Window.Handle);
-    fghOnReshapeNotify(window,width,height,GL_FALSE);
-  }
+  int domain;
+  bps_event_t** eventPtr = &fgStructure.CurrentWindow->Window.pContext.event; //XXX Is there a more direct way to access the context?
+  bps_event_t* event;
+  do
+  {
+	if(*eventPtr != NULL) {
+	  SFG_Window* window = fgStructure.CurrentWindow;
+	  if (window != NULL && window->Window.Handle != NULL) {
+		int size[2];
+		screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
+	    fghOnReshapeNotify(window,size[0],size[1],GL_FALSE);
+	  }
 
-  /* Read pending event. * /
-  int ident;
-  int events;
-  struct android_poll_source* source;
-  /* This is called "ProcessSingleEvent" but this means we'd only
-     process ~60 (screen Hz) mouse events per second, plus other ports
-     are processing all events already.  So let's process all pending
-     events. */
-  /* if ((ident=ALooper_pollOnce(0, NULL, &events, (void**)&source)) >= 0) { * /
-  while ((ident=ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0) {
-    /* Process this event. * /
-    if (source != NULL) {
-      source->process(source->app, source);
-    }
-  }
+	  event = *eventPtr;
+	  domain = bps_event_get_domain(event);
+	  if (domain == screen_get_domain()) {
+		int eventType;
+		screen_event_t screenEvent = screen_event_get_event(event);
+		screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_TYPE, &eventType);
+		switch (eventType) {
 
-  /* If we're not in RESUME state, Android paused us, so wait * /
-  struct android_app* app = fgDisplay.pDisplay.app;
-  if (app->destroyRequested != 1 && app->activityState != APP_CMD_RESUME) {
-      INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_PAUSE));
+		//Mostly from fg_main_android
+		case SCREEN_EVENT_MTOUCH_TOUCH:
+		case SCREEN_EVENT_MTOUCH_RELEASE:
+		case SCREEN_EVENT_MTOUCH_MOVE:
+		{
+		  mtouch_event_t touchEvent;
+		  screen_get_mtouch_event(screenEvent, &touchEvent, 0);
+		  if(touchEvent.contact_id == 0) { //XXX Only support one contact for now
+			int size[2];
+			screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
+			handle_left_mouse(touchEvent.x, touchEvent.y, size[1], eventType, window);
+		  }
+		  break;
+		}
 
-    int FOREVER = -1;
-    while (app->destroyRequested != 1 && (app->activityState != APP_CMD_RESUME)) {
-      if ((ident=ALooper_pollOnce(FOREVER, NULL, &events, (void**)&source)) >= 0) {
-        /* Process this event. * /
-        if (source != NULL) {
-          source->process(source->app, source);
-        }
-      }
-    }
-    /* Coming back from a pause: * /
-    /* - Recreate window context and surface */
-    /* - Call user-defined hook to restore resources (textures...) * /
-    /* - Exit pause loop * /
-    if (app->destroyRequested != 1) {
-      /* Android is full-screen only, simplified call.. * /
-      /* Ideally we'd have a fgPlatformReopenWindow() * /
-      /* If we're hidden by a non-fullscreen or translucent activity,
-         we'll be paused but not stopped, and keep the current
-         surface; in which case fgPlatformOpenWindow will no-op. * /
-      fgPlatformOpenWindow(window, "", GL_FALSE, 0, 0, GL_FALSE, 0, 0, GL_FALSE, GL_FALSE);
+		case SCREEN_EVENT_POINTER:
+		{
+		  //Based off/part taken from GamePlay3d PlatformBlackBerry
+		  static int mouse_pressed = 0;
+		  int buttons;
+		  int position[2];
+		  // A move event will be fired unless a button state changed.
+		  bool move = true;
+		  bool left_move = false;
+		  // This is a mouse move event, it is applicable to a device with a usb mouse or simulator.
+		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
+		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
+		  int size[2];
+		  screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
 
-      /* TODO: should there be a whole GLUT_INIT_WORK forced? probably...
-       * Could queue that up in APP_CMD_TERM_WINDOW handler, but it'll
-       * be not possible to ensure InitContext CB gets called before
-       * Resume CB like that.. so maybe just force calling initContext CB
-       * here is best. Or we could force work on the window in question..
-       * 1) save old work mask, 2) set mask to init only, 3) call fgProcessWork directly
-       * 4) set work mask back to the one saved in step 1.
-        /
-      if (!FETCH_WCB(*window, InitContext))
-          fgWarning("Resuming application, but no callback to reload context resources (glutInitContextFunc)");
-    }
+		  // Handle left mouse. Interpret as touch if the left mouse event is not consumed.
+		  if (buttons & SCREEN_LEFT_MOUSE_BUTTON) {
+			if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON) {
+			  left_move = true;
+			} else {
+			  move = false;
+			  mouse_pressed |= SCREEN_LEFT_MOUSE_BUTTON;
+			  handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_TOUCH, window);
+			}
+		  } else if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON) {
+			move = false;
+			mouse_pressed &= ~SCREEN_LEFT_MOUSE_BUTTON;
+			handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_RELEASE, window);
+		  }
 
-    INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_RESUME));
-  }
-  */
+		  // Handle right mouse.
+		  if (buttons & SCREEN_RIGHT_MOUSE_BUTTON) {
+			if ((mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) == 0) {
+			  move = false;
+			  mouse_pressed |= SCREEN_RIGHT_MOUSE_BUTTON;
+			  INVOKE_WCB(*window, Mouse, (GLUT_RIGHT_BUTTON, GLUT_DOWN, position[0], position[1]));
+			}
+		  } else if (mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) {
+			move = false;
+			mouse_pressed &= ~SCREEN_RIGHT_MOUSE_BUTTON;
+			INVOKE_WCB(*window, Mouse, (GLUT_RIGHT_BUTTON, GLUT_UP, position[0], position[1]));
+		  }
+
+		  // Handle middle mouse.
+		  if (buttons & SCREEN_MIDDLE_MOUSE_BUTTON) {
+			if ((mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) == 0) {
+			  move = false;
+			  mouse_pressed |= SCREEN_MIDDLE_MOUSE_BUTTON;
+			  INVOKE_WCB(*window, Mouse, (GLUT_MIDDLE_BUTTON, GLUT_DOWN, position[0], position[1]));
+			}
+		  } else if (mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) {
+			move = false;
+			mouse_pressed &= ~SCREEN_MIDDLE_MOUSE_BUTTON;
+			INVOKE_WCB(*window, Mouse, (GLUT_MIDDLE_BUTTON, GLUT_UP, position[0], position[1]));
+		  }
+
+		  // Fire a move event if none of the buttons changed.
+		  if (left_move || move) {
+			handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_MOVE, window);
+		  }
+		  break;
+		}
+
+		//Based off fg_main_android
+		case SCREEN_EVENT_KEYBOARD:
+		{
+		  int flags;
+		  int value;
+		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
+		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
+		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Flags: 0x%X, Sym: 0x%X", SLOG2_FA_SIGNED(flags), SLOG2_FA_SIGNED(value), SLOG2_FA_END);
+		  // Suppress key repeats if desired
+		  if (!fgStructure.CurrentWindow->State.IgnoreKeyRepeat && (flags & KEY_REPEAT) == 0) {
+			unsigned int keypress = 0;
+			unsigned char ascii = 0;
+			if ((keypress = key_special(value))) {
+			  if(flags & KEY_DOWN) {
+				INVOKE_WCB(*window, Special, (keypress, window->State.MouseX, window->State.MouseY));
+			  } else {
+				INVOKE_WCB(*window, SpecialUp, (keypress, window->State.MouseX, window->State.MouseY));
+			  }
+			} else if((flags & KEY_SYM_VALID) && (ascii = key_ascii(value))) {
+			  if(flags & KEY_DOWN) {
+				INVOKE_WCB(*window, Keyboard, (ascii, window->State.MouseX, window->State.MouseY));
+			  } else {
+				INVOKE_WCB(*window, KeyboardUp, (ascii, window->State.MouseX, window->State.MouseY));
+			  }
+			}
+		  }
+		  break;
+		}
+		}
+	  } else if (domain == navigator_get_domain()) {
+		switch (bps_event_get_code(event)) {
+
+		case NAVIGATOR_WINDOW_STATE:
+		{
+		  LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE", SLOG2_FA_END);
+		  navigator_window_state_t state = navigator_event_get_window_state(event);
+		  switch (state)
+		  {
+		  case NAVIGATOR_WINDOW_FULLSCREEN:
+			LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_FULLSCREEN", SLOG2_FA_END);
+			INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_RESUME));
+			break;
+		  case NAVIGATOR_WINDOW_THUMBNAIL:
+		  case NAVIGATOR_WINDOW_INVISIBLE:
+			LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL/NAVIGATOR_WINDOW_INVISIBLE", SLOG2_FA_END);
+			INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_PAUSE));
+			break;
+		  }
+		  break;
+		}
+
+		case NAVIGATOR_EXIT:
+		  LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_EXIT", SLOG2_FA_END);
+		  /* User closed the application for good, let's kill the window */
+		  {
+			SFG_Window* window = fgStructure.CurrentWindow;
+			if (window != NULL) {
+			  fgDestroyWindow(window);
+			} else {
+			  LOGI("NAVIGATOR_EXIT: No current window", SLOG2_FA_END);
+			}
+		  }
+		  break;
+		}
+	  }
+	}
+  } while(bps_get_event(eventPtr, 1) == BPS_SUCCESS && *eventPtr != NULL);
+
+  /* Reset event to reduce chances of triggering something */
+  *eventPtr = NULL;
 }
 
 void fgPlatformMainLoopPreliminaryWork ( void )
 {
   LOGI("fgPlatformMainLoopPreliminaryWork\n", SLOG2_FA_END);
-
-  key_init();
 }
 
 
