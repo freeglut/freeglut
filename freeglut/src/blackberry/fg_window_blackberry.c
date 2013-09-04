@@ -48,6 +48,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     fgWarning("You can't have more than one window on BlackBerry");
     return;
   }
+  window->Window.pContext.event = NULL; //XXX Should probably be done elsewhere. Done here so there is no event at the moment
 
   /* Create window */
   if (screen_create_context(&window->Window.pContext.screenContext, 0)) {
