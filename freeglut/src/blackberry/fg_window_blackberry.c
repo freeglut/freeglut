@@ -65,10 +65,13 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 
   /* Set window properties */
   int screenFormat = SCREEN_FORMAT_RGBA8888;
-#ifdef __X86__
+#ifdef GL_ES_VERSION_2_0
   int screenUsage = SCREEN_USAGE_OPENGL_ES2;
-#else
-  int screenUsage = SCREEN_USAGE_DISPLAY | SCREEN_USAGE_OPENGL_ES2; // Physical device copy directly into physical display
+#elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
+  int screenUsage = SCREEN_USAGE_OPENGL_ES1;
+#endif
+#ifndef __X86__
+  screenUsage |= SCREEN_USAGE_DISPLAY; // Physical device copy directly into physical display
 #endif
   if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_FORMAT, &screenFormat)) {
 	screen_destroy_window(sWindow);
