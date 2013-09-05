@@ -98,7 +98,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
   }*/
 
   /* Create window buffers */
-  if (screen_create_window_buffers(sWindow, 2)) {
+  if (screen_create_window_buffers(sWindow, (fgState.DisplayMode & GLUT_DOUBLE) ? 2 : 1)) {
 	screen_destroy_window(sWindow);
 	screen_destroy_context(window->Window.pContext.screenContext);
 	fgError("Could not create window buffers");

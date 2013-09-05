@@ -46,7 +46,7 @@ int fghChooseConfig(EGLConfig* config) {
     EGL_SAMPLES, (fgState.DisplayMode & GLUT_MULTISAMPLE) ? fgState.SampleNumber : 0,
     EGL_NONE
   };
-  
+
   EGLint num_config;
   if (!eglChooseConfig(fgDisplay.pDisplay.egl.Display,
 		       attribs, config, 1, &num_config)) {
@@ -94,11 +94,13 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
 
 void fgPlatformSetWindow ( SFG_Window *window )
 {
-  if (eglMakeCurrent(fgDisplay.pDisplay.egl.Display,
-		     window->Window.pContext.egl.Surface,
-		     window->Window.pContext.egl.Surface,
-		     window->Window.Context) == EGL_FALSE)
-    fgError("eglMakeCurrent: err=%x\n", eglGetError());
+  if ( window != fgStructure.CurrentWindow && window) {
+    if (eglMakeCurrent(fgDisplay.pDisplay.egl.Display,
+		       window->Window.pContext.egl.Surface,
+		       window->Window.pContext.egl.Surface,
+		       window->Window.Context) == EGL_FALSE)
+      fgError("eglMakeCurrent: err=%x\n", eglGetError());
+  }
 }
 
 /*

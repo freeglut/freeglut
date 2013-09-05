@@ -123,7 +123,6 @@ ELSEIF(ANDROID OR BLACKBERRY)
         src/android/fg_cursor_android.c
         src/android/fg_ext_android.c
         src/android/fg_gamemode_android.c
-        src/android/fg_input_devices_android.c
         src/android/fg_joystick_android.c
         src/android/fg_spaceball_android.c
         src/android/fg_structure_android.c
@@ -134,6 +133,7 @@ ELSEIF(ANDROID OR BLACKBERRY)
             src/android/native_app_glue/android_native_app_glue.h
             src/android/fg_init_android.c
             src/android/fg_internal_android.h
+            src/android/fg_input_devices_android.c
             src/android/fg_main_android.c
             src/android/fg_main_android.h
             src/android/fg_runtime_android.c
@@ -144,6 +144,7 @@ ELSEIF(ANDROID OR BLACKBERRY)
         LIST(APPEND FREEGLUT_SRCS
             src/blackberry/fg_init_blackberry.c
             src/blackberry/fg_internal_blackberry.h
+            src/x11/fg_input_devices_x11.c
             src/blackberry/fg_main_blackberry.c
             src/blackberry/fg_main_blackberry.h
             src/blackberry/fg_state_blackberry.c

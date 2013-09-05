@@ -29,10 +29,14 @@
 #include "fg_init.h"
 #include "egl/fg_init_egl.h"
 #include <bps/bps.h>
+#include <bps/navigator.h>
 
 void fgPlatformInitialize()
 {
   bps_initialize();
+
+  navigator_request_events(0);
+  //XXX rotation lock? navigator_rotation_lock(true);
 
   fghPlatformInitializeEGL();
 
@@ -45,6 +49,8 @@ void fgPlatformInitialize()
 void fgPlatformCloseDisplay()
 {
   fghPlatformCloseDisplayEGL();
+
+  navigator_stop_events(0);
 
   bps_shutdown();
 }
