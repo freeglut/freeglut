@@ -139,11 +139,18 @@ unsigned char key_ascii(int qnxKeycode)
   return qnxKeycode;
 }
 
-uint64_t fgPlatformSystemTime ( void )
+//From fg_main_x11
+fg_time_t fgPlatformSystemTime ( void )
 {
-  struct timespec now;
-  clock_gettime(CLOCK_REALTIME, &now);
-  return (1000 * now.tv_sec) + (now.tv_nsec / 1000000);
+#ifdef CLOCK_MONOTONIC
+    struct timespec now;
+    clock_gettime(CLOCK_MONOTONIC, &now);
+    return now.tv_nsec/1000000 + now.tv_sec*1000;
+#elif defined(HAVE_GETTIMEOFDAY)
+    struct timeval now;
+    gettimeofday( &now, NULL );
+    return now.tv_usec/1000 + now.tv_sec*1000;
+#endif
 }
 
 /*
@@ -276,10 +283,22 @@ void fgPlatformProcessSingleEvent ( void )
 		{
 		  mtouch_event_t touchEvent;
 		  screen_get_mtouch_event(screenEvent, &touchEvent, 0);
-		  if(touchEvent.contact_id == 0) { //XXX Only support one contact for now
+		  if(touchEvent.contact_id == 0) {
 			int size[2];
 			screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
 			handle_left_mouse(touchEvent.x, touchEvent.y, size[1], eventType, window);
+		  }
+
+		  //Now handle mutlitouch (adapted from fg_main_windows)
+		  if (eventType == SCREEN_EVENT_MTOUCH_TOUCH) {
+			INVOKE_WCB( *window, MultiEntry,  ( touchEvent.contact_id, GLUT_ENTERED ) );
+			INVOKE_WCB( *window, MultiButton, ( touchEvent.contact_id, touchEvent.x, touchEvent.y, 0, GLUT_DOWN ) );
+		  } else if (eventType == SCREEN_EVENT_MTOUCH_MOVE) {
+			INVOKE_WCB( *window, MultiMotion, ( touchEvent.contact_id, touchEvent.x, touchEvent.y ) );
+			//XXX No motion is performed without contact, thus MultiPassive is never used
+		  } else if (eventType == SCREEN_EVENT_MTOUCH_RELEASE) {
+			INVOKE_WCB( *window, MultiButton, ( touchEvent.contact_id, touchEvent.x, touchEvent.y, 0, GLUT_UP ) );
+			INVOKE_WCB( *window, MultiEntry,  ( touchEvent.contact_id, GLUT_LEFT ) );
 		  }
 		  break;
 		}
@@ -290,14 +309,18 @@ void fgPlatformProcessSingleEvent ( void )
 		  static int mouse_pressed = 0;
 		  int buttons;
 		  int position[2];
+		  int wheel;
 		  // A move event will be fired unless a button state changed.
 		  bool move = true;
 		  bool left_move = false;
 		  // This is a mouse move event, it is applicable to a device with a usb mouse or simulator.
 		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
 		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
+		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_MOUSE_WHEEL, &wheel);
 		  int size[2];
 		  screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
+
+		  //XXX Should multitouch be handled?
 
 		  // Handle left mouse. Interpret as touch if the left mouse event is not consumed.
 		  if (buttons & SCREEN_LEFT_MOUSE_BUTTON) {
@@ -343,6 +366,11 @@ void fgPlatformProcessSingleEvent ( void )
 		  // Fire a move event if none of the buttons changed.
 		  if (left_move || move) {
 			handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_MOVE, window);
+		  }
+
+		  if (wheel) {
+			fgState.MouseWheelTicks -= wheel;
+			//TODO: Implement wheel support (based on fg_main_mswin... though it seems excessive)
 		  }
 		  break;
 		}
