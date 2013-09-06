@@ -32,8 +32,8 @@
 #include "egl/fg_window_egl.h"
 
 #include <slog2.h>
-#define LOGI(...) ((void)slog2fa(NULL, 1337, SLOG2_INFO, __VA_ARGS__))
-#define LOGW(...) ((void)slog2fa(NULL, 1337, SLOG2_WARNING, __VA_ARGS__))
+#define LOGI(...) ((void)slog2fa(NULL, 1337, SLOG2_INFO, __VA_ARGS__, SLOG2_FA_END))
+#define LOGW(...) ((void)slog2fa(NULL, 1337, SLOG2_WARNING, __VA_ARGS__, SLOG2_FA_END))
 #include <sys/keycodes.h>
 #include <input/screen_helpers.h>
 #include <bps/bps.h>
@@ -283,7 +283,7 @@ void fgPlatformProcessSingleEvent ( void )
 		{
 		  mtouch_event_t touchEvent;
 		  screen_get_mtouch_event(screenEvent, &touchEvent, 0);
-		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_MTOUCH_*: Type: 0x%X, X: %d, Y: %d, Contact Id: %d", SLOG2_FA_SIGNED(eventType), SLOG2_FA_SIGNED(touchEvent.x), SLOG2_FA_SIGNED(touchEvent.y), SLOG2_FA_SIGNED(touchEvent.contact_id), SLOG2_FA_END);
+		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_MTOUCH_*: Type: 0x%X, X: %d, Y: %d, Contact Id: %d", SLOG2_FA_SIGNED(eventType), SLOG2_FA_SIGNED(touchEvent.x), SLOG2_FA_SIGNED(touchEvent.y), SLOG2_FA_SIGNED(touchEvent.contact_id));
 		  if(touchEvent.contact_id == 0) {
 			int size[2];
 			screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
@@ -321,7 +321,7 @@ void fgPlatformProcessSingleEvent ( void )
 		  int size[2];
 		  screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
 
-		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_POINTER: Buttons: 0x%X, X: %d, Y: %d, Wheel: %d", SLOG2_FA_SIGNED(buttons), SLOG2_FA_SIGNED(position[0]), SLOG2_FA_SIGNED(position[1]), SLOG2_FA_SIGNED(wheel), SLOG2_FA_END);
+		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_POINTER: Buttons: 0x%X, X: %d, Y: %d, Wheel: %d", SLOG2_FA_SIGNED(buttons), SLOG2_FA_SIGNED(position[0]), SLOG2_FA_SIGNED(position[1]), SLOG2_FA_SIGNED(wheel));
 
 		  //XXX Should multitouch be handled?
 
@@ -385,7 +385,7 @@ void fgPlatformProcessSingleEvent ( void )
 		  int value;
 		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
 		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
-		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Flags: 0x%X, Sym: 0x%X", SLOG2_FA_SIGNED(flags), SLOG2_FA_SIGNED(value), SLOG2_FA_END);
+		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Flags: 0x%X, Sym: 0x%X", SLOG2_FA_SIGNED(flags), SLOG2_FA_SIGNED(value));
 		  // Suppress key repeats if desired
 		  if ((flags & KEY_REPEAT) == 0 || (fgState.KeyRepeat == GLUT_KEY_REPEAT_ON && !fgStructure.CurrentWindow->State.IgnoreKeyRepeat)) {
 			unsigned int keypress = 0;
@@ -407,8 +407,12 @@ void fgPlatformProcessSingleEvent ( void )
 		  break;
 		}
 
+		case SCREEN_EVENT_PROPERTY:
+		case SCREEN_EVENT_IDLE:
+		  break;
+
 		default:
-		  LOGW("fgPlatformProcessSingleEvent: unknown screen event: 0x%X", SLOG2_FA_SIGNED(eventType), SLOG2_FA_END);
+		  LOGW("fgPlatformProcessSingleEvent: unknown screen event: 0x%X", SLOG2_FA_SIGNED(eventType));
 		  break;
 		}
 	  } else if (domain == navigator_get_domain()) {
@@ -417,41 +421,51 @@ void fgPlatformProcessSingleEvent ( void )
 
 		case NAVIGATOR_WINDOW_STATE:
 		{
-		  LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE", SLOG2_FA_END);
+		  LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE");
 		  navigator_window_state_t state = navigator_event_get_window_state(event);
 		  switch (state)
 		  {
 		  case NAVIGATOR_WINDOW_FULLSCREEN:
-			LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_FULLSCREEN", SLOG2_FA_END);
+			LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_FULLSCREEN");
 			INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_RESUME));
 			break;
 		  case NAVIGATOR_WINDOW_THUMBNAIL:
 		  case NAVIGATOR_WINDOW_INVISIBLE:
-			LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL/NAVIGATOR_WINDOW_INVISIBLE", SLOG2_FA_END);
+			LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL/NAVIGATOR_WINDOW_INVISIBLE");
 			INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_PAUSE));
 			break;
 		  default:
-			LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state), SLOG2_FA_END);
+			LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state));
 			break;
 		  }
 		  break;
 		}
 
 		case NAVIGATOR_EXIT:
-		  LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_EXIT", SLOG2_FA_END);
+		  LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_EXIT");
 		  /* User closed the application for good, let's kill the window */
 		  {
 			SFG_Window* window = fgStructure.CurrentWindow;
 			if (window != NULL) {
 			  fgDestroyWindow(window);
 			} else {
-			  LOGW("NAVIGATOR_EXIT: No current window", SLOG2_FA_END);
+			  LOGW("NAVIGATOR_EXIT: No current window");
 			}
 		  }
 		  break;
 
+		case NAVIGATOR_SWIPE_DOWN:
+		case NAVIGATOR_BACK:
+		case NAVIGATOR_WINDOW_ACTIVE:
+		case NAVIGATOR_DEVICE_LOCK_STATE:
+		case NAVIGATOR_WINDOW_COVER:
+		case NAVIGATOR_WINDOW_COVER_ENTER:
+		case NAVIGATOR_WINDOW_COVER_EXIT:
+		  //XXX Should probably do something with these
+		  break;
+
 		default:
-		  LOGW("fgPlatformProcessSingleEvent: unknown navigator event: 0x%X", SLOG2_FA_SIGNED(eventType), SLOG2_FA_END);
+		  LOGW("fgPlatformProcessSingleEvent: unknown navigator event: 0x%X", SLOG2_FA_SIGNED(eventType));
 		  break;
 		}
 	  }
@@ -464,7 +478,7 @@ void fgPlatformProcessSingleEvent ( void )
 
 void fgPlatformMainLoopPreliminaryWork ( void )
 {
-  LOGI("fgPlatformMainLoopPreliminaryWork\n", SLOG2_FA_END);
+  LOGI("fgPlatformMainLoopPreliminaryWork");
 }
 
 
