@@ -108,9 +108,10 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
   /* Request window events */
   screen_request_events(window->Window.pContext.screenContext);
 
-  /* Save window */
+  /* Save window and set state */
   window->Window.Handle = fgDisplay.pDisplay.single_native_window;
   window->State.WorkMask |= GLUT_INIT_WORK;
+  window->State.IsFullscreen = GL_TRUE; //XXX Always fullscreen for now
 
   /* Create context */
   fghChooseConfig(&window->Window.pContext.egl.Config);

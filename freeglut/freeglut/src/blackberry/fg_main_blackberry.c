@@ -283,6 +283,7 @@ void fgPlatformProcessSingleEvent ( void )
 		{
 		  mtouch_event_t touchEvent;
 		  screen_get_mtouch_event(screenEvent, &touchEvent, 0);
+		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_MTOUCH_*: Type: 0x%X, X: %d, Y: %d, Contact Id: %d", SLOG2_FA_SIGNED(eventType), SLOG2_FA_SIGNED(touchEvent.x), SLOG2_FA_SIGNED(touchEvent.y), SLOG2_FA_SIGNED(touchEvent.contact_id), SLOG2_FA_END);
 		  if(touchEvent.contact_id == 0) {
 			int size[2];
 			screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
@@ -319,6 +320,8 @@ void fgPlatformProcessSingleEvent ( void )
 		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_MOUSE_WHEEL, &wheel);
 		  int size[2];
 		  screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
+
+		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_POINTER: Buttons: 0x%X, X: %d, Y: %d, Wheel: %d", SLOG2_FA_SIGNED(buttons), SLOG2_FA_SIGNED(position[0]), SLOG2_FA_SIGNED(position[1]), SLOG2_FA_SIGNED(wheel), SLOG2_FA_END);
 
 		  //XXX Should multitouch be handled?
 
@@ -384,7 +387,7 @@ void fgPlatformProcessSingleEvent ( void )
 		  screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
 		  LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Flags: 0x%X, Sym: 0x%X", SLOG2_FA_SIGNED(flags), SLOG2_FA_SIGNED(value), SLOG2_FA_END);
 		  // Suppress key repeats if desired
-		  if (!fgStructure.CurrentWindow->State.IgnoreKeyRepeat && (flags & KEY_REPEAT) == 0) {
+		  if ((flags & KEY_REPEAT) == 0 || (fgState.KeyRepeat == GLUT_KEY_REPEAT_ON && !fgStructure.CurrentWindow->State.IgnoreKeyRepeat)) {
 			unsigned int keypress = 0;
 			unsigned char ascii = 0;
 			if ((keypress = key_special(value))) {
@@ -403,9 +406,14 @@ void fgPlatformProcessSingleEvent ( void )
 		  }
 		  break;
 		}
+
+		default:
+		  LOGW("fgPlatformProcessSingleEvent: unknown screen event: 0x%X", SLOG2_FA_SIGNED(eventType), SLOG2_FA_END);
+		  break;
 		}
 	  } else if (domain == navigator_get_domain()) {
-		switch (bps_event_get_code(event)) {
+		int eventType = bps_event_get_code(event);
+		switch (eventType) {
 
 		case NAVIGATOR_WINDOW_STATE:
 		{
@@ -422,6 +430,9 @@ void fgPlatformProcessSingleEvent ( void )
 			LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL/NAVIGATOR_WINDOW_INVISIBLE", SLOG2_FA_END);
 			INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_PAUSE));
 			break;
+		  default:
+			LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state), SLOG2_FA_END);
+			break;
 		  }
 		  break;
 		}
@@ -434,9 +445,13 @@ void fgPlatformProcessSingleEvent ( void )
 			if (window != NULL) {
 			  fgDestroyWindow(window);
 			} else {
-			  LOGI("NAVIGATOR_EXIT: No current window", SLOG2_FA_END);
+			  LOGW("NAVIGATOR_EXIT: No current window", SLOG2_FA_END);
 			}
 		  }
+		  break;
+
+		default:
+		  LOGW("fgPlatformProcessSingleEvent: unknown navigator event: 0x%X", SLOG2_FA_SIGNED(eventType), SLOG2_FA_END);
 		  break;
 		}
 	  }
