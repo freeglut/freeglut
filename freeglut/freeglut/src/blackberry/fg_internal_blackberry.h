@@ -40,17 +40,17 @@
 typedef struct tagSFG_PlatformDisplay SFG_PlatformDisplay;
 struct tagSFG_PlatformDisplay
 {
-  struct tagSFG_PlatformDisplayEGL egl;
-  EGLNativeWindowType single_native_window;
+    struct tagSFG_PlatformDisplayEGL egl;
+    EGLNativeWindowType single_native_window;
 };
 
 typedef struct tagSFG_PlatformContext SFG_PlatformContext;
 /* SFG_PlatformContext is used for SFG_Window.Window */
 struct tagSFG_PlatformContext
 {
-  struct tagSFG_PlatformContextEGL egl;
-  screen_context_t screenContext;
-  bps_event_t* event;
+    struct tagSFG_PlatformContextEGL egl;
+    screen_context_t screenContext;
+    bps_event_t* event;
 };
 
 
@@ -76,34 +76,34 @@ struct touchscreen {
  * interspersed
  */
 
-  /*
-   * We'll put these values in and that should
-   * allow the code to at least compile when there is
-   * no support. The JS open routine should error out
-   * and shut off all the code downstream anyway and if
-   * the application doesn't use a joystick we'll be fine.
-   */
+/*
+ * We'll put these values in and that should
+ * allow the code to at least compile when there is
+ * no support. The JS open routine should error out
+ * and shut off all the code downstream anyway and if
+ * the application doesn't use a joystick we'll be fine.
+ */
 
-  struct JS_DATA_TYPE
-  {
+struct JS_DATA_TYPE
+{
     int buttons;
     int x;
     int y;
-  };
+};
 
-#            define JS_RETURN (sizeof(struct JS_DATA_TYPE))
+#define JS_RETURN (sizeof(struct JS_DATA_TYPE))
 
 /* XXX It might be better to poll the operating system for the numbers of buttons and
  * XXX axes and then dynamically allocate the arrays.
  */
-#    define _JS_MAX_AXES 16
+#define _JS_MAX_AXES 16
 typedef struct tagSFG_PlatformJoystick SFG_PlatformJoystick;
 struct tagSFG_PlatformJoystick
 {
-       struct JS_DATA_TYPE js;
+    struct JS_DATA_TYPE js;
 
-    char         fname [ 128 ];
-    int          fd;
+    char fname [ 128 ];
+    int  fd;
 };
 
 /* Window's state description. This structure should be kept portable. */
