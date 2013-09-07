@@ -62,38 +62,39 @@ int fgPlatformGlutDeviceGet ( GLenum eWhat )
 
 int fgPlatformGlutGet ( GLenum eWhat )
 {
-  switch (eWhat) {
-  /* One full-screen window only */
-  case GLUT_WINDOW_X:
-  case GLUT_WINDOW_Y:
-  case GLUT_WINDOW_BORDER_WIDTH:
-  case GLUT_WINDOW_HEADER_HEIGHT:
-      return 0;
+    switch (eWhat) {
+    /* One full-screen window only */
+    case GLUT_WINDOW_X:
+    case GLUT_WINDOW_Y:
+    case GLUT_WINDOW_BORDER_WIDTH:
+    case GLUT_WINDOW_HEADER_HEIGHT:
+        return 0;
 
-  case GLUT_WINDOW_WIDTH:
-  case GLUT_WINDOW_HEIGHT:
+    case GLUT_WINDOW_WIDTH:
+    case GLUT_WINDOW_HEIGHT:
     {
-      if ( fgStructure.CurrentWindow == NULL )
-		return 0;
-      int size[2];
-      if ( screen_get_window_property_iv(fgStructure.CurrentWindow->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size) != 0 )
-    	return 0;
-	  switch ( eWhat )
-		{
-		case GLUT_WINDOW_WIDTH:
-		  return size[0];
-		case GLUT_WINDOW_HEIGHT:
-		  return size[1];
-		}
+        if ( fgStructure.CurrentWindow == NULL )
+            return 0;
+        int size[2];
+        if ( screen_get_window_property_iv(fgStructure.CurrentWindow->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size) != 0 )
+            return 0;
+        switch ( eWhat )
+        {
+        case GLUT_WINDOW_WIDTH:
+            return size[0];
+        case GLUT_WINDOW_HEIGHT:
+            return size[1];
+        }
+        break;
     }
 
-  case GLUT_WINDOW_COLORMAP_SIZE:
-      /* 0 for RGBA/non-indexed mode */
-      /* Under BlackBerry and GLES more generally, no indexed-mode */
-      return 0;
+    case GLUT_WINDOW_COLORMAP_SIZE:
+        /* 0 for RGBA/non-indexed mode */
+        /* Under BlackBerry and GLES more generally, no indexed-mode */
+        return 0;
 
-  default:
-    return fghPlatformGlutGetEGL(eWhat);
-  }
-  return -1;
+    default:
+        return fghPlatformGlutGetEGL(eWhat);
+    }
+    return -1;
 }
