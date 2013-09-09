@@ -160,7 +160,7 @@ fg_time_t fgPlatformSystemTime ( void )
 void fgPlatformSleepForEvents( fg_time_t msec )
 {
     //XXX: Is this right? Is there a more direct way to access the context?
-    if(bps_get_event(&fgStructure.CurrentWindow->Window.pContext.event, (int)msec) != BPS_SUCCESS) {
+    if(fgStructure.CurrentWindow && bps_get_event(&fgStructure.CurrentWindow->Window.pContext.event, (int)msec) != BPS_SUCCESS) {
         LOGW("BPS couldn't get event");
     }
 }
