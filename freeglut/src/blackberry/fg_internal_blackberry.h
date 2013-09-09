@@ -41,6 +41,8 @@ typedef struct tagSFG_PlatformDisplay SFG_PlatformDisplay;
 struct tagSFG_PlatformDisplay
 {
     struct tagSFG_PlatformDisplayEGL egl;
+    screen_context_t screenContext;
+	bps_event_t* event;
     EGLNativeWindowType single_native_window;
 };
 
@@ -49,8 +51,6 @@ typedef struct tagSFG_PlatformContext SFG_PlatformContext;
 struct tagSFG_PlatformContext
 {
     struct tagSFG_PlatformContextEGL egl;
-    screen_context_t screenContext;
-    bps_event_t* event;
 };
 
 
