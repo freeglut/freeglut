@@ -254,6 +254,16 @@ void handle_left_mouse(int x, int y, int height, int eventType, SFG_Window* wind
     }
 }
 
+/*
+ * Determine a GLUT modifier mask based on BlackBerry modifier info.
+ */
+int fgPlatformGetModifiers (int mod)
+{
+    return (((mod & KEYMOD_SHIFT) ? GLUT_ACTIVE_SHIFT : 0) |
+            ((mod & KEYMOD_CTRL) ? GLUT_ACTIVE_CTRL : 0) |
+            ((mod & KEYMOD_ALT) ? GLUT_ACTIVE_ALT : 0));
+}
+
 void fgPlatformProcessSingleEvent ( void )
 {
     int domain;
@@ -270,6 +280,7 @@ void fgPlatformProcessSingleEvent ( void )
             domain = bps_event_get_domain(fgDisplay.pDisplay.event);
             if (domain == screen_get_domain()) {
                 int eventType;
+                int mod;
                 screen_event_t screenEvent = screen_event_get_event(fgDisplay.pDisplay.event);
                 screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_TYPE, &eventType);
                 switch (eventType) {
@@ -281,7 +292,13 @@ void fgPlatformProcessSingleEvent ( void )
                 {
                     mtouch_event_t touchEvent;
                     screen_get_mtouch_event(screenEvent, &touchEvent, 0);
-                    LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_MTOUCH_*: Type: 0x%X, X: %d, Y: %d, Contact Id: %d", SLOG2_FA_SIGNED(eventType), SLOG2_FA_SIGNED(touchEvent.x), SLOG2_FA_SIGNED(touchEvent.y), SLOG2_FA_SIGNED(touchEvent.contact_id));
+                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
+
+                    LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_MTOUCH_*: Type: 0x%X, X: %d, Y: %d, Contact Id: %d, Mod: 0x%X", SLOG2_FA_SIGNED(eventType), SLOG2_FA_SIGNED(touchEvent.x), SLOG2_FA_SIGNED(touchEvent.y), SLOG2_FA_SIGNED(touchEvent.contact_id), SLOG2_FA_SIGNED(mod));
+
+                    /* Remember the current modifiers state so user can query it from their callback */
+                    fgState.Modifiers = fgPlatformGetModifiers(mod);
+
                     if(touchEvent.contact_id == 0) {
                         int size[2];
                         screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
@@ -316,12 +333,16 @@ void fgPlatformProcessSingleEvent ( void )
                     screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
                     screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
                     screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_MOUSE_WHEEL, &wheel);
+                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
                     int size[2];
                     screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
 
-                    LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_POINTER: Buttons: 0x%X, X: %d, Y: %d, Wheel: %d", SLOG2_FA_SIGNED(buttons), SLOG2_FA_SIGNED(position[0]), SLOG2_FA_SIGNED(position[1]), SLOG2_FA_SIGNED(wheel));
+                    LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_POINTER: Buttons: 0x%X, X: %d, Y: %d, Wheel: %d, Mod: 0x%X", SLOG2_FA_SIGNED(buttons), SLOG2_FA_SIGNED(position[0]), SLOG2_FA_SIGNED(position[1]), SLOG2_FA_SIGNED(wheel), SLOG2_FA_SIGNED(mod));
 
                     //XXX Should multitouch be handled?
+
+                    /* Remember the current modifiers state so user can query it from their callback */
+                    fgState.Modifiers = fgPlatformGetModifiers(mod);
 
                     // Handle left mouse. Interpret as touch if the left mouse event is not consumed.
                     if (buttons & SCREEN_LEFT_MOUSE_BUTTON) {
@@ -383,11 +404,19 @@ void fgPlatformProcessSingleEvent ( void )
                     int value;
                     screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
                     screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
-                    LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Flags: 0x%X, Sym: 0x%X", SLOG2_FA_SIGNED(flags), SLOG2_FA_SIGNED(value));
-                    // Suppress key repeats if desired
-                    if ((flags & KEY_REPEAT) == 0 || (fgState.KeyRepeat == GLUT_KEY_REPEAT_ON && !fgStructure.CurrentWindow->State.IgnoreKeyRepeat)) {
+                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
+
+                    LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Flags: 0x%X, Sym: 0x%X, Mod: 0x%X", SLOG2_FA_SIGNED(flags), SLOG2_FA_SIGNED(value), SLOG2_FA_SIGNED(mod));
+
+                    /* Suppress key repeats if desired. Based off fg_main_mswin */
+                    if ((flags & KEY_REPEAT) == 0 || (fgState.KeyRepeat == GLUT_KEY_REPEAT_OFF && fgStructure.CurrentWindow->State.IgnoreKeyRepeat == GL_TRUE)) {
                         unsigned int keypress = 0;
                         unsigned char ascii = 0;
+
+                        /* Remember the current modifiers state so user can query it from their callback */
+                        fgState.Modifiers = fgPlatformGetModifiers(mod);
+
+                        /* Process keys */
                         if ((keypress = key_special(value))) {
                             if(flags & KEY_DOWN) {
                                 INVOKE_WCB(*window, Special, (keypress, window->State.MouseX, window->State.MouseY));
@@ -400,6 +429,8 @@ void fgPlatformProcessSingleEvent ( void )
                             } else {
                                 INVOKE_WCB(*window, KeyboardUp, (ascii, window->State.MouseX, window->State.MouseY));
                             }
+                        } else {
+                            LOGW("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Unhandled key event");
                         }
                     }
                     break;
@@ -487,7 +518,7 @@ void fgPlatformMainLoopPreliminaryWork ( void )
 
     /* Request navigator events */
     navigator_request_events(0);
-	//XXX rotation lock? navigator_rotation_lock(true);
+    //XXX rotation lock? navigator_rotation_lock(true);
 
     /* Request window events */
     screen_request_events(fgDisplay.pDisplay.screenContext);
@@ -495,11 +526,11 @@ void fgPlatformMainLoopPreliminaryWork ( void )
 
 void fgPlatformMainLoopPostWork ( void )
 {
-	LOGI("fgPlatformMainLoopPostWork");
+    LOGI("fgPlatformMainLoopPostWork");
 
-	screen_stop_events(fgDisplay.pDisplay.screenContext);
+    screen_stop_events(fgDisplay.pDisplay.screenContext);
 
-	navigator_stop_events(0);
+    navigator_stop_events(0);
 }
 
 /* deal with work list items */
