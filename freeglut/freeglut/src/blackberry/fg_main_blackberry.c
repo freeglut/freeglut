@@ -316,6 +316,8 @@ void fgPlatformProcessSingleEvent ( void )
                         INVOKE_WCB( *window, MultiButton, ( touchEvent.contact_id, touchEvent.x, touchEvent.y, 0, GLUT_UP ) );
                         INVOKE_WCB( *window, MultiEntry,  ( touchEvent.contact_id, GLUT_LEFT ) );
                     }
+
+                    fgState.Modifiers = INVALID_MODIFIERS;
                     break;
                 }
 
@@ -394,6 +396,8 @@ void fgPlatformProcessSingleEvent ( void )
                         fgState.MouseWheelTicks -= wheel;
                         //TODO: Implement wheel support (based on fg_main_mswin... though it seems excessive)
                     }
+
+                    fgState.Modifiers = INVALID_MODIFIERS;
                     break;
                 }
 
@@ -432,6 +436,8 @@ void fgPlatformProcessSingleEvent ( void )
                         } else {
                             LOGW("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Unhandled key event");
                         }
+
+                        fgState.Modifiers = INVALID_MODIFIERS;
                     }
                     break;
                 }
