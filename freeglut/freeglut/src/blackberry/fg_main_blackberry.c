@@ -161,7 +161,7 @@ fg_time_t fgPlatformSystemTime ( void )
 void fgPlatformSleepForEvents( fg_time_t msec )
 {
     //XXX: Is this right? Is there a more direct way to access the context?
-    if(fgStructure.CurrentWindow && bps_get_event(&fgDisplay.pDisplay.event, (int)msec) != BPS_SUCCESS) {
+    if(fgStructure.CurrentWindow && fgDisplay.pDisplay.event == NULL && bps_get_event(&fgDisplay.pDisplay.event, (int)msec) != BPS_SUCCESS) {
         LOGW("BPS couldn't get event");
     }
 }
@@ -266,12 +266,17 @@ int fgPlatformGetModifiers (int mod)
 
 void fgPlatformProcessSingleEvent ( void )
 {
+    if(fgStructure.CurrentWindow == NULL)
+        //XXX Is this right? Would this just cause a whole lot of busy looping while we wait for events?
+    	LOGW("fgPlatformProcessSingleEvent: Missing current window. Skipping event processing");
+        return;
+
     int domain;
     do
     {
         if(fgDisplay.pDisplay.event != NULL) {
             SFG_Window* window = fgStructure.CurrentWindow;
-            if (window != NULL && window->Window.Handle != NULL) {
+            if (window->Window.Handle != NULL) {
                 int size[2];
                 screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
                 fghOnReshapeNotify(window,size[0],size[1],GL_FALSE);
