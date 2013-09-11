@@ -266,10 +266,11 @@ int fgPlatformGetModifiers (int mod)
 
 void fgPlatformProcessSingleEvent ( void )
 {
-    if(fgStructure.CurrentWindow == NULL)
+    if(fgStructure.CurrentWindow == NULL) {
         //XXX Is this right? Would this just cause a whole lot of busy looping while we wait for events?
-    	LOGW("fgPlatformProcessSingleEvent: Missing current window. Skipping event processing");
+        LOGW("fgPlatformProcessSingleEvent: Missing current window. Skipping event processing");
         return;
+    }
 
     int domain;
     do
