@@ -45,7 +45,7 @@
 #elif defined (__ANDROID__)
 #   define  TARGET_HOST_ANDROID  1
 
-#elif defined (__QNX__)
+#elif defined (__QNXNTO__)
 #   define  TARGET_HOST_BLACKBERRY  1
 
 #elif defined(__posix__) || defined(__unix__) || defined(__linux__) || defined(__sun)

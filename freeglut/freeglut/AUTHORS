@@ -32,14 +32,14 @@ John Tsiombikas <nuclear@member.fsf.org>
 Sylvain Beucler
     support for Android, X11/EGL, OpenGL(ES) 2.x, misc fixes
 
-Vincent Simonetti
-    support for BlackBerry
-
 Diederick C. Niehorster
 Chris Marshall
 Clive McCarthy
 Eero Pajarre
 Florian Echtler
 Matti Lehtonen
+
+Vincent Simonetti
+    support for BlackBerry
 
 ...and all the opengl-gamedev-l people that made Pawel start this project :)
