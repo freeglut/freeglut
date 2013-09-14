@@ -110,7 +110,7 @@ void fghParseCommandLineArguments ( int* pargc, char** argv, char **pDisplayName
     int i, j, argc = *pargc;
 
     {
-	    /* check if GLUT_FPS env var is set */
+        /* check if GLUT_FPS env var is set */
         const char *fps = getenv( "GLUT_FPS" );
 
         if( fps )
@@ -229,7 +229,7 @@ void fgDeinitialize( void )
         return;
     }
 
-	/* If we're in game mode, we want to leave game mode */
+    /* If we're in game mode, we want to leave game mode */
     if( fgStructure.GameModeWindow ) {
         glutLeaveGameMode();
     }
@@ -237,7 +237,7 @@ void fgDeinitialize( void )
     /* If there was a menu created, destroy the rendering context */
     if( fgStructure.MenuContext )
     {
-		fgPlatformDestroyContext (fgDisplay.pDisplay, fgStructure.MenuContext->MContext );
+        fgPlatformDestroyContext (fgDisplay.pDisplay, fgStructure.MenuContext->MContext );
         free( fgStructure.MenuContext );
         fgStructure.MenuContext = NULL;
     }
@@ -256,9 +256,9 @@ void fgDeinitialize( void )
         free( timer );
     }
 
-	fgPlatformDeinitialiseInputDevices ();
+    fgPlatformDeinitialiseInputDevices ();
 
-	fgState.MouseWheelTicks = 0;
+    fgState.MouseWheelTicks = 0;
 
     fgState.MajorVersion = 1;
     fgState.MinorVersion = 0;
@@ -310,7 +310,7 @@ void fgDeinitialize( void )
         fgState.ProgramName = NULL;
     }
 
-	fgPlatformCloseDisplay ();
+    fgPlatformCloseDisplay ();
 
     fgState.Initialised = GL_FALSE;
 }
@@ -342,7 +342,7 @@ void FGAPIENTRY glutInit( int* pargc, char** argv )
 
     fgCreateStructure( );
 
-	fghParseCommandLineArguments ( pargc, argv, &displayName, &geometry );
+    fghParseCommandLineArguments ( pargc, argv, &displayName, &geometry );
 
     /*
      * Have the display created now. If there wasn't a "-display"

@@ -32,7 +32,11 @@
 #include "egl/fg_window_egl.h"
 
 #include <slog2.h>
+#ifdef NDEBUG
+#define LOGI(...)
+#else
 #define LOGI(...) ((void)slog2fa(NULL, 1337, SLOG2_INFO, __VA_ARGS__, SLOG2_FA_END))
+#endif
 #define LOGW(...) ((void)slog2fa(NULL, 1337, SLOG2_WARNING, __VA_ARGS__, SLOG2_FA_END))
 #include <sys/keycodes.h>
 #include <input/screen_helpers.h>
@@ -165,7 +169,8 @@ fg_time_t fgPlatformSystemTime ( void )
  */
 void fgPlatformSleepForEvents( fg_time_t msec )
 {
-    if(fgStructure.CurrentWindow && fgDisplay.pDisplay.event == NULL && bps_get_event(&fgDisplay.pDisplay.event, (int)msec) != BPS_SUCCESS) {
+    if(fgStructure.CurrentWindow && fgDisplay.pDisplay.event == NULL &&
+            bps_get_event(&fgDisplay.pDisplay.event, (int)msec) != BPS_SUCCESS) {
         LOGW("BPS couldn't get event");
     }
 }
