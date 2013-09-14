@@ -40,6 +40,7 @@
 #include <bps/event.h>
 #include <bps/screen.h>
 #include <bps/navigator.h>
+#include <bps/virtualkeyboard.h>
 
 extern void fghOnReshapeNotify(SFG_Window *window, int width, int height, GLboolean forceNotify);
 extern void fghOnPositionNotify(SFG_Window *window, int x, int y, GLboolean forceNotify);
@@ -53,8 +54,11 @@ extern void fgPlatformIconifyWindow( SFG_Window *window );
 extern void fgPlatformShowWindow( SFG_Window *window );
 extern void fgPlatformMainLoopPostWork ( void );
 extern void fgPlatformRotateWindow( SFG_Window *window, int rotation );
+extern void fgPlatformFlushCommands ( void );
 
 static struct touchscreen touchscreen;
+
+#define ESCAPE_BUTTON_KEY 0x001B
 
 unsigned int key_special(int qnxKeycode)
 {
@@ -135,7 +139,7 @@ unsigned char key_ascii(int qnxKeycode)
         case KEYCODE_RETURN:
             return 0x000A;
         case KEYCODE_ESCAPE:
-            return 0x001B;
+            return ESCAPE_BUTTON_KEY;
         }
     }
     return qnxKeycode;
@@ -161,7 +165,6 @@ fg_time_t fgPlatformSystemTime ( void )
  */
 void fgPlatformSleepForEvents( fg_time_t msec )
 {
-    //XXX: Is this right? Is there a more direct way to access the context?
     if(fgStructure.CurrentWindow && fgDisplay.pDisplay.event == NULL && bps_get_event(&fgDisplay.pDisplay.event, (int)msec) != BPS_SUCCESS) {
         LOGW("BPS couldn't get event");
     }
@@ -265,6 +268,57 @@ int fgPlatformGetModifiers (int mod)
             ((mod & KEYMOD_ALT) ? GLUT_ACTIVE_ALT : 0));
 }
 
+void fgPlatformHandleKeyboardHeight(SFG_Window* window, int height)
+{
+    int size[2];
+    int screenHeight;
+    int nScreenHeight = -1;
+
+    screenHeight = glutGet(GLUT_WINDOW_HEIGHT); //Using this takes rotation into account
+    if(height == 0) {
+        nScreenHeight = screenHeight;
+    }
+    else if(!screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_POSITION, size)) {
+        /* Calculate the new screen size */ //XXX Make sure to use display size instead of screen size
+        nScreenHeight = ((size[1] + screenHeight) - height) - size[1];
+    }
+
+    if(nScreenHeight != -1) {
+        /* If nScreenHeight is less then zero then window is covered. If nScreenHeight == height, then no change in size. Else, change in size */
+
+        int screenWidth = glutGet(GLUT_WINDOW_WIDTH);
+        if(nScreenHeight < 0) {
+            LOGI("fgPlatformHandleKeyboardHeight: Covered window state");
+            window->State.Visible = GL_FALSE;
+            window->State.pWState.windowCovered = GL_TRUE;
+            INVOKE_WCB(*window, WindowStatus, (GLUT_FULLY_COVERED));
+            fghOnReshapeNotify(window, screenWidth, 0, GL_FALSE);
+        } else {
+            if(window->State.pWState.windowCovered == GL_TRUE) {
+                LOGI("fgPlatformHandleKeyboardHeight: Resetting window state");
+
+                /* Reset window status if it was previously covered */
+                switch(window->State.pWState.windowState) {
+                case NAVIGATOR_WINDOW_FULLSCREEN:
+                    window->State.Visible = GL_TRUE;
+                    INVOKE_WCB(*window, WindowStatus, (GLUT_FULLY_RETAINED));
+                    break;
+                case NAVIGATOR_WINDOW_THUMBNAIL:
+                    window->State.Visible = GL_TRUE;
+                    INVOKE_WCB(*window, WindowStatus, (GLUT_PARTIALLY_RETAINED));
+                    break;
+                case NAVIGATOR_WINDOW_INVISIBLE:
+                    window->State.Visible = GL_FALSE;
+                    INVOKE_WCB(*window, WindowStatus, (GLUT_HIDDEN));
+                    break;
+                }
+                window->State.pWState.windowCovered = GL_FALSE;
+            }
+            fghOnReshapeNotify(window, screenWidth, nScreenHeight, GL_FALSE);
+        }
+    }
+}
+
 void fgPlatformProcessSingleEvent ( void )
 {
     if(fgStructure.CurrentWindow == NULL) {
@@ -345,7 +399,7 @@ void fgPlatformProcessSingleEvent ( void )
 
                 LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_POINTER: Buttons: 0x%X, X: %d, Y: %d, Wheel: %d, Mod: 0x%X", SLOG2_FA_SIGNED(buttons), SLOG2_FA_SIGNED(position[0]), SLOG2_FA_SIGNED(position[1]), SLOG2_FA_SIGNED(wheel), SLOG2_FA_SIGNED(mod));
 
-                //XXX Should multitouch be handled?
+                //XXX Is multitouch be handled in a good way?
 
                 /* Remember the current modifiers state so user can query it from their callback */
                 fgState.Modifiers = fgPlatformGetModifiers(mod);
@@ -499,28 +553,37 @@ void fgPlatformProcessSingleEvent ( void )
             case NAVIGATOR_WINDOW_STATE:
             {
                 LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE");
+
+                /* Covered only happens due to keyboard. When the app is minimized, the keyboard is closed.
+                   When the keyboard is open, and the app is fullscreened, the keyboard is also closed.
+                   If a window is covered and the app is minimized, the state will be set and the keyboard event
+                   will adjust the screen size and change window status. */
                 navigator_window_state_t state = navigator_event_get_window_state(fgDisplay.pDisplay.event);
-                switch (state)
+                if(window->State.pWState.windowCovered == GL_FALSE)
                 {
-                case NAVIGATOR_WINDOW_FULLSCREEN:
-                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_FULLSCREEN");
-                    window->State.Visible = GL_TRUE;
-                    INVOKE_WCB(*window, WindowStatus, (GLUT_FULLY_RETAINED));
-                    break;
-                case NAVIGATOR_WINDOW_THUMBNAIL:
-                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL");
-                    window->State.Visible = GL_TRUE;
-                    INVOKE_WCB(*window, WindowStatus, (GLUT_PARTIALLY_RETAINED));
-                    break;
-                case NAVIGATOR_WINDOW_INVISIBLE:
-                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_INVISIBLE");
-                    window->State.Visible = GL_FALSE;
-                    INVOKE_WCB(*window, WindowStatus, (GLUT_HIDDEN)); //XXX Should this be GLUT_FULLY_COVERED?
-                    break;
-                default:
-                    LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state));
-                    break;
+                    switch (state)
+                    {
+                    case NAVIGATOR_WINDOW_FULLSCREEN:
+                        LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_FULLSCREEN");
+                        window->State.Visible = GL_TRUE;
+                        INVOKE_WCB(*window, WindowStatus, (GLUT_FULLY_RETAINED));
+                        break;
+                    case NAVIGATOR_WINDOW_THUMBNAIL:
+                        LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL");
+                        window->State.Visible = GL_TRUE;
+                        INVOKE_WCB(*window, WindowStatus, (GLUT_PARTIALLY_RETAINED));
+                        break;
+                    case NAVIGATOR_WINDOW_INVISIBLE:
+                        LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_INVISIBLE");
+                        window->State.Visible = GL_FALSE;
+                        INVOKE_WCB(*window, WindowStatus, (GLUT_HIDDEN));
+                        break;
+                    default:
+                        LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state));
+                        break;
+                    }
                 }
+                window->State.pWState.windowState = state;
                 break;
             }
 
@@ -563,8 +626,11 @@ void fgPlatformProcessSingleEvent ( void )
             case NAVIGATOR_ORIENTATION:
                 LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_ORIENTATION");
 
+                /* NAVIGATOR_ORIENTATION occurs before NAVIGATOR_KEYBOARD_POSITION */
+
                 /* Rotate and resize the window */
                 fgPlatformRotateWindow(window, navigator_event_get_orientation_angle(fgDisplay.pDisplay.event));
+                fgPlatformFlushCommands();
                 fghOnReshapeNotify(window, window->State.pWState.newWidth, window->State.pWState.newHeight, GL_FALSE);
 
                 /* Reset sizes */
@@ -576,7 +642,9 @@ void fgPlatformProcessSingleEvent ( void )
                 break;
 
             case NAVIGATOR_BACK:
-                /* XXX Should this be a Special/SpecialUp event? */
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_BACK");
+                INVOKE_WCB(*window, Keyboard, (ESCAPE_BUTTON_KEY, window->State.MouseX, window->State.MouseY));
+                INVOKE_WCB(*window, KeyboardUp, (ESCAPE_BUTTON_KEY, window->State.MouseX, window->State.MouseY));
                 break;
 
             case NAVIGATOR_WINDOW_ACTIVE:
@@ -591,17 +659,52 @@ void fgPlatformProcessSingleEvent ( void )
 
             case NAVIGATOR_ORIENTATION_DONE:
             case NAVIGATOR_ORIENTATION_RESULT:
-                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_ORIENTATION_DONE\NAVIGATOR_ORIENTATION_RESULT");
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_ORIENTATION_DONE/NAVIGATOR_ORIENTATION_RESULT");
                 break;
 
             case NAVIGATOR_KEYBOARD_STATE:
-                /* XXX Should something be done with this? */
+            {
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_STATE");
+
+                navigator_keyboard_state_t state = navigator_event_get_keyboard_state(fgDisplay.pDisplay.event);
+                switch (state)
+                {
+                case NAVIGATOR_KEYBOARD_CLOSED:
+                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_STATE-NAVIGATOR_KEYBOARD_CLOSED");
+                    /* NAVIGATOR_KEYBOARD_POSITION only occurs on open, so on keyboard close we need to reset the keyboard height */
+                    fgPlatformHandleKeyboardHeight(window, 0);
+                    break;
+                case NAVIGATOR_KEYBOARD_OPENING:
+                case NAVIGATOR_KEYBOARD_OPENED:
+                case NAVIGATOR_KEYBOARD_CLOSING:
+                    break;
+                case NAVIGATOR_KEYBOARD_UNRECOGNIZED:
+                    LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_STATE-NAVIGATOR_KEYBOARD_UNRECOGNIZED");
+                    break;
+                default:
+                    LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state));
+                    break;
+                }
                 break;
+            }
 
             case NAVIGATOR_KEYBOARD_POSITION:
-                /* TODO Invoke resize with the modified screen size (((y + height) - keyboardPos) - y).
-                 * If result is less then zero then window is covered. If == height, then no change in size. Else, change in size */
+            {
+                /* Occurs only when keyboard has opened or resizes */
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_POSITION");
+
+                int keyboardOffset = navigator_event_get_keyboard_position(fgDisplay.pDisplay.event);
+                if(keyboardOffset == BPS_FAILURE) {
+                    LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_POSITION: getting keyboard offset failed");
+                } else {
+                    /* keyboardOffset is the offset from the top of the screen to the top of the keyboard, AKA the size of the uncovered screen
+                       We want the height of the keyboard. So instead of determining the orientation, getting the right display size, and subtracting;
+                       we just get the keyboard height which may be slower but easier to understand and work with */
+                    virtualkeyboard_get_height(&keyboardOffset);
+                    fgPlatformHandleKeyboardHeight(window, keyboardOffset);
+                }
                 break;
+            }
 
             case NAVIGATOR_DEVICE_LOCK_STATE:
                 break;
@@ -614,7 +717,7 @@ void fgPlatformProcessSingleEvent ( void )
 
             case NAVIGATOR_APP_STATE:
                 /* Can do the same as NAVIGATOR_WINDOW_ACTIVE/NAVIGATOR_WINDOW_INACTIVE but
-                   seems less likely to work when the app comes to the foreground. Might be a bug */
+                   seems like it doesn't work when the app comes to the foreground. Might be a bug */
                 break;
 
             case NAVIGATOR_ORIENTATION_SIZE:

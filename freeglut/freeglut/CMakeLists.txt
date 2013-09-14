@@ -128,7 +128,6 @@ ELSEIF(ANDROID OR BLACKBERRY)
         src/android/fg_gamemode_android.c
         src/android/fg_joystick_android.c
         src/android/fg_spaceball_android.c
-        src/android/fg_structure_android.c
     )
     IF(ANDROID)
         LIST(APPEND FREEGLUT_SRCS
@@ -141,6 +140,7 @@ ELSEIF(ANDROID OR BLACKBERRY)
             src/android/fg_main_android.h
             src/android/fg_runtime_android.c
             src/android/fg_state_android.c
+            src/android/fg_structure_android.c
             src/android/fg_window_android.c
         )
     ELSE()
@@ -150,6 +150,7 @@ ELSEIF(ANDROID OR BLACKBERRY)
             src/x11/fg_input_devices_x11.c
             src/blackberry/fg_main_blackberry.c
             src/blackberry/fg_state_blackberry.c
+            src/blackberry/fg_structure_blackberry.c
             src/blackberry/fg_window_blackberry.c
         )
     ENDIF()

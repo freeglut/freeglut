@@ -159,6 +159,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
         fgError("Could not set window rotation");
         return;
     }
+    window->State.pWState.originalRotation = orientation;
 
     /* Set buffer sizes */
     if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, value)) {
@@ -189,9 +190,18 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     window->State.Visible = GL_TRUE;
 }
 
+void fgPlatformFlushCommands()
+{
+    if(screen_flush_context(fgDisplay.pDisplay.screenContext, 0)) {
+        fgWarning("Could not flush screen context");
+    }
+}
+
 void fgPlatformRotateWindow(SFG_Window* window, int rotation)
 {
-    screen_set_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_ROTATION, &rotation);
+    if(screen_set_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_ROTATION, &rotation)) {
+        fgWarning("Could not set window rotation");
+    }
 }
 
 /*
