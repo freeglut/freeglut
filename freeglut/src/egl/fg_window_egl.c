@@ -41,8 +41,8 @@ int fghChooseConfig(EGLConfig* config) {
        http://qt.gitorious.org/qt/qtbase/source/893deb1a93021cdfabe038cdf1869de33a60cbc9:src/plugins/platforms/qnx/qqnxglcontext.cpp
        That's all that is used, and that's what BlackBerry uses for their own internal OpenGL setup, so unless something else is determined, use it */
     EGL_BLUE_SIZE, 8,
-	EGL_GREEN_SIZE, 8,
-	EGL_RED_SIZE, 8,
+    EGL_GREEN_SIZE, 8,
+    EGL_RED_SIZE, 8,
 #else
     EGL_BLUE_SIZE, 1,
     EGL_GREEN_SIZE, 1,
@@ -58,7 +58,7 @@ int fghChooseConfig(EGLConfig* config) {
 
   EGLint num_config;
   if (!eglChooseConfig(fgDisplay.pDisplay.egl.Display,
-		       attribs, config, 1, &num_config)) {
+               attribs, config, 1, &num_config)) {
     fgWarning("eglChooseConfig: error %x\n", eglGetError());
     return 0;
   }
@@ -105,9 +105,9 @@ void fgPlatformSetWindow ( SFG_Window *window )
 {
   if ( window != fgStructure.CurrentWindow && window) {
     if (eglMakeCurrent(fgDisplay.pDisplay.egl.Display,
-		       window->Window.pContext.egl.Surface,
-		       window->Window.pContext.egl.Surface,
-		       window->Window.Context) == EGL_FALSE)
+               window->Window.pContext.egl.Surface,
+               window->Window.pContext.egl.Surface,
+               window->Window.Context) == EGL_FALSE)
       fgError("eglMakeCurrent: err=%x\n", eglGetError());
   }
 }
@@ -138,9 +138,28 @@ void fghPlatformOpenWindowEGL( SFG_Window* window )
  */
 void fghPlatformCloseWindowEGL( SFG_Window* window )
 {
-  eglMakeCurrent(fgDisplay.pDisplay.egl.Display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+  /* Based on fg_window_mswin fgPlatformCloseWindow */
+  if( fgStructure.CurrentWindow == window )
+    eglMakeCurrent(fgDisplay.pDisplay.egl.Display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
   if (window->Window.Context != EGL_NO_CONTEXT) {
-    eglDestroyContext(fgDisplay.pDisplay.egl.Display, window->Window.Context);
+    /* Step through the list of windows. If the rendering context is not being used by another window, then delete it */
+    {
+      GLboolean used = GL_FALSE;
+      SFG_Window *iter;
+
+      for( iter = (SFG_Window*)fgStructure.Windows.First;
+           iter && used == GL_FALSE;
+           iter = (SFG_Window*)iter->Node.Next)
+      {
+        if( (iter->Window.Context == window->Window.Context) &&
+            (iter != window) )
+          used = GL_TRUE;
+      }
+
+      if( !used )
+        eglDestroyContext(fgDisplay.pDisplay.egl.Display, window->Window.Context);
+    }
     window->Window.Context = EGL_NO_CONTEXT;
   }
 

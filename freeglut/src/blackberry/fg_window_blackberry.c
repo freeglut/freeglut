@@ -182,7 +182,11 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 
     /* Create context */
     fghChooseConfig(&window->Window.pContext.egl.Config);
-    window->Window.Context = fghCreateNewContextEGL(window);
+    window->Window.Context = EGL_NO_CONTEXT;
+    if( fgState.UseCurrentContext == GL_TRUE )
+        window->Window.Context = eglGetCurrentContext();
+    if( window->Window.Context == EGL_NO_CONTEXT )
+        window->Window.Context = fghCreateNewContextEGL(window);
 
     /* Create EGL window */
     fghPlatformOpenWindowEGL(window);

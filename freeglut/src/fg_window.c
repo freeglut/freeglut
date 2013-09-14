@@ -106,7 +106,7 @@ void fghContextCreationError( void )
  */
 void fgSetWindow ( SFG_Window *window )
 {
-	fgPlatformSetWindow ( window );
+    fgPlatformSetWindow ( window );
 
     fgStructure.CurrentWindow = window;
 }
@@ -158,7 +158,7 @@ void fgCloseWindow( SFG_Window* window )
     if (fgStructure.GameModeWindow != NULL && fgStructure.GameModeWindow->ID==window->ID)
         glutLeaveGameMode();
 
-	fgPlatformCloseWindow ( window );
+    fgPlatformCloseWindow ( window );
 }
 
 
@@ -335,7 +335,7 @@ void FGAPIENTRY glutSetWindowTitle( const char* title )
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutSetWindowTitle" );
     if( ! fgStructure.CurrentWindow->Parent )
     {
-		fgPlatformGlutSetWindowTitle ( title );
+        fgPlatformGlutSetWindowTitle ( title );
     }
 }
 
@@ -349,7 +349,7 @@ void FGAPIENTRY glutSetIconTitle( const char* title )
 
     if( ! fgStructure.CurrentWindow->Parent )
     {
-		fgPlatformGlutSetIconTitle ( title );
+        fgPlatformGlutSetIconTitle ( title );
     }
 }
 
@@ -445,7 +445,7 @@ void FGAPIENTRY glutFullScreen( void )
     }
 
     if (!win->State.IsFullscreen)
-	    win->State.WorkMask |= GLUT_FULL_SCREEN_WORK;
+        win->State.WorkMask |= GLUT_FULL_SCREEN_WORK;
 }
 
 /*
