@@ -32,6 +32,11 @@ set( BLACKBERRY_TARGET_ROOT "$ENV{QNX_TARGET}" )
 set( CMAKE_SYSTEM_NAME Linux )
 set( CMAKE_SYSTEM_VERSION 1 )
 
+# Check for PlayBook
+if( EXISTS "${BLACKBERRY_TARGET_ROOT}/usr/include" )
+set( PLAYBOOK True )
+endif()
+
 # STL version: by default gnustl_static will be used
 set( BLACKBERRY_USE_STLPORT FALSE CACHE BOOL "Experimental: use stlport_static instead of gnustl_static")
 mark_as_advanced( BLACKBERRY_USE_STLPORT )
@@ -91,15 +96,29 @@ else()
 endif()
 
 # Includes
-list( APPEND BLACKBERRY_SYSTEM_INCLUDE_DIRS "${BLACKBERRY_TARGET_ROOT}/qnx6/usr/include" )
+if( PLAYBOOK )
+ list( APPEND BLACKBERRY_SYSTEM_INCLUDE_DIRS "${BLACKBERRY_TARGET_ROOT}/usr/include" )
+else()
+ list( APPEND BLACKBERRY_SYSTEM_INCLUDE_DIRS "${BLACKBERRY_TARGET_ROOT}/qnx6/usr/include" )
+endif()
 
 # Flags and preprocessor definitions
 if( BLACKBERRY_ARCHITECTURE STREQUAL "arm" )
- set( BLACKBERRY_CC_FLAGS  " -V4.6.3,gcc_ntoarmv7le -D__QNX__" )
- set( BLACKBERRY_CXX_FLAGS " -V4.6.3,gcc_ntoarmv7le -Y_gpp -D__QNX__" )
+ if( PLAYBOOK )
+  set( BLACKBERRY_CC_FLAGS  " -V4.4.2,gcc_ntoarmv7le -D__PLAYBOOK__" )
+  set( BLACKBERRY_CXX_FLAGS " -V4.4.2,gcc_ntoarmv7le -Y_gpp -D__PLAYBOOK__" )
+ else()
+  set( BLACKBERRY_CC_FLAGS  " -V4.6.3,gcc_ntoarmv7le -D__QNX__" )
+  set( BLACKBERRY_CXX_FLAGS " -V4.6.3,gcc_ntoarmv7le -Y_gpp -D__QNX__" )
+ endif()
 else()
- set( BLACKBERRY_CC_FLAGS  " -V4.6.3,gcc_ntox86 -D__QNX__" )
- set( BLACKBERRY_CXX_FLAGS " -V4.6.3,gcc_ntox86 -Y_gpp -D__QNX__" )
+ if( PLAYBOOK )
+  set( BLACKBERRY_CC_FLAGS  " -V4.4.2,gcc_ntox86 -D__PLAYBOOK__" )
+  set( BLACKBERRY_CXX_FLAGS " -V4.4.2,gcc_ntox86 -Y_gpp -D__PLAYBOOK__" )
+ else()
+  set( BLACKBERRY_CC_FLAGS  " -V4.6.3,gcc_ntox86 -D__QNX__" )
+  set( BLACKBERRY_CXX_FLAGS " -V4.6.3,gcc_ntox86 -Y_gpp -D__QNX__" )
+ endif()
 endif()
 set( BLACKBERRY 1 )
 
@@ -131,7 +150,7 @@ set( CMAKE_SHARED_LINKER_FLAGS "" CACHE STRING "linker flags" )
 SET( CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "" CACHE STRING "linker flags")
 SET( CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "" CACHE STRING "linker flags")
 set( CMAKE_MODULE_LINKER_FLAGS "" CACHE STRING "linker flags" )
-set( CMAKE_EXE_LINKER_FLAGS "-lstdc++ -lm -lEGL -lGLESv2 -lbps -lscreen" CACHE STRING "linker flags" )
+set( CMAKE_EXE_LINKER_FLAGS "-lstdc++" CACHE STRING "linker flags" )
 
 # Finish flags
 set( BLACKBERRY_CXX_FLAGS    "${BLACKBERRY_CXX_FLAGS}"    CACHE INTERNAL "Extra BlackBerry compiler flags")
