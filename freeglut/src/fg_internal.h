@@ -45,7 +45,7 @@
 #elif defined (__ANDROID__)
 #   define  TARGET_HOST_ANDROID  1
 
-#elif defined (__QNXNTO__)
+#elif defined (__QNXNTO__) || defined (__PLAYBOOK__)
 #   define  TARGET_HOST_BLACKBERRY  1
 
 #elif defined(__posix__) || defined(__unix__) || defined(__linux__) || defined(__sun)
@@ -69,6 +69,14 @@
 
 #ifndef TARGET_HOST_MS_WINDOWS
 #   define  TARGET_HOST_MS_WINDOWS 0
+#endif
+
+#ifndef TARGET_HOST_ANDROID
+#   define  TARGET_HOST_ANDROID    0
+#endif
+
+#ifndef TARGET_HOST_BLACKBERRY
+#   define  TARGET_HOST_BLACKBERRY 0
 #endif
 
 #ifndef  TARGET_HOST_POSIX_X11

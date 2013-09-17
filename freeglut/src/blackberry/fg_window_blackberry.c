@@ -32,7 +32,6 @@
 #include "fg_internal.h"
 #include "egl/fg_window_egl.h"
 #include <screen/screen.h>
-#include <bps/screen.h>
 
 /*
  * Opens a window. Requires a SFG_Window object created and attached
@@ -65,7 +64,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
     int screenUsage = SCREEN_USAGE_OPENGL_ES1 | SCREEN_USAGE_ROTATION;
 #endif
-#ifndef __X86__
+#if !defined(__X86__) && !defined(__PLAYBOOK__)
     screenUsage |= SCREEN_USAGE_DISPLAY; // Physical device copy directly into physical display
 #endif
     if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_FORMAT, &screenFormat)) {

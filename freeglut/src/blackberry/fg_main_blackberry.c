@@ -31,6 +31,18 @@
 #include "fg_internal.h"
 #include "egl/fg_window_egl.h"
 
+#ifdef __PLAYBOOK__
+#include <sys/slog.h>
+#ifdef NDEBUG
+#define LOGI(...)
+#else
+#define LOGI(...) ((void)slogf(1337, _SLOG_INFO, __VA_ARGS__))
+#endif
+#define LOGW(...) ((void)slogf(1337, _SLOG_WARNING, __VA_ARGS__))
+#ifndef SLOG2_FA_SIGNED
+#define SLOG2_FA_SIGNED(x) (x)
+#endif
+#else
 #include <slog2.h>
 #ifdef NDEBUG
 #define LOGI(...)
@@ -38,6 +50,7 @@
 #define LOGI(...) ((void)slog2fa(NULL, 1337, SLOG2_INFO, __VA_ARGS__, SLOG2_FA_END))
 #endif
 #define LOGW(...) ((void)slog2fa(NULL, 1337, SLOG2_WARNING, __VA_ARGS__, SLOG2_FA_END))
+#endif
 #include <sys/keycodes.h>
 #include <input/screen_helpers.h>
 #include <bps/bps.h>
@@ -355,7 +368,11 @@ void fgPlatformProcessSingleEvent ( void )
             {
                 mtouch_event_t touchEvent;
                 screen_get_mtouch_event(screenEvent, &touchEvent, 0);
+#ifndef __PLAYBOOK__
                 screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
+#else
+                mod = 0;
+#endif
 
                 LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_MTOUCH_*: Type: 0x%X, X: %d, Y: %d, Contact Id: %d, Mod: 0x%X", SLOG2_FA_SIGNED(eventType), SLOG2_FA_SIGNED(touchEvent.x), SLOG2_FA_SIGNED(touchEvent.y), SLOG2_FA_SIGNED(touchEvent.contact_id), SLOG2_FA_SIGNED(mod));
 
@@ -397,8 +414,12 @@ void fgPlatformProcessSingleEvent ( void )
                 // This is a mouse move event, it is applicable to a device with a usb mouse or simulator.
                 screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
                 screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
+#ifndef __PLAYBOOK__
                 screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_MOUSE_WHEEL, &wheel);
                 screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
+#else
+                wheel = mod = 0;
+#endif
                 int size[2];
                 screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
 
@@ -552,7 +573,7 @@ void fgPlatformProcessSingleEvent ( void )
                 break;
             }
         } else if (domain == navigator_get_domain()) {
-            int eventType = bps_event_get_code(fgDisplay.pDisplay.event);
+            unsigned int eventType = bps_event_get_code(fgDisplay.pDisplay.event);
             switch (eventType) {
 
             case NAVIGATOR_WINDOW_STATE:
@@ -636,6 +657,11 @@ void fgPlatformProcessSingleEvent ( void )
                 /* Rotate and resize the window */
                 fgPlatformRotateWindow(window, navigator_event_get_orientation_angle(fgDisplay.pDisplay.event));
                 fgPlatformFlushCommands();
+#ifdef __PLAYBOOK__
+                /* PlayBook doesn't indicate what the new size will be, so we need to retrieve it from the window itself */
+                window->State.pWState.newWidth = glutGet(GLUT_WINDOW_WIDTH);
+                window->State.pWState.newHeight = glutGet(GLUT_WINDOW_HEIGHT);
+#endif
                 fghOnReshapeNotify(window, window->State.pWState.newWidth, window->State.pWState.newHeight, GL_FALSE);
 
                 /* Reset sizes */
@@ -667,6 +693,7 @@ void fgPlatformProcessSingleEvent ( void )
                 LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_ORIENTATION_DONE/NAVIGATOR_ORIENTATION_RESULT");
                 break;
 
+#ifndef __PLAYBOOK__
             case NAVIGATOR_KEYBOARD_STATE:
             {
                 LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_STATE");
@@ -732,6 +759,7 @@ void fgPlatformProcessSingleEvent ( void )
                 window->State.pWState.newWidth = navigator_event_get_orientation_size_width(fgDisplay.pDisplay.event);
                 window->State.pWState.newHeight = navigator_event_get_orientation_size_height(fgDisplay.pDisplay.event);
                 break;
+#endif
 
             case 0: //Doesn't exist in header, but shows up when keyboard shows and resizes
                 break;
@@ -741,6 +769,29 @@ void fgPlatformProcessSingleEvent ( void )
                 break;
             }
         }
+#ifdef __PLAYBOOK__
+        else if(domain == virtualkeyboard_get_domain()) {
+            unsigned int eventType = bps_event_get_code(fgDisplay.pDisplay.event);
+            switch (eventType) {
+            case VIRTUALKEYBOARD_EVENT_VISIBLE:
+                break;
+
+            case VIRTUALKEYBOARD_EVENT_HIDDEN:
+                LOGI("fgPlatformProcessSingleEvent: VIRTUALKEYBOARD_EVENT_HIDDEN");
+                fgPlatformHandleKeyboardHeight(window, 0);
+                break;
+
+            case VIRTUALKEYBOARD_EVENT_INFO:
+                LOGI("fgPlatformProcessSingleEvent: VIRTUALKEYBOARD_EVENT_INFO");
+                fgPlatformHandleKeyboardHeight(window, virtualkeyboard_event_get_height(fgDisplay.pDisplay.event));
+                break;
+
+            default:
+                LOGW("fgPlatformProcessSingleEvent: unknown virtualkeyboard event: 0x%X", eventType);
+                break;
+            }
+        }
+#endif
     } while(bps_get_event(&fgDisplay.pDisplay.event, 1) == BPS_SUCCESS && fgDisplay.pDisplay.event != NULL);
 
     /* Reset event to reduce chances of triggering something */
@@ -757,6 +808,11 @@ void fgPlatformMainLoopPreliminaryWork ( void )
     /* Allow rotation */
     navigator_rotation_lock(false);
 
+#ifdef __PLAYBOOK__
+    /* Request keyboard events */
+    virtualkeyboard_request_events(0);
+#endif
+
     /* Request window events */
     screen_request_events(fgDisplay.pDisplay.screenContext);
 }
@@ -768,7 +824,9 @@ void fgPlatformMainLoopPostWork ( void )
     /* Stop all events */
     screen_stop_events(fgDisplay.pDisplay.screenContext);
 
+#ifndef __PLAYBOOK__
     navigator_stop_events(0);
+#endif
 }
 
 /* deal with work list items */
