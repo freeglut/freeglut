@@ -33,7 +33,7 @@ set( CMAKE_SYSTEM_NAME Linux )
 set( CMAKE_SYSTEM_VERSION 1 )
 
 # Check for PlayBook
-if( EXISTS "${BLACKBERRY_TARGET_ROOT}/usr/include" )
+if( EXISTS "${BLACKBERRY_TARGET_ROOT}/x86/lib/gcc/4.4.2" )
 set( PLAYBOOK True )
 endif()
 

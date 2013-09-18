@@ -37,4 +37,7 @@ void fgPlatformCreateWindow ( SFG_Window *window )
 
     memset(&(window->State.pWState), 0, sizeof(SFG_PlatformWindowState));
     window->State.pWState.windowCovered = GL_FALSE;
+#ifdef __PLAYBOOK__
+    window->State.pWState.keyboardOpen = GL_FALSE;
+#endif
 }

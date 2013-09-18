@@ -43,7 +43,7 @@ struct tagSFG_PlatformDisplay
 {
     struct tagSFG_PlatformDisplayEGL egl;
     screen_context_t screenContext;
-	bps_event_t* event;
+    bps_event_t* event;
     EGLNativeWindowType single_native_window;
 };
 
@@ -114,11 +114,15 @@ struct tagSFG_PlatformJoystick
 typedef struct tagSFG_PlatformWindowState SFG_PlatformWindowState;
 struct tagSFG_PlatformWindowState
 {
-	int newWidth;
-	int newHeight;
-	int originalRotation;
-	navigator_window_state_t windowState;
-	GLboolean windowCovered;
+    int newWidth;
+    int newHeight;
+    int originalRotation;
+    navigator_window_state_t windowState;
+    GLboolean windowCovered;
+#ifdef __PLAYBOOK__
+    int keyboardHeight;
+    GLboolean keyboardOpen;
+#endif
 };
 
 /* Menu font and color definitions */
