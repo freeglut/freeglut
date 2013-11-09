@@ -578,6 +578,18 @@ static int fgPlatformGetModifiers (void)
             ( GetKeyState( VK_RMENU    ) < 0 )) ? GLUT_ACTIVE_ALT   : 0 );
 }
 
+/* Check whether a button (VK_*BUTTON) is currently depressed. Returns
+ * non-zero (not necessarily 1) if yes. */
+static SHORT fgGetAsyncKeyState(int vKey)
+{
+    /* MSDN says: "If the most significant bit is set, the key is down, and if
+     * the least significant bit is set, the key was pressed after the previous
+     * call to GetAsyncKeyState." This behavior cannot be relied upon however.
+     * Remove this bit so that we can simply test with ! if key is up.
+     */
+    return GetAsyncKeyState(vKey) & ~1;
+}
+
 static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean keydown, WPARAM wParam, LPARAM lParam)
 {
     static unsigned char lControl = 0, lShift = 0, lAlt = 0,
@@ -629,12 +641,12 @@ static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean ke
      * so when we get an alt, shift or control keypress here, we manually check whether it was the left or the right
      */
 #define ASYNC_KEY_EVENT(winKey,glutKey,keyStateVar)\
-    if (!keyStateVar && GetAsyncKeyState ( winKey ))\
+    if (!keyStateVar && fgGetAsyncKeyState ( winKey ))\
     {\
         keypress   = glutKey;\
         keyStateVar = 1;\
     }\
-    else if (keyStateVar && !GetAsyncKeyState ( winKey ))\
+    else if (keyStateVar && !fgGetAsyncKeyState ( winKey ))\
     {\
         keypress   = glutKey;\
         keyStateVar = 0;\
@@ -1237,7 +1249,7 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
                 SetCapture ( window->Window.Handle ) ;
             setCaptureActive = 1; /* Set to false in WM_CAPTURECHANGED handler */
         }
-        else if (!GetAsyncKeyState(VK_LBUTTON) && !GetAsyncKeyState(VK_MBUTTON) && !GetAsyncKeyState(VK_RBUTTON))
+        else if (!fgGetAsyncKeyState(VK_LBUTTON) && !fgGetAsyncKeyState(VK_MBUTTON) && !fgGetAsyncKeyState(VK_RBUTTON))
           /* Make sure all mouse buttons are released before releasing capture */
           ReleaseCapture () ;
 
