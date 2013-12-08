@@ -132,7 +132,10 @@
 /* Note: FREEGLUT_GLES1 and FREEGLUT_GLES2 are only used to cleanly
    bootstrap headers inclusion here; use GLES constants directly
    (e.g. GL_ES_VERSION_2_0) for all other needs */
-#ifdef FREEGLUT_GLES2
+#ifdef FREEGLUT_REGAL
+#   include <GL/Regal.h>
+#   include <GL/RegalGLU.h>
+#elif FREEGLUT_GLES2
 #   include <EGL/egl.h>
 #   include <GLES2/gl2.h>
 #elif FREEGLUT_GLES1

@@ -26,7 +26,11 @@
 #ifndef  FREEGLUT_INTERNAL_EGL_H
 #define  FREEGLUT_INTERNAL_EGL_H
 
+#ifdef FREEGLUT_REGAL
+#include <GL/Regal.h>
+#else
 #include <EGL/egl.h>
+#endif
 
 /* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
 /* The structure used by display initialization in freeglut_init.c */

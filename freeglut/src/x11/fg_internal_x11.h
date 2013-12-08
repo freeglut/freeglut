@@ -33,8 +33,10 @@
 #ifdef EGL_VERSION_1_0
 #include "egl/fg_internal_egl.h"
 #else
+#ifndef FREEGLUT_REGAL
 #include <GL/glx.h>
 #include "x11/fg_internal_x11_glx.h"
+#endif
 #endif
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
