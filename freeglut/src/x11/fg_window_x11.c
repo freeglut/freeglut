@@ -387,6 +387,10 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     );
 #endif
 
+#ifdef FREEGLUT_REGAL
+    RegalMakeCurrent(window->Window.Context);
+#endif
+
     /* register extension events _before_ window is mapped */
     #ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
        fgRegisterDevices( fgDisplay.pDisplay.Display, &(window->Window.Handle) );
