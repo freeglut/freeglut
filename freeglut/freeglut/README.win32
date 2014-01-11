@@ -1,3 +1,9 @@
+NB
+==================================
+For ancient 16bit compatibility, windef.h (included through windows.h in
+freeglut_std.h) defines near and far. Its best to avoid using variables
+with these names in your own program.
+
 Installing the Libraries with MSVC
 ==================================
 
