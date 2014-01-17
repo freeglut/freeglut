@@ -22,6 +22,62 @@ float color[][3] = {
 	{0, 1, 1},
 	{1, 0, 1}
 };
+int timerInts[] = {
+    250,
+    500,
+    1000
+};
+int timerSurroundInt = 1000, timerCenterInt = 1000;
+
+/* menu IDs, creation/update funcs and callback */
+int menuID, subMenuSurround, subMenuCenter;
+
+void createMenuEntries(int which)
+{
+    for (int i = 0; i < sizeof(timerInts) / sizeof(*timerInts); i++)
+    {
+        char temp[10] = {'\0'};
+        /* flag current value */
+        if ((which == 1 ? timerSurroundInt : timerCenterInt) == timerInts[i])
+            temp[0] = '+';
+        else
+            temp[0] = '-';
+
+        sprintf(temp + 1, " %4d ms", timerInts[i]);
+
+        glutAddMenuEntry(temp, timerInts[i]);
+    }
+}
+
+void updateMenuEntries(int which)
+{
+    for (int i = 0; i < sizeof(timerInts) / sizeof(*timerInts); i++)
+    {
+        char temp[10] = { '\0' };
+        /* flag current value */
+        if ((which == 1 ? timerSurroundInt : timerCenterInt) == timerInts[i])
+            temp[0] = '+';
+        else
+            temp[0] = '-';
+
+        sprintf(temp + 1, " %4d ms", timerInts[i]);
+
+        glutChangeToMenuEntry(i+1, temp, timerInts[i]);
+    }
+}
+
+void MenuSurround(int timerInt)
+{
+    timerSurroundInt = timerInt;
+    glutSetMenu(subMenuSurround);
+    updateMenuEntries(1);
+}
+void MenuCenter(int timerInt)
+{
+    timerCenterInt = timerInt;
+    glutSetMenu(subMenuCenter);
+    updateMenuEntries(2);
+}
 
 int main(int argc, char **argv)
 {
@@ -35,6 +91,18 @@ int main(int argc, char **argv)
     /* get timer started, its reset in the timer function itself */
     glutTimerFunc(1000, timer_func, 1);
     glutTimerFunc(500, timer_func, 2);
+
+    /* menus for setting timing */
+    subMenuSurround = glutCreateMenu(MenuSurround);
+    createMenuEntries(1);
+
+    subMenuCenter = glutCreateMenu(MenuCenter);
+    createMenuEntries(2);
+
+    menuID = glutCreateMenu(MenuSurround);  /* doesn't matter, no clickable entries in this menu */
+    glutAddSubMenu("Center", subMenuCenter);
+    glutAddSubMenu("Surround", subMenuSurround);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	glutMainLoop();
 	return 0;
@@ -69,6 +137,6 @@ void timer_func(int which)
     
 	glutPostRedisplay();
 
-	/* (re)set the timer callback and ask glut to call it in 1 second */
-	glutTimerFunc(1000, timer_func, which);
+	/* (re)set the timer callback and ask glut to call it in x ms */
+    glutTimerFunc(which == 1 ? timerSurroundInt:timerCenterInt, timer_func, which);
 }

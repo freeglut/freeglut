@@ -607,7 +607,7 @@ GLboolean fgCheckActiveMenu ( SFG_Window *window, int button, GLboolean pressed,
                 fgSetWindow( parent_window );
                 fgStructure.CurrentMenu = active_menu;
 
-                /* Deactivate menu and then call callback (we don't want menu to stay in view while callback is executing) */
+                /* Deactivate menu and then call callback (we don't want menu to stay in view while callback is executing, and user should be able to change menus in callback) */
                 fgDeactivateMenu( parent_window );
                 active_menu->Callback( active_entry->ID );
 
