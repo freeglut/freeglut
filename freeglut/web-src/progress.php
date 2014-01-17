@@ -11,7 +11,12 @@ generateHeader($_SERVER['PHP_SELF']);
 <div class="textheader">FreeGLUT 3.0</div>
 <p>
 Major work, its status and planned milestone. <a
-href="help.php">Help</a> on any of these plans is very welcome!</p>
+href="help.php">Help</a> on any of these plans is very welcome! Fork the
+<a href="">github repository</a>, <a
+href="http://lists.sourceforge.net/lists/listinfo/freeglut-developer">join</a>
+and contact us on the <a
+href="mailto:freeglut-developer@lists.sourceforge.net">freeglut-developer</a>
+mailing list to discuss your plans, and get cracking!</p>
 <table>
 <tr>
 <th>Feature</th><th>Status</th><th>Milestone</th></tr>
@@ -19,6 +24,15 @@ href="help.php">Help</a> on any of these plans is very welcome!</p>
 Beucler, but there are <a href=docs/android.php#roadmap>todo
 points</a></td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
+
+<tr><td>Blackberry OS 10 port</td><td>Basic but complete functionality
+by Vinnie Simonetti.</td><td>Basic functionality as is now done: 3.0. Future
+enhancements: 3.0 or later.</td></tr>
+
+<tr><td>10bit display formats</td><td>GLUT supports that but FreeGLUT
+currently does not. Unfinished effort to implement <a
+href="https://github.com/dcnieho/FreeGLUT/tree/feature_30bit_framebuffer">here</a>.</td><td>3.0
+or later.</td></tr>
 
 <tr><td>GL2+ and GLES 1/2 clean API for geometry</td><td>Done for all (geometry like
 cube, cone, etc, as well as the teapot and other parts of the
