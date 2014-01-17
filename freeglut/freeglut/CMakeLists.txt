@@ -349,8 +349,12 @@ ELSE()
       SET(LIBNAME glut)
     ENDIF()
 
-    SET_TARGET_PROPERTIES(freeglut PROPERTIES VERSION 3.9.0 SOVERSION 3 OUTPUT_NAME ${LIBNAME})
-    SET_TARGET_PROPERTIES(freeglut_static PROPERTIES OUTPUT_NAME ${LIBNAME})
+    IF(FREEGLUT_BUILD_SHARED_LIBS)
+      SET_TARGET_PROPERTIES(freeglut PROPERTIES VERSION 3.9.0 SOVERSION 3 OUTPUT_NAME ${LIBNAME})
+    ENDIF()
+    IF(FREEGLUT_BUILD_STATIC_LIBS)
+      SET_TARGET_PROPERTIES(freeglut_static PROPERTIES OUTPUT_NAME ${LIBNAME})
+    ENDIF()
     IF(ANDROID)
         # Not in CMake toolchain file, because the toolchain
         # file is called several times and generally doesn't
