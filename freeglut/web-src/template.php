@@ -19,8 +19,8 @@ $sidebarentries = array(0, # We skip this entry anyway...
 	array("name"=>"API",          "page"=>"/docs/api.php"),
 	array("name"=>"OpenGL Wikibook",     "page"=>"http://en.wikibooks.org/wiki/OpenGL_Programming"),
 	1,
-	array("name"=>"Report a Bug",        "page"=>"http://sourceforge.net/tracker/?func=browse&amp;group_id=1032&amp;atid=101032"),
-	array("name"=>"Request a Feature",   "page"=>"http://sourceforge.net/tracker/?func=browse&amp;group_id=1032&amp;atid=351032"),
+	array("name"=>"Report a Bug",        "page"=>"http://sourceforge.net/p/freeglut/bugs/"),
+	array("name"=>"Request a Feature",   "page"=>"http://sourceforge.net/p/freeglut/feature-requests/"),
 	array("name"=>"Project Interface",   "page"=>"http://sourceforge.net/projects/freeglut/")
 );
 

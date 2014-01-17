@@ -20,6 +20,10 @@ Beucler, but there are <a href=docs/android.php#roadmap>todo
 points</a></td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
 
+<tr><td>Blackberry OS 10 port</td><td>Basic but complete functionality
+by Vinnie Simonetti.</td><td>Basic functionality as is now done: 3.0. Future
+enhancements: 3.0 or later.</td></tr>
+
 <tr><td>GL2+ and GLES 1/2 clean API for geometry</td><td>Done for all (geometry like
 cube, cone, etc, as well as the teapot and other parts of the
 teaset)</td><td>3.0</td></tr>
