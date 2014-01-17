@@ -11,7 +11,12 @@ generateHeader($_SERVER['PHP_SELF']);
 <div class="textheader">FreeGLUT 3.0</div>
 <p>
 Major work, its status and planned milestone. <a
-href="help.php">Help</a> on any of these plans is very welcome!</p>
+href="help.php">Help</a> on any of these plans is very welcome! Fork the
+<a href="">github repository</a>, <a
+href="http://lists.sourceforge.net/lists/listinfo/freeglut-developer">join</a>
+and contact us on the <a
+href="mailto:freeglut-developer@lists.sourceforge.net">freeglut-developer</a>
+mailing list to discuss your plans, and get cracking!</p>
 <table>
 <tr>
 <th>Feature</th><th>Status</th><th>Milestone</th></tr>
