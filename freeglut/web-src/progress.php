@@ -24,6 +24,11 @@ enhancements: 3.0 or later.</td></tr>
 by Vinnie Simonetti.</td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
 
+<tr><td>10bit display formats</td><td>GLUT supports that but FreeGLUT
+currently does not. Unfinished effort to implement <a
+href="https://github.com/dcnieho/FreeGLUT/tree/feature_30bit_framebuffer">here</a>.</td><td>3.0
+or later.</td></tr>
+
 <tr><td>GL2+ and GLES 1/2 clean API for geometry</td><td>Done for all (geometry like
 cube, cone, etc, as well as the teapot and other parts of the
 teaset)</td><td>3.0</td></tr>
