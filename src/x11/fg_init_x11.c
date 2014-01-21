@@ -182,6 +182,14 @@ void fgPlatformInitialize( const char* displayName )
     if( !glXQueryExtension( fgDisplay.pDisplay.Display, NULL, NULL ) )
         fgError( "OpenGL GLX extension not supported by display '%s'",
             XDisplayName( displayName ) );
+
+    /* This forces AMD Catalyst drivers to initialize and register a shutdown
+     * function, which must be done before our own call to atexit to prevent
+     * a crash if glutMainLoop is not called or is not exited cleanly.
+     * (see bug #206)
+     */
+    glXQueryExtensionsString( fgDisplay.pDisplay.Display,
+        DefaultScreen( fgDisplay.pDisplay.Display ));
 #endif
 
     fgDisplay.pDisplay.Screen = DefaultScreen( fgDisplay.pDisplay.Display );
