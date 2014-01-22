@@ -34,7 +34,8 @@ int menuID, subMenuSurround, subMenuCenter;
 
 void createMenuEntries(int which)
 {
-    for (int i = 0; i < sizeof(timerInts) / sizeof(*timerInts); i++)
+	int i;
+    for (i = 0; i < sizeof(timerInts) / sizeof(*timerInts); i++)
     {
         char temp[10] = {'\0'};
         /* flag current value */
@@ -51,7 +52,8 @@ void createMenuEntries(int which)
 
 void updateMenuEntries(int which)
 {
-    for (int i = 0; i < sizeof(timerInts) / sizeof(*timerInts); i++)
+	int i;
+    for (i = 0; i < sizeof(timerInts) / sizeof(*timerInts); i++)
     {
         char temp[10] = { '\0' };
         /* flag current value */
