@@ -580,14 +580,10 @@ static int fgPlatformGetModifiers (void)
 
 /* Check whether a button (VK_*BUTTON) is currently depressed. Returns
  * non-zero (not necessarily 1) if yes. */
-static SHORT fgGetAsyncKeyState(int vKey)
+static SHORT fgGetKeyState(int vKey)
 {
-    /* MSDN says: "If the most significant bit is set, the key is down, and if
-     * the least significant bit is set, the key was pressed after the previous
-     * call to GetAsyncKeyState." This behavior cannot be relied upon however.
-     * Remove this bit so that we can simply test with ! if key is up.
-     */
-    return GetAsyncKeyState(vKey) & ~1;
+    /* MSDN says: "If the high-order bit is 1, the key is down; otherwise, it is up". */
+    return GetKeyState(vKey) & 0xFF00;
 }
 
 static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean keydown, WPARAM wParam, LPARAM lParam)
@@ -640,30 +636,30 @@ static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean ke
      * The VK_L* & VK_R* left and right Alt, Ctrl and Shift virtual keys are however only used as parameters to GetAsyncKeyState() and GetKeyState()
      * so when we get an alt, shift or control keypress here, we manually check whether it was the left or the right
      */
-#define ASYNC_KEY_EVENT(winKey,glutKey,keyStateVar)\
-    if (!keyStateVar && fgGetAsyncKeyState ( winKey ))\
+#define KEY_EVENT(winKey,glutKey,keyStateVar)\
+    if (!keyStateVar && fgGetKeyState ( winKey ))\
     {\
         keypress   = glutKey;\
         keyStateVar = 1;\
     }\
-    else if (keyStateVar && !fgGetAsyncKeyState ( winKey ))\
+    else if (keyStateVar && !fgGetKeyState ( winKey ))\
     {\
         keypress   = glutKey;\
         keyStateVar = 0;\
     }
     case VK_CONTROL:
-        ASYNC_KEY_EVENT(VK_LCONTROL,GLUT_KEY_CTRL_L,lControl);
-        ASYNC_KEY_EVENT(VK_RCONTROL,GLUT_KEY_CTRL_R,rControl);
+        KEY_EVENT(VK_LCONTROL,GLUT_KEY_CTRL_L,lControl);
+        KEY_EVENT(VK_RCONTROL,GLUT_KEY_CTRL_R,rControl);
         break;
     case VK_SHIFT:
-        ASYNC_KEY_EVENT(VK_LSHIFT,GLUT_KEY_SHIFT_L,lShift);
-        ASYNC_KEY_EVENT(VK_RSHIFT,GLUT_KEY_SHIFT_R,rShift);
+        KEY_EVENT(VK_LSHIFT,GLUT_KEY_SHIFT_L,lShift);
+        KEY_EVENT(VK_RSHIFT,GLUT_KEY_SHIFT_R,rShift);
         break;
     case VK_MENU:
-        ASYNC_KEY_EVENT(VK_LMENU,GLUT_KEY_ALT_L,lAlt);
-        ASYNC_KEY_EVENT(VK_RMENU,GLUT_KEY_ALT_R,rAlt);
+        KEY_EVENT(VK_LMENU,GLUT_KEY_ALT_L,lAlt);
+        KEY_EVENT(VK_RMENU,GLUT_KEY_ALT_R,rAlt);
         break;
-#undef ASYNC_KEY_EVENT
+#undef KEY_EVENT
 
     case VK_DELETE:
         /* The delete key should be treated as an ASCII keypress: */
@@ -1249,7 +1245,7 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
                 SetCapture ( window->Window.Handle ) ;
             setCaptureActive = 1; /* Set to false in WM_CAPTURECHANGED handler */
         }
-        else if (!fgGetAsyncKeyState(VK_LBUTTON) && !fgGetAsyncKeyState(VK_MBUTTON) && !fgGetAsyncKeyState(VK_RBUTTON))
+        else if (!fgGetKeyState(VK_LBUTTON) && !fgGetKeyState(VK_MBUTTON) && !fgGetKeyState(VK_RBUTTON))
           /* Make sure all mouse buttons are released before releasing capture */
           ReleaseCapture () ;
 
