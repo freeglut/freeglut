@@ -1369,9 +1369,9 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
     case WM_SYSCHAR:
     case WM_CHAR:
     {
-      window = fghWindowUnderCursor(window);
+        window = fghWindowUnderCursor(window);
 
-      if( (fgState.KeyRepeat==GLUT_KEY_REPEAT_OFF || window->State.IgnoreKeyRepeat==GL_TRUE) && (HIWORD(lParam) & KF_REPEAT) )
+        if( (fgState.KeyRepeat==GLUT_KEY_REPEAT_OFF || window->State.IgnoreKeyRepeat==GL_TRUE) && (HIWORD(lParam) & KF_REPEAT) )
             break;
 
         fgState.Modifiers = fgPlatformGetModifiers( );
@@ -1379,6 +1379,23 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
                     ( (char)wParam,
                       window->State.MouseX, window->State.MouseY )
         );
+        fgState.Modifiers = INVALID_MODIFIERS;
+    }
+    break;
+
+    /* Add IME support for Chinese inputs */
+    case WM_IME_CHAR:
+    {
+        window = fghWindowUnderCursor(window);
+
+        if ((fgState.KeyRepeat == GLUT_KEY_REPEAT_OFF || window->State.IgnoreKeyRepeat == GL_TRUE) && (HIWORD(lParam) & KF_REPEAT))
+            break;
+
+        fgState.Modifiers = fgPlatformGetModifiers();
+        if (wParam < 256)
+            INVOKE_WCB(*window, Keyboard, ((char)wParam, window->State.MouseX, window->State.MouseY));
+        else
+            INVOKE_WCB(*window, Special, (wParam, window->State.MouseX, window->State.MouseY));
         fgState.Modifiers = INVALID_MODIFIERS;
     }
     break;
