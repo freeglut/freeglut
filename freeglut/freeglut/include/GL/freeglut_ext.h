@@ -240,6 +240,7 @@ FGAPI void    FGAPIENTRY glutInitContextFlags( int flags );
 FGAPI void    FGAPIENTRY glutInitContextProfile( int profile );
 FGAPI void    FGAPIENTRY glutInitErrorFunc( void (* callback)( const char *fmt, va_list ap ) );
 FGAPI void    FGAPIENTRY glutInitWarningFunc( void (* callback)( const char *fmt, va_list ap ) );
+FGAPI void    FGAPIENTRY glutInitDPIAware();    /* MUST be called before glutInit to have any effect */
 
 /* OpenGL >= 2.0 support */
 FGAPI void    FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib);

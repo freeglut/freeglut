@@ -93,7 +93,8 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       0,                      /* OpenGL ContextProfile */
                       0,                      /* HasOpenGL20 */
                       NULL,                   /* ErrorFunc */
-                      NULL                    /* WarningFunc */
+                      NULL,                   /* WarningFunc */
+                      GL_FALSE                /* DPIAware */
 };
 
 
@@ -637,6 +638,11 @@ void FGAPIENTRY glutInitDisplayString( const char* displayMode )
 
     /* We will make use of this value when creating a new OpenGL context... */
     fgState.DisplayMode = glut_state_flag;
+}
+
+void FGAPIENTRY glutInitDPIAware()
+{
+    fgState.DPIAware = GL_TRUE;
 }
 
 /* -- SETTING OPENGL 3.0 CONTEXT CREATION PARAMETERS ---------------------- */

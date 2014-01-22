@@ -333,6 +333,7 @@ struct tagSFG_State
     int              HasOpenGL20;          /* fgInitGL2 could find all OpenGL 2.0 functions */
     FGError          ErrorFunc;            /* User defined error handler    */
     FGWarning        WarningFunc;          /* User defined warning handler  */
+    GLboolean        DPIAware;             /* If true, on window the application will be declared DPI aware. No effect on other platoforms */
 };
 
 /* The structure used by display initialization in freeglut_init.c */

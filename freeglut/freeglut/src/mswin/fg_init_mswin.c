@@ -89,6 +89,12 @@ void fgPlatformInitialize( const char* displayName )
     {
         HWND desktop = GetDesktopWindow( );
         HDC  context = GetDC( desktop );
+        /* Set DPI awareness if requested by user (needed for working correctly on high-DPI screens) */
+        if (fgState.DPIAware)
+        {
+            SetProcessDPIAware();
+            GetDeviceCaps(context, LOGPIXELSX); /* Testing showed this query is also needed, calling SetProcessDPIAware by itself was not sufficient. */
+        }
 
         fgDisplay.ScreenWidthMM  = GetDeviceCaps( context, HORZSIZE );
         fgDisplay.ScreenHeightMM = GetDeviceCaps( context, VERTSIZE );
