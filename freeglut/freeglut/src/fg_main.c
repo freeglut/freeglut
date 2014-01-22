@@ -465,6 +465,13 @@ void FGAPIENTRY glutMainLoopEvent( void )
     /* Perform work on the window (position, reshape, display, etc) */
     fghProcessWork( );
 
+    /* Check OpenGL error state if requested.
+     * Don't call if no more open windows (can happen if user closes window from
+     * title bar), would lead to infinite error loop in glutReportErrors
+     */
+    if (fgState.GLDebugSwitch && fgStructure.CurrentWindow)
+        glutReportErrors( );
+
     fgCloseWindows( );
 }
 
