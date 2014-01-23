@@ -176,6 +176,9 @@ void fgPlatformInitialize( const char* displayName )
     if( fgDisplay.pDisplay.Display == NULL )
         fgError( "failed to open display '%s'", XDisplayName( displayName ) );
 
+    if ( fgState.XSyncSwitch )
+        XSynchronize(fgDisplay.pDisplay.Display, True);
+
 #ifdef EGL_VERSION_1_0
     fghPlatformInitializeEGL();
 #else
