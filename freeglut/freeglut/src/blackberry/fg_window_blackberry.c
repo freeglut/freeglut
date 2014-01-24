@@ -106,7 +106,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     }
 
     /* Request window events */
-    screen_request_events(window->Window.pContext.screenContext);
+    screen_request_events(window->Window.pContext.screenContext); //XXX When multiple screens are supported, this needs to be moved to wherever the screen context is actually created
 
     /* Save window and set state */
     window->Window.Handle = fgDisplay.pDisplay.single_native_window;
