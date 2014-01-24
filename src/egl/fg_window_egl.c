@@ -38,8 +38,8 @@ int fghChooseConfig(EGLConfig* config) {
 #endif
 #ifdef TARGET_HOST_BLACKBERRY
     /* Only 888 and 565 seem to work. Based on
-       http://qt.gitorious.org/qt/qtbase/source/893deb1a93021cdfabe038cdf1869de33a60cbc9:src/plugins/platforms/qnx/qqnxglcontext.cpp
-       That's all that is used, and that's what BlackBerry uses for their own internal OpenGL setup, so unless something else is determined, use it */
+       http://qt.gitorious.org/qt/qtbase/source/893deb1a93021cdfabe038cdf1869de33a60cbc9:src/plugins/platforms/qnx/qqnxglcontext.cpp and
+       https://twitter.com/BlackBerryDev/status/380720927475912706 */
     EGL_BLUE_SIZE, 8,
     EGL_GREEN_SIZE, 8,
     EGL_RED_SIZE, 8,
@@ -76,7 +76,7 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
   EGLConfig eglConfig = window->Window.pContext.egl.Config;
 
   /* Ensure OpenGLES 2.0 context */
-  static const EGLint ctx_attribs[] = {
+  static EGLint ctx_attribs[] = {
 #ifdef GL_ES_VERSION_2_0
     EGL_CONTEXT_CLIENT_VERSION, 2,
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
@@ -84,6 +84,10 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
 #endif
     EGL_NONE
   };
+#ifdef GL_ES_VERSION_2_0
+  int gles2Ver = fgState.MajorVersion <= 2 ? 2 : fgState.MajorVersion;
+  ctx_attribs[1] = gles2Ver;
+#endif
   context = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, ctx_attribs);
   if (context == EGL_NO_CONTEXT) {
     fgWarning("Cannot initialize EGL context, err=%x\n", eglGetError());
@@ -92,7 +96,7 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
   EGLint ver = -1;
   eglQueryContext(fgDisplay.pDisplay.egl.Display, context, EGL_CONTEXT_CLIENT_VERSION, &ver);
 #ifdef GL_ES_VERSION_2_0
-  if (ver != 2)
+  if (ver != gles2Ver)
 #else
   if (ver != 1)
 #endif

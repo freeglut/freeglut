@@ -56,9 +56,19 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     }
     fgDisplay.pDisplay.single_native_window = sWindow;
 
+    /* Choose config and screen format */
+    fghChooseConfig(&window->Window.pContext.egl.Config);
+    int screenFormat = SCREEN_FORMAT_RGBA8888; //Only SCREEN_FORMAT_RGBA8888 and SCREEN_FORMAT_RGB565 are supported. See fg_window_egl for more info
+    int configAttri;
+#define EGL_QUERY_COMP(att, comp) (eglGetConfigAttrib(fgDisplay.pDisplay.egl.Display, window->Window.pContext.egl.Config, att, &configAttri) == GL_TRUE && (configAttri comp))
+    if(EGL_QUERY_COMP(EGL_ALPHA_SIZE, <= 0) && EGL_QUERY_COMP(EGL_RED_SIZE, <= 5) &&
+            EGL_QUERY_COMP(EGL_GREEN_SIZE, <= 6) && EGL_QUERY_COMP(EGL_BLUE_SIZE, <= 5)) {
+        screenFormat = SCREEN_FORMAT_RGB565;
+    }
+#undef EGL_QUERY_COMP
+
     /* Set window properties */
     int orientation = atoi(getenv("ORIENTATION"));
-    int screenFormat = SCREEN_FORMAT_RGBA8888; //Only SCREEN_FORMAT_RGBA8888 and SCREEN_FORMAT_RGB565 are supported. See fg_window_egl for more info
 #ifdef GL_ES_VERSION_2_0
     int screenUsage = SCREEN_USAGE_OPENGL_ES2 | SCREEN_USAGE_ROTATION;
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
@@ -180,7 +190,6 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     window->State.IsFullscreen = GL_TRUE; //XXX Always fullscreen for now
 
     /* Create context */
-    fghChooseConfig(&window->Window.pContext.egl.Config);
     window->Window.Context = EGL_NO_CONTEXT;
     if( fgState.UseCurrentContext == GL_TRUE )
         window->Window.Context = eglGetCurrentContext();
