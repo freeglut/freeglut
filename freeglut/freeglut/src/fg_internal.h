@@ -45,6 +45,9 @@
 #elif defined (__ANDROID__)
 #   define  TARGET_HOST_ANDROID  1
 
+#elif defined (__QNX__)
+#   define  TARGET_HOST_BLACKBERRY  1
+
 #elif defined(__posix__) || defined(__unix__) || defined(__linux__) || defined(__sun)
 #   define  TARGET_HOST_POSIX_X11  1
 
@@ -183,6 +186,9 @@
 #endif
 #if TARGET_HOST_ANDROID
 #include "android/fg_internal_android.h"
+#endif
+#if TARGET_HOST_BLACKBERRY
+#include "blackberry/fg_internal_blackberry.h"
 #endif
 
 
@@ -372,7 +378,7 @@ struct tagSFG_Context
 
     int             DoubleBuffered;  /* Treat the window as double-buffered */
 
-    /* When drawing geometry to vertex attribute buffers, user specifies 
+    /* When drawing geometry to vertex attribute buffers, user specifies
      * the attribute indices for vertices, normals and/or texture coords
      * to freeglut. Those are stored here
      */
