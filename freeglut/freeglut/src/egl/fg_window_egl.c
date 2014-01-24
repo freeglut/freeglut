@@ -36,9 +36,18 @@ int fghChooseConfig(EGLConfig* config) {
 #else
     EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
 #endif
+#ifdef TARGET_HOST_BLACKBERRY
+    /* Only 888 and 565 seem to work. Based on
+       http://qt.gitorious.org/qt/qtbase/source/893deb1a93021cdfabe038cdf1869de33a60cbc9:src/plugins/platforms/qnx/qqnxglcontext.cpp
+       That's all that is used, and that's what BlackBerry uses for their own internal OpenGL setup, so unless something else is determined, use it */
+    EGL_BLUE_SIZE, 8,
+	EGL_GREEN_SIZE, 8,
+	EGL_RED_SIZE, 8,
+#else
     EGL_BLUE_SIZE, 1,
     EGL_GREEN_SIZE, 1,
     EGL_RED_SIZE, 1,
+#endif
     EGL_ALPHA_SIZE, (fgState.DisplayMode & GLUT_ALPHA) ? 1 : 0,
     EGL_DEPTH_SIZE, (fgState.DisplayMode & GLUT_DEPTH) ? 1 : 0,
     EGL_STENCIL_SIZE, (fgState.DisplayMode & GLUT_STENCIL) ? 1 : 0,
