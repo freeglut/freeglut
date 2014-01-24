@@ -30,6 +30,11 @@ int fghChooseConfig(EGLConfig* config) {
   const EGLint attribs[] = {
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
 #ifdef GL_ES_VERSION_2_0
+    /*
+     * Khronos does not specify a EGL_OPENGL_ES3_BIT outside of the OpenGL extension "EGL_KHR_create_context". There are numerous references on the internet that
+     * say to use EGL_OPENGL_ES3_BIT, followed by many saying they can't find it in any headers. In fact, the offical updated specification for EGL does not have
+     * any references to OpenGL ES 3.0. Tests have shown that EGL_OPENGL_ES2_BIT will work with ES 3.0.
+     */
     EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
     EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
@@ -85,6 +90,10 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
     EGL_NONE
   };
 #ifdef GL_ES_VERSION_2_0
+  /*
+   * As GLES 3.0 is backwards compatible with GLES 2.0, we set 2.0 as default unless the user states a different version.
+   * This updates the context attributes and lets us check that the correct version was set when we query it after creation.
+   */
   int gles2Ver = fgState.MajorVersion <= 2 ? 2 : fgState.MajorVersion;
   ctx_attribs[1] = gles2Ver;
 #endif
