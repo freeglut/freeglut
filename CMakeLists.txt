@@ -137,6 +137,11 @@ ELSEIF(ANDROID)
         src/android/fg_structure_android.c
         src/android/fg_window_android.c
     )
+ELSEIF(BLACKBERRY)
+    LIST(APPEND FREEGLUT_SRCS
+        src/blackberry/fg_internal_blackberry.h
+        src/blackberry/fg_main_blackberry.h
+    )
 ELSE()
     LIST(APPEND FREEGLUT_SRCS
         src/x11/fg_cursor_x11.c
@@ -219,14 +224,14 @@ ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-  IF(!ANDROID)
+  IF(NOT(ANDROID OR BLACKBERRY))
     # not setting -ansi as EGL/KHR headers doesn't support it
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ansi")
   ENDIF()
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 INCLUDE(CheckIncludeFiles)
-IF(UNIX AND NOT ANDROID)
+IF(UNIX AND NOT(ANDROID OR BLACKBERRY))
     FIND_PACKAGE(X11 REQUIRED)
     LIST(APPEND LIBS ${X11_LIBRARIES})
     IF(X11_Xrandr_FOUND)
@@ -251,6 +256,8 @@ IF(ANDROID)
     # -landroid for ANativeWindow
     # -llog for native Android logging
     LIST(APPEND LIBS android log)
+ELSEIF(BLACKBERRY)
+    LIST(APPEND LIBS bps slog2)
 ENDIF()
 
 INCLUDE(CheckFunctionExists)
@@ -464,12 +471,16 @@ IF(WIN32)
 ELSEIF(FREEGLUT_GLES2)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv2 -lEGL -lm")
+  ELSEIF(BLACKBERRY)
+    SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lGLESv2 -lEGL -lm")
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv2 -lEGL -lm")
   ENDIF()
 ELSEIF(FREEGLUT_GLES1)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv1_CM -lEGL -lm")
+  ELSEIF(BLACKBERRY)
+    SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lGLESv1_CM -lEGL -lm")
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv1_CM -lEGL -lm")
   ENDIF()
