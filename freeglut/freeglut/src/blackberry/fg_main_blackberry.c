@@ -457,10 +457,12 @@ void fgPlatformProcessSingleEvent ( void )
                 case NAVIGATOR_SWIPE_DOWN:
                 case NAVIGATOR_BACK:
                 case NAVIGATOR_WINDOW_ACTIVE:
+                case NAVIGATOR_WINDOW_INACTIVE:
                 case NAVIGATOR_DEVICE_LOCK_STATE:
                 case NAVIGATOR_WINDOW_COVER:
                 case NAVIGATOR_WINDOW_COVER_ENTER:
                 case NAVIGATOR_WINDOW_COVER_EXIT:
+                case NAVIGATOR_APP_STATE:
                     //XXX Should probably do something with these
                     break;
 
