@@ -118,25 +118,42 @@ IF(WIN32)
         )
     ENDIF()
 
-ELSEIF(ANDROID)
+ELSEIF(ANDROID OR BLACKBERRY)
+    # BlackBerry and Android share some similar design concepts and ideas, as with many mobile devices.
+    # As such, some classes can be shared between the two. XXX: Possibly rename shareable classes to
+    # a more generic name. *_stub? *_mobile?
     LIST(APPEND FREEGLUT_SRCS
-        src/android/native_app_glue/android_native_app_glue.c
-        src/android/native_app_glue/android_native_app_glue.h
-        src/android/fg_internal_android.h
         src/android/fg_cursor_android.c
         src/android/fg_ext_android.c
         src/android/fg_gamemode_android.c
-        src/android/fg_init_android.c
-        src/android/fg_input_devices_android.c
         src/android/fg_joystick_android.c
-        src/android/fg_main_android.c
-        src/android/fg_main_android.h
-        src/android/fg_runtime_android.c
         src/android/fg_spaceball_android.c
-        src/android/fg_state_android.c
-        src/android/fg_structure_android.c
-        src/android/fg_window_android.c
     )
+    IF(ANDROID)
+        LIST(APPEND FREEGLUT_SRCS
+            src/android/native_app_glue/android_native_app_glue.c
+            src/android/native_app_glue/android_native_app_glue.h
+            src/android/fg_internal_android.h
+            src/android/fg_init_android.c
+            src/android/fg_input_devices_android.c
+            src/android/fg_main_android.c
+            src/android/fg_main_android.h
+            src/android/fg_runtime_android.c
+            src/android/fg_state_android.c
+            src/android/fg_structure_android.c
+            src/android/fg_window_android.c
+        )
+    ELSE()
+        LIST(APPEND FREEGLUT_SRCS
+            src/blackberry/fg_internal_blackberry.h
+            src/blackberry/fg_init_blackberry.c
+            src/x11/fg_input_devices_x11.c
+            src/blackberry/fg_main_blackberry.c
+            src/blackberry/fg_state_blackberry.c
+            src/blackberry/fg_structure_blackberry.c
+            src/blackberry/fg_window_blackberry.c
+        )
+    ENDIF()
 ELSE()
     LIST(APPEND FREEGLUT_SRCS
         src/x11/fg_cursor_x11.c
@@ -219,14 +236,14 @@ ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-  IF(!ANDROID)
+  IF(NOT(ANDROID OR BLACKBERRY))
     # not setting -ansi as EGL/KHR headers doesn't support it
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ansi")
   ENDIF()
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 INCLUDE(CheckIncludeFiles)
-IF(UNIX AND NOT ANDROID)
+IF(UNIX AND NOT(ANDROID OR BLACKBERRY))
     FIND_PACKAGE(X11 REQUIRED)
     LIST(APPEND LIBS ${X11_LIBRARIES})
     IF(X11_Xrandr_FOUND)
@@ -251,6 +268,17 @@ IF(ANDROID)
     # -landroid for ANativeWindow
     # -llog for native Android logging
     LIST(APPEND LIBS android log)
+ELSEIF(BLACKBERRY)
+    if(PLAYBOOK)
+        # -lbps for event loop
+        # -screen for native screen
+        LIST(APPEND LIBS bps screen)
+    ELSE()
+        # -lbps for event loop
+        # -lslog2 for logging
+        # -screen for native screen
+        LIST(APPEND LIBS bps slog2 screen)
+    ENDIF()
 ENDIF()
 
 INCLUDE(CheckFunctionExists)
@@ -464,12 +492,24 @@ IF(WIN32)
 ELSEIF(FREEGLUT_GLES2)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv2 -lEGL -lm")
+  ELSEIF(BLACKBERRY)
+    IF(PLAYBOOK)
+      SET(PC_LIBS_PRIVATE "-lbps -lscreen -lGLESv2 -lEGL -lm")
+    ELSE()
+      SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv2 -lEGL -lm")
+    ENDIF()
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv2 -lEGL -lm")
   ENDIF()
 ELSEIF(FREEGLUT_GLES1)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv1_CM -lEGL -lm")
+  ELSEIF(BLACKBERRY)
+    IF(PLAYBOOK)
+      SET(PC_LIBS_PRIVATE "-lbps -lscreen -lGLESv1_CM -lEGL -lm")
+    ELSE()
+      SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv1_CM -lEGL -lm")
+    ENDIF()
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv1_CM -lEGL -lm")
   ENDIF()

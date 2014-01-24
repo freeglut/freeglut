@@ -30,15 +30,29 @@ int fghChooseConfig(EGLConfig* config) {
   const EGLint attribs[] = {
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
 #ifdef GL_ES_VERSION_2_0
+    /*
+     * Khronos does not specify a EGL_OPENGL_ES3_BIT outside of the OpenGL extension "EGL_KHR_create_context". There are numerous references on the internet that
+     * say to use EGL_OPENGL_ES3_BIT, followed by many saying they can't find it in any headers. In fact, the offical updated specification for EGL does not have
+     * any references to OpenGL ES 3.0. Tests have shown that EGL_OPENGL_ES2_BIT will work with ES 3.0.
+     */
     EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
     EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
 #else
     EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
 #endif
+#ifdef TARGET_HOST_BLACKBERRY
+    /* Only 888 and 565 seem to work. Based on
+       http://qt.gitorious.org/qt/qtbase/source/893deb1a93021cdfabe038cdf1869de33a60cbc9:src/plugins/platforms/qnx/qqnxglcontext.cpp and
+       https://twitter.com/BlackBerryDev/status/380720927475912706 */
+    EGL_BLUE_SIZE, 8,
+    EGL_GREEN_SIZE, 8,
+    EGL_RED_SIZE, 8,
+#else
     EGL_BLUE_SIZE, 1,
     EGL_GREEN_SIZE, 1,
     EGL_RED_SIZE, 1,
+#endif
     EGL_ALPHA_SIZE, (fgState.DisplayMode & GLUT_ALPHA) ? 1 : 0,
     EGL_DEPTH_SIZE, (fgState.DisplayMode & GLUT_DEPTH) ? 1 : 0,
     EGL_STENCIL_SIZE, (fgState.DisplayMode & GLUT_STENCIL) ? 1 : 0,
@@ -46,10 +60,10 @@ int fghChooseConfig(EGLConfig* config) {
     EGL_SAMPLES, (fgState.DisplayMode & GLUT_MULTISAMPLE) ? fgState.SampleNumber : 0,
     EGL_NONE
   };
-  
+
   EGLint num_config;
   if (!eglChooseConfig(fgDisplay.pDisplay.egl.Display,
-		       attribs, config, 1, &num_config)) {
+               attribs, config, 1, &num_config)) {
     fgWarning("eglChooseConfig: error %x\n", eglGetError());
     return 0;
   }
@@ -67,7 +81,7 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
   EGLConfig eglConfig = window->Window.pContext.egl.Config;
 
   /* Ensure OpenGLES 2.0 context */
-  static const EGLint ctx_attribs[] = {
+  static EGLint ctx_attribs[] = {
 #ifdef GL_ES_VERSION_2_0
     EGL_CONTEXT_CLIENT_VERSION, 2,
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
@@ -75,6 +89,14 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
 #endif
     EGL_NONE
   };
+#ifdef GL_ES_VERSION_2_0
+  /*
+   * As GLES 3.0 is backwards compatible with GLES 2.0, we set 2.0 as default unless the user states a different version.
+   * This updates the context attributes and lets us check that the correct version was set when we query it after creation.
+   */
+  int gles2Ver = fgState.MajorVersion <= 2 ? 2 : fgState.MajorVersion;
+  ctx_attribs[1] = gles2Ver;
+#endif
   context = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, ctx_attribs);
   if (context == EGL_NO_CONTEXT) {
     fgWarning("Cannot initialize EGL context, err=%x\n", eglGetError());
@@ -83,7 +105,7 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
   EGLint ver = -1;
   eglQueryContext(fgDisplay.pDisplay.egl.Display, context, EGL_CONTEXT_CLIENT_VERSION, &ver);
 #ifdef GL_ES_VERSION_2_0
-  if (ver != 2)
+  if (ver != gles2Ver)
 #else
   if (ver != 1)
 #endif
@@ -94,11 +116,13 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
 
 void fgPlatformSetWindow ( SFG_Window *window )
 {
-  if (eglMakeCurrent(fgDisplay.pDisplay.egl.Display,
-		     window->Window.pContext.egl.Surface,
-		     window->Window.pContext.egl.Surface,
-		     window->Window.Context) == EGL_FALSE)
-    fgError("eglMakeCurrent: err=%x\n", eglGetError());
+  if ( window != fgStructure.CurrentWindow && window) {
+    if (eglMakeCurrent(fgDisplay.pDisplay.egl.Display,
+               window->Window.pContext.egl.Surface,
+               window->Window.pContext.egl.Surface,
+               window->Window.Context) == EGL_FALSE)
+      fgError("eglMakeCurrent: err=%x\n", eglGetError());
+  }
 }
 
 /*
@@ -127,9 +151,28 @@ void fghPlatformOpenWindowEGL( SFG_Window* window )
  */
 void fghPlatformCloseWindowEGL( SFG_Window* window )
 {
-  eglMakeCurrent(fgDisplay.pDisplay.egl.Display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+  /* Based on fg_window_mswin fgPlatformCloseWindow */
+  if( fgStructure.CurrentWindow == window )
+    eglMakeCurrent(fgDisplay.pDisplay.egl.Display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
   if (window->Window.Context != EGL_NO_CONTEXT) {
-    eglDestroyContext(fgDisplay.pDisplay.egl.Display, window->Window.Context);
+    /* Step through the list of windows. If the rendering context is not being used by another window, then delete it */
+    {
+      GLboolean used = GL_FALSE;
+      SFG_Window *iter;
+
+      for( iter = (SFG_Window*)fgStructure.Windows.First;
+           iter && used == GL_FALSE;
+           iter = (SFG_Window*)iter->Node.Next)
+      {
+        if( (iter->Window.Context == window->Window.Context) &&
+            (iter != window) )
+          used = GL_TRUE;
+      }
+
+      if( !used )
+        eglDestroyContext(fgDisplay.pDisplay.egl.Display, window->Window.Context);
+    }
     window->Window.Context = EGL_NO_CONTEXT;
   }
 
