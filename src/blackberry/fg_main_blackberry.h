@@ -29,9 +29,9 @@
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
-/*extern void fgPlatformProcessSingleEvent(void);
-extern unsigned long fgPlatformSystemTime(void);
+extern void fgPlatformProcessSingleEvent(void);
+extern uint64_t fgPlatformSystemTime(void);
 extern void fgPlatformSleepForEvents(long msec);
-extern void fgPlatformMainLoopPreliminaryWork(void);*/
+extern void fgPlatformMainLoopPreliminaryWork(void);
 
 #endif

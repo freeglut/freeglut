@@ -142,12 +142,10 @@ ELSEIF(ANDROID OR BLACKBERRY)
         )
     ELSE()
         LIST(APPEND FREEGLUT_SRCS
-            # TODO: Anything similar to Android's app_glue?
             src/blackberry/fg_init_blackberry.c
             src/blackberry/fg_internal_blackberry.h
-            # TODO: src/blackberry/fg_main_blackberry.c
+            src/blackberry/fg_main_blackberry.c
             src/blackberry/fg_main_blackberry.h
-            # TODO: Anything similar to fg_spaceball_android.c needed?
             src/blackberry/fg_state_blackberry.c
             src/blackberry/fg_window_blackberry.c
         )
