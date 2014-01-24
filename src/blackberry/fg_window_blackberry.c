@@ -64,7 +64,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
   fgDisplay.pDisplay.single_native_window = sWindow;
 
   /* Set window properties */
-  int screenFormat = SCREEN_FORMAT_RGBA8888;
+  int screenFormat = SCREEN_FORMAT_RGBA8888; //XXX Should this be determined by config?
 #ifdef GL_ES_VERSION_2_0
   int screenUsage = SCREEN_USAGE_OPENGL_ES2;
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
