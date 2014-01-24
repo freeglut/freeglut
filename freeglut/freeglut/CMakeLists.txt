@@ -118,30 +118,39 @@ IF(WIN32)
         )
     ENDIF()
 
-ELSEIF(ANDROID)
+ELSEIF(ANDROID OR BLACKBERRY)
     LIST(APPEND FREEGLUT_SRCS
-        src/android/native_app_glue/android_native_app_glue.c
-        src/android/native_app_glue/android_native_app_glue.h
-        src/android/fg_internal_android.h
         src/android/fg_cursor_android.c
         src/android/fg_ext_android.c
         src/android/fg_gamemode_android.c
         src/android/fg_init_android.c
         src/android/fg_input_devices_android.c
         src/android/fg_joystick_android.c
-        src/android/fg_main_android.c
-        src/android/fg_main_android.h
-        src/android/fg_runtime_android.c
         src/android/fg_spaceball_android.c
-        src/android/fg_state_android.c
         src/android/fg_structure_android.c
-        src/android/fg_window_android.c
     )
-ELSEIF(BLACKBERRY)
-    LIST(APPEND FREEGLUT_SRCS
-        src/blackberry/fg_internal_blackberry.h
-        src/blackberry/fg_main_blackberry.h
-    )
+    IF(ANDROID)
+        LIST(APPEND FREEGLUT_SRCS
+            src/android/native_app_glue/android_native_app_glue.c
+            src/android/native_app_glue/android_native_app_glue.h
+            src/android/fg_internal_android.h
+            src/android/fg_main_android.c
+            src/android/fg_main_android.h
+            src/android/fg_runtime_android.c
+            src/android/fg_state_android.c
+            src/android/fg_window_android.c
+        )
+    ELSE()
+        LIST(APPEND FREEGLUT_SRCS
+            # TODO: Anything similar to Android's app_glue?
+            src/blackberry/fg_internal_blackberry.h
+            # TODO: src/blackberry/fg_main_blackberry.c
+            src/blackberry/fg_main_blackberry.h
+            # TODO: Anything similar to fg_spaceball_android.c needed?
+            src/blackberry/fg_state_blackberry.c
+            # TODO: src/blackberry/fg_window_blackberry.c
+        )
+    ENDIF()
 ELSE()
     LIST(APPEND FREEGLUT_SRCS
         src/x11/fg_cursor_x11.c
@@ -257,7 +266,10 @@ IF(ANDROID)
     # -llog for native Android logging
     LIST(APPEND LIBS android log)
 ELSEIF(BLACKBERRY)
-    LIST(APPEND LIBS bps slog2)
+    # -lbps for event loop
+    # -lslog2 for logging
+    # -screen for native screen
+    LIST(APPEND LIBS bps slog2 screen)
 ENDIF()
 
 INCLUDE(CheckFunctionExists)
@@ -472,7 +484,7 @@ ELSEIF(FREEGLUT_GLES2)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv2 -lEGL -lm")
   ELSEIF(BLACKBERRY)
-    SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lGLESv2 -lEGL -lm")
+    SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv2 -lEGL -lm")
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv2 -lEGL -lm")
   ENDIF()
@@ -480,7 +492,7 @@ ELSEIF(FREEGLUT_GLES1)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv1_CM -lEGL -lm")
   ELSEIF(BLACKBERRY)
-    SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lGLESv1_CM -lEGL -lm")
+    SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv1_CM -lEGL -lm")
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv1_CM -lEGL -lm")
   ENDIF()
