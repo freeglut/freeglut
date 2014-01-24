@@ -29,16 +29,23 @@
 #include "fg_init.h"
 #include "egl/fg_init_egl.h"
 #include <bps/bps.h>
-#include <bps/navigator.h>
+#include <screen/screen.h>
 
 void fgPlatformInitialize()
 {
     bps_initialize();
 
-    navigator_request_events(0);
-    //XXX rotation lock? navigator_rotation_lock(true);
-
     fghPlatformInitializeEGL();
+
+    /* Prepare for screen events */
+    fgDisplay.pDisplay.event = NULL;
+    fgDisplay.pDisplay.screenContext = NULL;
+
+    /* Create window */
+    if (screen_create_context(&fgDisplay.pDisplay.screenContext, 0)) {
+        fgError("Could not create screen context");
+        return;
+    }
 
     /* Get start time */
     fgState.Time = fgSystemTime();
@@ -50,7 +57,8 @@ void fgPlatformCloseDisplay()
 {
     fghPlatformCloseDisplayEGL();
 
-    navigator_stop_events(0);
+    screen_destroy_context(fgDisplay.pDisplay.screenContext);
+    fgDisplay.pDisplay.screenContext = NULL;
 
     bps_shutdown();
 }
