@@ -59,7 +59,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 
     /* Set window properties */
     int orientation = atoi(getenv("ORIENTATION"));
-    int screenFormat = SCREEN_FORMAT_RGBA8888; //XXX Should this be determined by config?
+    int screenFormat = SCREEN_FORMAT_RGBA8888; //Only SCREEN_FORMAT_RGBA8888 and SCREEN_FORMAT_RGB565 are supported. See fg_window_egl for more info
 #ifdef GL_ES_VERSION_2_0
     int screenUsage = SCREEN_USAGE_OPENGL_ES2 | SCREEN_USAGE_ROTATION;
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
