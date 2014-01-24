@@ -579,6 +579,9 @@ void fgPlatformProcessSingleEvent ( void )
                        seems less likely to work when the app comes to the foreground. Might be a bug */
                     break;
 
+                case 0: //Doesn't exist in header, but shows up when keyboard shows and resizes
+                	break;
+
                 default:
                     LOGW("fgPlatformProcessSingleEvent: unknown navigator event: 0x%X", SLOG2_FA_SIGNED(eventType));
                     break;
