@@ -47,6 +47,39 @@ void fgPlatformInitialize()
         return;
     }
 
+    /* Get screen size */
+    int displayCount;
+    screen_display_t* displays;
+    int vals[2];
+    if(screen_get_context_property_iv(fgDisplay.pDisplay.screenContext, SCREEN_PROPERTY_DISPLAY_COUNT, &displayCount)) {
+        fgWarning("Could not get display count. Screen size not determined and will be left at default values");
+    } else if(displayCount >= 1) {
+        displays = (screen_display_t*)calloc(displayCount, sizeof(screen_display_t));
+        if(screen_get_context_property_pv(fgDisplay.pDisplay.screenContext, SCREEN_PROPERTY_DISPLAYS, (void**)displays)) {
+            fgWarning("Could not get displays. Screen size not determined and will be left at default values");
+        } else {
+            /* We only care about the first one, which is the device display */
+            if(screen_get_display_property_iv(displays[0], SCREEN_PROPERTY_SIZE, vals)) {
+                fgWarning("Could not get display size. Values will be left at default");
+            } else {
+                if(screen_get_display_property_iv(displays[0], SCREEN_PROPERTY_ROTATION, &displayCount) || (displayCount == 0 || displayCount == 180)) {
+                    fgDisplay.ScreenWidth = vals[0];
+                    fgDisplay.ScreenHeight = vals[1];
+                } else {
+                    fgDisplay.ScreenWidth = vals[1];
+                    fgDisplay.ScreenHeight = vals[0];
+                }
+            }
+            if(screen_get_display_property_iv(displays[0], SCREEN_PROPERTY_PHYSICAL_SIZE, vals)) {
+                fgWarning("Could not get physical display size. Values will be left at default");
+            } else {
+                fgDisplay.ScreenWidthMM = vals[0];
+                fgDisplay.ScreenHeightMM = vals[1];
+            }
+        }
+        free(displays);
+    }
+
     /* Get start time */
     fgState.Time = fgSystemTime();
 
