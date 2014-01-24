@@ -31,11 +31,13 @@
 #include "fg_internal.h"
 #include "egl/fg_window_egl.h"
 
-#ifdef __PLAYBOOK__
-#include <sys/slog.h>
 #ifdef NDEBUG
 #define LOGI(...)
-#else
+#endif
+
+#ifdef __PLAYBOOK__
+#include <sys/slog.h>
+#ifndef LOGI
 #define LOGI(...) ((void)slogf(1337, _SLOG_INFO, __VA_ARGS__))
 #endif
 #define LOGW(...) ((void)slogf(1337, _SLOG_WARNING, __VA_ARGS__))
@@ -44,9 +46,7 @@
 #endif
 #else
 #include <slog2.h>
-#ifdef NDEBUG
-#define LOGI(...)
-#else
+#ifndef LOGI
 #define LOGI(...) ((void)slog2fa(NULL, 1337, SLOG2_INFO, __VA_ARGS__, SLOG2_FA_END))
 #endif
 #define LOGW(...) ((void)slog2fa(NULL, 1337, SLOG2_WARNING, __VA_ARGS__, SLOG2_FA_END))
@@ -353,6 +353,12 @@ void fgPlatformProcessSingleEvent ( void )
     do
     {
         SFG_Window* window = fgStructure.CurrentWindow;
+#ifdef __PLAYBOOK__
+        /* Get the keyboard height before doing anything since we otherwise don't get it until it changes */
+        if(window->State.pWState.keyboardHeight == 0) {
+            virtualkeyboard_get_height(&window->State.pWState.keyboardHeight);
+        }
+#endif
         domain = bps_event_get_domain(fgDisplay.pDisplay.event);
         if (domain == screen_get_domain()) {
             int eventType;
@@ -626,6 +632,8 @@ void fgPlatformProcessSingleEvent ( void )
                 } else {
                     LOGW("NAVIGATOR_EXIT: No current window");
                 }
+
+                //XXX Should this be a bit more "forceful" so that it doesn't continue to loop through events?
                 break;
             }
 
@@ -644,6 +652,11 @@ void fgPlatformProcessSingleEvent ( void )
                 /* Reset sizes */
                 window->State.pWState.newWidth = 0;
                 window->State.pWState.newHeight = 0;
+
+#ifdef __PLAYBOOK__
+                /* On rotation, the keyboard is closed. This prevents two resize calls */
+                window->State.pWState.keyboardOpen = GL_FALSE;
+#endif
 
                 /* Notify that we want to rotate */
                 navigator_orientation_check_response(fgDisplay.pDisplay.event, true);
@@ -770,20 +783,32 @@ void fgPlatformProcessSingleEvent ( void )
             }
         }
 #ifdef __PLAYBOOK__
+        /* While this could be used for non-PlayBook, BlackBerry 10 will still get navigator events, so use those. They are a bit more exact. */
         else if(domain == virtualkeyboard_get_domain()) {
             unsigned int eventType = bps_event_get_code(fgDisplay.pDisplay.event);
             switch (eventType) {
             case VIRTUALKEYBOARD_EVENT_VISIBLE:
+                LOGI("fgPlatformProcessSingleEvent: VIRTUALKEYBOARD_EVENT_VISIBLE");
+                if(window->State.pWState.keyboardOpen != GL_TRUE) {
+                    window->State.pWState.keyboardOpen = GL_TRUE;
+                    fgPlatformHandleKeyboardHeight(window, window->State.pWState.keyboardHeight);
+                }
                 break;
 
             case VIRTUALKEYBOARD_EVENT_HIDDEN:
                 LOGI("fgPlatformProcessSingleEvent: VIRTUALKEYBOARD_EVENT_HIDDEN");
-                fgPlatformHandleKeyboardHeight(window, 0);
+                if(window->State.pWState.keyboardOpen != GL_FALSE) {
+                    window->State.pWState.keyboardOpen = GL_FALSE;
+                    fgPlatformHandleKeyboardHeight(window, 0);
+                }
                 break;
 
             case VIRTUALKEYBOARD_EVENT_INFO:
                 LOGI("fgPlatformProcessSingleEvent: VIRTUALKEYBOARD_EVENT_INFO");
-                fgPlatformHandleKeyboardHeight(window, virtualkeyboard_event_get_height(fgDisplay.pDisplay.event));
+                window->State.pWState.keyboardHeight = virtualkeyboard_event_get_height(fgDisplay.pDisplay.event);
+                if(window->State.pWState.keyboardOpen == GL_TRUE) {
+                    fgPlatformHandleKeyboardHeight(window, window->State.pWState.keyboardHeight);
+                }
                 break;
 
             default:
