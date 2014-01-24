@@ -80,12 +80,14 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 
     /* Could set size based on what is specified for window. Work on another time
     int size[2];
-    size[0] = w;
-    size[1] = h;
-    if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, size)) {
-        screen_destroy_window(sWindow);
-        fgError("Could not set window buffer size");
-        return;
+    if(sizeUse) {
+        size[0] = w;
+        size[1] = h;
+        if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, size)) {
+            screen_destroy_window(sWindow);
+            fgError("Could not set window buffer size");
+            return;
+        }
     }*/
 
     /* Create window buffers */
