@@ -31,7 +31,7 @@
 
 extern void fgPlatformProcessSingleEvent(void);
 extern uint64_t fgPlatformSystemTime(void);
-extern void fgPlatformSleepForEvents(long msec);
+extern void fgPlatformSleepForEvents(uint64_t msec);
 extern void fgPlatformMainLoopPreliminaryWork(void);
 
 #endif
