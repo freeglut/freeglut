@@ -269,10 +269,16 @@ IF(ANDROID)
     # -llog for native Android logging
     LIST(APPEND LIBS android log)
 ELSEIF(BLACKBERRY)
-    # -lbps for event loop
-    # -lslog2 for logging
-    # -screen for native screen
-    LIST(APPEND LIBS bps slog2 screen)
+    if(PLAYBOOK)
+        # -lbps for event loop
+        # -screen for native screen
+        LIST(APPEND LIBS bps screen)
+    ELSE()
+        # -lbps for event loop
+        # -lslog2 for logging
+        # -screen for native screen
+        LIST(APPEND LIBS bps slog2 screen)
+    ENDIF()
 ENDIF()
 
 INCLUDE(CheckFunctionExists)
@@ -487,7 +493,11 @@ ELSEIF(FREEGLUT_GLES2)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv2 -lEGL -lm")
   ELSEIF(BLACKBERRY)
-    SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv2 -lEGL -lm")
+    IF(PLAYBOOK)
+      SET(PC_LIBS_PRIVATE "-lbps -lscreen -lGLESv2 -lEGL -lm")
+    ELSE()
+      SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv2 -lEGL -lm")
+    ENDIF()
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv2 -lEGL -lm")
   ENDIF()
@@ -495,7 +505,11 @@ ELSEIF(FREEGLUT_GLES1)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv1_CM -lEGL -lm")
   ELSEIF(BLACKBERRY)
-    SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv1_CM -lEGL -lm")
+    IF(PLAYBOOK)
+      SET(PC_LIBS_PRIVATE "-lbps -lscreen -lGLESv1_CM -lEGL -lm")
+    ELSE()
+      SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv1_CM -lEGL -lm")
+    ENDIF()
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv1_CM -lEGL -lm")
   ENDIF()
