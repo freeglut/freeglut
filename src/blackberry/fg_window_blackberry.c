@@ -43,84 +43,84 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
                            GLboolean sizeUse, int w, int h,
                            GLboolean gameMode, GLboolean isSubWindow )
 {
-  /* TODO: only one full-screen window possible? */
-  if (fgDisplay.pDisplay.single_native_window != NULL) {
-    fgWarning("You can't have more than one window on BlackBerry");
-    return;
-  }
-  window->Window.pContext.event = NULL; //XXX Should probably be done elsewhere. Done here so there is no event at the moment
+    /* TODO: only one full-screen window possible? */
+    if (fgDisplay.pDisplay.single_native_window != NULL) {
+        fgWarning("You can't have more than one window on BlackBerry");
+        return;
+    }
+    window->Window.pContext.event = NULL; //XXX Should probably be done elsewhere. Done here so there is no event at the moment
 
-  /* Create window */
-  if (screen_create_context(&window->Window.pContext.screenContext, 0)) {
-    fgError("Could not create screen context");
-	return;
-  }
-  screen_window_t sWindow;
-  if (screen_create_window(&sWindow, window->Window.pContext.screenContext)) {
-	screen_destroy_context(window->Window.pContext.screenContext);
-  	fgError("Could not create window");
-  	return;
-  }
-  fgDisplay.pDisplay.single_native_window = sWindow;
+    /* Create window */
+    if (screen_create_context(&window->Window.pContext.screenContext, 0)) {
+        fgError("Could not create screen context");
+        return;
+    }
+    screen_window_t sWindow;
+    if (screen_create_window(&sWindow, window->Window.pContext.screenContext)) {
+        screen_destroy_context(window->Window.pContext.screenContext);
+        fgError("Could not create window");
+        return;
+    }
+    fgDisplay.pDisplay.single_native_window = sWindow;
 
-  /* Set window properties */
-  int screenFormat = SCREEN_FORMAT_RGBA8888; //XXX Should this be determined by config?
+    /* Set window properties */
+    int screenFormat = SCREEN_FORMAT_RGBA8888; //XXX Should this be determined by config?
 #ifdef GL_ES_VERSION_2_0
-  int screenUsage = SCREEN_USAGE_OPENGL_ES2;
+    int screenUsage = SCREEN_USAGE_OPENGL_ES2;
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
-  int screenUsage = SCREEN_USAGE_OPENGL_ES1;
+    int screenUsage = SCREEN_USAGE_OPENGL_ES1;
 #endif
 #ifndef __X86__
-  screenUsage |= SCREEN_USAGE_DISPLAY; // Physical device copy directly into physical display
+    screenUsage |= SCREEN_USAGE_DISPLAY; // Physical device copy directly into physical display
 #endif
-  if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_FORMAT, &screenFormat)) {
-	screen_destroy_window(sWindow);
-	screen_destroy_context(window->Window.pContext.screenContext);
-	fgError("Could not set window format");
-	return;
-  }
-  if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_USAGE, &screenUsage)) {
-	screen_destroy_window(sWindow);
-	screen_destroy_context(window->Window.pContext.screenContext);
-	fgError("Could not set window usage");
-	return;
-  }
+    if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_FORMAT, &screenFormat)) {
+        screen_destroy_window(sWindow);
+        screen_destroy_context(window->Window.pContext.screenContext);
+        fgError("Could not set window format");
+        return;
+    }
+    if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_USAGE, &screenUsage)) {
+        screen_destroy_window(sWindow);
+        screen_destroy_context(window->Window.pContext.screenContext);
+        fgError("Could not set window usage");
+        return;
+    }
 
-  /* Could set size based on what is specified for window. Work on another time
-  int size[2];
-  size[0] = w;
-  size[1] = h;
-  if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, size)) {
-  	screen_destroy_window(sWindow);
-  	screen_destroy_context(window->Window.pContext.screenContext);
-  	fgError("Could not set window buffer size");
-  	return;
-  }*/
+    /* Could set size based on what is specified for window. Work on another time
+    int size[2];
+    size[0] = w;
+    size[1] = h;
+    if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, size)) {
+        screen_destroy_window(sWindow);
+        screen_destroy_context(window->Window.pContext.screenContext);
+        fgError("Could not set window buffer size");
+        return;
+    }*/
 
-  /* Create window buffers */
-  if (screen_create_window_buffers(sWindow, (fgState.DisplayMode & GLUT_DOUBLE) ? 2 : 1)) {
-	screen_destroy_window(sWindow);
-	screen_destroy_context(window->Window.pContext.screenContext);
-	fgError("Could not create window buffers");
-	return;
-  }
+    /* Create window buffers */
+    if (screen_create_window_buffers(sWindow, (fgState.DisplayMode & GLUT_DOUBLE) ? 2 : 1)) {
+        screen_destroy_window(sWindow);
+        screen_destroy_context(window->Window.pContext.screenContext);
+        fgError("Could not create window buffers");
+        return;
+    }
 
-  /* Request window events */
-  screen_request_events(window->Window.pContext.screenContext);
+    /* Request window events */
+    screen_request_events(window->Window.pContext.screenContext);
 
-  /* Save window and set state */
-  window->Window.Handle = fgDisplay.pDisplay.single_native_window;
-  window->State.WorkMask |= GLUT_INIT_WORK;
-  window->State.IsFullscreen = GL_TRUE; //XXX Always fullscreen for now
+    /* Save window and set state */
+    window->Window.Handle = fgDisplay.pDisplay.single_native_window;
+    window->State.WorkMask |= GLUT_INIT_WORK;
+    window->State.IsFullscreen = GL_TRUE; //XXX Always fullscreen for now
 
-  /* Create context */
-  fghChooseConfig(&window->Window.pContext.egl.Config);
-  window->Window.Context = fghCreateNewContextEGL(window);
+    /* Create context */
+    fghChooseConfig(&window->Window.pContext.egl.Config);
+    window->Window.Context = fghCreateNewContextEGL(window);
 
-  /* Create EGL window */
-  fghPlatformOpenWindowEGL(window);
+    /* Create EGL window */
+    fghPlatformOpenWindowEGL(window);
 
-  window->State.Visible = GL_TRUE;
+    window->State.Visible = GL_TRUE;
 }
 
 /*
@@ -128,7 +128,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
  */
 void fgPlatformReshapeWindow ( SFG_Window *window, int width, int height )
 {
-  fprintf(stderr, "fgPlatformReshapeWindow: STUB\n");
+    fprintf(stderr, "fgPlatformReshapeWindow: STUB\n");
 }
 
 /*
@@ -136,13 +136,13 @@ void fgPlatformReshapeWindow ( SFG_Window *window, int width, int height )
  */
 void fgPlatformCloseWindow( SFG_Window* window )
 {
-  fghPlatformCloseWindowEGL(window);
+    fghPlatformCloseWindowEGL(window);
 
-  screen_stop_events(window->Window.pContext.screenContext);
+    screen_stop_events(window->Window.pContext.screenContext);
 
-  screen_destroy_window((screen_window_t)window->Window.Handle);
+    screen_destroy_window((screen_window_t)window->Window.Handle);
 
-  screen_destroy_context(window->Window.pContext.screenContext);
+    screen_destroy_context(window->Window.pContext.screenContext);
 }
 
 /*
@@ -150,7 +150,7 @@ void fgPlatformCloseWindow( SFG_Window* window )
  */
 void fgPlatformShowWindow( void )
 {
-  fprintf(stderr, "fgPlatformShowWindow: STUB\n");
+    fprintf(stderr, "fgPlatformShowWindow: STUB\n");
 }
 
 /*
@@ -158,7 +158,7 @@ void fgPlatformShowWindow( void )
  */
 void fgPlatformHideWindow( SFG_Window *window )
 {
-  fprintf(stderr, "fgPlatformHideWindow: STUB\n");
+    fprintf(stderr, "fgPlatformHideWindow: STUB\n");
 }
 
 /*
@@ -166,7 +166,8 @@ void fgPlatformHideWindow( SFG_Window *window )
  */
 void fgPlatformIconifyWindow( SFG_Window *window )
 {
-  fprintf(stderr, "fgPlatformGlutIconifyWindow: STUB\n");
+    //XXX This is possible via Cascades, but can't seem to find a C-level API
+    fprintf(stderr, "fgPlatformGlutIconifyWindow: STUB\n");
 }
 
 /*
@@ -174,7 +175,7 @@ void fgPlatformIconifyWindow( SFG_Window *window )
  */
 void fgPlatformGlutSetWindowTitle( const char* title )
 {
-  fprintf(stderr, "fgPlatformGlutSetWindowTitle: STUB\n");
+    fprintf(stderr, "fgPlatformGlutSetWindowTitle: STUB\n");
 }
 
 /*
@@ -182,14 +183,15 @@ void fgPlatformGlutSetWindowTitle( const char* title )
  */
 void fgPlatformGlutSetIconTitle( const char* title )
 {
-  fprintf(stderr, "fgPlatformGlutSetIconTitle: STUB\n");}
+    fprintf(stderr, "fgPlatformGlutSetIconTitle: STUB\n");
+}
 
 /*
  * Change the specified window's position
  */
 void fgPlatformPositionWindow( SFG_Window *window, int x, int y )
 {
-  fprintf(stderr, "fgPlatformPositionWindow: STUB\n");
+    fprintf(stderr, "fgPlatformPositionWindow: STUB\n");
 }
 
 /*
@@ -197,7 +199,7 @@ void fgPlatformPositionWindow( SFG_Window *window, int x, int y )
  */
 void fgPlatformPushWindow( SFG_Window *window )
 {
-  fprintf(stderr, "fgPlatformPushWindow: STUB\n");
+    fprintf(stderr, "fgPlatformPushWindow: STUB\n");
 }
 
 /*
@@ -205,7 +207,7 @@ void fgPlatformPushWindow( SFG_Window *window )
  */
 void fgPlatformPopWindow( SFG_Window *window )
 {
-  fprintf(stderr, "fgPlatformPopWindow: STUB\n");
+    fprintf(stderr, "fgPlatformPopWindow: STUB\n");
 }
 
 /*
@@ -213,5 +215,5 @@ void fgPlatformPopWindow( SFG_Window *window )
  */
 void fgPlatformFullScreenToggle( SFG_Window *win )
 {
-  fprintf(stderr, "fgPlatformFullScreenToggle: STUB\n");
+    fprintf(stderr, "fgPlatformFullScreenToggle: STUB\n");
 }
