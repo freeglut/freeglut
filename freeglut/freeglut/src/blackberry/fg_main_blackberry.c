@@ -506,12 +506,18 @@ void fgPlatformProcessSingleEvent ( void )
                     {
                     case NAVIGATOR_WINDOW_FULLSCREEN:
                         LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_FULLSCREEN");
-                        INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_RESUME));
+                        window->State.Visible = GL_TRUE;
+                        INVOKE_WCB(*window, WindowStatus, (GLUT_FULLY_RETAINED));
                         break;
                     case NAVIGATOR_WINDOW_THUMBNAIL:
+                        LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL");
+                        window->State.Visible = GL_TRUE;
+                        INVOKE_WCB(*window, WindowStatus, (GLUT_PARTIALLY_RETAINED));
+                        break;
                     case NAVIGATOR_WINDOW_INVISIBLE:
-                        LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL/NAVIGATOR_WINDOW_INVISIBLE");
-                        INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_PAUSE));
+                        LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_INVISIBLE");
+                        window->State.Visible = GL_FALSE;
+                        INVOKE_WCB(*window, WindowStatus, (GLUT_HIDDEN)); //XXX Should this be GLUT_FULLY_COVERED?
                         break;
                     default:
                         LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state));
@@ -537,17 +543,40 @@ void fgPlatformProcessSingleEvent ( void )
                 }
 
                 case NAVIGATOR_SWIPE_DOWN:
+                    /* XXX Open app menu */
+                    break;
+
                 case NAVIGATOR_BACK:
+                    /* XXX Should this be a Special/SpecialUp event? */
+                    break;
+
                 case NAVIGATOR_WINDOW_ACTIVE:
+                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_ACTIVE");
+                    INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_RESUME));
+                    break;
+
                 case NAVIGATOR_WINDOW_INACTIVE:
+                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_INACTIVE");
+                    INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_PAUSE));
+                    break;
+
                 case NAVIGATOR_KEYBOARD_STATE:
                 case NAVIGATOR_KEYBOARD_POSITION:
+                    /* TODO Something needs to be done with this. Not sure what */
+                    break;
+
                 case NAVIGATOR_DEVICE_LOCK_STATE:
+                    break;
+
                 case NAVIGATOR_WINDOW_COVER:
                 case NAVIGATOR_WINDOW_COVER_ENTER:
                 case NAVIGATOR_WINDOW_COVER_EXIT:
+                    /* BlackBerry specific. Let app status and window status take care of everything */
+                    break;
+
                 case NAVIGATOR_APP_STATE:
-                    //XXX Should probably do something with these
+                    /* Can do the same as NAVIGATOR_WINDOW_ACTIVE/NAVIGATOR_WINDOW_INACTIVE but
+                       seems less likely to work when the app comes to the foreground. Might be a bug */
                     break;
 
                 default:
@@ -586,8 +615,7 @@ void fgPlatformMainLoopPostWork ( void )
 /* deal with work list items */
 void fgPlatformInitWork(SFG_Window* window)
 {
-    /* notify windowStatus/visibility */
-    INVOKE_WCB( *window, WindowStatus, ( GLUT_FULLY_RETAINED ) );
+    LOGI("fgPlatformInitWork");
 
     /* Position callback, always at 0,0 */
     fghOnPositionNotify(window, 0, 0, GL_TRUE);
