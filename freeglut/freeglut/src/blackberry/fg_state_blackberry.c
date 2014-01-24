@@ -35,6 +35,9 @@
 //From fg_state_android.c
 int fgPlatformGlutDeviceGet ( GLenum eWhat )
 {
+    int deviceCount, i, value;
+    screen_device_t* devices;
+
     switch( eWhat )
     {
     case GLUT_HAS_KEYBOARD:
@@ -42,13 +45,36 @@ int fgPlatformGlutDeviceGet ( GLenum eWhat )
         return 1;
 
     case GLUT_HAS_MOUSE:
-        /* BlackBerry has a touchscreen; until we get proper touchscreen
-           support, consider it as a mouse. */
+        /* BlackBerry has a touchscreen. Consider it as a mouse since we have no guarantee
+           that a mouse will be used (in which case it's a simulator). */
         return 1 ;
 
     case GLUT_NUM_MOUSE_BUTTONS:
-        /* BlackBerry has a touchscreen; until we get proper touchscreen
-           support, consider it as a 1-button mouse. */
+        /* BlackBerry has a touchscreen, which we can consider a 1-button mouse at min.
+           Otherwise check for an actual mouse, else get max touch points */
+        if(!screen_get_context_property_iv(fgDisplay.pDisplay.screenContext, SCREEN_PROPERTY_DEVICE_COUNT, &deviceCount)) {
+            devices = (screen_device_t*)calloc(deviceCount, sizeof(screen_device_t));
+            if(!screen_get_context_property_pv(fgDisplay.pDisplay.screenContext, SCREEN_PROPERTY_DEVICES, (void**)devices)) {
+                /* Check for a pointer */
+                for(i = 0; i < deviceCount; i++) {
+                    if(!screen_get_device_property_iv(devices[i], SCREEN_PROPERTY_TYPE, &value) &&
+                            value == SCREEN_EVENT_POINTER &&
+                            !screen_get_device_property_iv(devices[i], SCREEN_PROPERTY_BUTTON_COUNT, &value)) {
+                        return value;
+                    }
+                }
+                /* Check for mtouch */
+                for(i = 0; i < deviceCount; i++) {
+                    if(!screen_get_device_property_iv(devices[i], SCREEN_PROPERTY_TYPE, &value) &&
+                            value == SCREEN_EVENT_MTOUCH_TOUCH &&
+                            !screen_get_device_property_iv(devices[i], SCREEN_PROPERTY_MAXIMUM_TOUCH_ID, &value)) {
+                        return value;
+                    }
+                }
+            }
+            free(devices);
+        }
+        /* Backup, pretend it's a 1-button mouse */
         return 1;
 
     default:
