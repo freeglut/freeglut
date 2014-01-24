@@ -146,7 +146,6 @@ ELSEIF(ANDROID OR BLACKBERRY)
             src/blackberry/fg_internal_blackberry.h
             src/x11/fg_input_devices_x11.c
             src/blackberry/fg_main_blackberry.c
-            src/blackberry/fg_main_blackberry.h
             src/blackberry/fg_state_blackberry.c
             src/blackberry/fg_window_blackberry.c
         )

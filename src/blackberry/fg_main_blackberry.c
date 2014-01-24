@@ -157,7 +157,7 @@ fg_time_t fgPlatformSystemTime ( void )
  * Does the magic required to relinquish the CPU until something interesting
  * happens.
  */
-void fgPlatformSleepForEvents( uint64_t msec )
+void fgPlatformSleepForEvents( fg_time_t msec )
 {
   //XXX: Is this right? Is there a more direct way to access the context?
   if(bps_get_event(&fgStructure.CurrentWindow->Window.pContext.event, (int)msec) != BPS_SUCCESS) {
