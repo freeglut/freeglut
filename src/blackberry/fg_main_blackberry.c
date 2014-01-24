@@ -458,6 +458,8 @@ void fgPlatformProcessSingleEvent ( void )
                 case NAVIGATOR_BACK:
                 case NAVIGATOR_WINDOW_ACTIVE:
                 case NAVIGATOR_WINDOW_INACTIVE:
+                case NAVIGATOR_KEYBOARD_STATE:
+                case NAVIGATOR_KEYBOARD_POSITION:
                 case NAVIGATOR_DEVICE_LOCK_STATE:
                 case NAVIGATOR_WINDOW_COVER:
                 case NAVIGATOR_WINDOW_COVER_ENTER:
