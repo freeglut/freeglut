@@ -48,16 +48,10 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
         fgWarning("You can't have more than one window on BlackBerry");
         return;
     }
-    window->Window.pContext.event = NULL; //XXX Should probably be done elsewhere. Done here so there is no event at the moment
 
     /* Create window */
-    if (screen_create_context(&window->Window.pContext.screenContext, 0)) {
-        fgError("Could not create screen context");
-        return;
-    }
     screen_window_t sWindow;
-    if (screen_create_window(&sWindow, window->Window.pContext.screenContext)) {
-        screen_destroy_context(window->Window.pContext.screenContext);
+    if (screen_create_window(&sWindow, fgDisplay.pDisplay.screenContext)) {
         fgError("Could not create window");
         return;
     }
@@ -75,13 +69,11 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 #endif
     if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_FORMAT, &screenFormat)) {
         screen_destroy_window(sWindow);
-        screen_destroy_context(window->Window.pContext.screenContext);
         fgError("Could not set window format");
         return;
     }
     if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_USAGE, &screenUsage)) {
         screen_destroy_window(sWindow);
-        screen_destroy_context(window->Window.pContext.screenContext);
         fgError("Could not set window usage");
         return;
     }
@@ -92,7 +84,6 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     size[1] = h;
     if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, size)) {
         screen_destroy_window(sWindow);
-        screen_destroy_context(window->Window.pContext.screenContext);
         fgError("Could not set window buffer size");
         return;
     }*/
@@ -100,13 +91,9 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     /* Create window buffers */
     if (screen_create_window_buffers(sWindow, (fgState.DisplayMode & GLUT_DOUBLE) ? 2 : 1)) {
         screen_destroy_window(sWindow);
-        screen_destroy_context(window->Window.pContext.screenContext);
         fgError("Could not create window buffers");
         return;
     }
-
-    /* Request window events */
-    screen_request_events(window->Window.pContext.screenContext); //XXX When multiple screens are supported, this needs to be moved to wherever the screen context is actually created
 
     /* Save window and set state */
     window->Window.Handle = fgDisplay.pDisplay.single_native_window;
@@ -138,11 +125,7 @@ void fgPlatformCloseWindow( SFG_Window* window )
 {
     fghPlatformCloseWindowEGL(window);
 
-    screen_stop_events(window->Window.pContext.screenContext);
-
     screen_destroy_window((screen_window_t)window->Window.Handle);
-
-    screen_destroy_context(window->Window.pContext.screenContext);
 }
 
 /*

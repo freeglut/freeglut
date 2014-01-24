@@ -51,6 +51,7 @@ extern void fgPlatformPopWindow( SFG_Window *window );
 extern void fgPlatformHideWindow( SFG_Window *window );
 extern void fgPlatformIconifyWindow( SFG_Window *window );
 extern void fgPlatformShowWindow( SFG_Window *window );
+extern void fgPlatformMainLoopPostWork ( void );
 
 static struct touchscreen touchscreen;
 
@@ -160,7 +161,7 @@ fg_time_t fgPlatformSystemTime ( void )
 void fgPlatformSleepForEvents( fg_time_t msec )
 {
     //XXX: Is this right? Is there a more direct way to access the context?
-    if(fgStructure.CurrentWindow && bps_get_event(&fgStructure.CurrentWindow->Window.pContext.event, (int)msec) != BPS_SUCCESS) {
+    if(fgStructure.CurrentWindow && bps_get_event(&fgDisplay.pDisplay.event, (int)msec) != BPS_SUCCESS) {
         LOGW("BPS couldn't get event");
     }
 }
@@ -256,11 +257,9 @@ void handle_left_mouse(int x, int y, int height, int eventType, SFG_Window* wind
 void fgPlatformProcessSingleEvent ( void )
 {
     int domain;
-    bps_event_t** eventPtr = &fgStructure.CurrentWindow->Window.pContext.event; //XXX Is there a more direct way to access the context?
-    bps_event_t* event;
     do
     {
-        if(*eventPtr != NULL) {
+        if(fgDisplay.pDisplay.event != NULL) {
             SFG_Window* window = fgStructure.CurrentWindow;
             if (window != NULL && window->Window.Handle != NULL) {
                 int size[2];
@@ -268,11 +267,10 @@ void fgPlatformProcessSingleEvent ( void )
                 fghOnReshapeNotify(window,size[0],size[1],GL_FALSE);
             }
 
-            event = *eventPtr;
-            domain = bps_event_get_domain(event);
+            domain = bps_event_get_domain(fgDisplay.pDisplay.event);
             if (domain == screen_get_domain()) {
                 int eventType;
-                screen_event_t screenEvent = screen_event_get_event(event);
+                screen_event_t screenEvent = screen_event_get_event(fgDisplay.pDisplay.event);
                 screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_TYPE, &eventType);
                 switch (eventType) {
 
@@ -416,13 +414,13 @@ void fgPlatformProcessSingleEvent ( void )
                     break;
                 }
             } else if (domain == navigator_get_domain()) {
-                int eventType = bps_event_get_code(event);
+                int eventType = bps_event_get_code(fgDisplay.pDisplay.event);
                 switch (eventType) {
 
                 case NAVIGATOR_WINDOW_STATE:
                 {
                     LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE");
-                    navigator_window_state_t state = navigator_event_get_window_state(event);
+                    navigator_window_state_t state = navigator_event_get_window_state(fgDisplay.pDisplay.event);
                     switch (state)
                     {
                     case NAVIGATOR_WINDOW_FULLSCREEN:
@@ -444,6 +442,9 @@ void fgPlatformProcessSingleEvent ( void )
                 case NAVIGATOR_EXIT:
                 {
                     LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_EXIT");
+
+                    fgPlatformMainLoopPostWork();
+
                     /* User closed the application for good, let's kill the window */
                     SFG_Window* window = fgStructure.CurrentWindow;
                     if (window != NULL) {
@@ -474,17 +475,32 @@ void fgPlatformProcessSingleEvent ( void )
                 }
             }
         }
-    } while(bps_get_event(eventPtr, 1) == BPS_SUCCESS && *eventPtr != NULL);
+    } while(bps_get_event(&fgDisplay.pDisplay.event, 1) == BPS_SUCCESS && fgDisplay.pDisplay.event != NULL);
 
     /* Reset event to reduce chances of triggering something */
-    *eventPtr = NULL;
+    fgDisplay.pDisplay.event = NULL;
 }
 
 void fgPlatformMainLoopPreliminaryWork ( void )
 {
     LOGI("fgPlatformMainLoopPreliminaryWork");
+
+    /* Request navigator events */
+    navigator_request_events(0);
+	//XXX rotation lock? navigator_rotation_lock(true);
+
+    /* Request window events */
+    screen_request_events(fgDisplay.pDisplay.screenContext);
 }
 
+void fgPlatformMainLoopPostWork ( void )
+{
+	LOGI("fgPlatformMainLoopPostWork");
+
+	screen_stop_events(fgDisplay.pDisplay.screenContext);
+
+	navigator_stop_events(0);
+}
 
 /* deal with work list items */
 void fgPlatformInitWork(SFG_Window* window)
@@ -542,4 +558,3 @@ void fgPlatformVisibilityWork(SFG_Window* window)
         break;
     }
 }
-
