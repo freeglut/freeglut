@@ -102,8 +102,18 @@ int fgPlatformGlutGet ( GLenum eWhat )
         if ( fgStructure.CurrentWindow == NULL )
             return 0;
         int size[2];
+        int orientation;
         if ( screen_get_window_property_iv(fgStructure.CurrentWindow->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size) != 0 )
             return 0;
+        if ( screen_get_window_property_iv(fgStructure.CurrentWindow->Window.Handle, SCREEN_PROPERTY_ROTATION, &orientation) != 0 )
+			return 0;
+        int orientationDif = abs(orientation - fgStructure.CurrentWindow->State.pWState.originalRotation);
+        if (orientationDif == 90 || orientationDif == 270) {
+        	/* Swap dim. if screen is rotated */
+        	int tmp = size[0];
+        	size[0] = size[1];
+        	size[1] = tmp;
+        }
         switch ( eWhat )
         {
         case GLUT_WINDOW_WIDTH:
