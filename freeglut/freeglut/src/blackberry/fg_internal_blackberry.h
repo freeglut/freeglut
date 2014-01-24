@@ -69,6 +69,9 @@ struct touchscreen {
     bool in_mmotion;
 };
 
+/* -- INPUT DEFINITIONS ---------------------------------------------------- */
+#define WHEEL_DELTA 120 //This is taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms646254(v=vs.85).aspx
+
 
 /* -- JOYSTICK-SPECIFIC STRUCTURES AND TYPES ------------------------------- */
 /*

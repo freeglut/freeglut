@@ -393,8 +393,46 @@ void fgPlatformProcessSingleEvent ( void )
                     }
 
                     if (wheel) {
+                        /* Very slightly modified from fg_main_mswin.
+                         * Because we don't want MouseWheel to be called every. single. time.
+                         * That the action occurs, we mimic the Windows version with "wheel deltas"
+                         * XXX Do we even want this?
+                         * XXX If we want this, it's possible to get horizontal scroll as well.
+                         * XXX -Vertical scroll=wheel 0, horizontal=wheel 1? */
                         fgState.MouseWheelTicks -= wheel;
-                        //TODO: Implement wheel support (based on fg_main_mswin... though it seems excessive)
+                        if (abs(fgState.MouseWheelTicks) >= WHEEL_DELTA)
+                        {
+                            int wheel_number = 0;
+                            int direction = (fgState.MouseWheelTicks > 0) ? -1 : 1;
+
+                            if (!FETCH_WCB(*window, MouseWheel) && !FETCH_WCB(*window, Mouse))
+                                break;
+
+                            //XXX fgSetWindow(window);
+
+                            while(abs(fgState.MouseWheelTicks) >= WHEEL_DELTA)
+                            {
+                                if (FETCH_WCB(*window, MouseWheel))
+                                    INVOKE_WCB(*window, MouseWheel, (wheel_number, direction, window->State.MouseX, window->State.MouseY));
+                                else /* No mouse wheel, call the mouse button callback twice */
+                                {
+                                    /*
+                                     * Map wheel zero to button 3 and 4; +1 to 3, -1 to 4
+                                     *  "    "   one                     +1 to 5, -1 to 6, ...
+                                     *
+                                     * XXX The below assumes that you have no more than 3 mouse
+                                     * XXX buttons.  Sorry.
+                                     */
+                                    int button = wheel_number * 2 + 3;
+                                    if (direction < 0)
+                                        ++button;
+                                    INVOKE_WCB(*window, Mouse, (button, GLUT_DOWN, window->State.MouseX, window->State.MouseY));
+                                    INVOKE_WCB(*window, Mouse, (button, GLUT_UP, window->State.MouseX, window->State.MouseY));
+                                }
+
+                                fgState.MouseWheelTicks -= WHEEL_DELTA * direction;
+                            }
+                        }
                     }
 
                     fgState.Modifiers = INVALID_MODIFIERS;
