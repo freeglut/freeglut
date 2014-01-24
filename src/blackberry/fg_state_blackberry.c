@@ -76,7 +76,7 @@ int fgPlatformGlutGet ( GLenum eWhat )
       if ( fgStructure.CurrentWindow == NULL )
 		return 0;
       int size[2];
-      if ( screen_get_window_property_iv(fgStructure.CurrentWindow->Window.Handle, SCREEN_PROPERTY_SIZE, size) != 0 )
+      if ( screen_get_window_property_iv(fgStructure.CurrentWindow->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size) != 0 )
     	return 0;
 	  switch ( eWhat )
 		{
