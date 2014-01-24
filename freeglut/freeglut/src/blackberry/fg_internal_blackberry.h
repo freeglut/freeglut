@@ -113,7 +113,8 @@ struct tagSFG_PlatformJoystick
 typedef struct tagSFG_PlatformWindowState SFG_PlatformWindowState;
 struct tagSFG_PlatformWindowState
 {
-    char unused;
+	int newWidth;
+	int newHeight;
 };
 
 /* Menu font and color definitions */

@@ -119,6 +119,9 @@ IF(WIN32)
     ENDIF()
 
 ELSEIF(ANDROID OR BLACKBERRY)
+    # BlackBerry and Android share some similar design concepts and ideas, as with many mobile devices.
+    # As such, some classes can be shared between the two. XXX: Possibly rename shareable classes to
+    # a more generic name. *_stub? *_mobile?
     LIST(APPEND FREEGLUT_SRCS
         src/android/fg_cursor_android.c
         src/android/fg_ext_android.c
