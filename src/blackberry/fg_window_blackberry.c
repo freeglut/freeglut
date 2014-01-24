@@ -58,11 +58,12 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     fgDisplay.pDisplay.single_native_window = sWindow;
 
     /* Set window properties */
+    int orientation = atoi(getenv("ORIENTATION"));
     int screenFormat = SCREEN_FORMAT_RGBA8888; //XXX Should this be determined by config?
 #ifdef GL_ES_VERSION_2_0
-    int screenUsage = SCREEN_USAGE_OPENGL_ES2;
+    int screenUsage = SCREEN_USAGE_OPENGL_ES2 | SCREEN_USAGE_ROTATION;
 #elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
-    int screenUsage = SCREEN_USAGE_OPENGL_ES1;
+    int screenUsage = SCREEN_USAGE_OPENGL_ES1 | SCREEN_USAGE_ROTATION;
 #endif
 #ifndef __X86__
     screenUsage |= SCREEN_USAGE_DISPLAY; // Physical device copy directly into physical display
@@ -78,8 +79,8 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
         return;
     }
 
-    /* Uncomment when multiple windows are supported
     int value[2];
+    /* Uncomment when multiple windows are supported
     if(positionUse) {
         value[0] = x;
         value[1] = y;
@@ -88,17 +89,83 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
             fgError("Could not set window position");
             return;
         }
-    }
+    }*/
 
     if(sizeUse) {
+        /* Uncomment when multiple windows are supported
         value[0] = w;
         value[1] = h;
-        if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, value)) {
+        */
+        //TEMP until ^^ is uncommented
+        if (screen_get_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, value)) {
             screen_destroy_window(sWindow);
-            fgError("Could not set window buffer size");
+            fgError("Could not get window mode");
             return;
         }
-    }*/
+    } else {
+        /* From PlatformBlackBerry in GamePlay3d */
+        screen_display_t display;
+        if (screen_get_window_property_pv(sWindow, SCREEN_PROPERTY_DISPLAY, (void**)&display)) {
+            screen_destroy_window(sWindow);
+            fgError("Could not get window display");
+            return;
+        }
+
+        screen_display_mode_t displayMode;
+        if (screen_get_display_property_pv(display, SCREEN_PROPERTY_MODE, (void**)&displayMode)) {
+            screen_destroy_window(sWindow);
+            fgError("Could not get display mode");
+            return;
+        }
+
+        if (screen_get_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, value)) {
+            screen_destroy_window(sWindow);
+            fgError("Could not get window mode");
+            return;
+        }
+
+        /* Adjust buffer sizes based on rotation */
+        if ((orientation == 0) || (orientation == 180))
+        {
+            if (((displayMode.width > displayMode.height) && (value[0] < value[1])) ||
+                ((displayMode.width < displayMode.height) && (value[0] > value[1])))
+            {
+                int tmp = value[1];
+                value[1] = value[0];
+                value[0] = tmp;
+            }
+        }
+        else if ((orientation == 90) || (orientation == 270))
+        {
+            if (((displayMode.width > displayMode.height) && (value[0] > value[1])) ||
+                ((displayMode.width < displayMode.height) && (value[0] < value[1])))
+            {
+                int tmp = value[1];
+                value[1] = value[0];
+                value[0] = tmp;
+            }
+        }
+        else
+        {
+            screen_destroy_window(sWindow);
+            fgError("Unexpected rotation angle");
+            return;
+        }
+    }
+
+    /* Set rotation if usage allows it */
+    if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_ROTATION, &orientation)) {
+        screen_destroy_window(sWindow);
+        fgError("Could not set window rotation");
+        return;
+    }
+
+    /* Set buffer sizes */
+    if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, value)) {
+        screen_destroy_window(sWindow);
+        fgError("Could not set window buffer size");
+        return;
+    }
 
     /* Create window buffers */
     if (screen_create_window_buffers(sWindow, (fgState.DisplayMode & GLUT_DOUBLE) ? 2 : 1)) {
@@ -108,7 +175,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     }
 
     /* Save window and set state */
-    window->Window.Handle = fgDisplay.pDisplay.single_native_window;
+    window->Window.Handle = sWindow;
     window->State.WorkMask |= GLUT_INIT_WORK;
     window->State.IsFullscreen = GL_TRUE; //XXX Always fullscreen for now
 
@@ -120,6 +187,11 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     fghPlatformOpenWindowEGL(window);
 
     window->State.Visible = GL_TRUE;
+}
+
+void fgPlatformRotateWindow(SFG_Window* window, int rotation)
+{
+    screen_set_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_ROTATION, &rotation);
 }
 
 /*
@@ -162,6 +234,7 @@ void fgPlatformHideWindow( SFG_Window *window )
 void fgPlatformIconifyWindow( SFG_Window *window )
 {
     //XXX This is possible via Cascades, but can't seem to find a C-level API
+    //XXX bb::Application::instance()->minimize();
     fprintf(stderr, "fgPlatformGlutIconifyWindow: STUB\n");
 }
 

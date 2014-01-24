@@ -52,6 +52,7 @@ extern void fgPlatformHideWindow( SFG_Window *window );
 extern void fgPlatformIconifyWindow( SFG_Window *window );
 extern void fgPlatformShowWindow( SFG_Window *window );
 extern void fgPlatformMainLoopPostWork ( void );
+extern void fgPlatformRotateWindow( SFG_Window *window, int rotation );
 
 static struct touchscreen touchscreen;
 
@@ -272,320 +273,364 @@ void fgPlatformProcessSingleEvent ( void )
         return;
     }
 
+    if(fgDisplay.pDisplay.event == NULL)
+        /* Nothing to do */
+        return;
+
     int domain;
     do
     {
-        if(fgDisplay.pDisplay.event != NULL) {
-            SFG_Window* window = fgStructure.CurrentWindow;
-            if (window->Window.Handle != NULL) {
-                int size[2];
-                screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
-                fghOnReshapeNotify(window,size[0],size[1],GL_FALSE);
-            }
+        SFG_Window* window = fgStructure.CurrentWindow;
+        domain = bps_event_get_domain(fgDisplay.pDisplay.event);
+        if (domain == screen_get_domain()) {
+            int eventType;
+            int mod;
+            screen_event_t screenEvent = screen_event_get_event(fgDisplay.pDisplay.event);
+            screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_TYPE, &eventType);
+            switch (eventType) {
 
-            domain = bps_event_get_domain(fgDisplay.pDisplay.event);
-            if (domain == screen_get_domain()) {
-                int eventType;
-                int mod;
-                screen_event_t screenEvent = screen_event_get_event(fgDisplay.pDisplay.event);
-                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_TYPE, &eventType);
-                switch (eventType) {
+            //Mostly from fg_main_android
+            case SCREEN_EVENT_MTOUCH_TOUCH:
+            case SCREEN_EVENT_MTOUCH_RELEASE:
+            case SCREEN_EVENT_MTOUCH_MOVE:
+            {
+                mtouch_event_t touchEvent;
+                screen_get_mtouch_event(screenEvent, &touchEvent, 0);
+                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
 
-                //Mostly from fg_main_android
-                case SCREEN_EVENT_MTOUCH_TOUCH:
-                case SCREEN_EVENT_MTOUCH_RELEASE:
-                case SCREEN_EVENT_MTOUCH_MOVE:
-                {
-                    mtouch_event_t touchEvent;
-                    screen_get_mtouch_event(screenEvent, &touchEvent, 0);
-                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
+                LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_MTOUCH_*: Type: 0x%X, X: %d, Y: %d, Contact Id: %d, Mod: 0x%X", SLOG2_FA_SIGNED(eventType), SLOG2_FA_SIGNED(touchEvent.x), SLOG2_FA_SIGNED(touchEvent.y), SLOG2_FA_SIGNED(touchEvent.contact_id), SLOG2_FA_SIGNED(mod));
 
-                    LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_MTOUCH_*: Type: 0x%X, X: %d, Y: %d, Contact Id: %d, Mod: 0x%X", SLOG2_FA_SIGNED(eventType), SLOG2_FA_SIGNED(touchEvent.x), SLOG2_FA_SIGNED(touchEvent.y), SLOG2_FA_SIGNED(touchEvent.contact_id), SLOG2_FA_SIGNED(mod));
+                /* Remember the current modifiers state so user can query it from their callback */
+                fgState.Modifiers = fgPlatformGetModifiers(mod);
 
-                    /* Remember the current modifiers state so user can query it from their callback */
-                    fgState.Modifiers = fgPlatformGetModifiers(mod);
-
-                    if(touchEvent.contact_id == 0) {
-                        int size[2];
-                        screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
-                        handle_left_mouse(touchEvent.x, touchEvent.y, size[1], eventType, window);
-                    }
-
-                    //Now handle mutlitouch (adapted from fg_main_windows)
-                    if (eventType == SCREEN_EVENT_MTOUCH_TOUCH) {
-                        INVOKE_WCB( *window, MultiEntry,  ( touchEvent.contact_id, GLUT_ENTERED ) );
-                        INVOKE_WCB( *window, MultiButton, ( touchEvent.contact_id, touchEvent.x, touchEvent.y, 0, GLUT_DOWN ) );
-                    } else if (eventType == SCREEN_EVENT_MTOUCH_MOVE) {
-                        INVOKE_WCB( *window, MultiMotion, ( touchEvent.contact_id, touchEvent.x, touchEvent.y ) );
-                        //XXX No motion is performed without contact, thus MultiPassive is never used
-                    } else if (eventType == SCREEN_EVENT_MTOUCH_RELEASE) {
-                        INVOKE_WCB( *window, MultiButton, ( touchEvent.contact_id, touchEvent.x, touchEvent.y, 0, GLUT_UP ) );
-                        INVOKE_WCB( *window, MultiEntry,  ( touchEvent.contact_id, GLUT_LEFT ) );
-                    }
-
-                    fgState.Modifiers = INVALID_MODIFIERS;
-                    break;
-                }
-
-                case SCREEN_EVENT_POINTER:
-                {
-                    //Based off/part taken from GamePlay3d PlatformBlackBerry
-                    static int mouse_pressed = 0;
-                    int buttons;
-                    int position[2];
-                    int wheel;
-                    // A move event will be fired unless a button state changed.
-                    bool move = true;
-                    bool left_move = false;
-                    // This is a mouse move event, it is applicable to a device with a usb mouse or simulator.
-                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
-                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
-                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_MOUSE_WHEEL, &wheel);
-                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
+                if(touchEvent.contact_id == 0) {
                     int size[2];
                     screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
+                    handle_left_mouse(touchEvent.x, touchEvent.y, size[1], eventType, window);
+                }
 
-                    LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_POINTER: Buttons: 0x%X, X: %d, Y: %d, Wheel: %d, Mod: 0x%X", SLOG2_FA_SIGNED(buttons), SLOG2_FA_SIGNED(position[0]), SLOG2_FA_SIGNED(position[1]), SLOG2_FA_SIGNED(wheel), SLOG2_FA_SIGNED(mod));
+                //Now handle mutlitouch (adapted from fg_main_windows)
+                if (eventType == SCREEN_EVENT_MTOUCH_TOUCH) {
+                    INVOKE_WCB( *window, MultiEntry,  ( touchEvent.contact_id, GLUT_ENTERED ) );
+                    INVOKE_WCB( *window, MultiButton, ( touchEvent.contact_id, touchEvent.x, touchEvent.y, 0, GLUT_DOWN ) );
+                } else if (eventType == SCREEN_EVENT_MTOUCH_MOVE) {
+                    INVOKE_WCB( *window, MultiMotion, ( touchEvent.contact_id, touchEvent.x, touchEvent.y ) );
+                    //XXX No motion is performed without contact, thus MultiPassive is never used
+                } else if (eventType == SCREEN_EVENT_MTOUCH_RELEASE) {
+                    INVOKE_WCB( *window, MultiButton, ( touchEvent.contact_id, touchEvent.x, touchEvent.y, 0, GLUT_UP ) );
+                    INVOKE_WCB( *window, MultiEntry,  ( touchEvent.contact_id, GLUT_LEFT ) );
+                }
 
-                    //XXX Should multitouch be handled?
+                fgState.Modifiers = INVALID_MODIFIERS;
+                break;
+            }
+
+            case SCREEN_EVENT_POINTER:
+            {
+                //Based off/part taken from GamePlay3d PlatformBlackBerry
+                static int mouse_pressed = 0;
+                int buttons;
+                int position[2];
+                int wheel;
+                // A move event will be fired unless a button state changed.
+                bool move = true;
+                bool left_move = false;
+                // This is a mouse move event, it is applicable to a device with a usb mouse or simulator.
+                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
+                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
+                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_MOUSE_WHEEL, &wheel);
+                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
+                int size[2];
+                screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
+
+                LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_POINTER: Buttons: 0x%X, X: %d, Y: %d, Wheel: %d, Mod: 0x%X", SLOG2_FA_SIGNED(buttons), SLOG2_FA_SIGNED(position[0]), SLOG2_FA_SIGNED(position[1]), SLOG2_FA_SIGNED(wheel), SLOG2_FA_SIGNED(mod));
+
+                //XXX Should multitouch be handled?
+
+                /* Remember the current modifiers state so user can query it from their callback */
+                fgState.Modifiers = fgPlatformGetModifiers(mod);
+
+                // Handle left mouse. Interpret as touch if the left mouse event is not consumed.
+                if (buttons & SCREEN_LEFT_MOUSE_BUTTON) {
+                    if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON) {
+                        left_move = true;
+                    } else {
+                        move = false;
+                        mouse_pressed |= SCREEN_LEFT_MOUSE_BUTTON;
+                        handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_TOUCH, window);
+                    }
+                } else if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON) {
+                    move = false;
+                    mouse_pressed &= ~SCREEN_LEFT_MOUSE_BUTTON;
+                    handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_RELEASE, window);
+                }
+
+                // Handle right mouse.
+                if (buttons & SCREEN_RIGHT_MOUSE_BUTTON) {
+                    if ((mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) == 0) {
+                        move = false;
+                        mouse_pressed |= SCREEN_RIGHT_MOUSE_BUTTON;
+                        INVOKE_WCB(*window, Mouse, (GLUT_RIGHT_BUTTON, GLUT_DOWN, position[0], position[1]));
+                    }
+                } else if (mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) {
+                    move = false;
+                    mouse_pressed &= ~SCREEN_RIGHT_MOUSE_BUTTON;
+                    INVOKE_WCB(*window, Mouse, (GLUT_RIGHT_BUTTON, GLUT_UP, position[0], position[1]));
+                }
+
+                // Handle middle mouse.
+                if (buttons & SCREEN_MIDDLE_MOUSE_BUTTON) {
+                    if ((mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) == 0) {
+                        move = false;
+                        mouse_pressed |= SCREEN_MIDDLE_MOUSE_BUTTON;
+                        INVOKE_WCB(*window, Mouse, (GLUT_MIDDLE_BUTTON, GLUT_DOWN, position[0], position[1]));
+                    }
+                } else if (mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) {
+                    move = false;
+                    mouse_pressed &= ~SCREEN_MIDDLE_MOUSE_BUTTON;
+                    INVOKE_WCB(*window, Mouse, (GLUT_MIDDLE_BUTTON, GLUT_UP, position[0], position[1]));
+                }
+
+                // Fire a move event if none of the buttons changed.
+                if (left_move || move) {
+                    handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_MOVE, window);
+                }
+
+                if (wheel) {
+                    /* Very slightly modified from fg_main_mswin.
+                     * Because we don't want MouseWheel to be called every. single. time.
+                     * That the action occurs, we mimic the Windows version with "wheel deltas"
+                     * XXX Do we even want this?
+                     * XXX If we want this, it's possible to get horizontal scroll as well.
+                     * XXX -Vertical scroll=wheel 0, horizontal=wheel 1? */
+                    fgState.MouseWheelTicks -= wheel;
+                    if (abs(fgState.MouseWheelTicks) >= WHEEL_DELTA)
+                    {
+                        int wheel_number = 0;
+                        int direction = (fgState.MouseWheelTicks > 0) ? -1 : 1;
+
+                        if (!FETCH_WCB(*window, MouseWheel) && !FETCH_WCB(*window, Mouse))
+                            break;
+
+                        //XXX fgSetWindow(window);
+
+                        while(abs(fgState.MouseWheelTicks) >= WHEEL_DELTA)
+                        {
+                            if (FETCH_WCB(*window, MouseWheel))
+                                INVOKE_WCB(*window, MouseWheel, (wheel_number, direction, window->State.MouseX, window->State.MouseY));
+                            else /* No mouse wheel, call the mouse button callback twice */
+                            {
+                                /*
+                                 * Map wheel zero to button 3 and 4; +1 to 3, -1 to 4
+                                 *  "    "   one                     +1 to 5, -1 to 6, ...
+                                 *
+                                 * XXX The below assumes that you have no more than 3 mouse
+                                 * XXX buttons.  Sorry.
+                                 */
+                                int button = wheel_number * 2 + 3;
+                                if (direction < 0)
+                                    ++button;
+                                INVOKE_WCB(*window, Mouse, (button, GLUT_DOWN, window->State.MouseX, window->State.MouseY));
+                                INVOKE_WCB(*window, Mouse, (button, GLUT_UP, window->State.MouseX, window->State.MouseY));
+                            }
+
+                            fgState.MouseWheelTicks -= WHEEL_DELTA * direction;
+                        }
+                    }
+                }
+
+                fgState.Modifiers = INVALID_MODIFIERS;
+                break;
+            }
+
+            //Based off fg_main_android
+            case SCREEN_EVENT_KEYBOARD:
+            {
+                int flags;
+                int value;
+                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
+                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
+                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
+
+                LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Flags: 0x%X, Sym: 0x%X, Mod: 0x%X", SLOG2_FA_SIGNED(flags), SLOG2_FA_SIGNED(value), SLOG2_FA_SIGNED(mod));
+
+                /* Suppress key repeats if desired. Based off fg_main_mswin */
+                if ((flags & KEY_REPEAT) == 0 || (fgState.KeyRepeat == GLUT_KEY_REPEAT_OFF && fgStructure.CurrentWindow->State.IgnoreKeyRepeat == GL_TRUE)) {
+                    unsigned int keypress = 0;
+                    unsigned char ascii = 0;
 
                     /* Remember the current modifiers state so user can query it from their callback */
                     fgState.Modifiers = fgPlatformGetModifiers(mod);
 
-                    // Handle left mouse. Interpret as touch if the left mouse event is not consumed.
-                    if (buttons & SCREEN_LEFT_MOUSE_BUTTON) {
-                        if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON) {
-                            left_move = true;
+                    /* Process keys */
+                    if ((keypress = key_special(value))) {
+                        if(flags & KEY_DOWN) {
+                            INVOKE_WCB(*window, Special, (keypress, window->State.MouseX, window->State.MouseY));
                         } else {
-                            move = false;
-                            mouse_pressed |= SCREEN_LEFT_MOUSE_BUTTON;
-                            handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_TOUCH, window);
+                            INVOKE_WCB(*window, SpecialUp, (keypress, window->State.MouseX, window->State.MouseY));
                         }
-                    } else if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON) {
-                        move = false;
-                        mouse_pressed &= ~SCREEN_LEFT_MOUSE_BUTTON;
-                        handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_RELEASE, window);
-                    }
-
-                    // Handle right mouse.
-                    if (buttons & SCREEN_RIGHT_MOUSE_BUTTON) {
-                        if ((mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) == 0) {
-                            move = false;
-                            mouse_pressed |= SCREEN_RIGHT_MOUSE_BUTTON;
-                            INVOKE_WCB(*window, Mouse, (GLUT_RIGHT_BUTTON, GLUT_DOWN, position[0], position[1]));
+                    } else if((flags & KEY_SYM_VALID) && (ascii = key_ascii(value))) {
+                        if(flags & KEY_DOWN) {
+                            INVOKE_WCB(*window, Keyboard, (ascii, window->State.MouseX, window->State.MouseY));
+                        } else {
+                            INVOKE_WCB(*window, KeyboardUp, (ascii, window->State.MouseX, window->State.MouseY));
                         }
-                    } else if (mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) {
-                        move = false;
-                        mouse_pressed &= ~SCREEN_RIGHT_MOUSE_BUTTON;
-                        INVOKE_WCB(*window, Mouse, (GLUT_RIGHT_BUTTON, GLUT_UP, position[0], position[1]));
-                    }
-
-                    // Handle middle mouse.
-                    if (buttons & SCREEN_MIDDLE_MOUSE_BUTTON) {
-                        if ((mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) == 0) {
-                            move = false;
-                            mouse_pressed |= SCREEN_MIDDLE_MOUSE_BUTTON;
-                            INVOKE_WCB(*window, Mouse, (GLUT_MIDDLE_BUTTON, GLUT_DOWN, position[0], position[1]));
-                        }
-                    } else if (mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) {
-                        move = false;
-                        mouse_pressed &= ~SCREEN_MIDDLE_MOUSE_BUTTON;
-                        INVOKE_WCB(*window, Mouse, (GLUT_MIDDLE_BUTTON, GLUT_UP, position[0], position[1]));
-                    }
-
-                    // Fire a move event if none of the buttons changed.
-                    if (left_move || move) {
-                        handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_MOVE, window);
-                    }
-
-                    if (wheel) {
-                        /* Very slightly modified from fg_main_mswin.
-                         * Because we don't want MouseWheel to be called every. single. time.
-                         * That the action occurs, we mimic the Windows version with "wheel deltas"
-                         * XXX Do we even want this?
-                         * XXX If we want this, it's possible to get horizontal scroll as well.
-                         * XXX -Vertical scroll=wheel 0, horizontal=wheel 1? */
-                        fgState.MouseWheelTicks -= wheel;
-                        if (abs(fgState.MouseWheelTicks) >= WHEEL_DELTA)
-                        {
-                            int wheel_number = 0;
-                            int direction = (fgState.MouseWheelTicks > 0) ? -1 : 1;
-
-                            if (!FETCH_WCB(*window, MouseWheel) && !FETCH_WCB(*window, Mouse))
-                                break;
-
-                            //XXX fgSetWindow(window);
-
-                            while(abs(fgState.MouseWheelTicks) >= WHEEL_DELTA)
-                            {
-                                if (FETCH_WCB(*window, MouseWheel))
-                                    INVOKE_WCB(*window, MouseWheel, (wheel_number, direction, window->State.MouseX, window->State.MouseY));
-                                else /* No mouse wheel, call the mouse button callback twice */
-                                {
-                                    /*
-                                     * Map wheel zero to button 3 and 4; +1 to 3, -1 to 4
-                                     *  "    "   one                     +1 to 5, -1 to 6, ...
-                                     *
-                                     * XXX The below assumes that you have no more than 3 mouse
-                                     * XXX buttons.  Sorry.
-                                     */
-                                    int button = wheel_number * 2 + 3;
-                                    if (direction < 0)
-                                        ++button;
-                                    INVOKE_WCB(*window, Mouse, (button, GLUT_DOWN, window->State.MouseX, window->State.MouseY));
-                                    INVOKE_WCB(*window, Mouse, (button, GLUT_UP, window->State.MouseX, window->State.MouseY));
-                                }
-
-                                fgState.MouseWheelTicks -= WHEEL_DELTA * direction;
-                            }
-                        }
+                    } else {
+                        LOGW("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Unhandled key event");
                     }
 
                     fgState.Modifiers = INVALID_MODIFIERS;
-                    break;
                 }
+                break;
+            }
 
-                //Based off fg_main_android
-                case SCREEN_EVENT_KEYBOARD:
+            case SCREEN_EVENT_PROPERTY:
+            case SCREEN_EVENT_IDLE:
+                break;
+
+            default:
+                LOGW("fgPlatformProcessSingleEvent: unknown screen event: 0x%X", SLOG2_FA_SIGNED(eventType));
+                break;
+            }
+        } else if (domain == navigator_get_domain()) {
+            int eventType = bps_event_get_code(fgDisplay.pDisplay.event);
+            switch (eventType) {
+
+            case NAVIGATOR_WINDOW_STATE:
+            {
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE");
+                navigator_window_state_t state = navigator_event_get_window_state(fgDisplay.pDisplay.event);
+                switch (state)
                 {
-                    int flags;
-                    int value;
-                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
-                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
-                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_MODIFIERS, &mod);
-
-                    LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Flags: 0x%X, Sym: 0x%X, Mod: 0x%X", SLOG2_FA_SIGNED(flags), SLOG2_FA_SIGNED(value), SLOG2_FA_SIGNED(mod));
-
-                    /* Suppress key repeats if desired. Based off fg_main_mswin */
-                    if ((flags & KEY_REPEAT) == 0 || (fgState.KeyRepeat == GLUT_KEY_REPEAT_OFF && fgStructure.CurrentWindow->State.IgnoreKeyRepeat == GL_TRUE)) {
-                        unsigned int keypress = 0;
-                        unsigned char ascii = 0;
-
-                        /* Remember the current modifiers state so user can query it from their callback */
-                        fgState.Modifiers = fgPlatformGetModifiers(mod);
-
-                        /* Process keys */
-                        if ((keypress = key_special(value))) {
-                            if(flags & KEY_DOWN) {
-                                INVOKE_WCB(*window, Special, (keypress, window->State.MouseX, window->State.MouseY));
-                            } else {
-                                INVOKE_WCB(*window, SpecialUp, (keypress, window->State.MouseX, window->State.MouseY));
-                            }
-                        } else if((flags & KEY_SYM_VALID) && (ascii = key_ascii(value))) {
-                            if(flags & KEY_DOWN) {
-                                INVOKE_WCB(*window, Keyboard, (ascii, window->State.MouseX, window->State.MouseY));
-                            } else {
-                                INVOKE_WCB(*window, KeyboardUp, (ascii, window->State.MouseX, window->State.MouseY));
-                            }
-                        } else {
-                            LOGW("fgPlatformProcessSingleEvent: SCREEN_EVENT_KEYBOARD. Unhandled key event");
-                        }
-
-                        fgState.Modifiers = INVALID_MODIFIERS;
-                    }
+                case NAVIGATOR_WINDOW_FULLSCREEN:
+                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_FULLSCREEN");
+                    window->State.Visible = GL_TRUE;
+                    INVOKE_WCB(*window, WindowStatus, (GLUT_FULLY_RETAINED));
                     break;
-                }
-
-                case SCREEN_EVENT_PROPERTY:
-                case SCREEN_EVENT_IDLE:
+                case NAVIGATOR_WINDOW_THUMBNAIL:
+                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL");
+                    window->State.Visible = GL_TRUE;
+                    INVOKE_WCB(*window, WindowStatus, (GLUT_PARTIALLY_RETAINED));
                     break;
-
+                case NAVIGATOR_WINDOW_INVISIBLE:
+                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_INVISIBLE");
+                    window->State.Visible = GL_FALSE;
+                    INVOKE_WCB(*window, WindowStatus, (GLUT_HIDDEN)); //XXX Should this be GLUT_FULLY_COVERED?
+                    break;
                 default:
-                    LOGW("fgPlatformProcessSingleEvent: unknown screen event: 0x%X", SLOG2_FA_SIGNED(eventType));
+                    LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state));
                     break;
                 }
-            } else if (domain == navigator_get_domain()) {
-                int eventType = bps_event_get_code(fgDisplay.pDisplay.event);
-                switch (eventType) {
+                break;
+            }
 
-                case NAVIGATOR_WINDOW_STATE:
-                {
-                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE");
-                    navigator_window_state_t state = navigator_event_get_window_state(fgDisplay.pDisplay.event);
-                    switch (state)
-                    {
-                    case NAVIGATOR_WINDOW_FULLSCREEN:
-                        LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_FULLSCREEN");
-                        window->State.Visible = GL_TRUE;
-                        INVOKE_WCB(*window, WindowStatus, (GLUT_FULLY_RETAINED));
-                        break;
-                    case NAVIGATOR_WINDOW_THUMBNAIL:
-                        LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_THUMBNAIL");
-                        window->State.Visible = GL_TRUE;
-                        INVOKE_WCB(*window, WindowStatus, (GLUT_PARTIALLY_RETAINED));
-                        break;
-                    case NAVIGATOR_WINDOW_INVISIBLE:
-                        LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE-NAVIGATOR_WINDOW_INVISIBLE");
-                        window->State.Visible = GL_FALSE;
-                        INVOKE_WCB(*window, WindowStatus, (GLUT_HIDDEN)); //XXX Should this be GLUT_FULLY_COVERED?
-                        break;
-                    default:
-                        LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state));
-                        break;
-                    }
-                    break;
+            case NAVIGATOR_EXIT:
+            {
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_EXIT");
+
+                fgPlatformMainLoopPostWork();
+
+                /* User closed the application for good, let's kill the window */
+                SFG_Window* window = fgStructure.CurrentWindow;
+                if (window != NULL) {
+                    fgDestroyWindow(window);
+                } else {
+                    LOGW("NAVIGATOR_EXIT: No current window");
                 }
+                break;
+            }
 
-                case NAVIGATOR_EXIT:
-                {
-                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_EXIT");
+            case NAVIGATOR_SWIPE_DOWN:
+                /* XXX Open app menu */
+                break;
 
-                    fgPlatformMainLoopPostWork();
+            /* Orientation is a bunch of handshakes.
+               - First the app get's asked if it wants to rotate (NAVIGATOR_ORIENTATION_CHECK)
+               - If the app wants to rotate, then it will be told what size it will be after rotate (NAVIGATOR_ORIENTATION_SIZE).
+               - Once the OS confirms that it's ready to rotate, it tells the app to handle rotation (NAVIGATOR_ORIENTATION).
+               - Once rotation is complete, the OS tells the app it's done (NAVIGATOR_ORIENTATION_DONE) */
+            case NAVIGATOR_ORIENTATION_CHECK:
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_ORIENTATION_CHECK");
 
-                    /* User closed the application for good, let's kill the window */
-                    SFG_Window* window = fgStructure.CurrentWindow;
-                    if (window != NULL) {
-                        fgDestroyWindow(window);
-                    } else {
-                        LOGW("NAVIGATOR_EXIT: No current window");
-                    }
-                    break;
-                }
+                /* Reset sizes */
+                window->State.pWState.newWidth = 0;
+                window->State.pWState.newHeight = 0;
 
-                case NAVIGATOR_SWIPE_DOWN:
-                    /* XXX Open app menu */
-                    break;
+                /* Notify that we want to rotate */
+                navigator_orientation_check_response(fgDisplay.pDisplay.event, true);
+                break;
 
-                case NAVIGATOR_BACK:
-                    /* XXX Should this be a Special/SpecialUp event? */
-                    break;
+            case NAVIGATOR_ORIENTATION:
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_ORIENTATION");
 
-                case NAVIGATOR_WINDOW_ACTIVE:
-                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_ACTIVE");
-                    INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_RESUME));
-                    break;
+                /* Rotate and resize the window */
+                fgPlatformRotateWindow(window, navigator_event_get_orientation_angle(fgDisplay.pDisplay.event));
+                fghOnReshapeNotify(window, window->State.pWState.newWidth, window->State.pWState.newHeight, GL_FALSE);
 
-                case NAVIGATOR_WINDOW_INACTIVE:
-                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_INACTIVE");
-                    INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_PAUSE));
-                    break;
+                /* Reset sizes */
+                window->State.pWState.newWidth = 0;
+                window->State.pWState.newHeight = 0;
 
-                case NAVIGATOR_KEYBOARD_STATE:
-                case NAVIGATOR_KEYBOARD_POSITION:
-                    /* TODO Something needs to be done with this. Not sure what */
-                    break;
+                /* Done rotating */
+                navigator_done_orientation(fgDisplay.pDisplay.event);
+                break;
 
-                case NAVIGATOR_DEVICE_LOCK_STATE:
-                    break;
+            case NAVIGATOR_BACK:
+                /* XXX Should this be a Special/SpecialUp event? */
+                break;
 
-                case NAVIGATOR_WINDOW_COVER:
-                case NAVIGATOR_WINDOW_COVER_ENTER:
-                case NAVIGATOR_WINDOW_COVER_EXIT:
-                    /* BlackBerry specific. Let app status and window status take care of everything */
-                    break;
+            case NAVIGATOR_WINDOW_ACTIVE:
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_ACTIVE");
+                INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_RESUME));
+                break;
 
-                case NAVIGATOR_APP_STATE:
-                    /* Can do the same as NAVIGATOR_WINDOW_ACTIVE/NAVIGATOR_WINDOW_INACTIVE but
-                       seems less likely to work when the app comes to the foreground. Might be a bug */
-                    break;
+            case NAVIGATOR_WINDOW_INACTIVE:
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_WINDOW_INACTIVE");
+                INVOKE_WCB(*window, AppStatus, (GLUT_APPSTATUS_PAUSE));
+                break;
 
-                case 0: //Doesn't exist in header, but shows up when keyboard shows and resizes
-                	break;
+            case NAVIGATOR_ORIENTATION_DONE:
+            case NAVIGATOR_ORIENTATION_RESULT:
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_ORIENTATION_DONE\NAVIGATOR_ORIENTATION_RESULT");
+                break;
 
-                default:
-                    LOGW("fgPlatformProcessSingleEvent: unknown navigator event: 0x%X", SLOG2_FA_SIGNED(eventType));
-                    break;
-                }
+            case NAVIGATOR_KEYBOARD_STATE:
+                /* XXX Should something be done with this? */
+                break;
+
+            case NAVIGATOR_KEYBOARD_POSITION:
+                /* TODO Invoke resize with the modified screen size (((y + height) - keyboardPos) - y).
+                 * If result is less then zero then window is covered. If == height, then no change in size. Else, change in size */
+                break;
+
+            case NAVIGATOR_DEVICE_LOCK_STATE:
+                break;
+
+            case NAVIGATOR_WINDOW_COVER:
+            case NAVIGATOR_WINDOW_COVER_ENTER:
+            case NAVIGATOR_WINDOW_COVER_EXIT:
+                /* BlackBerry specific. Let app status and window status take care of everything */
+                break;
+
+            case NAVIGATOR_APP_STATE:
+                /* Can do the same as NAVIGATOR_WINDOW_ACTIVE/NAVIGATOR_WINDOW_INACTIVE but
+                   seems less likely to work when the app comes to the foreground. Might be a bug */
+                break;
+
+            case NAVIGATOR_ORIENTATION_SIZE:
+                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_ORIENTATION_SIZE");
+
+                /* Get new window size */
+                window->State.pWState.newWidth = navigator_event_get_orientation_size_width(fgDisplay.pDisplay.event);
+                window->State.pWState.newHeight = navigator_event_get_orientation_size_height(fgDisplay.pDisplay.event);
+                break;
+
+            case 0: //Doesn't exist in header, but shows up when keyboard shows and resizes
+                break;
+
+            default:
+                LOGW("fgPlatformProcessSingleEvent: unknown navigator event: 0x%X", SLOG2_FA_SIGNED(eventType));
+                break;
             }
         }
     } while(bps_get_event(&fgDisplay.pDisplay.event, 1) == BPS_SUCCESS && fgDisplay.pDisplay.event != NULL);
@@ -600,7 +645,9 @@ void fgPlatformMainLoopPreliminaryWork ( void )
 
     /* Request navigator events */
     navigator_request_events(0);
-    //XXX rotation lock? navigator_rotation_lock(true);
+
+    /* Allow rotation */
+    navigator_rotation_lock(false);
 
     /* Request window events */
     screen_request_events(fgDisplay.pDisplay.screenContext);
@@ -610,6 +657,7 @@ void fgPlatformMainLoopPostWork ( void )
 {
     LOGI("fgPlatformMainLoopPostWork");
 
+    /* Stop all events */
     screen_stop_events(fgDisplay.pDisplay.screenContext);
 
     navigator_stop_events(0);
@@ -622,6 +670,11 @@ void fgPlatformInitWork(SFG_Window* window)
 
     /* Position callback, always at 0,0 */
     fghOnPositionNotify(window, 0, 0, GL_TRUE);
+
+    /* Get window size */
+    int size[2];
+    screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_BUFFER_SIZE, size);
+    fghOnReshapeNotify(window, size[0], size[1], GL_FALSE);
 
     /* Size gets notified on window creation with size detection in mainloop above
      * XXX CHECK: does this messages happen too early like on windows,
