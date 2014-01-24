@@ -34,6 +34,7 @@
 #include "egl/fg_internal_egl.h"
 #include <screen/screen.h>
 #include <bps/event.h>
+#include <bps/navigator.h>
 
 /* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
 /* The structure used by display initialization in freeglut_init.c */
@@ -115,6 +116,9 @@ struct tagSFG_PlatformWindowState
 {
 	int newWidth;
 	int newHeight;
+	int originalRotation;
+	navigator_window_state_t windowState;
+	GLboolean windowCovered;
 };
 
 /* Menu font and color definitions */
