@@ -33,26 +33,26 @@
 
 void fgPlatformInitialize()
 {
-  bps_initialize();
+    bps_initialize();
 
-  navigator_request_events(0);
-  //XXX rotation lock? navigator_rotation_lock(true);
+    navigator_request_events(0);
+    //XXX rotation lock? navigator_rotation_lock(true);
 
-  fghPlatformInitializeEGL();
+    fghPlatformInitializeEGL();
 
-  /* Get start time */
-  fgState.Time = fgSystemTime();
+    /* Get start time */
+    fgState.Time = fgSystemTime();
 
-  fgState.Initialised = GL_TRUE;
+    fgState.Initialised = GL_TRUE;
 }
 
 void fgPlatformCloseDisplay()
 {
-  fghPlatformCloseDisplayEGL();
+    fghPlatformCloseDisplayEGL();
 
-  navigator_stop_events(0);
+    navigator_stop_events(0);
 
-  bps_shutdown();
+    bps_shutdown();
 }
 
 /**
