@@ -83,6 +83,14 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 
   fghPlatformOpenWindowEGL(window);
 
+  /* Bind context to the current thread if it's lost */
+  if (eglGetCurrentContext() == EGL_NO_CONTEXT &&
+      eglMakeCurrent(fgDisplay.pDisplay.egl.Display,
+             window->Window.pContext.egl.Surface,
+             window->Window.pContext.egl.Surface,
+             window->Window.Context) == EGL_FALSE)
+    fgError("eglMakeCurrent: err=%x\n", eglGetError());
+
   window->State.Visible = GL_TRUE;
 }
 
