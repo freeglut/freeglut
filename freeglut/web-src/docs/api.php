@@ -231,7 +231,7 @@ will thus not work with the currently available 2.8.1 release.
 			<li>glutMultiPassiveFunc &larr; id, x, y</li>
 		</ol>
 	</li>
-	<li><a href="#Android">Android functions</a>
+	<li><a href="#Mobile">Mobile functions</a>
 		<ol>
 			<li>glutInitContextFunc &larr; void</li>
 			<li>glutAppStatusFunc &larr; event</li>
@@ -2528,11 +2528,11 @@ desirable to get the device id as well in the following situations:
 
 </ul>
 
-Since this extra support comes at the cost of extra complexity, we're
+<p>Since this extra support comes at the cost of extra complexity, we're
 <a href="http://sourceforge.net/mailarchive/forum.php?thread_name=20120518071314.GA28061%40perso.beuc.net&forum_name=freeglut-developer">considering</a>
-whether/how to implement it.
+whether/how to implement it.</p>
 
-<h1><a name="Android"></a>Android Functions</h1>
+<h1><a name="Mobile"></a>Mobile Functions</h1>
 
 <p>These new callbacks were added:</p>
 
@@ -2547,9 +2547,14 @@ Possible states:
 <li>application comes back from a pause &rarr; GLUT_APPSTATUS_RESUME. Is
 called after the <code>glutInitContextFunc</code> callback.</li>
 </ul>
+</ul>
 
-<p>Android support is further described at
-the <a href="android.php">Android page</a>.</p>
+<p>Supported mobile platforms</p>
+<ul>
+<li>Android support is further described at
+the <a href="android.php">Android page</a>.</li>
+<li>BlackBerry 10/BlackBerry PlayBook</li>
+</ul>
 
 <h1>19. <a name="Miscellaneous"></a>Miscellaneous Functions</h1>
 
