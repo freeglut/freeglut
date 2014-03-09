@@ -48,6 +48,8 @@ make install
 
 <p>For Android, please see the dedicated <a href="android.php">Android page</a>.</p>
 
+<p>For BlackBerry support, please see <code>README.blackberry</code> in the project source code.</p>
+
 <p>For OpenGL ES support (1.x and 2.x), please see the
 dedicated <a href="gles.php">GLES page</a>.</p>
 
