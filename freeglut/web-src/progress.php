@@ -20,13 +20,13 @@ mailing list to discuss your plans, and get cracking!</p>
 <table>
 <tr>
 <th>Feature</th><th>Status</th><th>Milestone</th></tr>
-<tr><td>Android port</td><td>Basic but complete functionality by Sylvain
-Beucler, but there are <a href=docs/android.php#roadmap>todo
+<tr><td>Android port</td><td>Basic but complete functionality by <a href="http://www.beuc.net/">Sylvain
+Beucler</a>, but there are <a href=docs/android.php#roadmap>todo
 points</a></td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
 
-<tr><td>Blackberry OS 10 port</td><td>Basic but complete functionality
-by Vinnie Simonetti.</td><td>Basic functionality as is now done: 3.0. Future
+<tr><td>BlackBerry 10 port</td><td>Basic but complete functionality
+by <a href="https://github.com/rcmaniac25">Vinnie Simonetti</a>.</td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
 
 <tr><td>10bit display formats</td><td>GLUT supports that but FreeGLUT
@@ -74,7 +74,7 @@ value) after each token are ignored. This is a significant way in which
 FreeGLUT is not compatible with GLUT. Could be a nice project for
 someone who want to become familiar with the intricacies of requesting
 specific display formats on at least one of the various window servers
-(Windows, X11 and Android/EGL at the
+(Windows, X11 and Android/BlackBerry 10/EGL at the
 moment).</td><td>Undecided</td></tr>
 </table>
 </p>

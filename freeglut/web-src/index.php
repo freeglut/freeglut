@@ -32,8 +32,8 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <div class="textheader"><a name="download"></a>Help out!</div>
 <p>FreeGLUT 3.0 is in active development, and will feature ports to
-Android and BB10 as well as a host of other enhancements. We are looking
-for developers to help out with further work on the Android and BB10
+Android and BlackBerry 10 as well as a host of other enhancements. We are looking
+for developers to help out with further work on the Android and BlackBerry 10
 ports. Furthermore, ports to Cocoa/Carbon on OSX, and maybe even Wayland
 are planned, along with some enhancements to the API and implementation.
 See <a href="progress.php">here</a> for an overview of the major points
@@ -54,7 +54,7 @@ mailing list.</p>
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
-    <p>The ports to Andriod and BB10 as well as other API and
+    <p>The ports to Android and BlackBerry 10 as well as other API and
     implementation enhancements (e.g., move to CMake build system, VBO
     and shader support for geometry) are currently only available in
     trunk. Feel free to test by downloading a <a

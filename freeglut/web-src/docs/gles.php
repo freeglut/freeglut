@@ -20,11 +20,15 @@ generateHeader($_SERVER['PHP_SELF']);
 <p>FreeGLUT can initialize an OpenGL ES (GLES) context.  It works under platforms that supports EGL:</p>
 <ul>
   <li>Android (see <a href="android.php">dedicated page</a>)</li>
+  <li>BlackBerry 10/BlackBerry PlayBook</li>
   <li>Unix X11 with Mesa EGL</li>
 </ul>
 
 <p>FreeGLUT ES is provided as a separate library, because OpenGL ES has a distinct,
 incompatible library for each version (e.g. -lGLESv1_CM and -lGLESv2).</p>
+
+<p>When compiled for OpenGL ES 2.0, it is possible to use OpenGL ES 3.0 and higher if the device or
+driver supports it by calling <code>glutInitContextVersion(3.0, 0.0)</code> before creating a window.</p>
 
 <p>The following explains how to use FreeGLUT ES under Mesa EGL.</p>
 
