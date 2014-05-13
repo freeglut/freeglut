@@ -31,6 +31,7 @@
 #include <limits.h>     /* LONG_MAX */
 #include <unistd.h>     /* usleep, gethostname, getpid */
 #include <sys/types.h>  /* pid_t */
+#include "bits/local_lim.h"
 #include "../fg_internal.h"
 
 #ifdef EGL_VERSION_1_0
