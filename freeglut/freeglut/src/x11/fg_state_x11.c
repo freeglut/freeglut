@@ -155,6 +155,7 @@ int fgPlatformGlutGet ( GLenum eWhat )
         else
         {
           XVisualInfo * visualInfo;
+		  int result;
 #ifdef EGL_VERSION_1_0
 	  EGLint vid = 0;
 	  XVisualInfo visualTemplate;
@@ -166,13 +167,15 @@ int fgPlatformGlutGet ( GLenum eWhat )
 	  visualTemplate.visualid = vid;
 	  visualInfo = XGetVisualInfo(fgDisplay.pDisplay.Display, VisualIDMask, &visualTemplate, &num_visuals);
 #else
+	  {
           const GLXFBConfig fbconfig =
                 fgStructure.CurrentWindow->Window.pContext.FBConfig;
 
           visualInfo =
                 glXGetVisualFromFBConfig( fgDisplay.pDisplay.Display, fbconfig );
+	  }
 #endif
-          const int result = visualInfo->visual->map_entries;
+          result = visualInfo->visual->map_entries;
 
           XFree(visualInfo);
 
