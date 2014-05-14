@@ -16,13 +16,13 @@ static int sequence_number = 0 ;
 int windows[CALLBACKMAKER_N_WINDOWS] = {0};
 
 /* define status vars showing whether given callback has been called for given window */
-#define CALLBACK_CALLED_VAR(name)                            int name##_called[CALLBACKMAKER_N_WINDOWS]   = {0};
-#define CALLBACK_0V(name)                                    int name##_seq[CALLBACKMAKER_N_WINDOWS]      = {-1}; CALLBACK_CALLED_VAR(name); 
-#define CALLBACK_1V(name,field)                              int name##_##field[CALLBACKMAKER_N_WINDOWS]  = {-1}; CALLBACK_0V(name);
-#define CALLBACK_2V(name,field1,field2)                      int name##_##field2[CALLBACKMAKER_N_WINDOWS] = {-1}; CALLBACK_1V(name,field1);
-#define CALLBACK_3V(name,field1,field2,field3)               int name##_##field3[CALLBACKMAKER_N_WINDOWS] = {-1}; CALLBACK_2V(name,field1,field2);
-#define CALLBACK_4V(name,field1,field2,field3,field4)        int name##_##field4[CALLBACKMAKER_N_WINDOWS] = {-1}; CALLBACK_3V(name,field1,field2,field3);
-#define CALLBACK_5V(name,field1,field2,field3,field4,field5) int name##_##field5[CALLBACKMAKER_N_WINDOWS] = {-1}; CALLBACK_4V(name,field1,field2,field3,field4);
+#define CALLBACK_CALLED_VAR(name)                            int name##_called[CALLBACKMAKER_N_WINDOWS]   = {0}
+#define CALLBACK_0V(name)                                    int name##_seq[CALLBACKMAKER_N_WINDOWS]      = {-1}; CALLBACK_CALLED_VAR(name)
+#define CALLBACK_1V(name,field)                              int name##_##field[CALLBACKMAKER_N_WINDOWS]  = {-1}; CALLBACK_0V(name)
+#define CALLBACK_2V(name,field1,field2)                      int name##_##field2[CALLBACKMAKER_N_WINDOWS] = {-1}; CALLBACK_1V(name,field1)
+#define CALLBACK_3V(name,field1,field2,field3)               int name##_##field3[CALLBACKMAKER_N_WINDOWS] = {-1}; CALLBACK_2V(name,field1,field2)
+#define CALLBACK_4V(name,field1,field2,field3,field4)        int name##_##field4[CALLBACKMAKER_N_WINDOWS] = {-1}; CALLBACK_3V(name,field1,field2,field3)
+#define CALLBACK_5V(name,field1,field2,field3,field4,field5) int name##_##field5[CALLBACKMAKER_N_WINDOWS] = {-1}; CALLBACK_4V(name,field1,field2,field3,field4)
 CALLBACK_2V(reshape,width,height);
 CALLBACK_2V(position,top,left);
 CALLBACK_1V(visibility,vis);
@@ -39,7 +39,7 @@ CALLBACK_3V(passivemotion,x,y,mod);
 CALLBACK_1V(entry,state);
 CALLBACK_0V(close);
 /* menudestroy is registered on each menu, not a window */
-int menudestroy_called = 0 ;
+int menudestroy_called = 0;
 /* menustatus and menustate are global callbacks, set for all menus at the same time */
 int menustatus_called = 0;
 int menustate_called = 0;
