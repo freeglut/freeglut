@@ -606,37 +606,37 @@ static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean ke
     fgState.Modifiers = fgPlatformGetModifiers( );
 
     /* Convert the Win32 keystroke codes to GLUTtish way */
-#   define KEY(a,b) case a: keypress = b; break;
+#   define FG_KEY(a,b) case a: keypress = b; break;
 
     switch( wParam )
     {
-        KEY( VK_F1,     GLUT_KEY_F1        );
-        KEY( VK_F2,     GLUT_KEY_F2        );
-        KEY( VK_F3,     GLUT_KEY_F3        );
-        KEY( VK_F4,     GLUT_KEY_F4        );
-        KEY( VK_F5,     GLUT_KEY_F5        );
-        KEY( VK_F6,     GLUT_KEY_F6        );
-        KEY( VK_F7,     GLUT_KEY_F7        );
-        KEY( VK_F8,     GLUT_KEY_F8        );
-        KEY( VK_F9,     GLUT_KEY_F9        );
-        KEY( VK_F10,    GLUT_KEY_F10       );
-        KEY( VK_F11,    GLUT_KEY_F11       );
-        KEY( VK_F12,    GLUT_KEY_F12       );
-        KEY( VK_PRIOR,  GLUT_KEY_PAGE_UP   );
-        KEY( VK_NEXT,   GLUT_KEY_PAGE_DOWN );
-        KEY( VK_HOME,   GLUT_KEY_HOME      );
-        KEY( VK_END,    GLUT_KEY_END       );
-        KEY( VK_LEFT,   GLUT_KEY_LEFT      );
-        KEY( VK_UP,     GLUT_KEY_UP        );
-        KEY( VK_RIGHT,  GLUT_KEY_RIGHT     );
-        KEY( VK_DOWN,   GLUT_KEY_DOWN      );
-        KEY( VK_INSERT, GLUT_KEY_INSERT    );
+        FG_KEY( VK_F1,     GLUT_KEY_F1        );
+        FG_KEY( VK_F2,     GLUT_KEY_F2        );
+        FG_KEY( VK_F3,     GLUT_KEY_F3        );
+        FG_KEY( VK_F4,     GLUT_KEY_F4        );
+        FG_KEY( VK_F5,     GLUT_KEY_F5        );
+        FG_KEY( VK_F6,     GLUT_KEY_F6        );
+        FG_KEY( VK_F7,     GLUT_KEY_F7        );
+        FG_KEY( VK_F8,     GLUT_KEY_F8        );
+        FG_KEY( VK_F9,     GLUT_KEY_F9        );
+        FG_KEY( VK_F10,    GLUT_KEY_F10       );
+        FG_KEY( VK_F11,    GLUT_KEY_F11       );
+        FG_KEY( VK_F12,    GLUT_KEY_F12       );
+        FG_KEY( VK_PRIOR,  GLUT_KEY_PAGE_UP   );
+        FG_KEY( VK_NEXT,   GLUT_KEY_PAGE_DOWN );
+        FG_KEY( VK_HOME,   GLUT_KEY_HOME      );
+        FG_KEY( VK_END,    GLUT_KEY_END       );
+        FG_KEY( VK_LEFT,   GLUT_KEY_LEFT      );
+        FG_KEY( VK_UP,     GLUT_KEY_UP        );
+        FG_KEY( VK_RIGHT,  GLUT_KEY_RIGHT     );
+        FG_KEY( VK_DOWN,   GLUT_KEY_DOWN      );
+        FG_KEY( VK_INSERT, GLUT_KEY_INSERT    );
 
     /* handle control, alt and shift. For GLUT, we want to distinguish between left and right presses.
      * The VK_L* & VK_R* left and right Alt, Ctrl and Shift virtual keys are however only used as parameters to GetAsyncKeyState() and GetKeyState()
      * so when we get an alt, shift or control keypress here, we manually check whether it was the left or the right
      */
-#define KEY_EVENT(winKey,glutKey,keyStateVar)\
+#define FG_KEY_EVENT(winKey,glutKey,keyStateVar)\
     if (!keyStateVar && fgGetKeyState ( winKey ))\
     {\
         keypress   = glutKey;\
@@ -648,16 +648,16 @@ static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean ke
         keyStateVar = 0;\
     }
     case VK_CONTROL:
-        KEY_EVENT(VK_LCONTROL,GLUT_KEY_CTRL_L,lControl);
-        KEY_EVENT(VK_RCONTROL,GLUT_KEY_CTRL_R,rControl);
+        FG_KEY_EVENT(VK_LCONTROL,GLUT_KEY_CTRL_L,lControl);
+        FG_KEY_EVENT(VK_RCONTROL,GLUT_KEY_CTRL_R,rControl);
         break;
     case VK_SHIFT:
-        KEY_EVENT(VK_LSHIFT,GLUT_KEY_SHIFT_L,lShift);
-        KEY_EVENT(VK_RSHIFT,GLUT_KEY_SHIFT_R,rShift);
+        FG_KEY_EVENT(VK_LSHIFT,GLUT_KEY_SHIFT_L,lShift);
+        FG_KEY_EVENT(VK_RSHIFT,GLUT_KEY_SHIFT_R,rShift);
         break;
     case VK_MENU:
-        KEY_EVENT(VK_LMENU,GLUT_KEY_ALT_L,lAlt);
-        KEY_EVENT(VK_RMENU,GLUT_KEY_ALT_R,rAlt);
+        FG_KEY_EVENT(VK_LMENU,GLUT_KEY_ALT_L,lAlt);
+        FG_KEY_EVENT(VK_RMENU,GLUT_KEY_ALT_R,rAlt);
         break;
 #undef KEY_EVENT
 
