@@ -31,6 +31,7 @@
 #include <limits.h>     /* LONG_MAX */
 #include <unistd.h>     /* usleep, gethostname, getpid */
 #include <sys/types.h>  /* pid_t */
+
 #include "../fg_internal.h"
 
 #ifdef EGL_VERSION_1_0
@@ -38,6 +39,10 @@
 #define fghCreateNewContext fghCreateNewContextEGL
 #else
 #include "x11/fg_window_x11_glx.h"
+#endif
+
+#ifndef HOST_NAME_MAX
+#define HOST_NAME_MAX		64
 #endif
 
 static int fghResizeFullscrToggle(void)
