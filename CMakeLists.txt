@@ -238,7 +238,7 @@ IF(CMAKE_COMPILER_IS_GNUCC)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
   IF(NOT(ANDROID OR BLACKBERRY))
     # not setting -ansi as EGL/KHR headers doesn't support it
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ansi")
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic")
   ENDIF()
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
