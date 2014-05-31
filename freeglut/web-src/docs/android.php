@@ -34,16 +34,13 @@ generateHeader($_SERVER['PHP_SELF']);
 
   <ul>
 
-    <li>Note: at the moment, you need to chose between OpenGL ES 1.0 (FREEGLUT_GLES1) or 2.0 (FREEGLUT_GLES2) at compile time.<br />
-    In the near future, we may implement a way to set this at run-time.</li>
-
     <li>
 
       Use your own cross-compiler for Android, or export the one from
-      the Android NDK:
+      the Android NDK (API level 9 is required to use native activities):
 
       <pre>
-        /usr/src/android-ndk-r7c/build/tools/make-standalone-toolchain.sh \
+        /usr/src/android-ndk-r9d/build/tools/make-standalone-toolchain.sh \
           --platform=android-9 \
           --install-dir=/usr/src/ndk-standalone-9
       </pre>
@@ -55,20 +52,20 @@ generateHeader($_SERVER['PHP_SELF']);
 
       <pre>
         PATH=/usr/src/ndk-standalone-9/bin:$PATH
-        cd /usr/src/freeglut-x.x/
-        mkdir cross-android-gles2/
-        cd cross-android-gles2/
+        cd /usr/src/freeglut-3.0/
+        mkdir cross-android-gles/
+        cd cross-android-gles/
         cmake \
           -D CMAKE_TOOLCHAIN_FILE=../android_toolchain.cmake \
           -D CMAKE_INSTALL_PREFIX=/usr/src/ndk-standalone-9/sysroot/usr \
           -D CMAKE_BUILD_TYPE=Debug \
-          -D FREEGLUT_GLES2=ON \
+          -D FREEGLUT_GLES=ON \
           -D FREEGLUT_BUILD_DEMOS=NO \
           ..
         make -j4
         make install
         # Only static for now:
-        rm -f /usr/src/ndk-standalone-9/sysroot/usr/lib/libfreeglut-gles?.so*
+        rm -f /usr/src/ndk-standalone-9/sysroot/usr/lib/libfreeglut-gles.so*
       </pre>
 
     </li>
@@ -94,9 +91,11 @@ generateHeader($_SERVER['PHP_SELF']);
       'android_toolchain.cmake':</p>
 
     <pre>
-      PATH=/usr/src/ndk-standalone-9/bin:$PATH
+      PATH="$PATH:/usr/src/android-ndk-r9d"
+      PATH="$PATH:/usr/src/android-sdk-linux/tools"
+      PATH="$PATH:/usr/src/android-sdk-linux/platform-tools"
       export PKG_CONFIG_PATH=/usr/src/ndk-standalone-9/sysroot/usr/share/pkgconfig
-      cp .../freeglut-x.x/android_toolchain.cmake .
+      cp .../freeglut-3.0/android_toolchain.cmake .
       mkdir cross-android/
       cd cross-android/
       cmake \
@@ -121,10 +120,10 @@ generateHeader($_SERVER['PHP_SELF']);
       Create a module hierarchy pointing to FreeGLUT, with our Android.mk:
 
       <pre>
-        mkdir freeglut-gles2/
-        cp .../freeglut-x.x/android/gles2/Android.mk freeglut-gles2/
-        ln -s /usr/src/ndk-standalone-9/sysroot/usr/include freeglut-gles2/include
-        ln -s /usr/src/ndk-standalone-9/sysroot/usr/lib freeglut-gles2/lib
+        mkdir freeglut-gles/
+        cp .../freeglut-3.0/android/Android.mk freeglut-gles/
+        ln -s /usr/src/ndk-standalone-9/sysroot/usr/include freeglut-gles/include
+        ln -s /usr/src/ndk-standalone-9/sysroot/usr/lib freeglut-gles/lib
       </pre>
 
     </li>
@@ -134,9 +133,9 @@ generateHeader($_SERVER['PHP_SELF']);
       Reference this module in your jni/Android.mk:
 
       <pre>
-        LOCAL_STATIC_LIBRARIES := ... freeglut-gles2
+        LOCAL_STATIC_LIBRARIES := ... freeglut-gles
         ...
-        $(call import-module,freeglut-gles2)
+        $(call import-module,freeglut-gles)
       </pre>
 
     </li>
@@ -165,8 +164,7 @@ Done:
 <li>Virtual keypad (on touchscreen)</li>
 <li>Extract assets in cache dir on start-up</li>
 <li>Make EGL support reusable by Mesa X11</li>
-<li>freeglut_std.h can be used with GLES1 or GLES2 or non-ES headers<br />
-(using -DFREEGLUT_GLES1 and -DFREEGLUT_GLES2)</li>
+<li>freeglut_std.h can be used with GLES1 or GLES2 or non-ES headers</li>
 <li>GLES1 and GLES2 support for geometry</li>
 <li>Pause/resume application support</li>
 <li>Callback to reload OpenGL resources lost during a pause</li>
