@@ -22,10 +22,15 @@ generateHeader($_SERVER['PHP_SELF']);
   <li>Android (see <a href="android.php">dedicated page</a>)</li>
   <li>BlackBerry 10/BlackBerry PlayBook</li>
   <li>Unix X11 with Mesa EGL</li>
+  <li>TODO: Raspberry PI: Mesa EGL doesn't work due to X11's fbdev limitation (no GL);
+    it needs to use <a href="https://github.com/raspberrypi/userland/tree/master/host_applications/linux/libs/bcm_host">bcm_host</a>
+    from <tt>libraspeberrypi-dev</tt> which will shortcut X11 - see <a href="http://sourceforge.net/p/freeglut/feature-requests/71/">[#71]</a></li>
 </ul>
 
 <p>FreeGLUT ES is provided as a separate library, because OpenGL ES has a distinct,
-incompatible library for each version (e.g. -lGLESv1_CM and -lGLESv2).</p>
+  incompatible library for each version (e.g. -lGLESv1_CM and -lGLESv2).<br />
+  TODO: it seems it's possible to link both without incompatibility, so we need to remove
+  double-compilation.</p>
 
 <p>When compiled for OpenGL ES 2.0, it is possible to use OpenGL ES 3.0 and higher if the device or
 driver supports it by calling <code>glutInitContextVersion(3.0, 0.0)</code> before creating a window.</p>
@@ -36,6 +41,8 @@ driver supports it by calling <code>glutInitContextVersion(3.0, 0.0)</code> befo
 <h1>Compiling</h1>
 
 <p>Here's how to compile FreeGLUT for GLES2:</p>
+
+<p>First, check <tt>README.cmake</tt> to install the dependencies for your system.</p>
 
 <pre>
 aptitude install libgles2-mesa-dev
@@ -91,7 +98,13 @@ mkdir native-gles2/ && cd native-gles2/
 PKG_CONFIG_PATH=/tmp/freeglut-native-gles2/share/pkgconfig/ cmake ..
 </pre>
 
-<p>See for instance <code>progs/test-shapes-gles1/</code> in the source distribution:
-it is a standalone CMake app that uses FreeGLUT GLES1.</p>
+<p>See for instance:</p>
+<ul>
+  <li>OpenGL Wikibook's
+    <a href="https://gitorious.org/wikibooks-opengl/modern-tutorials/source/HEAD:tut04_transform-gles2"><tt>tut04_transform-gles2</tt>
+    example</a>: it uses a basic Makefile targetting <tt>freeglut-gles2</tt></li>
+  <li><tt>progs/test-shapes-gles1/</tt> in the source distribution:
+    it is a standalone CMake app that uses FreeGLUT GLES1.</li>
+</ul>
 
 <?php generateFooter(); ?>
