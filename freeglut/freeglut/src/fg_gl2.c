@@ -43,8 +43,9 @@ void FGAPIENTRY glutSetVertexAttribTexCoord2(GLint attrib) {
 }
 
 void fgInitGL2() {
-#ifndef GL_ES_VERSION_2_0
-    fgState.HasOpenGL20 = 0;
+#ifdef GL_ES_VERSION_2_0
+    fgState.HasOpenGL20 = (fgState.MajorVersion >= 2);
+#else
     /* TODO: Mesa returns a valid stub function, rather than NULL,
        when we request a non-existent function */
 #define CHECK(func, a) if ((a) == NULL) { fgWarning("fgInitGL2: " func " is NULL"); return; }
@@ -56,6 +57,6 @@ void fgInitGL2() {
     CHECK("fghEnableVertexAttribArray", fghEnableVertexAttribArray = (FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC)glutGetProcAddress("glEnableVertexAttribArray"));
     CHECK("fghDisableVertexAttribArray", fghDisableVertexAttribArray = (FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC)glutGetProcAddress("glDisableVertexAttribArray"));
 #undef CHECK
-#endif
     fgState.HasOpenGL20 = 1;
+#endif
 }

@@ -40,9 +40,7 @@ ELSE()
 ENDIF()
 
 # OpenGL ES support
-OPTION(FREEGLUT_GLES1 "Use OpenGL ES 1.x (requires EGL)" OFF)
-OPTION(FREEGLUT_GLES2 "Use OpenGL ES 2.x (requires EGL) (overrides BUILD_GLES1)" OFF)
-
+OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
 
 
 SET(FREEGLUT_HEADERS
@@ -81,7 +79,7 @@ SET(FREEGLUT_SRCS
     src/fg_window.c
 )
 # TODO: OpenGL ES requires a compatible version of these files:
-IF(NOT FREEGLUT_GLES2 AND NOT FREEGLUT_GLES1)
+IF(NOT FREEGLUT_GLES)
     LIST(APPEND FREEGLUT_SRCS
         src/fg_font.c
         src/fg_menu.c
@@ -172,7 +170,7 @@ ELSE()
         src/x11/fg_window_x11.c
         src/x11/fg_xinput_x11.c
     )
-    IF(NOT(FREEGLUT_GLES2 OR FREEGLUT_GLES1))
+    IF(NOT(FREEGLUT_GLES))
         LIST(APPEND FREEGLUT_SRCS
             src/x11/fg_internal_x11_glx.h
             src/x11/fg_display_x11_glx.c
@@ -183,7 +181,7 @@ ELSE()
         )
     ENDIF()
 ENDIF()
-IF(FREEGLUT_GLES2 OR FREEGLUT_GLES1)
+IF(FREEGLUT_GLES)
     LIST(APPEND FREEGLUT_SRCS
         src/egl/fg_internal_egl.h
         src/egl/fg_display_egl.c
@@ -199,18 +197,14 @@ IF(FREEGLUT_GLES2 OR FREEGLUT_GLES1)
     )
 ENDIF()
 
-# For OpenGL ES (GLES):
-# - compile with -DFREEGLUT_GLES1 and -DFREEGLUT_GLES2 to cleanly
-#   bootstrap headers inclusion in freeglut_std.h; these constants
-#   also need to be defined in client applications (e.g. through
-#   pkg-config), but use GLES constants directly for all other needs
-# - define GLES version-specific library
-IF(FREEGLUT_GLES2)
-  ADD_DEFINITIONS(-DFREEGLUT_GLES2)
-  LIST(APPEND LIBS GLESv2 EGL)
-ELSEIF(FREEGLUT_GLES1)
-  ADD_DEFINITIONS(-DFREEGLUT_GLES1)
-  LIST(APPEND LIBS GLESv1_CM EGL)
+# For OpenGL ES (GLES): compile with -DFREEGLUT_GLES to cleanly
+# bootstrap headers inclusion in freeglut_std.h; this constant also
+# need to be defined in client applications (e.g. through pkg-config),
+# but do use GLES constants directly for all other needs
+# GLES1 and GLES2 libraries are compatible and can be co-linked.
+IF(FREEGLUT_GLES)
+  ADD_DEFINITIONS(-DFREEGLUT_GLES)
+  LIST(APPEND LIBS GLESv2 GLESv1_CM EGL)
 ELSE()
   FIND_PACKAGE(OpenGL REQUIRED)
   LIST(APPEND LIBS ${OPENGL_gl_LIBRARY})
@@ -369,10 +363,8 @@ ELSE()
     # - the shared library should link to the dependency libraries so that the user
     #   won't have to link them explicitly (they shouldn't have to know that we depend
     #   on Xrandr or Xxf86vm)
-    IF(FREEGLUT_GLES2)
-      SET(LIBNAME freeglut-gles2)
-    ELSEIF(FREEGLUT_GLES1)
-      SET(LIBNAME freeglut-gles1)
+    IF(FREEGLUT_GLES)
+      SET(LIBNAME freeglut-gles)
     ELSE()
       SET(LIBNAME glut)
     ENDIF()
@@ -489,29 +481,17 @@ ADD_DEMO(timer           progs/demos/timer/timer.c)
 # Define static build dependencies
 IF(WIN32)
   SET(PC_LIBS_PRIVATE "-lopengl32 -lwinmm -lgdi32 -lm")
-ELSEIF(FREEGLUT_GLES2)
+ELSEIF(FREEGLUT_GLES)
   IF(ANDROID)
-    SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv2 -lEGL -lm")
+    SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv2 -lGLESv1_CM -lEGL -lm")
   ELSEIF(BLACKBERRY)
     IF(PLAYBOOK)
-      SET(PC_LIBS_PRIVATE "-lbps -lscreen -lGLESv2 -lEGL -lm")
+      SET(PC_LIBS_PRIVATE "-lbps -lscreen -lGLESv2 -lGLESv1_CM -lEGL -lm")
     ELSE()
-      SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv2 -lEGL -lm")
+      SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv2 -lGLESv1_CM -lEGL -lm")
     ENDIF()
   ELSE()
-    SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv2 -lEGL -lm")
-  ENDIF()
-ELSEIF(FREEGLUT_GLES1)
-  IF(ANDROID)
-    SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv1_CM -lEGL -lm")
-  ELSEIF(BLACKBERRY)
-    IF(PLAYBOOK)
-      SET(PC_LIBS_PRIVATE "-lbps -lscreen -lGLESv1_CM -lEGL -lm")
-    ELSE()
-      SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv1_CM -lEGL -lm")
-    ENDIF()
-  ELSE()
-    SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv1_CM -lEGL -lm")
+    SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv2 -lGLESv1_CM -lEGL -lm")
   ENDIF()
 ELSE()
   SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGL -lm")
@@ -520,16 +500,12 @@ ENDIF()
 # bootstrap headers inclusion in freeglut_std.h:
 SET(PC_LIBNAME "glut")
 SET(PC_FILENAME "freeglut.pc")
-IF(FREEGLUT_GLES2)
-  SET(PC_CFLAGS "-DFREEGLUT_GLES2")
-  SET(PC_LIBNAME "freeglut-gles2")
-  SET(PC_FILENAME "freeglut-gles2.pc")
-ELSEIF(FREEGLUT_GLES1)
-  SET(PC_CFLAGS "-DFREEGLUT_GLES1")
-  SET(PC_LIBNAME "freeglut-gles1")
-  SET(PC_FILENAME "freeglut-gles1.pc")
+IF(FREEGLUT_GLES)
+  SET(PC_CFLAGS "-DFREEGLUT_GLES")
+  SET(PC_LIBNAME "freeglut-gles")
+  SET(PC_FILENAME "freeglut-gles.pc")
 ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.pc.in ${CMAKE_BINARY_DIR}/freeglut.pc @ONLY)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION share/pkgconfig/ RENAME ${PC_FILENAME})
 # TODO: change the library and .pc name when building for GLES,
-# e.g. -lglut-GLES2
+# e.g. -lglut-GLES

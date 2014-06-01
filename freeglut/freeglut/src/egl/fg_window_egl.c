@@ -27,39 +27,49 @@
 #include "fg_internal.h"
 
 int fghChooseConfig(EGLConfig* config) {
-  const EGLint attribs[] = {
-    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-#ifdef GL_ES_VERSION_2_0
+  EGLint attribs[32];
+  int i = 0;
+  attribs[i++] = EGL_SURFACE_TYPE;
+  attribs[i++] = EGL_WINDOW_BIT;
+  if (fgState.MajorVersion >= 2) {
     /*
      * Khronos does not specify a EGL_OPENGL_ES3_BIT outside of the OpenGL extension "EGL_KHR_create_context". There are numerous references on the internet that
      * say to use EGL_OPENGL_ES3_BIT, followed by many saying they can't find it in any headers. In fact, the offical updated specification for EGL does not have
      * any references to OpenGL ES 3.0. Tests have shown that EGL_OPENGL_ES2_BIT will work with ES 3.0.
      */
-    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-#elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
-    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
-#else
-    EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
-#endif
+    attribs[i++] = EGL_RENDERABLE_TYPE;
+    attribs[i++] = EGL_OPENGL_ES2_BIT;
+  } else {
+    attribs[i++] = EGL_RENDERABLE_TYPE;
+    attribs[i++] = EGL_OPENGL_ES_BIT;
+  }
+  /* Technically it's possible to request a standard OpenGL (non-ES)
+     context, but currently our build system assumes EGL => GLES */
+  /* attribs[i++] = EGL_RENDERABLE_TYPE; */
+  /* attribs[i++] = EGL_OPENGL_BIT; */
 #ifdef TARGET_HOST_BLACKBERRY
-    /* Only 888 and 565 seem to work. Based on
+  /* Only 888 and 565 seem to work. Based on
        http://qt.gitorious.org/qt/qtbase/source/893deb1a93021cdfabe038cdf1869de33a60cbc9:src/plugins/platforms/qnx/qqnxglcontext.cpp and
        https://twitter.com/BlackBerryDev/status/380720927475912706 */
-    EGL_BLUE_SIZE, 8,
-    EGL_GREEN_SIZE, 8,
-    EGL_RED_SIZE, 8,
+  attribs[i++] = EGL_BLUE_SIZE; attribs[i++] = 8;
+  attribs[i++] = EGL_GREEN_SIZE; attribs[i++] = 8;
+  attribs[i++] = EGL_RED_SIZE; attribs[i++] = 8;
 #else
-    EGL_BLUE_SIZE, 1,
-    EGL_GREEN_SIZE, 1,
-    EGL_RED_SIZE, 1,
+  attribs[i++] = EGL_BLUE_SIZE; attribs[i++] = 1;
+  attribs[i++] = EGL_GREEN_SIZE; attribs[i++] = 1;
+  attribs[i++] = EGL_RED_SIZE; attribs[i++] = 1;
 #endif
-    EGL_ALPHA_SIZE, (fgState.DisplayMode & GLUT_ALPHA) ? 1 : 0,
-    EGL_DEPTH_SIZE, (fgState.DisplayMode & GLUT_DEPTH) ? 1 : 0,
-    EGL_STENCIL_SIZE, (fgState.DisplayMode & GLUT_STENCIL) ? 1 : 0,
-    EGL_SAMPLE_BUFFERS, (fgState.DisplayMode & GLUT_MULTISAMPLE) ? 1 : 0,
-    EGL_SAMPLES, (fgState.DisplayMode & GLUT_MULTISAMPLE) ? fgState.SampleNumber : 0,
-    EGL_NONE
-  };
+  attribs[i++] = EGL_ALPHA_SIZE;
+  attribs[i++] = (fgState.DisplayMode & GLUT_ALPHA) ? 1 : 0;
+  attribs[i++] = EGL_DEPTH_SIZE;
+  attribs[i++] = (fgState.DisplayMode & GLUT_DEPTH) ? 1 : 0;
+  attribs[i++] = EGL_STENCIL_SIZE;
+  attribs[i++] = (fgState.DisplayMode & GLUT_STENCIL) ? 1 : 0;
+  attribs[i++] = EGL_SAMPLE_BUFFERS;
+  attribs[i++] = (fgState.DisplayMode & GLUT_MULTISAMPLE) ? 1 : 0;
+  attribs[i++] = EGL_SAMPLES;
+  attribs[i++] = (fgState.DisplayMode & GLUT_MULTISAMPLE) ? fgState.SampleNumber : 0;
+  attribs[i++] = EGL_NONE;
 
   EGLint num_config;
   if (!eglChooseConfig(fgDisplay.pDisplay.egl.Display,
@@ -76,39 +86,26 @@ int fghChooseConfig(EGLConfig* config) {
  */
 EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
   EGLContext context;
+  EGLint ver = -1;
 
   EGLDisplay eglDisplay = fgDisplay.pDisplay.egl.Display;
   EGLConfig eglConfig = window->Window.pContext.egl.Config;
 
-  /* Ensure OpenGLES 2.0 context */
-  static EGLint ctx_attribs[] = {
-#ifdef GL_ES_VERSION_2_0
-    EGL_CONTEXT_CLIENT_VERSION, 2,
-#elif GL_VERSION_ES_CM_1_0 || GL_VERSION_ES_CL_1_0 || GL_VERSION_ES_CM_1_1 || GL_VERSION_ES_CL_1_1
-    EGL_CONTEXT_CLIENT_VERSION, 1,
-#endif
-    EGL_NONE
-  };
-#ifdef GL_ES_VERSION_2_0
-  /*
-   * As GLES 3.0 is backwards compatible with GLES 2.0, we set 2.0 as default unless the user states a different version.
-   * This updates the context attributes and lets us check that the correct version was set when we query it after creation.
-   */
-  int gles2Ver = fgState.MajorVersion <= 2 ? 2 : fgState.MajorVersion;
-  ctx_attribs[1] = gles2Ver;
-#endif
+  /* On GLES, user specifies the target version with glutInitContextVersion */
+  EGLint ctx_attribs[32];
+  int i = 0;
+  ctx_attribs[i++] = EGL_CONTEXT_CLIENT_VERSION;
+  ctx_attribs[i++] = fgState.MajorVersion;
+  ctx_attribs[i++] = EGL_NONE;
+
   context = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, ctx_attribs);
   if (context == EGL_NO_CONTEXT) {
     fgWarning("Cannot initialize EGL context, err=%x\n", eglGetError());
     fghContextCreationError();
   }
-  EGLint ver = -1;
+
   eglQueryContext(fgDisplay.pDisplay.egl.Display, context, EGL_CONTEXT_CLIENT_VERSION, &ver);
-#ifdef GL_ES_VERSION_2_0
-  if (ver != gles2Ver)
-#else
-  if (ver != 1)
-#endif
+  if (ver != fgState.MajorVersion)
     fgError("Wrong GLES major version: %d\n", ver);
 
   return context;

@@ -44,14 +44,12 @@
 
 /* declare for drawing using the different OpenGL versions here so we can
    have a nice code order below */
-#ifndef GL_ES_VERSION_2_0
 static void fghDrawGeometryWire11(GLfloat *vertices, GLfloat *normals,
                                   GLushort *vertIdxs, GLsizei numParts, GLsizei numVertPerPart, GLenum vertexMode,
                                   GLushort *vertIdxs2, GLsizei numParts2, GLsizei numVertPerPart2
     );
 static void fghDrawGeometrySolid11(GLfloat *vertices, GLfloat *normals, GLfloat *textcs, GLsizei numVertices,
                                    GLushort *vertIdxs, GLsizei numParts, GLsizei numVertIdxsPerPart);
-#endif
 static void fghDrawGeometryWire20(GLfloat *vertices, GLfloat *normals, GLsizei numVertices,
                                   GLushort *vertIdxs, GLsizei numParts, GLsizei numVertPerPart, GLenum vertexMode,
                                   GLushort *vertIdxs2, GLsizei numParts2, GLsizei numVertPerPart2,
@@ -62,9 +60,7 @@ static void fghDrawGeometrySolid20(GLfloat *vertices, GLfloat *normals, GLfloat 
                                    GLint attribute_v_coord, GLint attribute_v_normal, GLint attribute_v_texture);
 /* declare function for generating visualization of normals */
 static void fghGenerateNormalVisualization(GLfloat *vertices, GLfloat *normals, GLsizei numVertices);
-#ifndef GL_ES_VERSION_2_0
 static void fghDrawNormalVisualization11();
-#endif
 static void fghDrawNormalVisualization20(GLint attribute_v_coord);
 
 /* Drawing geometry:
@@ -147,12 +143,10 @@ void fghDrawGeometryWire(GLfloat *vertices, GLfloat *normals, GLsizei numVertice
                               vertIdxs, numParts, numVertPerPart, vertexMode,
                               vertIdxs2, numParts2, numVertPerPart2,
                               attribute_v_coord, attribute_v_normal);
-#ifndef GL_ES_VERSION_2_0
     else
         fghDrawGeometryWire11(vertices, normals,
                               vertIdxs, numParts, numVertPerPart, vertexMode,
                               vertIdxs2, numParts2, numVertPerPart2);
-#endif
 }
 
 /* Draw the geometric shape with filled triangles
@@ -203,7 +197,6 @@ void fghDrawGeometrySolid(GLfloat *vertices, GLfloat *normals, GLfloat *textcs, 
             /* draw normals for each vertex as well */
             fghDrawNormalVisualization20(attribute_v_coord);
     }
-#ifndef GL_ES_VERSION_2_0
     else
     {
         fghDrawGeometrySolid11(vertices, normals, textcs, numVertices,
@@ -213,13 +206,11 @@ void fghDrawGeometrySolid(GLfloat *vertices, GLfloat *normals, GLfloat *textcs, 
             /* draw normals for each vertex as well */
             fghDrawNormalVisualization11();
     }
-#endif
 }
 
 
 
 /* Version for OpenGL (ES) 1.1 */
-#ifndef GL_ES_VERSION_2_0
 static void fghDrawGeometryWire11(GLfloat *vertices, GLfloat *normals,
                                   GLushort *vertIdxs, GLsizei numParts, GLsizei numVertPerPart, GLenum vertexMode,
                                   GLushort *vertIdxs2, GLsizei numParts2, GLsizei numVertPerPart2
@@ -282,7 +273,6 @@ static void fghDrawGeometrySolid11(GLfloat *vertices, GLfloat *normals, GLfloat 
     if (textcs)
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
-#endif
 
 /* Version for OpenGL (ES) >= 2.0 */
 static void fghDrawGeometryWire20(GLfloat *vertices, GLfloat *normals, GLsizei numVertices,
@@ -540,7 +530,6 @@ static void fghGenerateNormalVisualization(GLfloat *vertices, GLfloat *normals, 
 }
 
 /* Version for OpenGL (ES) 1.1 */
-#ifndef GL_ES_VERSION_2_0
 static void fghDrawNormalVisualization11()
 {
     GLfloat currentColor[4];
@@ -559,7 +548,6 @@ static void fghDrawNormalVisualization11()
     free(verticesForNormalVisualization);
     glColor4f(currentColor[0],currentColor[1],currentColor[2],currentColor[3]);
 }
-#endif
 
 /* Version for OpenGL (ES) >= 2.0 */
 static void fghDrawNormalVisualization20(GLint attribute_v_coord)
