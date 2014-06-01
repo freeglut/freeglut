@@ -27,63 +27,51 @@ generateHeader($_SERVER['PHP_SELF']);
     from <tt>libraspeberrypi-dev</tt> which will shortcut X11 - see <a href="http://sourceforge.net/p/freeglut/feature-requests/71/">[#71]</a></li>
 </ul>
 
-<p>FreeGLUT ES is provided as a separate library, because OpenGL ES has a distinct,
-  incompatible library for each version (e.g. -lGLESv1_CM and -lGLESv2).<br />
-  TODO: it seems it's possible to link both without incompatibility, so we need to remove
-  double-compilation.</p>
+<p>FreeGLUT ES is provided as a separate library, because OpenGL ES
+has a distinct library from plain OpenGL (<tt>-lGLESv1_CM
+-lGLESv2</tt> instead of <tt>-lGL</tt>, and different headers too).
+We could consider dynamically loading the OpenGL symbols we need,
+like <a href="http://libsdl.org/">libSDL</a>.</p>
 
-<p>When compiled for OpenGL ES 2.0, it is possible to use OpenGL ES 3.0 and higher if the device or
-driver supports it by calling <code>glutInitContextVersion(3.0, 0.0)</code> before creating a window.</p>
-
-<p>The following explains how to use FreeGLUT ES under Mesa EGL.</p>
+<p>It is possible to select OpenGL ES 1, 2 or 3 (if the device and
+driver supports it) by calling
+e.g. <code>glutInitContextVersion(3,0)</code> before creating a
+window.</p>
 
 <a name="compiling"></a>
 <h1>Compiling</h1>
 
-<p>Here's how to compile FreeGLUT for GLES2:</p>
+<p>The following explains how to use FreeGLUT ES for Mesa EGL.<br />
+See also the <a href="android.php">Android page</a>.</p>
 
 <p>First, check <tt>README.cmake</tt> to install the dependencies for your system.</p>
 
-<pre>
-aptitude install libgles2-mesa-dev
-cd /usr/src/freeglut-3.0.0/
-mkdir native-gles2/ && cd native-gles2/
-cmake \
-  -DCMAKE_INSTALL_PREFIX=/tmp/freeglut-native-gles2 \
-  -D CMAKE_BUILD_TYPE=Debug \
-  -DFREEGLUT_GLES2=ON \
-  -DFREEGLUT_BUILD_DEMOS=NO \
-  ..
-make
-make install
-</pre>
-
-<p>For GLES1:</p>
+<p>Then:</p>
 
 <pre>
-aptitude install libgles1-mesa-dev
+apt-get install libgles1-mesa-dev libgles2-mesa-dev
 cd /usr/src/freeglut-3.0.0/
-mkdir native-gles1/ && cd native-gles1/
+mkdir native-gles/ && cd native-gles/
 cmake \
-  -DCMAKE_INSTALL_PREFIX=/tmp/freeglut-native-gles1 \
+  -DCMAKE_INSTALL_PREFIX=/tmp/freeglut-native-gles \
   -D CMAKE_BUILD_TYPE=Debug \
-  -DFREEGLUT_GLES1=ON \
+  -DFREEGLUT_GLES=ON \
   -DFREEGLUT_BUILD_DEMOS=NO \
   ..
-make
+make -j4
 make install
 </pre>
 
 <a name="using"></a>
 <h1>Using in your projects</h1>
 
-<p>Get the 'freeglut-gles2' module through pkg-config.</p>
+<p>Get the 'freeglut-gles' module through pkg-config.</p>
 
 <p>If you use CMake, you can do that with:</p>
 
 <pre>
 include(FindPkgConfig)
-pkg_check_modules(freeglut REQUIRED freeglut-gles2>=3.0.0)
+pkg_check_modules(freeglut REQUIRED freeglut-gles>=3.0.0)
 if(freeglut_FOUND)
   include_directories(${freeglut_STATIC_INCLUDE_DIRS})
   link_directories(${freeglut_STATIC_LIBRARY_DIRS})
@@ -94,17 +82,17 @@ endif()
 
 <pre>
 cd your_project/
-mkdir native-gles2/ && cd native-gles2/
-PKG_CONFIG_PATH=/tmp/freeglut-native-gles2/share/pkgconfig/ cmake ..
+mkdir native-gles/ && cd native-gles/
+PKG_CONFIG_PATH=/tmp/freeglut-native-gles/share/pkgconfig/ cmake ..
 </pre>
 
-<p>See for instance:</p>
+<p>Examples:</p>
 <ul>
   <li>OpenGL Wikibook's
     <a href="https://gitorious.org/wikibooks-opengl/modern-tutorials/source/HEAD:tut04_transform-gles2"><tt>tut04_transform-gles2</tt>
-    example</a>: it uses a basic Makefile targetting <tt>freeglut-gles2</tt></li>
+    example</a>: it uses a basic Makefile targetting <tt>freeglut-gles</tt></li>
   <li><tt>progs/test-shapes-gles1/</tt> in the source distribution:
-    it is a standalone CMake app that uses FreeGLUT GLES1.</li>
+    it is a standalone CMake app that uses FreeGLUT GLES (v1).</li>
 </ul>
 
 <?php generateFooter(); ?>
