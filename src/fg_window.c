@@ -127,15 +127,19 @@ void fgOpenWindow( SFG_Window* window, const char* title,
 
     fgSetWindow( window );
 
+#ifndef EGL_VERSION_1_0
     window->Window.DoubleBuffered =
         ( fgState.DisplayMode & GLUT_DOUBLE ) ? 1 : 0;
 
-#ifndef EGL_VERSION_1_0  /* No glDrawBuffer/glReadBuffer in GLES */
     if ( ! window->Window.DoubleBuffered )
     {
         glDrawBuffer ( GL_FRONT );
         glReadBuffer ( GL_FRONT );
     }
+#else
+    /* - EGL is always double-buffered */
+    /* - No glDrawBuffer/glReadBuffer in GLES */
+    window->Window.DoubleBuffered = 1;
 #endif
     window->Window.attribute_v_coord = -1;
     window->Window.attribute_v_normal = -1;
