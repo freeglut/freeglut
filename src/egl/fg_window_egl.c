@@ -3,7 +3,7 @@
  *
  * Window management methods for EGL
  *
- * Copyright (C) 2012  Sylvain Beucler
+ * Copyright (C) 2012, 2014  Sylvain Beucler
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -27,21 +27,18 @@
 #include "fg_internal.h"
 
 int fghChooseConfig(EGLConfig* config) {
-  EGLint attribs[32];
-  int i = 0;
-  attribs[i++] = EGL_SURFACE_TYPE;
-  attribs[i++] = EGL_WINDOW_BIT;
+  EGLint attributes[32];
+  int where = 0;
+  ATTRIB_VAL(EGL_SURFACE_TYPE, EGL_WINDOW_BIT);
   if (fgState.MajorVersion >= 2) {
     /*
      * Khronos does not specify a EGL_OPENGL_ES3_BIT outside of the OpenGL extension "EGL_KHR_create_context". There are numerous references on the internet that
      * say to use EGL_OPENGL_ES3_BIT, followed by many saying they can't find it in any headers. In fact, the offical updated specification for EGL does not have
      * any references to OpenGL ES 3.0. Tests have shown that EGL_OPENGL_ES2_BIT will work with ES 3.0.
      */
-    attribs[i++] = EGL_RENDERABLE_TYPE;
-    attribs[i++] = EGL_OPENGL_ES2_BIT;
+    ATTRIB_VAL(EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT);
   } else {
-    attribs[i++] = EGL_RENDERABLE_TYPE;
-    attribs[i++] = EGL_OPENGL_ES_BIT;
+    ATTRIB_VAL(EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT);
   }
   /* Technically it's possible to request a standard OpenGL (non-ES)
      context, but currently our build system assumes EGL => GLES */
@@ -51,29 +48,24 @@ int fghChooseConfig(EGLConfig* config) {
   /* Only 888 and 565 seem to work. Based on
        http://qt.gitorious.org/qt/qtbase/source/893deb1a93021cdfabe038cdf1869de33a60cbc9:src/plugins/platforms/qnx/qqnxglcontext.cpp and
        https://twitter.com/BlackBerryDev/status/380720927475912706 */
-  attribs[i++] = EGL_BLUE_SIZE; attribs[i++] = 8;
-  attribs[i++] = EGL_GREEN_SIZE; attribs[i++] = 8;
-  attribs[i++] = EGL_RED_SIZE; attribs[i++] = 8;
+  ATTRIB_VAL(EGL_BLUE_SIZE, 8);
+  ATTRIB_VAL(EGL_GREEN_SIZE, 8);
+  ATTRIB_VAL(EGL_RED_SIZE, 8);
 #else
-  attribs[i++] = EGL_BLUE_SIZE; attribs[i++] = 1;
-  attribs[i++] = EGL_GREEN_SIZE; attribs[i++] = 1;
-  attribs[i++] = EGL_RED_SIZE; attribs[i++] = 1;
+  ATTRIB_VAL(EGL_BLUE_SIZE, 1);
+  ATTRIB_VAL(EGL_GREEN_SIZE, 1);
+  ATTRIB_VAL(EGL_RED_SIZE, 1);
 #endif
-  attribs[i++] = EGL_ALPHA_SIZE;
-  attribs[i++] = (fgState.DisplayMode & GLUT_ALPHA) ? 1 : 0;
-  attribs[i++] = EGL_DEPTH_SIZE;
-  attribs[i++] = (fgState.DisplayMode & GLUT_DEPTH) ? 1 : 0;
-  attribs[i++] = EGL_STENCIL_SIZE;
-  attribs[i++] = (fgState.DisplayMode & GLUT_STENCIL) ? 1 : 0;
-  attribs[i++] = EGL_SAMPLE_BUFFERS;
-  attribs[i++] = (fgState.DisplayMode & GLUT_MULTISAMPLE) ? 1 : 0;
-  attribs[i++] = EGL_SAMPLES;
-  attribs[i++] = (fgState.DisplayMode & GLUT_MULTISAMPLE) ? fgState.SampleNumber : 0;
-  attribs[i++] = EGL_NONE;
+  ATTRIB_VAL(EGL_ALPHA_SIZE, (fgState.DisplayMode & GLUT_ALPHA) ? 1 : 0);
+  ATTRIB_VAL(EGL_DEPTH_SIZE, (fgState.DisplayMode & GLUT_DEPTH) ? 1 : 0);
+  ATTRIB_VAL(EGL_STENCIL_SIZE, (fgState.DisplayMode & GLUT_STENCIL) ? 1 : 0);
+  ATTRIB_VAL(EGL_SAMPLE_BUFFERS, (fgState.DisplayMode & GLUT_MULTISAMPLE) ? 1 : 0);
+  ATTRIB_VAL(EGL_SAMPLES, (fgState.DisplayMode & GLUT_MULTISAMPLE) ? fgState.SampleNumber : 0);
+  ATTRIB(EGL_NONE);
 
   EGLint num_config;
   if (!eglChooseConfig(fgDisplay.pDisplay.egl.Display,
-               attribs, config, 1, &num_config)) {
+               attributes, config, 1, &num_config)) {
     fgWarning("eglChooseConfig: error %x\n", eglGetError());
     return 0;
   }
@@ -92,13 +84,12 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
   EGLConfig eglConfig = window->Window.pContext.egl.Config;
 
   /* On GLES, user specifies the target version with glutInitContextVersion */
-  EGLint ctx_attribs[32];
-  int i = 0;
-  ctx_attribs[i++] = EGL_CONTEXT_CLIENT_VERSION;
-  ctx_attribs[i++] = fgState.MajorVersion;
-  ctx_attribs[i++] = EGL_NONE;
+  EGLint attributes[32];
+  int where = 0;
+  ATTRIB_VAL(EGL_CONTEXT_CLIENT_VERSION, fgState.MajorVersion);
+  ATTRIB(EGL_NONE);
 
-  context = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, ctx_attribs);
+  context = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, attributes);
   if (context == EGL_NO_CONTEXT) {
     fgWarning("Cannot initialize EGL context, err=%x\n", eglGetError());
     fghContextCreationError();
