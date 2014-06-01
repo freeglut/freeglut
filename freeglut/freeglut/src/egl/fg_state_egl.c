@@ -88,6 +88,9 @@ int fghPlatformGlutGetEGL ( GLenum eWhat )
             return 0;
 	return fgPlatformGetConfig( EGL_NATIVE_VISUAL_ID );
 
+    case GLUT_WINDOW_DOUBLEBUFFER:
+        return 1; /* EGL is always double-buffered */
+
     default:
         fgWarning( "glutGet(): missing enum handle %d", eWhat );
         break;
