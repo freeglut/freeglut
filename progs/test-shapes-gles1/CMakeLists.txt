@@ -11,7 +11,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 # FreeGLUT
 include(FindPkgConfig)
-pkg_check_modules(freeglut REQUIRED freeglut-gles1>=3.0.0)
+pkg_check_modules(freeglut REQUIRED freeglut-gles>=3.0.0)
 if(freeglut_FOUND)
   include_directories(${freeglut_STATIC_INCLUDE_DIRS})
   link_directories(${freeglut_STATIC_LIBRARY_DIRS})
