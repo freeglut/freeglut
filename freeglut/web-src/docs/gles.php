@@ -23,8 +23,11 @@ generateHeader($_SERVER['PHP_SELF']);
   <li>BlackBerry 10/BlackBerry PlayBook</li>
   <li>Unix X11 with Mesa EGL</li>
   <li>TODO: Raspberry PI: Mesa EGL doesn't work due to X11's fbdev limitation (no GL);
-    it needs to use <a href="https://github.com/raspberrypi/userland/tree/master/host_applications/linux/libs/bcm_host">bcm_host</a>
-    from <tt>libraspeberrypi-dev</tt> which will shortcut X11 - see <a href="http://sourceforge.net/p/freeglut/feature-requests/71/">[#71]</a></li>
+    it needs to use libraries from <tt>libraspeberrypi-dev</tt> which will shortcut X11
+    [<a href="https://github.com/openframeworks/openFrameworks/blob/master/libs/openFrameworks/app/ofAppEGLWindow.cpp">1</a>]
+    [<a href="http://sourceforge.net/p/freeglut/feature-requests/71/">2</a>]
+    [<a href="https://github.com/raspberrypi/userland/">3</a>]
+  </li>
 </ul>
 
 <p>FreeGLUT ES is provided as a separate library, because OpenGL ES
