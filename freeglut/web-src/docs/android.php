@@ -32,6 +32,9 @@ generateHeader($_SERVER['PHP_SELF']);
 <a name="compiling"></a>
 <h1>Compiling</h1>
 
+  <p>Note: a pre-built archive can be found here:
+  <a href="http://www.beuc.net/tmp/freeglut3-android-modules.tar.gz">freeglut3-android-modules.tar.gz</a> (2014-06-01 / SVN revision 1686).</p>
+
   <ul>
 
     <li>
