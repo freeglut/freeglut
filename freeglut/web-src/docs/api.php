@@ -200,6 +200,8 @@ will thus not work with the currently available 2.8.1 release.
 			<li>glutWireRhombicDodecahedron, glutSolidRhombicDodecahedron</li>
 			<li>glutWireTeapot, glutSolidTeapot, glutWireTeacup,
             glutSolidTeacup, glutWireTeaspoon, glutSolidTeaspoon</li>
+            <li>glutSetVertexAttribCoord3, glutSetVertexAttribNormal,
+            glutSetVertexAttribTexCoord2</li>
 		</ol>
 	</li>
 	<li><a href="#GameMode">Game Mode Functions</a>
@@ -378,10 +380,10 @@ of the new callbacks are listed in the GLUT Version 4 "glut.h" header file
 but did not make it into the documentation.  The new callbacks consist
 of regular and special key release callbacks, a joystick callback, a menu
 state callback (with one argument, distinct from the menu status callback
-which has three arguments), and a window status callback
- (also with one argument).  Unsupported callbacks are the two Tablet
-callbacks.  If the user has a need for an unsupported callback he should
-contact the <i>freeglut</i> development team.
+which has three arguments), a window status callback (also with one
+argument), and a window position callback.  Unsupported callbacks are
+the two Tablet callbacks.  If the user has a need for an unsupported
+callback he should contact the <i>freeglut</i> development team.
 </p>
 
 <h3>3.4.5 String Rendering</h3>
@@ -397,7 +399,17 @@ pixels for bitmapped fonts and in OpenGL units for the stroke fonts.
 
 <p>
 Two functions have been added to render a wireframe and a solid rhombic
-dodecahedron.
+dodecahedron. Furthermore, solid and wireframe versions of the original
+teacup and teaspoon that accompanied the famous Newell teapot. As these
+geometry functions are often used for teaching purposes,
+<tt>glutSetOption(GLUT_GEOMETRY_VISUALIZE_NORMALS,true/false)</tt> can
+now be used to visualize the normal vectors for each vertex. Lastly, to
+support drawing these objects with shaders, three functions have been
+added with which users can provide the addresses of the Coordinate,
+Normal and Texture Coordinate vertex attribs:
+<tt>glutSetVertexAttribCoord3</tt>, <tt>glutSetVertexAttribNormal</tt>,
+and <tt>glutSetVertexAttribTexCoord2</tt>. Texture coordinates are only
+generated for the teaset.
 </p>
 
 <h3>3.4.7  Extension Function Queries</h3>
@@ -481,8 +493,8 @@ glutInitDisplayString support is limited: any of the tokens recognized
 by GLUT are also recognized by <i>FreeGLUT</i>, but any statements with
 comparators cannot (yet: do <a href="../help.php">help develop
 this!</a>) be handled. Any spec (comparator and value) after the token
-is ignored. Many of these values can however be set with glutSetOption
-for now however...
+is ignored. However, many of these values can be set with glutSetOption
+for now...
 </p>
 
 <h2>4.5 glutInitErrorFunc, glutInitWarningFunc</h2>
@@ -954,8 +966,12 @@ callback; programs with multiple windows or menus must explicitly set the
  and not rely on its current setting. <br/>
 The amount of computation and rendering done in an idle
 callback should be minimized to avoid affecting the program's interactive
- response.  In general, no more than a single frame of rendering should
- be done in a single invocation of an idle callback. <br/>
+response.  In general, no more than a single frame of rendering should
+be done in a single invocation of an idle callback. Note that no actual
+drawing to the framebuffer should be done from the idle callback, this
+is not supported. While it might work on some platforms, it will not on
+others or might stop working in the future. Drawing should be done in
+the <tt>glutDisplayFunc</tt> callback.<br/>
 Calling <tt>glutIdleFunc</tt> with a NULL argument
 disables the call to an idle callback.
 </p>
@@ -994,7 +1010,7 @@ repositioned/moved programatically or by the user.
 <p><b>Usage</b></p>
 
 <p><tt>void glutPositionFunc ( void
-(* callback)( int x, int y) );</tt></p>
+(* func)( int x, int y) );</tt></p>
 
 <p><b>Description</b></p>
 
@@ -2022,7 +2038,7 @@ are designed such that all characters have (nominally) the same height. </p>
 <h1>15. <a name="GeometricObject"></a>Geometric Object Rendering Functions</h1>
 
 <p>
-<i>Freeglut</i> includes eighteen routines for generating
+<i>Freeglut</i> includes twenty two routines for generating
 easily-recognizable 3-d geometric objects.  These routines are
 effectively the same ones that are included in the GLUT library, and
 reflect the functionality available in the <i>aux</i> toolkit described
@@ -2036,7 +2052,10 @@ note that depth testing (GL_LESS) should be enabled for the correct
 drawing of the nonconvex objects, i.e., the glutTorus,
 glutSierpinskiSponge, glutTeapot, glutTeacup and glutTeaspoon.<br>
 Also see the <tt>GLUT_GEOMETRY_VISUALIZE_NORMALS</tt> option that can be
-set with <tt>glutSetOption</tt>.
+set with <tt>glutSetOption</tt>. Lastly, see
+<tt>glutSetVertexAttribCoord3</tt>, <tt>glutSetVertexAttribNormal</tt>,
+and <tt>glutSetVertexAttribTexCoord2</tt> if you wish to use these
+objects with shaders.
 </p>
 
 <h2>15.1  glutWireSphere, glutSolidSphere</h2>
@@ -2395,6 +2414,32 @@ should use:</p>
 
 <p>GLUT only has the teapot and misses the rest of the teaset. </p>
 
+<h2>15.12 glutSetVertexAttribCoord3, glutSetVertexAttribNormal, glutSetVertexAttribTexCoord2</h2>
+<p>
+To draw shapes with shaders (OpenGL 2 and later), one need to upload
+vertices and associated normal vectors and texture coordinates to
+vertex attributes of your shaders. Use these functions to set the
+indices (addresses) of the vertex attributes in your currently active
+shaders before calling the above geometry functions, and <i>FreeGLUT</i>
+will upload the object geometry there. Texture coordinates are only
+generated for the teapot, teacup and teaspoon.
+</p>
+
+<p><b>Definition</b></p>
+
+<p><tt>
+void glutSetVertexAttribCoord3&nbsp;&nbsp;&nbsp;(GLint attrib);<br>
+void glutSetVertexAttribNormal&nbsp;&nbsp;&nbsp;(GLint attrib);<br>
+void glutSetVertexAttribTexCoord2(GLint attrib);</tt></p>
+
+<p><b>Arguments</b></p>
+<p><tt>attrib&nbsp;&nbsp;</tt>The index (address) of the vertex
+attribute</p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>GLUT does not include these functions.</p>
+
 <h1>16. <a name="GameMode"></a>Game Mode Functions</h1>
 
 <h2>16.1 glutGameModeString</h2>
@@ -2485,16 +2530,16 @@ glutStopVideoResizing</h2>
 
 <h2>18.2 glutCopyColormap</h2>
 
-<h1><a name="MultiTouch"></a>MultiTouch Functions</h1>
+<h1>19. <a name="MultiTouch"></a>MultiTouch Functions</h1>
 
 MultiTouch callbacks are used to handle environments with multiple
 inputs, such as a multi-touch screen, multi-touch touchpad, or
 multiple mouses.<br />
 
-<h2>glutMultiEntryFunc &larr; id, GLUT_ENTERED|GLUT_LEFT</h2>
-<h2>glutMultiButtonFunc &larr; id, x, y, button, GLUT_DOWN|GLUT_UP</h2>
-<h2>glutMultiMotionFunc &larr; id, x, y</h2>
-<h2>glutMultiPassiveFunc &larr; id, x, y</h2>
+<h2>19.1 glutMultiEntryFunc &larr; id, GLUT_ENTERED|GLUT_LEFT</h2>
+<h2>19.2 glutMultiButtonFunc &larr; id, x, y, button, GLUT_DOWN|GLUT_UP</h2>
+<h2>19.3 glutMultiMotionFunc &larr; id, x, y</h2>
+<h2>19.4 glutMultiPassiveFunc &larr; id, x, y</h2>
 
 These functions work like their non-multi variants, with an additional
 'deviceid' parameter describing the current input device (mouse or
@@ -2532,7 +2577,7 @@ desirable to get the device id as well in the following situations:
 <a href="http://sourceforge.net/mailarchive/forum.php?thread_name=20120518071314.GA28061%40perso.beuc.net&forum_name=freeglut-developer">considering</a>
 whether/how to implement it.</p>
 
-<h1><a name="Mobile"></a>Mobile Functions</h1>
+<h1>20. <a name="Mobile"></a>Mobile Functions</h1>
 
 <p>These new callbacks were added:</p>
 
@@ -2556,9 +2601,9 @@ the <a href="android.php">Android page</a>.</li>
 <li>BlackBerry 10/BlackBerry PlayBook</li>
 </ul>
 
-<h1>19. <a name="Miscellaneous"></a>Miscellaneous Functions</h1>
+<h1>21. <a name="Miscellaneous"></a>Miscellaneous Functions</h1>
 
-<h2>19.1 glutSetKeyRepeat, glutIgnoreKeyRepeat</h2>
+<h2>21.1 glutSetKeyRepeat, glutIgnoreKeyRepeat</h2>
 
 <p>
 The <tt>glutSetKeyRepeat</tt> and <tt>glutIgnoreKeyRepeat</tt> functions
@@ -2598,11 +2643,11 @@ the windows for which you don't want it.</p>
 <tt>glutSetKeyRepeat</tt>, but <i>FreeGLUT</i>'s behavior should conform on all
 platforms to GLUT's behavior on X11.</p>
 
-<h2>19.2 glutForceJoystickFunc</h2>
+<h2>21.2 glutForceJoystickFunc</h2>
 
-<h2>19.3 glutReportErrors</h2>
+<h2>21.3 glutReportErrors</h2>
 
-<h1>20. <a name="UsageNotes"></a>Usage Notes</h1>
+<h1>22. <a name="UsageNotes"></a>Usage Notes</h1>
 
 <p> The following environment variables
 are recognized by <i>freeglut</i>:
@@ -2622,16 +2667,16 @@ Furthermore, on windows, there is a resource file identifier GLUT_ICON
 that you can specify for your executable file. It specifies the icon
 that goes in the upper left-hand corner of the <i>freeglut</i> windows.
 Your application's resource file should contain the line:<br>
-<tt>GLUT_ICON   ICON    DISCARDABLE     "icon.ico"</tt><br>, where
+<tt>GLUT_ICON   ICON    DISCARDABLE     "icon.ico"</tt><br> where
 icon.ico is the filename of your icon. The One demo includes such an
 icon as an example.
 </p>
 
-<h1>21. <a name="ImplementationNotes"></a>Implementation Notes</h1>
+<h2>21.1 <a name="ImplementationNotes"></a>Implementation Notes</h2>
 
-<h1>22. <a name="GLUT_State"></a>GLUT State</h1>
+<h2>21.2 <a name="GLUT_State"></a>GLUT State</h2>
 
-<h1>23. <a name="Freeglut.h_Header"></a>"freeglut.h" Header File</h1>
+<h2>21.3 <a name="Freeglut.h_Header"></a>"freeglut.h" Header File</h2>
 
 <p>
 Application programmers who are porting their GLUT programs to <i>freeglut</i> may continue
@@ -2673,8 +2718,8 @@ if (glutGet(GLUT_VERSION) &lt; 20001) {
 }
 </pre>
 
-<h1>24. <a name="References"></a>References</h1>
+<h2>21.4 <a name="References"></a>References</h2>
 
-<h1>25. <a name="Index"></a>Index</h1>
+<h2>21.5 <a name="Index"></a>Index</h2>
 
 <?php generateFooter(); ?>
