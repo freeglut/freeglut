@@ -30,11 +30,16 @@ int fghChooseConfig(EGLConfig* config) {
   EGLint attributes[32];
   int where = 0;
   ATTRIB_VAL(EGL_SURFACE_TYPE, EGL_WINDOW_BIT);
+#ifdef EGL_OPENGL_ES3_BIT
+  if (fgDisplay.pDisplay.egl.MinorVersion >= 5 && fgState.MajorVersion >= 3) {
+    ATTRIB_VAL(EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT);
+  } else
+#endif
   if (fgState.MajorVersion >= 2) {
     /*
-     * Khronos does not specify a EGL_OPENGL_ES3_BIT outside of the OpenGL extension "EGL_KHR_create_context". There are numerous references on the internet that
-     * say to use EGL_OPENGL_ES3_BIT, followed by many saying they can't find it in any headers. In fact, the offical updated specification for EGL does not have
-     * any references to OpenGL ES 3.0. Tests have shown that EGL_OPENGL_ES2_BIT will work with ES 3.0.
+     * Khronos does not specify a EGL_OPENGL_ES3_BIT outside of the OpenGL extension "EGL_KHR_create_context" and EGL 1.5. There are numerous references on the internet 
+     * that say to use EGL_OPENGL_ES3_BIT (pre-EGL 1.5), followed by many saying they can't find it in any headers. In fact, the offical updated specification for EGL 
+     * does not have any references to OpenGL ES 3.x. Tests have shown that EGL_OPENGL_ES2_BIT will work with ES 3.x.
      */
     ATTRIB_VAL(EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT);
   } else {
@@ -87,6 +92,12 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
   EGLint attributes[32];
   int where = 0;
   ATTRIB_VAL(EGL_CONTEXT_CLIENT_VERSION, fgState.MajorVersion);
+#ifdef EGL_CONTEXT_MINOR_VERSION
+  if (fgDisplay.pDisplay.egl.MinorVersion >= 5) {
+    // EGL_CONTEXT_CLIENT_VERSION == EGL_CONTEXT_MAJOR_VERSION
+    ATTRIB_VAL(EGL_CONTEXT_MINOR_VERSION, fgState.MinorVersion);
+  }
+#endif
   ATTRIB(EGL_NONE);
 
   context = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, attributes);
@@ -96,8 +107,17 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
   }
 
   eglQueryContext(fgDisplay.pDisplay.egl.Display, context, EGL_CONTEXT_CLIENT_VERSION, &ver);
-  if (ver != fgState.MajorVersion)
+  if (ver != fgState.MajorVersion) {
     fgError("Wrong GLES major version: %d\n", ver);
+  }
+#ifdef EGL_CONTEXT_MINOR_VERSION
+  if (fgDisplay.pDisplay.egl.MinorVersion >= 5) {
+    eglQueryContext(fgDisplay.pDisplay.egl.Display, context, EGL_CONTEXT_MINOR_VERSION, &ver);
+    if (ver != fgState.MinorVersion) {
+      fgError("Wrong GLES minor version: %d\n", ver);
+    }
+  }
+#endif
 
   return context;
 }

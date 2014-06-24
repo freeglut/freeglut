@@ -39,7 +39,7 @@ void fghPlatformInitializeEGL()
 
   FREEGLUT_INTERNAL_ERROR_EXIT(fgDisplay.pDisplay.egl.Display != EGL_NO_DISPLAY,
 			       "No display available", "fgPlatformInitialize");
-  if (eglInitialize(fgDisplay.pDisplay.egl.Display, NULL, NULL) != EGL_TRUE)
+  if (eglInitialize(fgDisplay.pDisplay.egl.Display, &fgDisplay.pDisplay.egl.MajorVersion, &fgDisplay.pDisplay.egl.MinorVersion) != EGL_TRUE)
     fgError("eglInitialize: error %x\n", eglGetError());
 
 # ifdef GL_VERSION_1_1  /* or later */
@@ -59,6 +59,8 @@ void fghPlatformCloseDisplayEGL()
   if (fgDisplay.pDisplay.egl.Display != EGL_NO_DISPLAY) {
     eglTerminate(fgDisplay.pDisplay.egl.Display);
     fgDisplay.pDisplay.egl.Display = EGL_NO_DISPLAY;
+    fgDisplay.pDisplay.egl.MajorVersion = 0;
+    fgDisplay.pDisplay.egl.MinorVersion = 0;
   }
 }
 
