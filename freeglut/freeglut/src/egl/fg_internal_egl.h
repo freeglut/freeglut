@@ -35,6 +35,8 @@ struct tagSFG_PlatformDisplayEGL
 {
   /* Used to initialize and deinitialize EGL */
   EGLDisplay          Display;
+  EGLint              MajorVersion;
+  EGLint              MinorVersion;
 };
 
 

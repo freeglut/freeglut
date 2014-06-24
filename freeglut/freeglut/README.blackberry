@@ -6,7 +6,7 @@
 #   $ source /absolute/path/to/the/bbndk/bbndk-env.sh
 #   $ mkdir build
 #   $ cd build
-#   $ cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES2=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
+#   $ cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
 #   $ make -j8
 #
 #  Usage Mac:
@@ -16,6 +16,8 @@
 #   > /absolute/path/to/the/bbndk/bbndk-env.bat
 #   > mkdir build
 #   > cd build
-#   > cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES2=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
+#   > cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
 #   > make -j8
 #
+
+To change which version of OpenGL to use, call glutInitContextVersion(1, 0) for OpenGL ES 1.x, glutInitContextVersion(2, 0) for OpenGL ES 2.0, or glutInitContextVersion(3, 0) for OpenGL ES 3.0.

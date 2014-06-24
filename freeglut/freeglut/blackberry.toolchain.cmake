@@ -6,7 +6,7 @@
 #   $ source /absolute/path/to/the/bbndk/bbndk-env.sh
 #   $ mkdir build
 #   $ cd build
-#   $ cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES2=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
+#   $ cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
 #   $ make -j8
 #
 #  Usage Mac:
@@ -16,7 +16,7 @@
 #   > /absolute/path/to/the/bbndk/bbndk-env.bat
 #   > mkdir build
 #   > cd build
-#   > cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES2=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
+#   > cmake .. -DCMAKE_TOOLCHAIN_FILE="../blackberry.toolchain.cmake" -DBLACKBERRY_ARCHITECTURE=arm -DFREEGLUT_GLES=ON -DFREEGLUT_BUILD_DEMOS=NO -DCMAKE_VERBOSE_MAKEFILE=TRUE -G "Eclipse CDT4 - Unix Makefiles"
 #   > make -j8
 #
 
@@ -34,7 +34,12 @@ set( CMAKE_SYSTEM_VERSION 1 )
 
 # Check for PlayBook
 if( EXISTS "${BLACKBERRY_TARGET_ROOT}/x86/lib/gcc/4.4.2" )
-set( PLAYBOOK True )
+  set( PLAYBOOK True )
+endif()
+
+# Check for for GCC 4.8.2
+if( EXISTS "${BLACKBERRY_TARGET_ROOT}/x86/lib/gcc/4.8.2" )
+  set( BB_GCC_482 True )
 endif()
 
 # STL version: by default gnustl_static will be used
@@ -103,28 +108,52 @@ else()
 endif()
 
 # Flags and preprocessor definitions
-if( BLACKBERRY_ARCHITECTURE STREQUAL "arm" )
- if( PLAYBOOK )
-  set( BLACKBERRY_CC_FLAGS  " -V4.4.2,gcc_ntoarmv7le -D__PLAYBOOK__" )
-  set( BLACKBERRY_CXX_FLAGS " -V4.4.2,gcc_ntoarmv7le -Y_gpp -D__PLAYBOOK__" )
- else()
-  set( BLACKBERRY_CC_FLAGS  " -V4.6.3,gcc_ntoarmv7le -D__QNX__" )
-  set( BLACKBERRY_CXX_FLAGS " -V4.6.3,gcc_ntoarmv7le -Y_gpp -D__QNX__" )
- endif()
+set( BB_USING_GCC_482 False )
+if( PLAYBOOK )
+  set( BLACKBERRY_COMP_DEF "-D__PLAYBOOK__" )
+  set( BLACKBERRY_COMP_VERSION "4.4.2" )
 else()
- if( PLAYBOOK )
-  set( BLACKBERRY_CC_FLAGS  " -V4.4.2,gcc_ntox86 -D__PLAYBOOK__" )
-  set( BLACKBERRY_CXX_FLAGS " -V4.4.2,gcc_ntox86 -Y_gpp -D__PLAYBOOK__" )
- else()
-  set( BLACKBERRY_CC_FLAGS  " -V4.6.3,gcc_ntox86 -D__QNX__" )
-  set( BLACKBERRY_CXX_FLAGS " -V4.6.3,gcc_ntox86 -Y_gpp -D__QNX__" )
- endif()
+  set( BLACKBERRY_COMP_DEF "-D__QNX__" )
+  if( BB_GCC_482 AND BLACKBERRY_USE_GCC_4_8 )
+    set( BLACKBERRY_COMP_VERSION "4.8.2" )
+    set( BB_USING_GCC_482 True )
+  else()
+    set( BLACKBERRY_COMP_VERSION "4.6.3" )
+  endif()
 endif()
+if( BLACKBERRY_ARCHITECTURE STREQUAL "arm" )
+  set( BLACKBERRY_COMP_TARGET "gcc_ntoarmv7le" )
+else()
+  set( BLACKBERRY_COMP_TARGET "gcc_ntox86" )
+endif()
+set( BLACKBERRY_CXX_COMP_LIB "" )
+if( BLACKBERRY_DINKUM )
+  set( DINKUM 1 )
+  if( BB_USING_GCC_482 )
+    set( BLACKBERRY_COMP_TARGET "${BLACKBERRY_COMP_TARGET}_cpp" )
+  else()
+    set( BLACKBERRY_CXX_COMP_LIB "-Y_cpp" )
+  endif()
+else()
+  set( DINKUM 0 )
+  if( BB_USING_GCC_482 )
+    set( BLACKBERRY_COMP_TARGET "${BLACKBERRY_COMP_TARGET}_gpp" )
+  else()
+    set( BLACKBERRY_CXX_COMP_LIB "-Y_gpp" )
+  endif()
+endif()
+set( BLACKBERRY_CC_FLAGS  " -V${BLACKBERRY_COMP_VERSION},${BLACKBERRY_COMP_TARGET} ${BLACKBERRY_COMP_DEF}" )
+set( BLACKBERRY_CXX_FLAGS " -V${BLACKBERRY_COMP_VERSION},${BLACKBERRY_COMP_TARGET} ${BLACKBERRY_CXX_COMP_LIB} ${BLACKBERRY_COMP_DEF}" )
 set( BLACKBERRY 1 )
 
 # NDK flags
-set( CMAKE_CXX_FLAGS "${BLACKBERRY_CXX_FLAGS}" )
-set( CMAKE_C_FLAGS "${BLACKBERRY_CC_FLAGS}" )
+if( DINKUM )
+  set( CMAKE_CXX_FLAGS "${BLACKBERRY_CXX_FLAGS} -DBLACKBERRY_DINKUM=1" )
+  set( CMAKE_C_FLAGS "${BLACKBERRY_CC_FLAGS} -DBLACKBERRY_DINKUM=1" )
+else()
+  set( CMAKE_CXX_FLAGS "${BLACKBERRY_CXX_FLAGS}" )
+  set( CMAKE_C_FLAGS "${BLACKBERRY_CC_FLAGS}" )
+endif()
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" )
 set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fexceptions" )
 
