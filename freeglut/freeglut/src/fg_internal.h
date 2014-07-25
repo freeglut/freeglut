@@ -32,6 +32,8 @@
 #    include "config.h"
 #endif
 
+#include "fg_version.h"
+
 /* Freeglut is intended to function under all Unix/X11 and Win32 platforms. */
 /* XXX: Don't all MS-Windows compilers (except Cygwin) have _WIN32 defined?
  * XXX: If so, remove the first set of defined()'s below.
