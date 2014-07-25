@@ -19,11 +19,6 @@
 #cmakedefine HAVE_ULONG_LONG
 #cmakedefine HAVE_U__INT64
 
-/* version numbers */
-#define VERSION_MAJOR @VERSION_MAJOR@
-#define VERSION_MINOR @VERSION_MINOR@
-#define VERSION_PATCH @VERSION_PATCH@
-
 /* warning and errors printed? */
 #cmakedefine FREEGLUT_PRINT_WARNINGS
 #cmakedefine FREEGLUT_PRINT_ERRORS
