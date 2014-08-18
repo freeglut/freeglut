@@ -18,6 +18,8 @@ set(VERSION_MAJOR 3)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
 
+# Update fg_version.h to match the versions number here in cmake
+CONFIGURE_FILE(src/fg_version.h.in src/fg_version.h)
 
 # FREEGLUT_BUILD_SHARED_LIBS is already a standard CMake variable, but we need to
 # re-declare it here so it will show up in the GUI.
