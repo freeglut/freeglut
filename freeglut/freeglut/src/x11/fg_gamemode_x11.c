@@ -29,17 +29,53 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
+/* we'll try to use XR&R if it's available at compile-time, and at runtime, and the user
+ * hasn't explicitly disabled it by setting the FREEGLUT_NO_XRANDR env-var.
+ */
+static int use_xrandr(void)
+{
+#ifdef HAVE_X11_EXTENSIONS_XRANDR_H
+    int event_base, error_base;
+	if(!XRRQueryExtension(fgDisplay.pDisplay.Display, &event_base, &error_base)) {
+		return 0;
+	}
+	if(getenv("FREEGLUT_NO_XRANDR")) {
+		return 0;
+	}
+	return 1;
+#else
+	return 0;	/* no compile-time support */
+#endif
+}
+
+/* we'll try to use XF86VidMode if it's available at compile-time, and at runtime, and the
+ * user hasn't explicitly disabled it by setting the FREEGLUT_NO_XF86VM env-var.
+ */
+static int use_xf86vm(void)
+{
+#ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
+	int event_base, error_base;
+	if(!XF86VidModeQueryExtension(fgDisplay.pDisplay.Display, &event_base, &error_base)) {
+		return 0;
+	}
+	if(getenv("FREEGLUT_NO_XF86VM")) {
+		return 0;
+	}
+	return 1;
+#else
+	return 0;	/* no compile-time support */
+#endif
+}
+
+
 #ifdef HAVE_X11_EXTENSIONS_XRANDR_H
 static int xrandr_resize(int xsz, int ysz, int rate, int just_checking)
 {
-    int event_base, error_base, ver_major, ver_minor, use_rate;
+    int ver_major, ver_minor, use_rate;
     XRRScreenConfiguration *xrr_config = 0;
     Status result = -1;
 
-    /* must check at runtime for the availability of the extension */
-    if(!XRRQueryExtension(fgDisplay.pDisplay.Display, &event_base, &error_base)) {
-        return -1;
-    }
+	/* NOTE: we have already determined that XR&R is availble and enabled before calling this */
 
     XRRQueryVersion(fgDisplay.pDisplay.Display, &ver_major, &ver_minor);
 
@@ -147,10 +183,6 @@ static int xrandr_resize(int xsz, int ysz, int rate, int just_checking)
  */
 void fgPlatformRememberState( void )
 {
-#   if defined(HAVE_X11_EXTENSIONS_XRANDR_H) | defined(HAVE_X11_EXTENSIONS_XF86VMODE_H)
-    int event_base, error_base;
-#   endif
-
     /*
      * Remember the current pointer location before going fullscreen
      * for restoring it later:
@@ -164,7 +196,7 @@ void fgPlatformRememberState( void )
             &fgDisplay.pDisplay.DisplayPointerX, &fgDisplay.pDisplay.DisplayPointerY, &junk_mask);
 
 #   ifdef HAVE_X11_EXTENSIONS_XRANDR_H
-    if(XRRQueryExtension(fgDisplay.pDisplay.Display, &event_base, &error_base)) {
+    if(use_xrandr()) {
         XRRScreenConfiguration *xrr_config;
         XRRScreenSize *ssizes;
         Rotation rot;
@@ -189,40 +221,38 @@ void fgPlatformRememberState( void )
             XRRFreeScreenConfigInfo(xrr_config);
         }
     }
-#   endif
+#   endif	/* HAVE_X11_EXTENSIONS_XRANDR_H */
 
     /*
      * This highly depends on the XFree86 extensions,
      * not approved as X Consortium standards
      */
 #   ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
-    if(!XF86VidModeQueryExtension(fgDisplay.pDisplay.Display, &event_base, &error_base)) {
-        return;
-    }
-
-    /*
-     * Remember the current ViewPort location of the screen to be able to
-     * restore the ViewPort on LeaveGameMode():
-     */
-    if( !XF86VidModeGetViewPort(
-             fgDisplay.pDisplay.Display,
-             fgDisplay.pDisplay.Screen,
-             &fgDisplay.pDisplay.DisplayViewPortX,
-             &fgDisplay.pDisplay.DisplayViewPortY ) )
-        fgWarning( "XF86VidModeGetViewPort failed" );
+	if(use_xf86vm()) {
+		/*
+		 * Remember the current ViewPort location of the screen to be able to
+		 * restore the ViewPort on LeaveGameMode():
+		 */
+		if( !XF86VidModeGetViewPort(
+				 fgDisplay.pDisplay.Display,
+				 fgDisplay.pDisplay.Screen,
+				 &fgDisplay.pDisplay.DisplayViewPortX,
+				 &fgDisplay.pDisplay.DisplayViewPortY ) )
+			fgWarning( "XF86VidModeGetViewPort failed" );
 
 
-    /* Query the current display settings: */
-    fgDisplay.pDisplay.DisplayModeValid =
-      XF86VidModeGetModeLine(
-        fgDisplay.pDisplay.Display,
-        fgDisplay.pDisplay.Screen,
-        &fgDisplay.pDisplay.DisplayModeClock,
-        &fgDisplay.pDisplay.DisplayMode
-    );
+		/* Query the current display settings: */
+		fgDisplay.pDisplay.DisplayModeValid =
+		  XF86VidModeGetModeLine(
+			fgDisplay.pDisplay.Display,
+			fgDisplay.pDisplay.Screen,
+			&fgDisplay.pDisplay.DisplayModeClock,
+			&fgDisplay.pDisplay.DisplayMode
+		);
 
-    if( !fgDisplay.pDisplay.DisplayModeValid )
-        fgWarning( "XF86VidModeGetModeLine failed" );
+		if( !fgDisplay.pDisplay.DisplayModeValid )
+			fgWarning( "XF86VidModeGetModeLine failed" );
+	}
 #   endif
 
 }
@@ -238,90 +268,90 @@ void fgPlatformRestoreState( void )
         fgDisplay.pDisplay.DisplayPointerX, fgDisplay.pDisplay.DisplayPointerY
     );
 
-
-#   ifdef HAVE_X11_EXTENSIONS_XRANDR_H
-    if(fgDisplay.pDisplay.prev_size_valid) {
-        if(xrandr_resize(fgDisplay.pDisplay.prev_xsz, fgDisplay.pDisplay.prev_ysz, fgDisplay.pDisplay.prev_refresh, 0) != -1) {
-            fgDisplay.pDisplay.prev_size_valid = 0;
-#       ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
-            fgDisplay.pDisplay.DisplayModeValid = 0;
-#       endif
-            return;
-        }
+#ifdef HAVE_X11_EXTENSIONS_XRANDR_H
+	if(use_xrandr()) {
+	    if(fgDisplay.pDisplay.prev_size_valid) {
+		    if(xrandr_resize(fgDisplay.pDisplay.prev_xsz, fgDisplay.pDisplay.prev_ysz, fgDisplay.pDisplay.prev_refresh, 0) != -1) {
+			    fgDisplay.pDisplay.prev_size_valid = 0;
+#ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
+		        fgDisplay.pDisplay.DisplayModeValid = 0;
+#endif
+	        }
+		}
+		return;	/* don't fall back to XF86VidMode if we have XR&R */
     }
-#   endif
+#endif	/* HAVE_X11_EXTENSIONS_XRANDR_H */
 
 
 
-#   ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
+#ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
     /*
      * This highly depends on the XFree86 extensions,
      * not approved as X Consortium standards
      */
+	if(use_xf86vm()) {
 
-    if( fgDisplay.pDisplay.DisplayModeValid )
-    {
-        XF86VidModeModeInfo** displayModes;
-        int i, displayModesCount;
+		if( fgDisplay.pDisplay.DisplayModeValid )
+		{
+			XF86VidModeModeInfo** displayModes;
+			int i, displayModesCount;
 
-        if( !XF86VidModeGetAllModeLines(
-                 fgDisplay.pDisplay.Display,
-                 fgDisplay.pDisplay.Screen,
-                 &displayModesCount,
-                 &displayModes ) )
-        {
-            fgWarning( "XF86VidModeGetAllModeLines failed" );
-            return;
-        }
-
-
-        /*
-         * Check every of the modes looking for one that matches our demands.
-         * If we find one, switch to it and restore the remembered viewport.
-         */
-        for( i = 0; i < displayModesCount; i++ )
-        {
-            if(displayModes[ i ]->hdisplay == fgDisplay.pDisplay.DisplayMode.hdisplay &&
-               displayModes[ i ]->vdisplay == fgDisplay.pDisplay.DisplayMode.vdisplay &&
-               displayModes[ i ]->dotclock == fgDisplay.pDisplay.DisplayModeClock )
-            {
-                if( !XF86VidModeSwitchToMode(
-                         fgDisplay.pDisplay.Display,
-                         fgDisplay.pDisplay.Screen,
-                         displayModes[ i ] ) )
-                {
-                    fgWarning( "XF86VidModeSwitchToMode failed" );
-                    break;
-                }
-
-                if( !XF86VidModeSetViewPort(
-                         fgDisplay.pDisplay.Display,
-                         fgDisplay.pDisplay.Screen,
-                         fgDisplay.pDisplay.DisplayViewPortX,
-                         fgDisplay.pDisplay.DisplayViewPortY ) )
-                    fgWarning( "XF86VidModeSetViewPort failed" );
+			if( !XF86VidModeGetAllModeLines(
+					 fgDisplay.pDisplay.Display,
+					 fgDisplay.pDisplay.Screen,
+					 &displayModesCount,
+					 &displayModes ) )
+			{
+				fgWarning( "XF86VidModeGetAllModeLines failed" );
+				return;
+			}
 
 
-                /*
-                 * For the case this would be the last X11 call the application
-                 * calls exit() we've to flush the X11 output queue to have the
-                 * commands sent to the X server before the application exits.
-                 */
-                XFlush( fgDisplay.pDisplay.Display );
+			/*
+			 * Check every of the modes looking for one that matches our demands.
+			 * If we find one, switch to it and restore the remembered viewport.
+			 */
+			for( i = 0; i < displayModesCount; i++ )
+			{
+				if(displayModes[ i ]->hdisplay == fgDisplay.pDisplay.DisplayMode.hdisplay &&
+				   displayModes[ i ]->vdisplay == fgDisplay.pDisplay.DisplayMode.vdisplay &&
+				   displayModes[ i ]->dotclock == fgDisplay.pDisplay.DisplayModeClock )
+				{
+					if( !XF86VidModeSwitchToMode(
+							 fgDisplay.pDisplay.Display,
+							 fgDisplay.pDisplay.Screen,
+							 displayModes[ i ] ) )
+					{
+						fgWarning( "XF86VidModeSwitchToMode failed" );
+						break;
+					}
 
-                fgDisplay.pDisplay.DisplayModeValid = 0;
-#       ifdef HAVE_X11_EXTENSIONS_XRANDR_H
-                fgDisplay.pDisplay.prev_size_valid = 0;
-#       endif
+					if( !XF86VidModeSetViewPort(
+							 fgDisplay.pDisplay.Display,
+							 fgDisplay.pDisplay.Screen,
+							 fgDisplay.pDisplay.DisplayViewPortX,
+							 fgDisplay.pDisplay.DisplayViewPortY ) )
+						fgWarning( "XF86VidModeSetViewPort failed" );
 
-                break;
-            }
-        }
-        XFree( displayModes );
+
+					/*
+					 * For the case this would be the last X11 call the application
+					 * calls exit() we've to flush the X11 output queue to have the
+					 * commands sent to the X server before the application exits.
+					 */
+					XFlush( fgDisplay.pDisplay.Display );
+
+					fgDisplay.pDisplay.DisplayModeValid = 0;
+#ifdef HAVE_X11_EXTENSIONS_XRANDR_H
+					fgDisplay.pDisplay.prev_size_valid = 0;
+#endif
+					break;
+				}
+			}
+			XFree( displayModes );
+		}
     }
-
-#   endif
-
+#endif	/* HAVE_X11_EXTENSIONS_XF86VMODE_H */
 }
 
 #ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
@@ -378,105 +408,108 @@ static int fghCheckDisplayModes( GLboolean exactMatch, int displayModesCount, XF
 GLboolean fgPlatformChangeDisplayMode( GLboolean haveToTest )
 {
     GLboolean success = GL_FALSE;
-    /* first try to use XRandR, then fallback to XF86VidMode */
-#   ifdef HAVE_X11_EXTENSIONS_XRANDR_H
-    if(xrandr_resize(fgState.GameModeSize.X, fgState.GameModeSize.Y,
-                fgState.GameModeRefresh, haveToTest) != -1) {
-        return GL_TRUE;
-    }
-#   endif
+#ifdef HAVE_X11_EXTENSIONS_XRANDR_H
+	if(use_xrandr()) {
+	    if(xrandr_resize(fgState.GameModeSize.X, fgState.GameModeSize.Y,
+		            fgState.GameModeRefresh, haveToTest) != -1) {
+			return GL_TRUE;
+	    }
+		return GL_FALSE;	/* don't fall back to XF86VidMode */
+	}
+#endif	/* HAVE_X11_EXTENSIONS_XRANDR_H */
 
 
     /*
      * This highly depends on the XFree86 extensions,
      * not approved as X Consortium standards
      */
-#   ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
+#ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
+	if(use_xf86vm()) {
+		/*
+		 * This is also used by applications which check modes by calling
+		 * glutGameModeGet(GLUT_GAME_MODE_POSSIBLE), so allow the check:
+		 */
+		if( haveToTest || fgDisplay.pDisplay.DisplayModeValid )
+		{
+			XF86VidModeModeInfo** displayModes;
+			int i, displayModesCount;
 
-    /*
-     * This is also used by applications which check modes by calling
-     * glutGameModeGet(GLUT_GAME_MODE_POSSIBLE), so allow the check:
-     */
-    if( haveToTest || fgDisplay.pDisplay.DisplayModeValid )
-    {
-        XF86VidModeModeInfo** displayModes;
-        int i, displayModesCount;
+			/* If we don't have a valid modeline in the display structure, which
+			 * can happen if this is called from glutGameModeGet instead of
+			 * glutEnterGameMode, then we need to query the current mode, to make
+			 * unspecified settings to default to their current values.
+			 */
+			if(!fgDisplay.pDisplay.DisplayModeValid) {
+				if(!XF86VidModeGetModeLine(fgDisplay.pDisplay.Display, fgDisplay.pDisplay.Screen,
+						&fgDisplay.pDisplay.DisplayModeClock, &fgDisplay.pDisplay.DisplayMode)) {
+					return success;
+				}
+			}
 
-        /* If we don't have a valid modeline in the display structure, which
-         * can happen if this is called from glutGameModeGet instead of
-         * glutEnterGameMode, then we need to query the current mode, to make
-         * unspecified settings to default to their current values.
-         */
-        if(!fgDisplay.pDisplay.DisplayModeValid) {
-            if(!XF86VidModeGetModeLine(fgDisplay.pDisplay.Display, fgDisplay.pDisplay.Screen,
-                    &fgDisplay.pDisplay.DisplayModeClock, &fgDisplay.pDisplay.DisplayMode)) {
-                return success;
-            }
-        }
+			if (fgState.GameModeSize.X == -1)
+			{
+				fgState.GameModeSize.X = fgDisplay.pDisplay.DisplayMode.hdisplay;
+			}
+			if (fgState.GameModeSize.Y == -1)
+			{
+				fgState.GameModeSize.Y = fgDisplay.pDisplay.DisplayMode.vdisplay;
+			}
+			if (fgState.GameModeDepth == -1)
+			{
+				/* can't get color depth from this, nor can we change it, do nothing
+				 * TODO: get with XGetVisualInfo()? but then how to set?
+				 */
+			}
+			if (fgState.GameModeRefresh == -1)
+			{
+				/* Compute the displays refresh rate, dotclock comes in kHz. */
+				int refresh = ( fgDisplay.pDisplay.DisplayModeClock * 1000 ) /
+					( fgDisplay.pDisplay.DisplayMode.htotal * fgDisplay.pDisplay.DisplayMode.vtotal );
 
-        if (fgState.GameModeSize.X == -1)
-        {
-            fgState.GameModeSize.X = fgDisplay.pDisplay.DisplayMode.hdisplay;
-        }
-        if (fgState.GameModeSize.Y == -1)
-        {
-            fgState.GameModeSize.Y = fgDisplay.pDisplay.DisplayMode.vdisplay;
-        }
-        if (fgState.GameModeDepth == -1)
-        {
-            /* can't get color depth from this, nor can we change it, do nothing
-             * TODO: get with XGetVisualInfo()? but then how to set?
-             */
-        }
-        if (fgState.GameModeRefresh == -1)
-        {
-            /* Compute the displays refresh rate, dotclock comes in kHz. */
-            int refresh = ( fgDisplay.pDisplay.DisplayModeClock * 1000 ) /
-                ( fgDisplay.pDisplay.DisplayMode.htotal * fgDisplay.pDisplay.DisplayMode.vtotal );
+				fgState.GameModeRefresh = refresh;
+			}
 
-            fgState.GameModeRefresh = refresh;
-        }
-
-        /* query all possible display modes */
-        if( !XF86VidModeGetAllModeLines(
-                 fgDisplay.pDisplay.Display,
-                 fgDisplay.pDisplay.Screen,
-                 &displayModesCount,
-                 &displayModes ) )
-        {
-            fgWarning( "XF86VidModeGetAllModeLines failed" );
-            return success;
-        }
+			/* query all possible display modes */
+			if( !XF86VidModeGetAllModeLines(
+					 fgDisplay.pDisplay.Display,
+					 fgDisplay.pDisplay.Screen,
+					 &displayModesCount,
+					 &displayModes ) )
+			{
+				fgWarning( "XF86VidModeGetAllModeLines failed" );
+				return success;
+			}
 
 
-        /*
-         * Check every of the modes looking for one that matches our demands,
-         * ignoring the refresh rate if no exact match could be found.
-         */
-        i = fghCheckDisplayModes( GL_TRUE, displayModesCount, displayModes );
-        if( i < 0 ) {
-            i = fghCheckDisplayModes( GL_FALSE, displayModesCount, displayModes );
-        }
-        success = ( i < 0 ) ? GL_FALSE : GL_TRUE;
+			/*
+			 * Check every of the modes looking for one that matches our demands,
+			 * ignoring the refresh rate if no exact match could be found.
+			 */
+			i = fghCheckDisplayModes( GL_TRUE, displayModesCount, displayModes );
+			if( i < 0 ) {
+				i = fghCheckDisplayModes( GL_FALSE, displayModesCount, displayModes );
+			}
+			success = ( i < 0 ) ? GL_FALSE : GL_TRUE;
 
-        if( !haveToTest && success ) {
-            if( !XF86VidModeSwitchToMode(
-                     fgDisplay.pDisplay.Display,
-                     fgDisplay.pDisplay.Screen,
-                     displayModes[ i ] ) )
-                fgWarning( "XF86VidModeSwitchToMode failed" );
-        }
+			if( !haveToTest && success ) {
+				if( !XF86VidModeSwitchToMode(
+						 fgDisplay.pDisplay.Display,
+						 fgDisplay.pDisplay.Screen,
+						 displayModes[ i ] ) )
+					fgWarning( "XF86VidModeSwitchToMode failed" );
+			}
 
-        XFree( displayModes );
-    }
+			XFree( displayModes );
+		}
+	}
 
-#   endif
+#endif	/* HAVE_X11_EXTENSIONS_XF86VMODE_H */
 
     return success;
 }
 
 
-void fgPlatformEnterGameMode( void ) 
+void fgPlatformEnterGameMode( void )
 {
 
     /*
@@ -521,38 +554,40 @@ void fgPlatformEnterGameMode( void )
         fgState.GameModeSize.X/2, fgState.GameModeSize.Y/2
     );
 
-#   ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
+#ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
+	if(use_xf86vm()) {
 
-    if( fgDisplay.pDisplay.DisplayModeValid )
-    {
-        int x, y;
-        Window child;
+		if( fgDisplay.pDisplay.DisplayModeValid )
+		{
+			int x, y;
+			Window child;
 
-        /* Change to viewport to the window topleft edge: */
-        if( !XF86VidModeSetViewPort( fgDisplay.pDisplay.Display, fgDisplay.pDisplay.Screen, 0, 0 ) )
-            fgWarning( "XF86VidModeSetViewPort failed" );
+			/* Change to viewport to the window topleft edge: */
+			if( !XF86VidModeSetViewPort( fgDisplay.pDisplay.Display, fgDisplay.pDisplay.Screen, 0, 0 ) )
+				fgWarning( "XF86VidModeSetViewPort failed" );
 
-        /*
-         * Final window repositioning: It could be avoided using an undecorated
-         * window using override_redirect, but this * would possily require
-         * more changes and investigation.
-         */
+			/*
+			 * Final window repositioning: It could be avoided using an undecorated
+			 * window using override_redirect, but this * would possily require
+			 * more changes and investigation.
+			 */
 
-        /* Get the current postion of the drawable area on screen */
-        XTranslateCoordinates(
-            fgDisplay.pDisplay.Display,
-            fgStructure.CurrentWindow->Window.Handle,
-            fgDisplay.pDisplay.RootWindow,
-            0, 0, &x, &y,
-            &child
-        );
+			/* Get the current postion of the drawable area on screen */
+			XTranslateCoordinates(
+				fgDisplay.pDisplay.Display,
+				fgStructure.CurrentWindow->Window.Handle,
+				fgDisplay.pDisplay.RootWindow,
+				0, 0, &x, &y,
+				&child
+			);
 
-        /* Move the decorataions out of the topleft corner of the display */
-        XMoveWindow( fgDisplay.pDisplay.Display, fgStructure.CurrentWindow->Window.Handle,
-                     -x, -y);
-    }
+			/* Move the decorataions out of the topleft corner of the display */
+			XMoveWindow( fgDisplay.pDisplay.Display, fgStructure.CurrentWindow->Window.Handle,
+						 -x, -y);
+		}
+	}
 
-#endif
+#endif	/* HAVE_X11_EXTENSIONS_XF86VMODE_H */
 
     /* Grab the keyboard, too */
     XGrabKeyboard(
@@ -565,7 +600,7 @@ void fgPlatformEnterGameMode( void )
 
 }
 
-void fgPlatformLeaveGameMode( void ) 
+void fgPlatformLeaveGameMode( void )
 {
     XUngrabPointer( fgDisplay.pDisplay.Display, CurrentTime );
     XUngrabKeyboard( fgDisplay.pDisplay.Display, CurrentTime );
