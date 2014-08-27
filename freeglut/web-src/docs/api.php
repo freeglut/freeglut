@@ -1557,7 +1557,8 @@ These queries are with respect to the current window:
 <li>GLUT_WINDOW_WIDTH - window width, see <a href="#Conventions">FreeGLUT's conventions</a></li>
 <li>GLUT_WINDOW_HEIGHT - window height, see <a href="#Conventions">FreeGLUT's conventions</a></li>
 <li>GLUT_WINDOW_BORDER_WIDTH - window border width</li>
-<li>GLUT_WINDOW_BORDER_HEIGHT - window border height</li>
+<li>GLUT_WINDOW_BORDER_HEIGHT - height of non-client area above window,
+including both border and caption (if any)</li>
 <li>GLUT_WINDOW_BUFFER_SIZE - number of color (including alpha) or color index bits per pixel</li>
 <li>GLUT_WINDOW_STENCIL_SIZE - number of bits per stencil value</li>
 <li>GLUT_WINDOW_DEPTH_SIZE - number of bits per depth value</li>
