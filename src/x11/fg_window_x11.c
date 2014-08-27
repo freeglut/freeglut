@@ -40,6 +40,18 @@
 #include "x11/fg_window_x11_glx.h"
 #endif
 
+/* Motif window hints, only define needed ones */
+typedef struct
+{
+    unsigned long flags;
+    unsigned long functions;
+    unsigned long decorations;
+    long input_mode;
+    unsigned long status;
+} MotifWmHints;
+#define MWM_HINTS_DECORATIONS         (1L << 1)
+#define MWM_DECOR_BORDER              (1L << 1)
+
 static int fghResizeFullscrToggle(void)
 {
     XWindowAttributes attributes;
@@ -340,6 +352,26 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 
     XSetWMProtocols( fgDisplay.pDisplay.Display, window->Window.Handle,
                      &fgDisplay.pDisplay.DeleteWindow, 1 );
+                     
+    if (!isSubWindow && !window->IsMenu &&
+        ((fgState.DisplayMode & GLUT_BORDERLESS) || (fgState.DisplayMode & GLUT_CAPTIONLESS)))
+    {
+        /* _MOTIF_WM_HINTS is replaced by _NET_WM_WINDOW_TYPE, but that property does not allow precise 
+         * control over the visual style of the window, which is what we are trying to achieve here.
+         * Stick with Motif and hope for the best... */
+        MotifWmHints hints = {0};
+        hints.flags = MWM_HINTS_DECORATIONS;
+        hints.decorations = (fgState.DisplayMode & GLUT_CAPTIONLESS) ? MWM_DECOR_BORDER:0;
+        printf("%i\n",hints.decorations);
+
+        XChangeProperty(fgDisplay.pDisplay.Display, window->Window.Handle,
+                        XInternAtom( fgDisplay.pDisplay.Display, "_MOTIF_WM_HINTS", False ),
+                        XInternAtom( fgDisplay.pDisplay.Display, "_MOTIF_WM_HINTS", False ), 32,
+                        PropModeReplace,
+                        (unsigned char*) &hints,
+                        sizeof(MotifWmHints) / sizeof(long));
+        }
+
 
     if (fgDisplay.pDisplay.NetWMSupported
         && fgDisplay.pDisplay.NetWMPid != None
