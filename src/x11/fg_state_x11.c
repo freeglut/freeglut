@@ -88,15 +88,23 @@ int fgPlatformGlutGet ( GLenum eWhat )
     case GLUT_WINDOW_HEADER_HEIGHT:
     {
         int x, y;
-        Window w;
+        Window p,w;
 
         if( fgStructure.CurrentWindow == NULL )
             return 0;
 
+        if (fgStructure.CurrentWindow->Parent)
+            /* For child window, we should return relative to upper-left
+             * of parent's client area.
+             */
+            p = fgStructure.CurrentWindow->Parent->Window.Handle;
+        else
+            p = fgDisplay.pDisplay.RootWindow;
+            
         XTranslateCoordinates(
             fgDisplay.pDisplay.Display,
             fgStructure.CurrentWindow->Window.Handle,
-            fgDisplay.pDisplay.RootWindow,
+            p,
             0, 0, &x, &y, &w);
 
         switch ( eWhat )
@@ -105,7 +113,8 @@ int fgPlatformGlutGet ( GLenum eWhat )
         case GLUT_WINDOW_Y: return y;
         }
 
-        if ( w == 0 )
+        if ( w == 0 || fgStructure.CurrentWindow->Parent)
+            /* logic below needs w, and child windows don't have borders */
             return 0;
         XTranslateCoordinates(
             fgDisplay.pDisplay.Display,
