@@ -334,7 +334,7 @@ void Timer(int unused)
             width, height,
             x ,y,
             x-border,
-            y-border-caption);
+            y-caption);
     else
         printf("child window %dx%d, top-left of client at: (%d,%d), relative to parent\n",
         width, height,
