@@ -194,7 +194,7 @@ void SampleKeyboard( unsigned char cChar, int nMouseX, int nMouseY )
             glutTimerFunc(2000, UnhideTimer, nWindow);
         }
         glutHideWindow();
-
+        break;
 
     case 'p':
     case 'P':
@@ -214,6 +214,7 @@ void SampleKeyboard( unsigned char cChar, int nMouseX, int nMouseY )
             else
                 glutSetCursor(GLUT_CURSOR_CYCLE);
         }
+        break;
 
     default:
         break;
@@ -275,6 +276,7 @@ void WindowStatus(int state)
 void Redisplay(void)
 {
     int win = glutGetWindow();
+    int viewport[4];
 
     if (win==nWindow)
     {
@@ -290,6 +292,14 @@ void Redisplay(void)
     }
     glClear(GL_COLOR_BUFFER_BIT);
     DrawQuad();
+
+    if (win==nWindow)
+    {
+        glColor3f(1, 1, 0);
+        glGetIntegerv(GL_VIEWPORT, viewport);
+        glRasterPos2i(2, -glutBitmapHeight(GLUT_BITMAP_9_BY_15)+3+viewport[3]);
+        glutBitmapString(GLUT_BITMAP_9_BY_15, (unsigned char*)"press f/r/m/d/c/i/h/p");
+    }
 
     glutSwapBuffers();
     glutPostWindowRedisplay(win);
