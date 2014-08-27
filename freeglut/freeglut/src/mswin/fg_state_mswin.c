@@ -256,7 +256,7 @@ int fgPlatformGlutGet ( GLenum eWhat )
              * all other extra pixels are assumed to be atop the window, forming the caption.
              */
             borderWidth   = ((winRect.right-winRect.left)-(clientRect.right-clientRect.left))/2;
-            captionHeight = (winRect.bottom-winRect.top)-(clientRect.bottom-clientRect.top)-borderWidth*2;
+            captionHeight = (winRect.bottom-winRect.top)-(clientRect.bottom-clientRect.top)-borderWidth; /* include top border in caption height */
             
             switch( eWhat )
             {
