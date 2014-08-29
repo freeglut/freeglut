@@ -84,8 +84,6 @@ int fgPlatformGlutGet ( GLenum eWhat )
      */
     case GLUT_WINDOW_X:
     case GLUT_WINDOW_Y:
-    case GLUT_WINDOW_BORDER_WIDTH:
-    case GLUT_WINDOW_HEADER_HEIGHT:
     {
         int x, y;
         Window p,w;
@@ -112,19 +110,71 @@ int fgPlatformGlutGet ( GLenum eWhat )
         case GLUT_WINDOW_X: return x;
         case GLUT_WINDOW_Y: return y;
         }
-
-        if ( w == 0 || fgStructure.CurrentWindow->Parent)
-            /* logic below needs w, and child windows don't have borders */
+    }
+    
+    case GLUT_WINDOW_BORDER_WIDTH:
+    case GLUT_WINDOW_HEADER_HEIGHT:
+    {
+        Atom actual_type, net_extents;
+        int actual_format;
+        unsigned long nitems, bytes_after;
+        unsigned char *data = NULL;
+        int result, top, left;
+        
+        if (fgStructure.CurrentWindow == NULL || fgStructure.CurrentWindow->Parent)
+            /* can't get widths/heights if no current window
+             * and child windows don't have borders */
             return 0;
-        XTranslateCoordinates(
-            fgDisplay.pDisplay.Display,
-            fgStructure.CurrentWindow->Window.Handle,
-            w, 0, 0, &x, &y, &w);
+        
+        /* try to get through _NET_FRAME_EXTENTS */
+        net_extents = XInternAtom(fgDisplay.pDisplay.Display, "_NET_FRAME_EXTENTS", False);
+        
+        result = XGetWindowProperty(
+            fgDisplay.pDisplay.Display, fgStructure.CurrentWindow->Window.Handle, net_extents,
+            0, 4, False, AnyPropertyType, 
+            &actual_type, &actual_format, 
+            &nitems, &bytes_after, &data);
+
+        if (result == Success && nitems == 4 && bytes_after == 0)
+            /* got the data we expected, here's to hoping that
+             * _NET_FRAME_EXTENTS is supported and the data
+             * contain sensible values */
+        {
+            long *extents = (long *)data;
+            left = (int) extents[0]; /* we take left as border width, consistent with old logic. bottom and right better be the same... */
+            top  = (int) extents[2];
+        }
+        else
+        {
+            /* try in the previous way as fall-back */
+            Window w;
+            int x,y;
+            
+            XTranslateCoordinates(
+                fgDisplay.pDisplay.Display,
+                fgStructure.CurrentWindow->Window.Handle,
+                fgDisplay.pDisplay.RootWindow,
+                0, 0, &x, &y, &w);
+            
+            if (w == 0)
+                /* logic below needs w */
+                return 0;
+            
+            XTranslateCoordinates(
+                fgDisplay.pDisplay.Display,
+                fgStructure.CurrentWindow->Window.Handle,
+                w, 0, 0, &x, &y, &w);  
+            
+            left = x;
+            top  = y;
+        }
+        if (result == Success)
+            XFree(data);
 
         switch ( eWhat )
         {
-        case GLUT_WINDOW_BORDER_WIDTH:  return x;
-        case GLUT_WINDOW_HEADER_HEIGHT: return y;
+        case GLUT_WINDOW_BORDER_WIDTH:  return left;
+        case GLUT_WINDOW_HEADER_HEIGHT: return top;
         }
     }
 
