@@ -278,10 +278,14 @@ void FGAPIENTRY glutStrokeCharacter( void* fontID, int character )
         for( j = 0; j < strip->Number; j++ )
             glVertex2f( strip->Vertices[ j ].X, strip->Vertices[ j ].Y );
         glEnd( );
-				glBegin( GL_POINTS );
-        for( j = 0; j < strip->Number; j++ )
-            glVertex2f( strip->Vertices[ j ].X, strip->Vertices[ j ].Y );
-				glEnd( );
+        
+        if (fgState.StrokeFontDrawJoinDots)
+        {
+            glBegin( GL_POINTS );
+            for( j = 0; j < strip->Number; j++ )
+                glVertex2f( strip->Vertices[ j ].X, strip->Vertices[ j ].Y );
+            glEnd( );
+        }
     }
     glTranslatef( schar->Right, 0.0, 0.0 );
 }

@@ -118,6 +118,10 @@ void FGAPIENTRY glutSetOption( GLenum eWhat, int value )
         fgStructure.CurrentWindow->State.VisualizeNormals = value;
       break;
 
+    case GLUT_STROKE_FONT_DRAW_JOIN_DOTS:
+      fgState.StrokeFontDrawJoinDots = value;
+      break;
+
     default:
         fgWarning( "glutSetOption(): missing enum handle %d", eWhat );
         break;
@@ -217,6 +221,9 @@ int FGAPIENTRY glutGet( GLenum eWhat )
       if( fgStructure.CurrentWindow == NULL )
         return GL_FALSE;
       return fgStructure.CurrentWindow->State.VisualizeNormals;
+
+    case GLUT_STROKE_FONT_DRAW_JOIN_DOTS:
+        return fgState.StrokeFontDrawJoinDots;
 
     default:
         return fgPlatformGlutGet ( eWhat );
