@@ -1527,6 +1527,8 @@ windows if GLUT_MULTISAMPLE was set in the displayMode.</li>
 <li>GLUT_GEOMETRY_VISUALIZE_NORMALS - Set whether <a
 href="#GeometricObject"><i>FreeGLUT</i>'s geometric object rendering
 functions</a> also visualize the object's normals or not.</li>
+<li>GLUT_STROKE_FONT_DRAW_JOIN_DOTS - Set whether join dots are drawn
+between line segments when drawing letters of stroke fonts or not.</li>
 </ul>
 </p>
 

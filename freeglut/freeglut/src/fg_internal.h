@@ -342,6 +342,8 @@ struct tagSFG_State
 
     GLboolean        SkipStaleMotion;      /* skip stale motion events */
 
+    GLboolean        StrokeFontDrawJoinDots;/* Draw dots between line segments of stroke fonts? */
+
     int              MajorVersion;         /* Major OpenGL context version  */
     int              MinorVersion;         /* Minor OpenGL context version  */
     int              ContextFlags;         /* OpenGL context flags          */
