@@ -38,12 +38,14 @@ or later.</td></tr>
 cube, cone, etc, as well as the teapot and other parts of the
 teaset)</td><td>3.0</td></tr>
 
-<tr><td>GL2+ and GLES 1/2 clean API for fonts and menus</td><td>Not sure what can be done
-here really. Menus will continue to work fine with OpenGL 3+ exclusive
-applications as long as the platform provides legacy contexts, as menus
-have their own rendering context. For text rendering, its probably best if the
-user looks at freetype and the like and avoids the use of FreeGLUT's
-text API</td><td>Probably impossible to do anything here</td></tr>
+<tr><td>GL2+ and GLES 1/2 clean API for fonts and menus</td><td>For
+stroke fonts, we can use a similar approach as for the shapes, should
+thus be straightforward. For the bitmap fonts, this is more complex.
+John T suggested "using a glyph atlas texture with GL_STREAM_DRAW VBOs",
+which would get us somewhere. Code could be ripped from his </a
+href="http://nuclear.mutantstargoat.com/sw/libdrawtext/">libdrawtext
+library</a></td><td>The sooner the better, but will have to wait for
+asap after 3.0.</td></tr>
 
 <tr><td>At runtime loading of OpenGL, OpenGL ES1 or OpenGL ES2 libraries,
 like SDL.</td><td>Currently CMake variables define at compile time which
@@ -67,6 +69,10 @@ might want to port to Cocoa first or even forget about Carbon all
 together.</td><td>Undecided</td></tr>
 
 <tr><td>Wayland port</td><td>Not started.</td><td>Undecided</td></tr>
+
+<tr><td>Unicode support</td><td>Not started, we'd need to discuss this
+carefully on the mailing list first to minimize impact on the
+API.</td><td>Undecided</td></tr>
 
 <tr><td>Complete glutInitDisplayString support</td><td>FreeGLUT now only
 partially supports glutInitDisplayString, any spec (comparator and
