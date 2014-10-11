@@ -3,6 +3,10 @@
 #include <math.h>
 #include "glmatrix.h"
 
+#ifndef M_PI
+#define M_PI	3.141592653589793
+#endif
+
 #define MMODE_IDX(x)	((x) - GL_MODELVIEW)
 #define MAT_STACK_SIZE	32
 #define MAT_IDENT	{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
@@ -114,17 +118,17 @@ void gl_scalef(float x, float y, float z)
     gl_mult_matrixf(mat);
 }
 
-void gl_ortho(float left, float right, float bottom, float top, float near, float far)
+void gl_ortho(float left, float right, float bottom, float top, float znear, float zfar)
 {
     float mat[] = MAT_IDENT;
 
     float dx = right - left;
     float dy = top - bottom;
-    float dz = far - near;
+    float dz = zfar - znear;
 
     float tx = -(right + left) / dx;
     float ty = -(top + bottom) / dy;
-    float tz = -(far + near) / dz;
+    float tz = -(zfar + znear) / dz;
 
     float sx = 2.f / dx;
     float sy = 2.f / dy;
@@ -140,21 +144,21 @@ void gl_ortho(float left, float right, float bottom, float top, float near, floa
     gl_mult_matrixf(mat);
 }
 
-void gl_frustum(float left, float right, float bottom, float top, float near, float far)
+void gl_frustum(float left, float right, float bottom, float top, float znear, float zfar)
 {
     float mat[] = MAT_IDENT;
 
     float dx = right - left;
     float dy = top - bottom;
-    float dz = far - near;
+    float dz = zfar - znear;
 
     float a = (right + left) / dx;
     float b = (top + bottom) / dy;
-    float c = -(far + near) / dz;
-    float d = -2.f * far * near / dz;
+    float c = -(zfar + znear) / dz;
+    float d = -2.f * zfar * znear / dz;
 
-    mat[0] = 2.f * near / dx;
-    mat[5] = 2.f * near / dy;
+    mat[0] = 2.f * znear / dx;
+    mat[5] = 2.f * znear / dy;
     mat[8] = a;
     mat[9] = b;
     mat[10] = c;
@@ -165,11 +169,11 @@ void gl_frustum(float left, float right, float bottom, float top, float near, fl
     gl_mult_matrixf(mat);
 }
 
-void glu_perspective(float vfov, float aspect, float near, float far)
+void glu_perspective(float vfov, float aspect, float znear, float zfar)
 {
     float vfov_rad = (float)M_PI * vfov / 180.f;
-    float x = near * (float)tan(vfov_rad / 2.f);
-    gl_frustum(-aspect * x, aspect * x, -x, x, near, far);
+    float x = znear * (float)tan(vfov_rad / 2.f);
+    gl_frustum(-aspect * x, aspect * x, -x, x, znear, zfar);
 }
 
 /* return the matrix (16 elements, 4x4 matrix, row-major order */
