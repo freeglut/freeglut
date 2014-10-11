@@ -20,9 +20,9 @@ void gl_mult_matrixf(const float *mat);
 void gl_translatef(float x, float y, float z);
 void gl_rotatef(float angle, float x, float y, float z);
 void gl_scalef(float x, float y, float z);
-void gl_ortho(float left, float right, float bottom, float top, float near, float far);
-void gl_frustum(float left, float right, float bottom, float top, float near, float far);
-void glu_perspective(float vfov, float aspect, float near, float far);
+void gl_ortho(float left, float right, float bottom, float top, float znear, float zfar);
+void gl_frustum(float left, float right, float bottom, float top, float znear, float zfar);
+void glu_perspective(float vfov, float aspect, float znear, float zfar);
 
 /* getters */
 float* get_matrix(int mm);
