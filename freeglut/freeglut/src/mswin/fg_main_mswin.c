@@ -184,7 +184,7 @@ static struct WM_MESSAGE_MAP allMessages[] =
 
 
 
-#   if(_WIN32_WINNT >= 0x0500)
+#   if(_WIN32_WINNT >= 0x0500) && defined(WM_NCXBUTTONDOWN)
         DEFINE_MESSAGE(WM_NCXBUTTONDOWN),
         DEFINE_MESSAGE(WM_NCXBUTTONUP),
         DEFINE_MESSAGE(WM_NCXBUTTONDBLCLK),
@@ -241,7 +241,7 @@ static struct WM_MESSAGE_MAP allMessages[] =
             DEFINE_MESSAGE(WM_UNINITMENUPOPUP),
             DEFINE_MESSAGE(WM_MENUCOMMAND),
 
-#           if(_WIN32_WINNT >= 0x0500)
+#           if(_WIN32_WINNT >= 0x0500) && defined(WM_CHANGEUISTATE)
                 DEFINE_MESSAGE(WM_CHANGEUISTATE),
                 DEFINE_MESSAGE(WM_UPDATEUISTATE),
                 DEFINE_MESSAGE(WM_QUERYUISTATE),
@@ -272,7 +272,7 @@ static struct WM_MESSAGE_MAP allMessages[] =
 #   if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
         DEFINE_MESSAGE(WM_MOUSEWHEEL),
 #   endif
-#   if (_WIN32_WINNT >= 0x0500)
+#   if (_WIN32_WINNT >= 0x0500) && defined(WM_XBUTTONDOWN)
         DEFINE_MESSAGE(WM_XBUTTONDOWN),
         DEFINE_MESSAGE(WM_XBUTTONUP),
         DEFINE_MESSAGE(WM_XBUTTONDBLCLK),
@@ -364,7 +364,7 @@ static struct WM_MESSAGE_MAP allMessages[] =
         DEFINE_MESSAGE(WM_MOUSEHOVER),
         DEFINE_MESSAGE(WM_MOUSELEAVE),
 #   endif
-#   if(WINVER >= 0x0500)
+#   if(WINVER >= 0x0500) && defined(WM_NCMOUSEHOVER)
         DEFINE_MESSAGE(WM_NCMOUSEHOVER),
         DEFINE_MESSAGE(WM_NCMOUSELEAVE),
 #   endif /* WINVER >= 0x0500 */
@@ -398,7 +398,7 @@ static struct WM_MESSAGE_MAP allMessages[] =
         DEFINE_MESSAGE(WM_PRINTCLIENT),
 #   endif /* WINVER >= 0x0400 */
 
-#   if(_WIN32_WINNT >= 0x0500)
+#   if(_WIN32_WINNT >= 0x0500) && defined(WM_APPCOMMAND)
         DEFINE_MESSAGE(WM_APPCOMMAND),
 #   endif /* _WIN32_WINNT >= 0x0500 */
 
@@ -1283,7 +1283,7 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         */
 #else
         /* int modkeys = GET_KEYSTATE_WPARAM( wParam ); */
-        short ticks = GET_WHEEL_DELTA_WPARAM( wParam );
+        short ticks = HIWORD( wParam );
         /* commented out as should not be needed here, mouse motion is processed in WM_MOUSEMOVE first:
         window->State.MouseX = GET_X_LPARAM( lParam );
         window->State.MouseY = GET_Y_LPARAM( lParam );
