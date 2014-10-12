@@ -247,11 +247,12 @@ void FGAPIENTRY glutJoystickFunc( FGCBJoystick callback, int pollInterval )
     SET_CALLBACK( Joystick );
     fgStructure.CurrentWindow->State.JoystickPollRate = pollInterval;
 
-    fgStructure.CurrentWindow->State.JoystickLastPoll =
-        fgElapsedTime() - fgStructure.CurrentWindow->State.JoystickPollRate;
-
-    if( fgStructure.CurrentWindow->State.JoystickLastPoll < 0 )
+    /* set last poll time such that joystick will be polled asap */
+    fgStructure.CurrentWindow->State.JoystickLastPoll = fgElapsedTime();
+    if (fgStructure.CurrentWindow->State.JoystickLastPoll < pollInterval)
         fgStructure.CurrentWindow->State.JoystickLastPoll = 0;
+    else
+        fgStructure.CurrentWindow->State.JoystickLastPoll -= pollInterval;
 }
 
 
