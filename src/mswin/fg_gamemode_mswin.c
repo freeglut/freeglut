@@ -31,7 +31,7 @@
 /*
  * Changes to requested devmode, if it doesn't match current mode
  */
-GLboolean fghPlatformChangeDisplayMode(GLboolean haveToTest, DEVMODE *devModeRequested)
+GLboolean fghChangeDisplayMode(GLboolean haveToTest, DEVMODE *devModeRequested)
 {
     GLboolean success = GL_FALSE;
     DEVMODE  devModeCurrent;
@@ -138,7 +138,7 @@ void fgPlatformRememberState( void )
 void fgPlatformRestoreState( void )
 {
     /* Restore the previously remembered desktop display settings */
-    fghPlatformChangeDisplayMode(GL_FALSE,&fgDisplay.pDisplay.DisplayMode);
+    fghChangeDisplayMode(GL_FALSE,&fgDisplay.pDisplay.DisplayMode);
 }
 
 
@@ -176,7 +176,7 @@ GLboolean fgPlatformChangeDisplayMode( GLboolean haveToTest )
         devMode.dmFields |= DM_DISPLAYFREQUENCY;
     }
 
-    return fghPlatformChangeDisplayMode(haveToTest, &devMode);
+    return fghChangeDisplayMode(haveToTest, &devMode);
 }
 
 void fgPlatformEnterGameMode( void ) 
