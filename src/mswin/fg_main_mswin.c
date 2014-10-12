@@ -752,7 +752,9 @@ SFG_Window* fghWindowUnderCursor(SFG_Window *window)
 
         /* Get mouse position at time of message */
         DWORD mouse_pos_dw = GetMessagePos();
-        POINT mouse_pos = {GET_X_LPARAM(mouse_pos_dw), GET_Y_LPARAM(mouse_pos_dw)};
+        POINT mouse_pos;
+        mouse_pos.x = GET_X_LPARAM(mouse_pos_dw);
+        mouse_pos.y = GET_Y_LPARAM(mouse_pos_dw);
         ScreenToClient( window->Window.Handle, &mouse_pos );
         
         hwnd = ChildWindowFromPoint(window->Window.Handle, mouse_pos);
@@ -947,7 +949,9 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
                     /* For child window, we should return relative to upper-left
                      * of parent's client area.
                      */
-                    POINT topleft = {windowRect.left,windowRect.top};
+                    POINT topleft;
+                    topleft.x = windowRect.left;
+                    topleft.y = windowRect.top;
 
                     ScreenToClient(window->Parent->Window.Handle,&topleft);
                     windowRect.left = topleft.x;
