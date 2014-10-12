@@ -233,7 +233,7 @@ static void fghFillPFD( PIXELFORMATDESCRIPTOR *ppfd, HDC hdc, unsigned char laye
   ppfd->cDepthBits = 24;
   ppfd->cStencilBits = 8;
 
-  ppfd->cAuxBuffers = fghNumberOfAuxBuffersRequested();
+  ppfd->cAuxBuffers = (BYTE) fghNumberOfAuxBuffersRequested();
   ppfd->iLayerType = layer_type;
   ppfd->bReserved = 0;
   ppfd->dwLayerMask = 0;
@@ -570,7 +570,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     WNDCLASS wc;
     DWORD flags   = 0;
     DWORD exFlags = 0;
-    ATOM atom;
+    BOOL atom;
 
     /* Grab the window class we have registered on glutInit(): */
     atom = GetClassInfo( fgDisplay.pDisplay.Instance, _T("FREEGLUT"), &wc );
