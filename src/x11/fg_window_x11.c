@@ -362,7 +362,6 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
         MotifWmHints hints = {0};
         hints.flags = MWM_HINTS_DECORATIONS;
         hints.decorations = (fgState.DisplayMode & GLUT_CAPTIONLESS) ? MWM_DECOR_BORDER:0;
-        printf("%lu\n", hints.decorations);
 
         XChangeProperty(fgDisplay.pDisplay.Display, window->Window.Handle,
                         XInternAtom( fgDisplay.pDisplay.Display, "_MOTIF_WM_HINTS", False ),
