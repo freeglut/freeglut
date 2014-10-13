@@ -28,10 +28,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifdef HAVE_CONFIG_H
-#    include "config.h"
-#endif
-
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
