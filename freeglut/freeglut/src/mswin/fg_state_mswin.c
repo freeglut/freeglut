@@ -327,11 +327,9 @@ int fgPlatformGlutDeviceGet ( GLenum eWhat )
 
     default:
         fgWarning( "glutDeviceGet(): missing enum handle %d", eWhat );
+        return -1;
         break;
     }
-
-    /* And now -- the failure. */
-    return -1;
 }
 
 /*
