@@ -628,8 +628,11 @@ its event loop.
 
 <p>
 The  <tt>glutLeaveMainLoop</tt> function causes <i>freeglut</i> to stop the event loop.  If the
-<tt>GLUT_ACTION_ON_WINDOW_CLOSE</tt> option has been set to <tt>GLUT_ACTION_CONTINUE_EXECUTION</tt>,
-control will return to the function which called <tt>glutMainLoop</tt>; otherwise the application will exit.
+<tt>GLUT_ACTION_ON_WINDOW_CLOSE</tt> option has been set to
+<tt>GLUT_ACTION_GLUTMAINLOOP_RETURNS</tt> or
+<tt>GLUT_ACTION_CONTINUE_EXECUTION</tt>, control will return to the
+function which called <tt>glutMainLoop</tt>; otherwise the application
+will exit.
 </p>
 
 <p>
