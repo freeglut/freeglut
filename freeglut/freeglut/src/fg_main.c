@@ -543,10 +543,18 @@ void FGAPIENTRY glutMainLoop( void )
         fgDeinitialize( );
     /* if we don't want to deinitialize but we have windows left open at this point, then ActionOnWindowClose
      * must be GLUT_ACTION_GLUTMAINLOOP_RETURNS. This action on close implies all current windows should be
-     * closed, otherwise user would have chosen close action GLUT_ACTION_CONTINUE_EXECUTION. Close windows*/
+     * closed, otherwise user would have chosen close action GLUT_ACTION_CONTINUE_EXECUTION. Close windows */
     if (actionMainloop == GLUT_ACTION_DONT_DEINITIALIZE && fgListLength(&fgStructure.Windows)>0)
-        while (fgStructure.Windows.First)
-            fgDestroyWindow((SFG_Window *)fgStructure.Windows.First);
+    {
+        SFG_Window* win = (SFG_Window*) fgStructure.Windows.First, *winn;
+        while (win)
+        {
+            winn = (SFG_Window*) win->Node.Next;
+            if (!win->IsMenu)   /* But don't close menus! */
+                fgDestroyWindow(win);
+            win = winn;
+        }
+    }
     /* exit if wanted */
     if(actionClose == GLUT_ACTION_EXIT)
         exit(0);

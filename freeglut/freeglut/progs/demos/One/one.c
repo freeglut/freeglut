@@ -403,6 +403,7 @@ int main( int argc, char** argv )
     /*
      * we requested not to deinitialize, so we should be able to open a window again right away
      * see glutSetOption(GLUT_ACTION_ON_MAINLOOP_RETURN,GLUT_ACTION_DONT_DEINITIALIZE) above
+     * note that menus are still there!
      */
     g_mainwin1 = glutCreateWindow("Risen from the dead");
     glutDisplayFunc(SampleDisplay);
