@@ -481,7 +481,7 @@ void FGAPIENTRY glutMainLoopEvent( void )
  */
 void FGAPIENTRY glutMainLoop( void )
 {
-    int action;
+    int actionClose, actionMainloop;
 
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutMainLoop" );
 
@@ -524,15 +524,32 @@ void FGAPIENTRY glutMainLoop( void )
     }
 
     /*
-     * When this loop terminates, destroy the display, state and structure
-     * of a freeglut session, so that another glutInit() call can happen
+     * When this loop terminates, decide how to clean up.
+     * - We always deinitialize and exit when ActionOnWindowClose is GLUT_ACTION_EXIT
+     * - When ActionOnWindowClose is GLUT_ACTION_GLUTMAINLOOP_RETURNS or GLUT_ACTION_CONTINUE_EXECUTION,
+     *   we do not exit. Whether we deinitialize however depends on ActionOnMainloopReturn:
+     *   - if GLUT_ACTION_DEINITIALIZE, we deinitialize
+     *   - if GLUT_ACTION_DONT_DEINITIALIZE, we don't. We do however close all windows that remain open.
+     * 
+     * deinitialize entails: destroy the display, state and structure of a freeglut session, so that
+     * another glutInit() call can happen
      *
-     * Save the "ActionOnWindowClose" because "fgDeinitialize" resets it.
+     * Save the ActionOnWindowClose and ActionOnMainloopReturn because "fgDeinitialize" resets it.
      */
-    action = fgState.ActionOnWindowClose;
-    fgDeinitialize( );
-    if( action == GLUT_ACTION_EXIT )
-        exit( 0 );
+    actionClose    = fgState.ActionOnWindowClose;
+    actionMainloop = fgState.ActionOnMainloopReturn;
+    /* deinitialize if needed according to above */
+    if (actionClose == GLUT_ACTION_EXIT || actionMainloop == GLUT_ACTION_DEINITIALIZE)
+        fgDeinitialize( );
+    /* if we don't want to deinitialize but we have windows left open at this point, then ActionOnWindowClose
+     * must be GLUT_ACTION_GLUTMAINLOOP_RETURNS. This action on close implies all current windows should be
+     * closed, otherwise user would have chosen close action GLUT_ACTION_CONTINUE_EXECUTION. Close windows*/
+    if (actionMainloop == GLUT_ACTION_DONT_DEINITIALIZE && fgListLength(&fgStructure.Windows)>0)
+        while (fgStructure.Windows.First)
+            fgDestroyWindow((SFG_Window *)fgStructure.Windows.First);
+    /* exit if wanted */
+    if(actionClose == GLUT_ACTION_EXIT)
+        exit(0);
 }
 
 /*

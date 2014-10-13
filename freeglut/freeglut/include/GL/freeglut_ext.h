@@ -53,6 +53,12 @@
 #define GLUT_ACTION_CONTINUE_EXECUTION           2
 
 /*
+ * GLUT API Extension macro definitions -- behaviour when the mainloop returns
+ */
+#define GLUT_ACTION_DEINITIALIZE                 0
+#define GLUT_ACTION_DONT_DEINITIALIZE            1
+
+/*
  * Create a new rendering context when the user opens a new window?
  */
 #define GLUT_CREATE_NEW_CONTEXT                  0
@@ -72,6 +78,7 @@
 #define  GLUT_INIT_STATE                    0x007C
 
 #define  GLUT_ACTION_ON_WINDOW_CLOSE        0x01F9
+#define  GLUT_ACTION_ON_MAINLOOP_RETURN     0x0207
 
 #define  GLUT_WINDOW_BORDER_WIDTH           0x01FA
 #define  GLUT_WINDOW_BORDER_HEIGHT          0x01FB
@@ -89,6 +96,7 @@
 #define  GLUT_GEOMETRY_VISUALIZE_NORMALS    0x0205
 
 #define  GLUT_STROKE_FONT_DRAW_JOIN_DOTS    0x0206  /* Draw dots between line segments of stroke fonts? */
+        /* note next should be 0x0208, 0x0207 used higher up */
 
 /*
  * New tokens for glutInitDisplayMode.

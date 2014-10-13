@@ -78,6 +78,7 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       -1,                     /* GameModeDepth */
                       -1,                     /* GameModeRefresh */
                       GLUT_ACTION_EXIT,       /* ActionOnWindowClose */
+                      GLUT_ACTION_DEINITIALIZE,/* ActionOnMainloopReturn */
                       GLUT_EXEC_STATE_INIT,   /* ExecState */
                       NULL,                   /* ProgramName */
                       GL_FALSE,               /* JoysticksInitialised */
@@ -284,6 +285,7 @@ void fgDeinitialize( void )
     fgState.GLDebugSwitch       = GL_FALSE;
     fgState.XSyncSwitch         = GL_FALSE;
     fgState.ActionOnWindowClose = GLUT_ACTION_EXIT;
+    fgState.ActionOnMainloopReturn = GLUT_ACTION_DEINITIALIZE;
     fgState.ExecState           = GLUT_EXEC_STATE_INIT;
 
     fgState.KeyRepeat       = GLUT_KEY_REPEAT_ON;

@@ -87,6 +87,10 @@ void FGAPIENTRY glutSetOption( GLenum eWhat, int value )
         fgState.ActionOnWindowClose = value;
         break;
 
+    case GLUT_ACTION_ON_MAINLOOP_RETURN:
+        fgState.ActionOnMainloopReturn = value;
+        break;
+
     case GLUT_RENDERING_CONTEXT:
         fgState.UseCurrentContext =
             ( value == GLUT_USE_CURRENT_CONTEXT ) ? GL_TRUE : GL_FALSE;
@@ -194,6 +198,9 @@ int FGAPIENTRY glutGet( GLenum eWhat )
 
     case GLUT_ACTION_ON_WINDOW_CLOSE:
         return fgState.ActionOnWindowClose;
+
+    case GLUT_ACTION_ON_MAINLOOP_RETURN:
+        return fgState.ActionOnMainloopReturn;
 
     case GLUT_VERSION :
         return VERSION_MAJOR * 10000 + VERSION_MINOR * 100 + VERSION_PATCH;
