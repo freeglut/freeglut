@@ -12,10 +12,6 @@
  * Creation date: czw gru  2 11:58:41 CET 1999
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 
