@@ -303,6 +303,7 @@ int main( int argc, char** argv )
     glutInit( &argc, argv );
 
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+    glutSetOption(GLUT_ACTION_ON_MAINLOOP_RETURN,GLUT_ACTION_DONT_DEINITIALIZE);
     glutMenuStatusFunc( SampleMenuStatus );
     glutIdleFunc( SampleIdle );
 
@@ -395,9 +396,29 @@ int main( int argc, char** argv )
 
     /*
      * returned from mainloop after window closed
-     * see glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS); above
+     * see glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS) above
      */
     printf( "glutMainLoop() termination works fine!\n" );
+
+    /*
+     * we requested not to deinitialize, so we should be able to open a window again right away
+     * see glutSetOption(GLUT_ACTION_ON_MAINLOOP_RETURN,GLUT_ACTION_DONT_DEINITIALIZE) above
+     */
+    g_mainwin1 = glutCreateWindow("Risen from the dead");
+    glutDisplayFunc(SampleDisplay);
+    glutReshapeFunc(SampleReshape);
+    glutKeyboardFunc(SampleKeyboard);
+    glutSpecialFunc(SampleSpecial);
+    glutEntryFunc(SampleEntry);
+    glutAttachMenu(GLUT_LEFT_BUTTON);
+    glutSetMenu(subMenuA);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+    printf("opening a new window after glutMainLoop() termination works fine!\n");
+
+    /*
+     * Enter the main FreeGLUT processing loop again
+     */
+    glutMainLoop();
 
     return EXIT_SUCCESS;
 }
