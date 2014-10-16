@@ -1759,8 +1759,8 @@ void fgPlatformVisibilityWork(SFG_Window* window)
             win = win->Parent;
         break;
     case DesireNormalState:
-        if (win->IsMenu && (!fgStructure.GameModeWindow || win->ActiveMenu->ParentWindow != fgStructure.GameModeWindow))
-            cmdShow = SW_SHOWNA;    /* Just show, don't activate window if its a menu. Only exception is when the parent is a gamemode window as the menu would pop under it when we do this... */
+        if (win->IsMenu && !fgStructure.GameModeWindow)
+            cmdShow = SW_SHOWNA;    /* Just show, don't activate window if its a menu. Only exception is when there is a gamemode window as the menu would pop under it when we do this... */
         else
             cmdShow = SW_SHOW;
         break;
