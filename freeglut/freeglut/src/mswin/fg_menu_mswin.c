@@ -30,6 +30,9 @@
 #include "../fg_internal.h"
 
 
+extern void fgEnumMenus( FGCBMenuEnumerator enumCallback, SFG_Enumerator* enumerator );
+
+
 
 GLvoid fgPlatformGetGameModeVMaxExtent( SFG_Window* window, int* x, int* y )
 {
@@ -37,24 +40,59 @@ GLvoid fgPlatformGetGameModeVMaxExtent( SFG_Window* window, int* x, int* y )
     *y = glutGet ( GLUT_SCREEN_HEIGHT );
 }
 
+static void fghcbIsActiveMenu(SFG_Menu *menu,
+    SFG_Enumerator *enumerator)
+{
+    if (enumerator->found)
+        return;
+
+    /* Check the menu's active and the one we are searching for. */
+    if (menu->IsActive && menu->Window->Window.Handle==(HWND)enumerator->data)
+    {
+        enumerator->found = GL_TRUE;
+        enumerator->data  = (void*) menu;
+        return;
+    }
+}
+
 void fgPlatformCheckMenuDeactivate(HWND newFocusWnd)
 {
     /* User/system switched application focus.
      * If we have an open menu, close it.
+     * If the window that got focus is an active
+     * menu window, don't do anything. This occurs
+     * as it is sadly necessary to do an activating
+     * ShowWindow() for the menu to pop up over the
+     * gamemode window.
+     * If the window that got focus is the gamemode
+     * window, the menus pop under it. Bring them
+     * back in view in this special case.
      */
     SFG_Menu* menu = NULL;
+    SFG_Enumerator enumerator;
 
     if ( fgState.ActiveMenus )
-        menu = fgGetActiveMenu();
-
-    if ( menu )
     {
-        if (newFocusWnd != menu->Window->Window.Handle)
-            /* When in GameMode, the menu's parent window will lose focus when the menu is opened.
-             * This is sadly necessary as we need to do an activating ShowWindow() for the menu
-             * to pop up over the gamemode window
-             */
-            fgDeactivateMenu(menu->ParentWindow);
+        /* see if there is an active menu whose window matches the one that got focus */
+        enumerator.found = GL_FALSE;
+        enumerator.data  = (void*) newFocusWnd;
+        fgEnumMenus(fghcbIsActiveMenu, &enumerator);
+        if (enumerator.found)
+            menu = (SFG_Menu*) enumerator.data;
+
+        if ( !menu )
+        {
+            /* window that got focus was not one of the active menus. That means we'll
+             * close the active menu's unless the window that got focus was their parent */
+            menu = fgGetActiveMenu();
+            
+            if (newFocusWnd != menu->ParentWindow->Window.Handle)
+            {
+                /* focus shifted to another window than the menu's parent, close menus */
+                fgDeactivateMenu(menu->ParentWindow);
+                return;
+            }
+        }
     }
 };
 
