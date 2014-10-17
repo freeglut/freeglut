@@ -568,7 +568,7 @@ static void fghcbGetActiveMenu( SFG_Menu *menu,
     if ( enumerator->found )
         return;
 
-    /* Check the menu's ID. */
+    /* Check the menu's is active */
     if( menu->IsActive )
     {
         enumerator->found = GL_TRUE;
@@ -580,6 +580,7 @@ static void fghcbGetActiveMenu( SFG_Menu *menu,
 
 /*
  * Returns active menu, if any. Assumption: only one menu active throughout application at any one time.
+ * This is false when a submenu is also open.
  * This is easier than fgWindowByXXX as all menus are placed in one doubly linked list...
  */
 SFG_Menu* fgGetActiveMenu( )

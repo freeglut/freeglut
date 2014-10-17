@@ -42,7 +42,7 @@ extern void fgPlatformInitSystemTime();
 void fgPlatformInitialize( const char* displayName )
 {
     WNDCLASS wc;
-    ATOM atom;
+    BOOL atom;
 
     /* What we need to do is to initialize the fgDisplay global structure here. */
     fgDisplay.pDisplay.Instance = GetModuleHandle( NULL );

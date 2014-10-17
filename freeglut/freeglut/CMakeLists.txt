@@ -228,6 +228,9 @@ IF(WIN32)
         SET( CMAKE_DEBUG_POSTFIX "d" )
     ENDIF(MSVC)
     
+    # enable the use of Win2000 APIs (needed for really old compilers like MSVC6)
+    ADD_DEFINITIONS(-D_WIN32_WINNT=0x0500)
+    ADD_DEFINITIONS(-DWINVER=0x0500)
 ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
