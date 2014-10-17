@@ -32,7 +32,7 @@
 #include "egl/fg_internal_egl.h"
 
 /* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
-/* The structure used by display initialization in freeglut_init.c */
+/* The structure used by display initialization in fg_init.c */
 typedef struct tagSFG_PlatformDisplay SFG_PlatformDisplay;
 struct android_app;
 struct tagSFG_PlatformDisplay
@@ -68,7 +68,7 @@ struct touchscreen {
 
 /* -- JOYSTICK-SPECIFIC STRUCTURES AND TYPES ------------------------------- */
 /*
- * Initial defines from "js.h" starting around line 33 with the existing "freeglut_joystick.c"
+ * Initial defines from "js.h" starting around line 33 with the existing "fg_joystick.c"
  * interspersed
  */
 

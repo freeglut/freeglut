@@ -1,5 +1,5 @@
 /*
- * freeglut_ext.c
+ * fg_ext.c
  *
  * Functions related to OpenGL extensions.
  *

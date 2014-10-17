@@ -1,5 +1,5 @@
 /*
- * freeglut_gamemode.c
+ * fg_gamemode.c
  *
  * The game mode handling code.
  *

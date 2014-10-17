@@ -1,5 +1,5 @@
 /*
- * freeglut_teapot_data.h
+ * fg_teapot_data.h
  *
  * The freeglut library teapot data include file.
  *

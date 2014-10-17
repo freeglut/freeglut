@@ -1,5 +1,5 @@
 /*
- * freeglut_input_devices_x11.c
+ * fg_input_devices_x11.c
  *
  * Handles miscellaneous input devices via direct serial-port access.
  * Proper X11 XInput device support is not yet supported.

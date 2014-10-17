@@ -1,5 +1,5 @@
 /*
- * freeglut_main.c
+ * fg_main.c
  *
  * The windows message processing methods.
  *

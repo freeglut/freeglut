@@ -54,7 +54,7 @@
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "FreeGLUT-jnicb", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "FreeGLUT-jnicb", __VA_ARGS__))
 
-/* Cf. freeglut_main_android.c */
+/* Cf. fg_main_android.c */
 extern int32_t handle_input(struct android_app* app, AInputEvent* event);
 extern void handle_cmd(struct android_app* app, int32_t cmd);
 

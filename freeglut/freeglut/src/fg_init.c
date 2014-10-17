@@ -1,5 +1,5 @@
 /*
- * freeglut_init.c
+ * fg_init.c
  *
  * Various freeglut initialization functions.
  *

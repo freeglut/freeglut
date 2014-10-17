@@ -1,5 +1,5 @@
 /*
- * freeglut_init_x11.c
+ * fg_init_x11.c
  *
  * Various freeglut initialization functions.
  *

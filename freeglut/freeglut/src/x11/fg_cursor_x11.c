@@ -1,5 +1,5 @@
 /*
- * freeglut_cursor_x11.c
+ * fg_cursor_x11.c
  *
  * The Windows-specific mouse cursor related stuff.
  *

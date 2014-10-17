@@ -1,5 +1,5 @@
 /*
- * freeglut_internal_mswin.h
+ * fg_internal_mswin.h
  *
  * The freeglut library private include file.
  *

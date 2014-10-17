@@ -1,5 +1,5 @@
 /*
- * freeglut_stroke_roman.c
+ * fg_stroke_roman.c
  *
  * freeglut Roman stroke font definition
  *

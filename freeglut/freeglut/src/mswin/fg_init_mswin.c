@@ -1,5 +1,5 @@
 /*
- * freeglut_init_mswin.c
+ * fg_init_mswin.c
  *
  * The Windows-specific mouse cursor related stuff.
  *
@@ -34,6 +34,7 @@
 extern LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg,
                                WPARAM wParam, LPARAM lParam );
 extern void fgPlatformInitSystemTime();
+extern void fghCloseInputDevices(void);
 
 
 /*
@@ -138,8 +139,6 @@ void fgPlatformInitialize( const char* displayName )
 
 
 /* Platform-Specific Deinitialization Functions: */
-extern void fghCloseInputDevices ( void );
-
 void fgPlatformDeinitialiseInputDevices ( void )
 {
 #if !defined(_WIN32_WCE)

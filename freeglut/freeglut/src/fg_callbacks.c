@@ -1,5 +1,5 @@
 /*
- * freeglut_callbacks.c
+ * fg_callbacks.c
  *
  * The callbacks setting methods.
  *

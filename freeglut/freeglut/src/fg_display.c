@@ -1,5 +1,5 @@
 /*
- * freeglut_display.c
+ * fg_display.c
  *
  * Display message posting, context buffer swapping.
  *
