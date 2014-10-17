@@ -1,5 +1,5 @@
 /*
- * freeglut_window.c
+ * fg_window.c
  *
  * Window management methods.
  *

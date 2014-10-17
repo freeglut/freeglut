@@ -1,5 +1,5 @@
 /*
- * freeglut_overlay.c
+ * fg_overlay.c
  *
  * Overlay management functions (as defined by GLUT API)
  *

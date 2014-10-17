@@ -1,5 +1,5 @@
 /*
- * freeglut_state.c
+ * fg_state.c
  *
  * Freeglut state query methods.
  *

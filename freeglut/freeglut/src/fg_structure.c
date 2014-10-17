@@ -1,5 +1,5 @@
 /*
- * freeglut_structure.c
+ * fg_structure.c
  *
  * Windows and menus need tree structure
  *
@@ -100,7 +100,7 @@ SFG_Window* fgCreateWindow( SFG_Window* parent, const char* title,
 
     /*
      * Open the window now. The fgOpenWindow() function is system
-     * dependant, and resides in freeglut_window.c. Uses fgState.
+     * dependant, and resides in fg_window.c. Uses fgState.
      */
     fgOpenWindow( window, title, positionUse, x, y, sizeUse, w, h, gameMode,
                   (GLboolean)(parent ? GL_TRUE : GL_FALSE) );
@@ -190,7 +190,7 @@ void fgCloseWindows( )
 
 /*
  * This function destroys a window and all of its subwindows. Actually,
- * another function, defined in freeglut_window.c is called, but this is
+ * another function, defined in fg_window.c is called, but this is
  * a whole different story...
  */
 void fgDestroyWindow( SFG_Window* window )
@@ -465,7 +465,7 @@ static void fghcbWindowByHandle( SFG_Window *window,
 /*
  * fgWindowByHandle returns a (SFG_Window *) value pointing to the
  * first window in the queue matching the specified window handle.
- * The function is defined in freeglut_structure.c file.
+ * The function is defined in fg_structure.c file.
  */
 SFG_Window* fgWindowByHandle ( SFG_WindowHandleType hWindow )
 {
@@ -506,7 +506,7 @@ static void fghcbWindowByID( SFG_Window *window, SFG_Enumerator *enumerator )
 /*
  * This function is similar to the previous one, except it is
  * looking for a specified (sub)window identifier. The function
- * is defined in freeglut_structure.c file.
+ * is defined in fg_structure.c file.
  */
 SFG_Window* fgWindowByID( int windowID )
 {

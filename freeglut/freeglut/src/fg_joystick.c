@@ -1,5 +1,5 @@
 /*
- * freeglut_joystick.c
+ * fg_joystick.c
  *
  * Joystick handling code
  *

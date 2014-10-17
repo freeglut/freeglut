@@ -1,5 +1,5 @@
 /*
- * freeglut_main_x11.c
+ * fg_main_x11.c
  *
  * The X11-specific windows message processing methods.
  *

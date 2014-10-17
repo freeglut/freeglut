@@ -16,7 +16,7 @@
 /* convert the XInput button state mask to the regular X mouse event button mask */
 #define BUTTON_MASK(xistate)	((xistate) << 8)
 
-/* import function from freeglut_main.c */
+/* import function from fg_main.c */
 extern int fgPlatformGetModifiers( int state );
 
 /* extension opcode for XInput */

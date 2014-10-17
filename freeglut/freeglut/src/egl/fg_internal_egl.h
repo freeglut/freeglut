@@ -1,5 +1,5 @@
 /*
- * freeglut_internal_android.h
+ * fg_internal_android.h
  *
  * The freeglut library private include file.
  *
@@ -29,7 +29,7 @@
 #include <EGL/egl.h>
 
 /* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
-/* The structure used by display initialization in freeglut_init.c */
+/* The structure used by display initialization in fg_init.c */
 struct tagSFG_Window;
 struct tagSFG_PlatformDisplayEGL
 {

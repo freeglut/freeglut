@@ -1,5 +1,5 @@
 /*
- * freeglut_cursor.c
+ * fg_cursor.c
  *
  * The mouse cursor related stuff.
  *

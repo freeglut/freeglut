@@ -1,5 +1,5 @@
 /*
- * freeglut_state_mswin.c
+ * fg_state_mswin.c
  *
  * The Windows-specific state query methods.
  *

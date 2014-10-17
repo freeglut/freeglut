@@ -1,5 +1,5 @@
 /*
- * freeglut_misc.c
+ * fg_misc.c
  *
  * Functions that didn't fit anywhere else...
  *
