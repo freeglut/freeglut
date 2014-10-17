@@ -346,7 +346,7 @@ void FGAPIENTRY glutStrokeString( void* fontID, const unsigned char *string )
 /*
  * Return the width in pixels of a stroke character
  */
-int FGAPIENTRY glutStrokeWidth( void* fontID, int character )
+GLfloat FGAPIENTRY glutStrokeWidthf( void* fontID, int character )
 {
     const SFG_StrokeChar *schar;
     SFG_StrokeFont* font;
@@ -364,17 +364,21 @@ int FGAPIENTRY glutStrokeWidth( void* fontID, int character )
     schar = font->Characters[ character ];
     freeglut_return_val_if_fail( schar, 0 );
 
-    return ( int )( schar->Right + 0.5 );
+    return schar->Right;
+}
+int FGAPIENTRY glutStrokeWidth(void* fontID, int character)
+{
+    return ( int )( glutStrokeWidthf(fontID,character) + 0.5f );
 }
 
 /*
  * Return the width of a string drawn using a stroke font
  */
-int FGAPIENTRY glutStrokeLength( void* fontID, const unsigned char* string )
+GLfloat FGAPIENTRY glutStrokeLengthf( void* fontID, const unsigned char* string )
 {
     unsigned char c;
-    float length = 0.0;
-    float this_line_length = 0.0;
+    GLfloat length = 0.0;
+    GLfloat this_line_length = 0.0;
     SFG_StrokeFont* font;
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutStrokeLength" );
     font = fghStrokeByID( fontID );
@@ -404,7 +408,11 @@ int FGAPIENTRY glutStrokeLength( void* fontID, const unsigned char* string )
         }
     if( length < this_line_length )
         length = this_line_length;
-    return( int )( length + 0.5 );
+    return length;
+}
+int FGAPIENTRY glutStrokeLength( void* fontID, const unsigned char* string )
+{
+    return( int )( glutStrokeLengthf(fontID,string) + 0.5f );
 }
 
 /*
