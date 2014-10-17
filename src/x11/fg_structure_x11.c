@@ -1,5 +1,5 @@
 /*
- * freeglut_structure.c
+ * fg_structure.c
  *
  * Windows and menus need tree structure
  *

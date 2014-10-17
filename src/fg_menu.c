@@ -1,5 +1,5 @@
 /*
- * freeglut_menu.c
+ * fg_menu.c
  *
  * Pull-down menu creation and handling.
  *
@@ -782,7 +782,7 @@ void fghCalculateMenuBoxSize( void )
  */
 int FGAPIENTRY glutCreateMenu( FGCBMenu callback )
 {
-    /* The menu object creation code resides in freeglut_structure.c */
+    /* The menu object creation code resides in fg_structure.c */
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenu" );
     if (fgState.ActiveMenus)
         fgError("Menu manipulation not allowed while menus in use.");
@@ -804,7 +804,7 @@ void FGAPIENTRY glutDestroyMenu( int menuID )
     if (fgState.ActiveMenus)
         fgError("Menu manipulation not allowed while menus in use.");
 
-    /* The menu object destruction code resides in freeglut_structure.c */
+    /* The menu object destruction code resides in fg_structure.c */
     fgDestroyMenu( menu );
 }
 

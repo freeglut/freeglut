@@ -1,5 +1,5 @@
 /*
- * freeglut_spaceball_mswin.c
+ * fg_spaceball_mswin.c
  *
  * Spaceball support for Windows
  *

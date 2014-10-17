@@ -1,5 +1,5 @@
 /*
- * freeglut_videoresize.c
+ * fg_videoresize.c
  *
  * Video resize functions (as defined by GLUT API)
  *

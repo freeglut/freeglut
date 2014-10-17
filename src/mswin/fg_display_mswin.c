@@ -1,5 +1,5 @@
 /*
- * freeglut_display_mswin.c
+ * fg_display_mswin.c
  *
  * The Windows-specific mouse cursor related stuff.
  *

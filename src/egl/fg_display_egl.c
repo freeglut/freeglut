@@ -1,5 +1,5 @@
 /*
- * freeglut_display_android.c
+ * fg_display_android.c
  *
  * Display message posting, context buffer swapping.
  *

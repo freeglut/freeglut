@@ -1,5 +1,5 @@
 /*
- * freeglut_state_x11.c
+ * fg_state_x11.c
  *
  * X11-specific freeglut state query methods.
  *
@@ -54,7 +54,7 @@ int fgPlatformGlutDeviceGet ( GLenum eWhat )
          * but at least one X server has a bug where this causes a segfault.
          *
          * In XFree86/Xorg servers, a mouse wheel is seen as two buttons
-         * rather than an Axis; "freeglut_main.c" expects this when
+         * rather than an Axis; "fg_main.c" expects this when
          * checking for a wheel event.
          */
         {

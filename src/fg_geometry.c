@@ -1,5 +1,5 @@
 /*
- * freeglut_geometry.c
+ * fg_geometry.c
  *
  * Freeglut geometry rendering methods.
  *

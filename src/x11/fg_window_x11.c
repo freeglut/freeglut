@@ -1,5 +1,5 @@
 /*
- * freeglut_window_x11.c
+ * fg_window_x11.c
  *
  * Window management methods for X11
  *

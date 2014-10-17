@@ -1,5 +1,5 @@
 /*
- * freeglut_font.c
+ * fg_font.c
  *
  * Bitmap and stroke fonts displaying.
  *
@@ -37,7 +37,7 @@
 /* -- IMPORT DECLARATIONS -------------------------------------------------- */
 
 /*
- * These are the font faces defined in freeglut_font_data.c file:
+ * These are the font faces defined in fg_font_data.c file:
  */
 extern SFG_Font fgFontFixed8x13;
 extern SFG_Font fgFontFixed9x15;

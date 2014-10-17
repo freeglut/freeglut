@@ -1,5 +1,5 @@
 /*
- * freeglut_structure_mswin.c
+ * fg_structure_mswin.c
  *
  * The Windows-specific mouse cursor related stuff.
  *

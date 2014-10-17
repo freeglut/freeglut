@@ -353,7 +353,7 @@ struct tagSFG_State
     FGWarning        WarningFunc;          /* User defined warning handler  */
 };
 
-/* The structure used by display initialization in freeglut_init.c */
+/* The structure used by display initialization in fg_init.c */
 typedef struct tagSFG_Display SFG_Display;
 struct tagSFG_Display
 {
@@ -791,7 +791,7 @@ struct tagSFG_StrokeFont
 
 /* -- JOYSTICK-SPECIFIC STRUCTURES AND TYPES ------------------------------- */
 /*
- * Initial defines from "js.h" starting around line 33 with the existing "freeglut_joystick.c"
+ * Initial defines from "js.h" starting around line 33 with the existing "fg_joystick.c"
  * interspersed
  */
 
@@ -942,7 +942,7 @@ void fgDestroyStructure( void );
 /*
  * Window creation, opening, closing and destruction.
  * Also CallBack clearing/initialization.
- * Defined in freeglut_structure.c, freeglut_window.c.
+ * Defined in fg_structure.c, fg_window.c.
  */
 SFG_Window* fgCreateWindow( SFG_Window* parent, const char* title,
                             GLboolean positionUse, int x, int y,
@@ -958,11 +958,11 @@ void        fgAddToWindowDestroyList ( SFG_Window* window );
 void        fgCloseWindows ();
 void        fgDestroyWindow( SFG_Window* window );
 
-/* Menu creation and destruction. Defined in freeglut_structure.c */
+/* Menu creation and destruction. Defined in fg_structure.c */
 SFG_Menu*   fgCreateMenu( FGCBMenu menuCallback );
 void        fgDestroyMenu( SFG_Menu* menu );
 
-/* Joystick device management functions, defined in freeglut_joystick.c */
+/* Joystick device management functions, defined in fg_joystick.c */
 int         fgJoystickDetect( void );
 void        fgInitialiseJoysticks( void );
 void        fgJoystickClose( void );
@@ -973,7 +973,7 @@ int         fgInputDeviceDetect( void );
 void        fgInitialiseInputDevices( void );
 void        fgInputDeviceClose( void );
 
-/* spaceball device functions, defined in freeglut_spaceball.c */
+/* spaceball device functions, defined in fg_spaceball.c */
 void        fgInitialiseSpaceball( void );
 void        fgSpaceballClose( void );
 void        fgSpaceballSetWindow( SFG_Window *window );
@@ -994,7 +994,7 @@ void fgSetCursor ( SFG_Window *window, int cursorID );
  *
  * where window is the enumerated (sub)window pointer (SFG_Window *),
  * and userData is the a custom user-supplied pointer. Functions
- * are defined and exported from freeglut_structure.c file.
+ * are defined and exported from fg_structure.c file.
  */
 void fgEnumWindows( FGCBWindowEnumerator enumCallback, SFG_Enumerator* enumerator );
 void fgEnumSubWindows( SFG_Window* window, FGCBWindowEnumerator enumCallback,
@@ -1003,14 +1003,14 @@ void fgEnumSubWindows( SFG_Window* window, FGCBWindowEnumerator enumCallback,
 /*
  * fgWindowByHandle returns a (SFG_Window *) value pointing to the
  * first window in the queue matching the specified window handle.
- * The function is defined in freeglut_structure.c file.
+ * The function is defined in fg_structure.c file.
  */
 SFG_Window* fgWindowByHandle( SFG_WindowHandleType hWindow );
 
 /*
  * This function is similiar to the previous one, except it is
  * looking for a specified (sub)window identifier. The function
- * is defined in freeglut_structure.c file.
+ * is defined in fg_structure.c file.
  */
 SFG_Window* fgWindowByID( int windowID );
 
@@ -1038,7 +1038,7 @@ void fgDeactivateMenu( SFG_Window *window );
 /*
  * This function gets called just before the buffers swap, so that
  * freeglut can display the pull-down menus via OpenGL. The function
- * is defined in freeglut_menu.c file.
+ * is defined in fg_menu.c file.
  */
 void fgDisplayMenu( void );
 
