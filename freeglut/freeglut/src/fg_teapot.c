@@ -1,5 +1,5 @@
 /*
- * freeglut_teapot.c
+ * fg_teapot.c
  *
  * Teapot(tm) rendering code.
  *

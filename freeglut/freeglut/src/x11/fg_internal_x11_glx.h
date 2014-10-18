@@ -1,5 +1,5 @@
 /*
- * freeglut_internal_x11.h
+ * fg_internal_x11.h
  *
  * The freeglut library private include file.
  *

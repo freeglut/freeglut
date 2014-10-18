@@ -183,7 +183,9 @@ will thus not work with the currently available 2.8.1 release.
 			<li>glutStrokeCharacter</li>
 			<li>glutStrokeString</li>
 			<li>glutStrokeWidth</li>
+			<li>glutStrokeWidthf</li>
 			<li>glutStrokeLength</li>
+   			<li>glutStrokeLengthf</li>
 			<li>glutStrokeHeight</li>
 		</ol>
 	</li>
@@ -1945,8 +1947,8 @@ as asterisks. </p>
 <h2>14.8 glutStrokeWidth</h2>
 
 <p>
-The <tt>glutStrokeWidth</tt> function returns the width in pixels of
-a single character in the specified stroke font.
+The <tt>glutStrokeWidth</tt> function returns the width in model units of
+a single character in the specified stroke font, rounded to an int.
 </p>
 
 <p><b>Usage</b> </p>
@@ -1974,11 +1976,42 @@ number; the function rounds it to the nearest integer for the return value.
 <p>Nonexistent characters return the width
 of an asterisk. </p>
 
-<h2>14.9 glutStrokeLength</h2>
+<h2>14.9 glutStrokeWidthf</h2>
 
 <p>
-The <tt>glutStrokeLength</tt> function returns the width in pixels of
-a string of characters in the specified stroke font.
+The <tt>glutStrokeWidthf</tt> function returns the width in model units of
+a single character in the specified stroke font.
+</p>
+
+<p><b>Usage</b> </p>
+
+<p><tt>GLfloat glutStrokeWidthf ( void *font,
+int character );</tt> </p>
+
+<p><tt>font
+</tt>The stroke font to use in calculating
+the character width <br/>
+ <tt>character </tt>The ASCII
+code of the character </p>
+
+<p><b>Description</b></p>
+
+<p>
+The <tt>glutStrokeWidthf</tt>
+function returns the width of the given character in the specified stroke
+font. Function was included in an unreleased GLUT 3.8.
+ </p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>Nonexistent characters return the width
+of an asterisk. </p>
+
+<h2>14.10 glutStrokeLength</h2>
+
+<p>
+The <tt>glutStrokeLength</tt> function returns the width in model units of
+a string of characters in the specified stroke font, rounded to an int.
 </p>
 
 <p><b>Usage</b></p>
@@ -1994,10 +2027,10 @@ whose width is to be calculated </p>
 <p><b>Description</b></p>
 
 <p>
-The <tt>glutStrokeLength</tt> function returns the width in pixels of the given character string in
+The <tt>glutStrokeLength</tt> function returns the width in model units of the given character string in
 the specified stroke font. Because the font is a stroke font, the width
 of an individual character is a floating-point number. <i>Freeglut</i>
-  adds the floating-point widths and rounds the funal result to return the
+  adds the floating-point widths and rounds the final result to return the
 integer value. Thus the return value may differ from the sum of the
 character widths returned by a series of calls to <tt>glutStrokeWidth</tt>.
 The width of nonexistent characters is counted to be the width
@@ -2007,12 +2040,38 @@ of an asterisk. </p>
 one or more carriage returns, <i>freeglut</i> calculates the widths in pixels
 of the lines separately and returns the largest width. </p>
 
-<p><b>Changes From GLUT</b></p>
+<h2>14.11 glutStrokeLengthf</h2>
 
-<p>GLUT does not include this function.
- </p>
+<p>
+The <tt>glutStrokeLengthf</tt> function returns the width in model units of
+a string of characters in the specified stroke font.
+</p>
 
-<h2>14.10 glutStrokeHeight</h2>
+<p><b>Usage</b></p>
+
+<p><tt>GLfloat glutStrokeLengthf ( void *font,
+char *string );</tt> </p>
+
+<p><tt>font </tt>The stroke
+font to use in calculating the character width <br/>
+ <tt>string </tt>String of characters
+whose width is to be calculated </p>
+
+<p><b>Description</b></p>
+
+<p>
+The <tt>glutStrokeLengthf</tt> function returns the width in model units of the given character string in
+the specified stroke font. The return value is equal to the sum of the
+character widths returned by a series of calls to
+<tt>glutStrokeWidthf</tt>. Function was included in an unreleased GLUT 3.8.
+The width of nonexistent characters is counted to be the width
+of an asterisk. </p>
+
+<p>If the string contains
+one or more carriage returns, <i>freeglut</i> calculates the widths in pixels
+of the lines separately and returns the largest width. </p>
+
+<h2>14.12 glutStrokeHeight</h2>
 
 <p>
 The <tt>glutStrokeHeight</tt> function returns the height in pixels of

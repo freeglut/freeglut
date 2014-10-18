@@ -1,5 +1,5 @@
 /*
- * freeglut_input_devices_mswin.c
+ * fg_input_devices_mswin.c
  *
  * The Windows-specific mouse cursor related stuff.
  *

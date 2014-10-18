@@ -1,5 +1,5 @@
 /*
- * freeglut_ext.c
+ * fg_ext.c
  *
  * Functions related to OpenGL extensions.
  *
@@ -125,8 +125,10 @@ static GLUTproc fghGetGLUTProcAddress( const char* procName )
     CHECK_NAME(glutBitmapWidth);
     CHECK_NAME(glutStrokeCharacter);
     CHECK_NAME(glutStrokeWidth);
+    CHECK_NAME(glutStrokeWidthf);
     CHECK_NAME(glutBitmapLength);
     CHECK_NAME(glutStrokeLength);
+    CHECK_NAME(glutStrokeLengthf);
     CHECK_NAME(glutWireSphere);
     CHECK_NAME(glutSolidSphere);
     CHECK_NAME(glutWireCone);

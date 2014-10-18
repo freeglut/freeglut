@@ -1,5 +1,5 @@
 /*
- * freeglut_menu_x11.c
+ * fg_menu_x11.c
  *
  * Pull-down menu creation and handling.
  *
