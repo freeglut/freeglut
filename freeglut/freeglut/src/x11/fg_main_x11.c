@@ -28,9 +28,7 @@
 
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
-#ifdef HAVE_ERRNO_H
-#    include <errno.h>
-#endif
+#include <errno.h>
 #include <stdarg.h>
 
 
@@ -118,10 +116,8 @@ void fgPlatformSleepForEvents( fg_time_t msec )
         wait.tv_usec = (msec % 1000) * 1000;
         err = select( socket+1, &fdset, NULL, NULL, &wait );
 
-#ifdef HAVE_ERRNO_H
         if( ( -1 == err ) && ( errno != EINTR ) )
             fgWarning ( "freeglut select() error: %d", errno );
-#endif
     }
 }
 
