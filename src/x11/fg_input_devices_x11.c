@@ -33,9 +33,7 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
-#ifdef HAVE_ERRNO_H
 #include <errno.h>
-#endif
 #include <sys/ioctl.h>
 #include <stdio.h>
 #include <stdlib.h>
