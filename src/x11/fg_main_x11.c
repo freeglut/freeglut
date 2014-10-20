@@ -32,13 +32,6 @@
 #    include <errno.h>
 #endif
 #include <stdarg.h>
-#ifdef  HAVE_VFPRINTF
-#    define VFPRINTF(s,f,a) vfprintf((s),(f),(a))
-#elif defined(HAVE__DOPRNT)
-#    define VFPRINTF(s,f,a) _doprnt((f),(a),(s))
-#else
-#    define VFPRINTF(s,f,a)
-#endif
 
 
 /*
