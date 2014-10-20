@@ -31,13 +31,6 @@
 #    include <errno.h>
 #endif
 #include <stdarg.h>
-#ifdef  HAVE_VFPRINTF
-#    define VFPRINTF(s,f,a) vfprintf((s),(f),(a))
-#elif defined(HAVE__DOPRNT)
-#    define VFPRINTF(s,f,a) _doprnt((f),(a),(s))
-#else
-#    define VFPRINTF(s,f,a)
-#endif
 
 /*
  * Try to get the maximum value allowed for ints, falling back to the minimum
@@ -289,7 +282,7 @@ void fgError( const char *fmt, ... )
         fprintf( stderr, "freeglut ");
         if( fgState.ProgramName )
             fprintf( stderr, "(%s): ", fgState.ProgramName );
-        VFPRINTF( stderr, fmt, ap );
+        vfprintf( stderr, fmt, ap );
         fprintf( stderr, "\n" );
 
         va_end( ap );
@@ -322,7 +315,7 @@ void fgWarning( const char *fmt, ... )
         fprintf( stderr, "freeglut ");
         if( fgState.ProgramName )
             fprintf( stderr, "(%s): ", fgState.ProgramName );
-        VFPRINTF( stderr, fmt, ap );
+        vfprintf( stderr, fmt, ap );
         fprintf( stderr, "\n" );
 
         va_end( ap );
