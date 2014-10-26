@@ -131,10 +131,10 @@ struct tagSFG_PlatformWindowState
 #    ifdef HAVE_FCNTL_H
 #        include <fcntl.h>
 #    endif
-#    ifdef HAVE_ERRNO_H
-#        include <errno.h>
-#        include <string.h>
-#    endif
+
+#include <errno.h>
+#include <string.h>
+
 #    if defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__NetBSD__)
 /* XXX The below hack is done until freeglut's autoconf is updated. */
 #        define HAVE_USB_JS    1

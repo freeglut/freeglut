@@ -48,10 +48,6 @@
 #endif
 
 
-#ifndef HAVE_VFPRINTF
-#define  HAVE_VFPRINTF 1
-#endif
-
 /* MinGW may lack a prototype for ChangeDisplaySettingsEx() (depending on the version?) */
 #if !defined(ChangeDisplaySettingsEx)
 LONG WINAPI ChangeDisplaySettingsExA(LPCSTR,LPDEVMODEA,HWND,DWORD,LPVOID);
