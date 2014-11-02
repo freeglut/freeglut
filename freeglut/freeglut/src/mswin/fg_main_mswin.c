@@ -1640,8 +1640,7 @@ void fgPlatformPosResZordWork(SFG_Window* window, unsigned int workMask)
             /* For fullscreen mode, find the monitor that is covered the most
                 * by the window and get its rect as the resize target.
 	            */
-            GetWindowRect(window->Window.Handle, &rect);
-            hMonitor= MonitorFromRect(&rect, MONITOR_DEFAULTTONEAREST);
+            hMonitor= MonitorFromWindow(window->Window.Handle, MONITOR_DEFAULTTONEAREST);
             mi.cbSize = sizeof(mi);
             GetMonitorInfo(hMonitor, &mi);
             rect = mi.rcMonitor;
