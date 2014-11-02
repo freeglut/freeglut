@@ -54,19 +54,23 @@ mailing list.</p>
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
-    <p>The ports to Android and BlackBerry 10 as well as other API and
-    implementation enhancements (e.g., move to CMake build system, VBO
-    and shader support for geometry) are currently only available in
-    trunk. Feel free to test by downloading a <a
+    <p>Version 3.0.0, Release Candidate 1 was released on Wednesday,
+    October 29, 2014.</p>
+	<p>
+       <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.0.0-rc1.tar.gz?download">Freeglut 3.0.0 Release Candidate 1</a> [<i>Released: 29 Oct 2014</i>]<br/>
+    </p>
+    <p>Amongst many smaller enhancements and bugfixes, this RC includes
+    experimental ports to Android and BlackBerry 10 as well as other API
+    and implementation enhancements (e.g., move to CMake build system,
+    VBO and shader support for geometry). Also moved to CMake as build
+    system. Please try it out and give us feedback on how it worked for
+    you.
+<!--
+    Feel free to test by downloading a <a
     href="https://sourceforge.net/p/freeglut/code/HEAD/tarball?path=/trunk/freeglut/freeglut">tarball
     of current trunk</a>, or <a href="help.php#svn">grabbing a copy from
     svn</a>, and give us feedback on how it worked for you. All this
     will eventually become a FreeGLUT 3.0 release.</p>
-<!--
-	<p>Version 2.8.0, Release Candidate 4 was released on Wednesday, December 21, 2011.</p>
-	<p>
-                <a href="http://freeglut.svn.sourceforge.net/viewvc/freeglut/tags/FG_2_8_0_RC4.tar.gz">Freeglut 2.8.0 Release Candidate 4</a> [<i>Released: 21 Dec 2011</i>]<br/>
-        </p>
 	<p>There are no presently active testing releases.
 	</p>
 -->
