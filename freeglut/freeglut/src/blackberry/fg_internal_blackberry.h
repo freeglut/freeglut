@@ -119,10 +119,8 @@ struct tagSFG_PlatformWindowState
     int originalRotation;
     navigator_window_state_t windowState;
     GLboolean windowCovered;
-#ifdef __PLAYBOOK__
     int keyboardHeight;
     GLboolean keyboardOpen;
-#endif
 };
 
 /* Menu font and color definitions */
