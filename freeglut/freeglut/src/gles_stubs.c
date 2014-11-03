@@ -35,8 +35,10 @@ void glutBitmapCharacter( void* font, int character ) {}
 int  glutBitmapWidth( void* font, int character ) { return 0; }
 void glutStrokeCharacter( void* font, int character ) {}
 int  glutStrokeWidth( void* font, int character ) { return 0; }
+GLfloat glutStrokeWidthf( void* font, int character ) { return 0.0f; }
 int  glutBitmapLength( void* font, const unsigned char* string ) { return 0; }
 int  glutStrokeLength( void* font, const unsigned char* string ) { return 0; }
+GLfloat glutStrokeLengthf( void* font, const unsigned char *string ) { return 0.0f; }
 
 void *glutGetMenuData( void ) { return NULL; }
 void  glutSetMenuData(void* data) {}

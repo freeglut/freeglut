@@ -268,15 +268,14 @@ IF(ANDROID)
     # -llog for native Android logging
     LIST(APPEND LIBS android log)
 ELSEIF(BLACKBERRY)
-    if(PLAYBOOK)
-        # -lbps for event loop
-        # -screen for native screen
-        LIST(APPEND LIBS bps screen)
-    ELSE()
-        # -lbps for event loop
+    # -lbps for event loop
+    # -screen for native screen
+    LIST(APPEND LIBS bps screen)
+
+    if(NOT PLAYBOOK)
         # -lslog2 for logging
-        # -screen for native screen
-        LIST(APPEND LIBS bps slog2 screen)
+        # -pps for low-level screen manipulation
+        LIST(APPEND LIBS slog2 pps)
     ENDIF()
 ENDIF()
 

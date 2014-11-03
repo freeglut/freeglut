@@ -31,7 +31,7 @@
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 #include "egl/fg_window_egl.h"
-#include <screen/screen.h>
+#include <sys/pps.h>
 
 /*
  * Opens a window. Requires a SFG_Window object created and attached
@@ -261,9 +261,20 @@ void fgPlatformHideWindow( SFG_Window *window )
  */
 void fgPlatformIconifyWindow( SFG_Window *window )
 {
-    //XXX This is possible via Cascades, but can't seem to find a C-level API
-    //XXX bb::Application::instance()->minimize();
+#ifndef __PLAYBOOK__
+    pps_encoder_t encoder;
+
+    pps_encoder_initialize(&encoder, false);
+    pps_encoder_add_string(&encoder, "msg", "minimizeWindow");
+
+    if (navigator_raw_write(pps_encoder_buffer(&encoder), pps_encoder_length(&encoder)) != BPS_SUCCESS) {
+        fgWarning("Could not iconify window on BlackBerry");
+    }
+
+    pps_encoder_cleanup(&encoder);
+#else
     fprintf(stderr, "fgPlatformGlutIconifyWindow: STUB\n");
+#endif
 }
 
 /*
@@ -279,6 +290,7 @@ void fgPlatformGlutSetWindowTitle( const char* title )
  */
 void fgPlatformGlutSetIconTitle( const char* title )
 {
+    //XXX Possibly a window cover label?
     fprintf(stderr, "fgPlatformGlutSetIconTitle: STUB\n");
 }
 
