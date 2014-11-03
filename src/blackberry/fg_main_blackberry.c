@@ -353,12 +353,10 @@ void fgPlatformProcessSingleEvent ( void )
     do
     {
         SFG_Window* window = fgStructure.CurrentWindow;
-#ifdef __PLAYBOOK__
         /* Get the keyboard height before doing anything since we otherwise don't get it until it changes */
         if(window->State.pWState.keyboardHeight == 0) {
             virtualkeyboard_get_height(&window->State.pWState.keyboardHeight);
         }
-#endif
         domain = bps_event_get_domain(fgDisplay.pDisplay.event);
         if (domain == screen_get_domain()) {
             int eventType;
@@ -674,8 +672,13 @@ void fgPlatformProcessSingleEvent ( void )
                 /* PlayBook doesn't indicate what the new size will be, so we need to retrieve it from the window itself */
                 window->State.pWState.newWidth = glutGet(GLUT_WINDOW_WIDTH);
                 window->State.pWState.newHeight = glutGet(GLUT_WINDOW_HEIGHT);
-#endif
                 fghOnReshapeNotify(window, window->State.pWState.newWidth, window->State.pWState.newHeight, GL_FALSE);
+#else
+                if(window->State.pWState.keyboardOpen == GL_FALSE) {
+                    /* On rotation, if the keyboard is open, it will get the keyboard resize events anyway. Otherwise, handle the resize. */
+                    fghOnReshapeNotify(window, window->State.pWState.newWidth, window->State.pWState.newHeight, GL_FALSE);
+                }
+#endif
 
                 /* Reset sizes */
                 window->State.pWState.newWidth = 0;
@@ -708,48 +711,9 @@ void fgPlatformProcessSingleEvent ( void )
 
 #ifndef __PLAYBOOK__
             case NAVIGATOR_KEYBOARD_STATE:
-            {
-                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_STATE");
-
-                navigator_keyboard_state_t state = navigator_event_get_keyboard_state(fgDisplay.pDisplay.event);
-                switch (state)
-                {
-                case NAVIGATOR_KEYBOARD_CLOSED:
-                    LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_STATE-NAVIGATOR_KEYBOARD_CLOSED");
-                    /* NAVIGATOR_KEYBOARD_POSITION only occurs on open, so on keyboard close we need to reset the keyboard height */
-                    fgPlatformHandleKeyboardHeight(window, 0);
-                    break;
-                case NAVIGATOR_KEYBOARD_OPENING:
-                case NAVIGATOR_KEYBOARD_OPENED:
-                case NAVIGATOR_KEYBOARD_CLOSING:
-                    break;
-                case NAVIGATOR_KEYBOARD_UNRECOGNIZED:
-                    LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_STATE-NAVIGATOR_KEYBOARD_UNRECOGNIZED");
-                    break;
-                default:
-                    LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_STATE unknown: 0x%X", SLOG2_FA_SIGNED(state));
-                    break;
-                }
-                break;
-            }
-
             case NAVIGATOR_KEYBOARD_POSITION:
-            {
-                /* Occurs only when keyboard has opened or resizes */
-                LOGI("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_POSITION");
-
-                int keyboardOffset = navigator_event_get_keyboard_position(fgDisplay.pDisplay.event);
-                if(keyboardOffset == BPS_FAILURE) {
-                    LOGW("fgPlatformProcessSingleEvent: NAVIGATOR_KEYBOARD_POSITION: getting keyboard offset failed");
-                } else {
-                    /* keyboardOffset is the offset from the top of the screen to the top of the keyboard, AKA the size of the uncovered screen
-                       We want the height of the keyboard. So instead of determining the orientation, getting the right display size, and subtracting;
-                       we just get the keyboard height which may be slower but easier to understand and work with */
-                    virtualkeyboard_get_height(&keyboardOffset);
-                    fgPlatformHandleKeyboardHeight(window, keyboardOffset);
-                }
+                /* See virtual keyboard handling for info on why this is not used. */
                 break;
-            }
 
             case NAVIGATOR_DEVICE_LOCK_STATE:
                 break;
@@ -775,6 +739,7 @@ void fgPlatformProcessSingleEvent ( void )
 #endif
 
             case 0: //Doesn't exist in header, but shows up when keyboard shows and resizes
+            case NAVIGATOR_OTHER:
                 break;
 
             default:
@@ -782,8 +747,10 @@ void fgPlatformProcessSingleEvent ( void )
                 break;
             }
         }
-#ifdef __PLAYBOOK__
-        /* While this could be used for non-PlayBook, BlackBerry 10 will still get navigator events, so use those. They are a bit more exact. */
+        /* 
+         * BlackBerry 10 navigator provides keyboard events, but they conflict with how we handle keyboard events.
+         * Causing multiple reshape messages and can leave window state incorrectly setup.
+         */
         else if(domain == virtualkeyboard_get_domain()) {
             unsigned int eventType = bps_event_get_code(fgDisplay.pDisplay.event);
             switch (eventType) {
@@ -816,7 +783,6 @@ void fgPlatformProcessSingleEvent ( void )
                 break;
             }
         }
-#endif
     } while(bps_get_event(&fgDisplay.pDisplay.event, 1) == BPS_SUCCESS && fgDisplay.pDisplay.event != NULL);
 
     /* Reset event to reduce chances of triggering something */
@@ -828,15 +794,13 @@ void fgPlatformMainLoopPreliminaryWork ( void )
     LOGI("fgPlatformMainLoopPreliminaryWork");
 
     /* Request navigator events */
-    navigator_request_events(0);
+    navigator_request_events(NAVIGATOR_EXTENDED_DATA);
 
     /* Allow rotation */
     navigator_rotation_lock(false);
 
-#ifdef __PLAYBOOK__
     /* Request keyboard events */
     virtualkeyboard_request_events(0);
-#endif
 
     /* Request window events */
     screen_request_events(fgDisplay.pDisplay.screenContext);
