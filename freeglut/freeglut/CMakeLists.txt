@@ -21,6 +21,11 @@ set(VERSION_PATCH 0)
 # Update fg_version.h to match the versions number here in cmake
 CONFIGURE_FILE(src/fg_version.h.in src/fg_version.h)
 
+# shared lib version numbers (change before release)
+set(SO_MAJOR 3)		# increment on backwards incompatible API/ABI changes
+set(SO_MINOR 10)	# increment on backwards compatible or internal changes
+set(SO_REV 0)		# if nothing else changed increment this
+
 # FREEGLUT_BUILD_SHARED_LIBS is already a standard CMake variable, but we need to
 # re-declare it here so it will show up in the GUI.
 # by default, we want to build both
@@ -371,7 +376,7 @@ ELSE()
     ENDIF()
 
     IF(FREEGLUT_BUILD_SHARED_LIBS)
-      SET_TARGET_PROPERTIES(freeglut PROPERTIES VERSION 3.9.0 SOVERSION 3 OUTPUT_NAME ${LIBNAME})
+      SET_TARGET_PROPERTIES(freeglut PROPERTIES VERSION ${SO_MAJOR}.${SO_MINOR}.${SO_REV} SOVERSION ${SO_MAJOR} OUTPUT_NAME ${LIBNAME})
     ENDIF()
     IF(FREEGLUT_BUILD_STATIC_LIBS)
       SET_TARGET_PROPERTIES(freeglut_static PROPERTIES OUTPUT_NAME ${LIBNAME})
