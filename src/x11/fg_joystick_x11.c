@@ -39,6 +39,8 @@
 #    include <sys/param.h>
 #endif
 
+#include <fcntl.h>
+
 
 /*this should be defined in a header file */
 #define MAX_NUM_JOYSTICKS  2   
