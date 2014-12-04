@@ -94,7 +94,7 @@ int fghPlatformGlutGetGLX ( GLenum eWhat )
         return fghChooseConfig(&config);
     }
 
-    /* This is system-dependant */
+    /* This is system-dependent */
     case GLUT_WINDOW_FORMAT_ID:
         if( fgStructure.CurrentWindow == NULL )
             return 0;
