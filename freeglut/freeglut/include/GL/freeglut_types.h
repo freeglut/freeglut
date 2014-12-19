@@ -62,6 +62,8 @@ typedef void(*FGCBButtonBox)(int, int);
 typedef void(*FGCBTabletMotion)(int, int);
 typedef void(*FGCBTabletButton)(int, int, int, int);
 typedef void(*FGCBDestroy)(void);    /* Used for both window and menu destroy callbacks */
+typedef void(*FGCBClose)(void);
+typedef void(*FGCBWMClose)(void);
 
 typedef void(*FGCBMultiEntry)(int, int);
 typedef void(*FGCBMultiButton)(int, int, int, int, int);
