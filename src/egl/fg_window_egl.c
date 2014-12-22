@@ -38,7 +38,7 @@ int fghChooseConfig(EGLConfig* config) {
   if (fgState.MajorVersion >= 2) {
     /*
      * Khronos does not specify a EGL_OPENGL_ES3_BIT outside of the OpenGL extension "EGL_KHR_create_context" and EGL 1.5. There are numerous references on the internet 
-     * that say to use EGL_OPENGL_ES3_BIT (pre-EGL 1.5), followed by many saying they can't find it in any headers. In fact, the offical updated specification for EGL 
+     * that say to use EGL_OPENGL_ES3_BIT (pre-EGL 1.5), followed by many saying they can't find it in any headers. In fact, the official updated specification for EGL 
      * does not have any references to OpenGL ES 3.x. Tests have shown that EGL_OPENGL_ES2_BIT will work with ES 3.x.
      */
     ATTRIB_VAL(EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT);

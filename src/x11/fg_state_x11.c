@@ -79,7 +79,7 @@ int fgPlatformGlutGet ( GLenum eWhat )
     {
 
     /*
-     * Those calls are somewhat similiar, as they use XGetWindowAttributes()
+     * Those calls are somewhat similar, as they use XGetWindowAttributes()
      * function
      */
     case GLUT_WINDOW_X:

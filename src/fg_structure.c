@@ -100,7 +100,7 @@ SFG_Window* fgCreateWindow( SFG_Window* parent, const char* title,
 
     /*
      * Open the window now. The fgOpenWindow() function is system
-     * dependant, and resides in fg_window.c. Uses fgState.
+     * dependent, and resides in fg_window.c. Uses fgState.
      */
     fgOpenWindow( window, title, positionUse, x, y, sizeUse, w, h, gameMode,
                   (GLboolean)(parent ? GL_TRUE : GL_FALSE) );
@@ -332,7 +332,7 @@ void fgDestroyMenu( SFG_Menu* menu )
  * This function should be called on glutInit(). It will prepare the internal
  * structure of freeglut to be used in the application. The structure will be
  * destroyed using fgDestroyStructure() on glutMainLoop() return. In that
- * case further use of freeglut should be preceeded with a glutInit() call.
+ * case further use of freeglut should be preceded with a glutInit() call.
  */
 void fgCreateStructure( void )
 {
