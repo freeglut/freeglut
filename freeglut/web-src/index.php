@@ -37,7 +37,7 @@ for developers to help out with further work on the Android and BlackBerry 10
 ports. Furthermore, ports to Cocoa/Carbon on OSX, and maybe even Wayland
 are planned, along with some enhancements to the API and implementation.
 See <a href="progress.php">here</a> for an overview of the major points
-on our todo list. You can easily help out by forking the unoffical clone
+on our todo list. You can easily help out by forking the unofficial clone
 of our <a
 href="https://sourceforge.net/p/freeglut/code/HEAD/tree/">sourceforge.net
 SVN repository</a> on <a

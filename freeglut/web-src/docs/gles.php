@@ -93,7 +93,7 @@ PKG_CONFIG_PATH=/tmp/freeglut-native-gles/share/pkgconfig/ cmake ..
 <ul>
   <li>OpenGL Wikibook's
     <a href="https://gitorious.org/wikibooks-opengl/modern-tutorials/source/HEAD:tut04_transform-gles2"><tt>tut04_transform-gles2</tt>
-    example</a>: it uses a basic Makefile targetting <tt>freeglut-gles</tt></li>
+    example</a>: it uses a basic Makefile targeting <tt>freeglut-gles</tt></li>
   <li><tt>progs/test-shapes-gles1/</tt> in the source distribution:
     it is a standalone CMake app that uses FreeGLUT GLES (v1).</li>
 </ul>

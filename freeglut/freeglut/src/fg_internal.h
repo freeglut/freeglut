@@ -378,7 +378,7 @@ struct tagSFG_Timer
 
 /*
  * A window and its OpenGL context. The contents of this structure
- * are highly dependant on the target operating system we aim at...
+ * are highly dependent on the target operating system we aim at...
  */
 typedef struct tagSFG_Context SFG_Context;
 struct tagSFG_Context
@@ -902,7 +902,7 @@ extern SFG_State fgState;
   }
 
 /*
- * Following definitions are somewhat similiar to GLib's,
+ * Following definitions are somewhat similar to GLib's,
  * but do not generate any log messages:
  */
 #define  freeglut_return_if_fail( expr ) \
@@ -1008,7 +1008,7 @@ void fgEnumSubWindows( SFG_Window* window, FGCBWindowEnumerator enumCallback,
 SFG_Window* fgWindowByHandle( SFG_WindowHandleType hWindow );
 
 /*
- * This function is similiar to the previous one, except it is
+ * This function is similar to the previous one, except it is
  * looking for a specified (sub)window identifier. The function
  * is defined in fg_structure.c file.
  */
