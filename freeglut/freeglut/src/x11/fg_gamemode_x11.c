@@ -75,7 +75,7 @@ static int xrandr_resize(int xsz, int ysz, int rate, int just_checking)
     XRRScreenConfiguration *xrr_config = 0;
     Status result = -1;
 
-	/* NOTE: we have already determined that XR&R is availble and enabled before calling this */
+	/* NOTE: we have already determined that XR&R is available and enabled before calling this */
 
     XRRQueryVersion(fgDisplay.pDisplay.Display, &ver_major, &ver_minor);
 
@@ -572,7 +572,7 @@ void fgPlatformEnterGameMode( void )
 			 * more changes and investigation.
 			 */
 
-			/* Get the current postion of the drawable area on screen */
+			/* Get the current position of the drawable area on screen */
 			XTranslateCoordinates(
 				fgDisplay.pDisplay.Display,
 				fgStructure.CurrentWindow->Window.Handle,
