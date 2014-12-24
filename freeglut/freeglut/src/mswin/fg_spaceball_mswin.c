@@ -30,6 +30,8 @@
  */
 
 /*
+ * Modified by Jinrong Xie (stonexjr@gmail.com) 12/24/2014
+ * for Space Navigator support on Windows.
  * This code is enhanced by at least supporting 3Dconnexion's 
  * six degree of freedom navigator.
  */
@@ -68,8 +70,6 @@ void fgPlatformInitializeSpaceball(void)
 		__fgSpaceball.hwndTarget = NULL;
 		sball_initialized = 0;
 	}
-
-	return;
 }
 
 void fgPlatformSpaceballClose(void)
@@ -94,6 +94,7 @@ void fgPlatformSpaceballSetWindow(SFG_Window *window)
 
 int fgIsSpaceballWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
+	return 0;
 }
 
 void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
@@ -101,7 +102,6 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	#define LOGITECH_VENDOR_ID 0x46d
 	HRAWINPUT hRawInput = (HRAWINPUT)lParam;
 	UINT inputCode = (UINT)wParam;
-	RAWINPUTHEADER hdr;
 	UINT size;
 	BYTE *rawInputBuffer;
 	PRAWINPUT pRawInput;
