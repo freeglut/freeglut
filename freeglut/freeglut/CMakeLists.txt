@@ -49,6 +49,9 @@ ENDIF()
 # OpenGL ES support
 OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
 
+# option to build either as "glut" (ON) or "freeglut" (OFF)
+OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" ON)
+
 
 SET(FREEGLUT_HEADERS
     include/GL/freeglut.h
@@ -365,15 +368,20 @@ ELSE()
     #   or special-cased FreeGLUT long ago (e.g. .so.4 on OpenBSD), so
     #   the lack of support for current:revision:age in CMake should
     #   not be a problem.
-    # - the output library should be named glut so it'll be linkable with -lglut
+	# - the output library should be named glut so it'll be linkable with -lglut
+	#   (unless FREEGLUT_REPLACE_GLUT is false).
     # - the shared library should link to the dependency libraries so that the user
     #   won't have to link them explicitly (they shouldn't have to know that we depend
     #   on Xrandr or Xxf86vm)
     IF(FREEGLUT_GLES)
-      SET(LIBNAME freeglut-gles)
+		SET(LIBNAME freeglut-gles)
     ELSE()
-      SET(LIBNAME glut)
-    ENDIF()
+		IF(FREEGLUT_REPLACE_GLUT)
+			SET(LIBNAME glut)
+		ELSE()
+			SET(LIBNAME freeglut)
+		ENDIF()
+	ENDIF()
 
     IF(FREEGLUT_BUILD_SHARED_LIBS)
       SET_TARGET_PROPERTIES(freeglut PROPERTIES VERSION ${SO_MAJOR}.${SO_MINOR}.${SO_REV} SOVERSION ${SO_MAJOR} OUTPUT_NAME ${LIBNAME})
