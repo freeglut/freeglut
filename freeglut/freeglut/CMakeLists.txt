@@ -50,7 +50,9 @@ ENDIF()
 OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
 
 # option to build either as "glut" (ON) or "freeglut" (OFF)
-OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" ON)
+IF(NOT WIN32)
+    OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" ON)
+ENDIF()
 
 
 SET(FREEGLUT_HEADERS
