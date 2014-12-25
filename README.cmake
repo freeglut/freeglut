@@ -50,11 +50,25 @@ How to build freeglut on UNIX
 
 Breakdown of CMake configuration options
 ----------------------------------------
-BUILD_SHARED_LIBS       [ON, OFF] Build freeglut as a shared library
-BUILD_STATIC_LIBS       [ON, OFF] Build freeglut as a static library
-CMAKE_BUILD_TYPE        [Empty, Debug, Release] Can be overriden by passing it
-                        as a make variable during build.
-CMAKE_INSTALL_PREFIX	Installation prefix (e.g. /usr/local on UNIX)
-FREEGLUT_BUILD_DEMOS	[ON, OFF] Controls whether the demos are built or not.
-FREEGLUT_GLES1          [ON, OFF] TODO
-FREEGLUT_GLES2          [ON, OFF] TODO
+CMAKE_BUILD_TYPE            [Empty, Debug, Release] Can be overriden by
+                            passing it as a make variable during build.
+CMAKE_INSTALL_PREFIX	    Installation prefix (e.g. /usr/local on UNIX)
+FREEGLUT_BUILD_DEMOS	    [ON, OFF] Controls whether the demos are
+                            built or not.
+FREEGLUT_BUILD_SHARED_LIBS  [ON, OFF] Build freeglut as a shared library
+FREEGLUT_BUILD_STATIC_LIBS  [ON, OFF] Build freeglut as a static library
+FREEGLUT_GLES               [ON, OFF] Link with GLEs libraries instead
+                            of OpenGL
+FREEGLUT_PRINT_ERRORS       [ON, OFF] Controls whether errors are
+                            default handled or not when user does not
+                            provide an error callback
+FREEGLUT_PRINT_WARNINGS     [ON, OFF] Controls whether warnings are
+                            default handled or not when user does not
+                            provide an warning callback
+FREEGLUT_REPLACE_GLUT       [ON, OFF] For non-Windows platforms,
+                            freeglut is by default built as -lglut. if
+                            off, built as -lfreeglut. On Windows,
+                            libraries are always built as freeglut.
+INSTALL_PDB                 [ON, OFF] MSVC only: controls whether debug
+                            information files are included with the
+                            install or not
