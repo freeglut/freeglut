@@ -54,9 +54,10 @@ mailing list.</p>
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
-    <p>Version 3.0.0, Release Candidate 1 was released on Wednesday,
-    October 29, 2014.</p>
-	<p>
+	 <p>
+       <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.0.0-rc2.tar.gz?download">Freeglut 3.0.0 Release Candidate 2</a> [<i>Released: 26 Dec 2014</i>]<br/>
+    </p>
+	 <p>
        <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.0.0-rc1.tar.gz?download">Freeglut 3.0.0 Release Candidate 1</a> [<i>Released: 29 Oct 2014</i>]<br/>
     </p>
     <p>Amongst many smaller enhancements and bugfixes, this RC includes
