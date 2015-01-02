@@ -8,7 +8,7 @@ setPageTitle("A Look At Progress");
 generateHeader($_SERVER['PHP_SELF']);
 ?>
 
-<div class="textheader">FreeGLUT 3.0</div>
+<div class="textheader">FreeGLUT 3.0 an onwards</div>
 <p>
 Major work, its status and planned milestone. <a
 href="help.php">Help</a> on any of these plans is very welcome! Fork the
@@ -26,7 +26,8 @@ points</a></td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
 
 <tr><td>BlackBerry 10 port</td><td>Basic but complete functionality
-by <a href="https://github.com/rcmaniac25">Vinnie Simonetti</a>.</td><td>Basic functionality as is now done: 3.0. Future
+by <a href="https://github.com/rcmaniac25">Vinnie
+Simonetti</a>.</td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
 
 <tr><td>callbacks with closures</td><td>Have versions of each callback
@@ -51,17 +52,14 @@ href="http://nuclear.mutantstargoat.com/sw/libdrawtext/">libdrawtext
 library</a></td><td>The sooner the better, but will have to wait for
 asap after 3.0.</td></tr>
 
-<tr><td>At runtime loading of OpenGL, OpenGL ES1 or OpenGL ES2 libraries,
+<tr><td>At runtime loading of OpenGL or OpenGL ES libraries,
 like SDL.</td><td>Currently CMake variables define at compile time which
-of these three the library will be compiled against. No work has been
-done on moving this to an at-runtime API.</td><td>Having this in 3.0
-would be nice, but not essential.</td></tr>
+of the two the library will be compiled against. No work has been
+done to move this to an at-runtime API.</td><td>After 3.0</td></tr>
 
 <tr><td>Code reorganized such that platform-specific and display
-server-specific code are decoupled</td><td>Done, thanks John Fay! This
-already led to a port to Android and support for GLES 1/2 on X11
-(thanks Sylvain for both!), and paves the way for implementing native
-OSX and Wayland support</td><td>3.0</td></tr>
+server-specific code are decoupled</td><td>Done, thanks John
+Fay!</td><td>3.0</td></tr>
 
 <tr><td>Position callback</td><td>Done: we now have a position callback
 to notify the client when the position of the window
