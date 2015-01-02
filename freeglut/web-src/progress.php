@@ -43,6 +43,14 @@ or later.</td></tr>
 cube, cone, etc, as well as the teapot and other parts of the
 teaset)</td><td>3.0</td></tr>
 
+<tr><td>High-DPI awareness.</td><td>As discussed <a
+href="http://sourceforge.net/p/freeglut/mailman/message/30859054/">here</a>,
+it is unclear what should be done. See also associated <a
+href="https://github.com/dcnieho/FreeGLUT/tree/feature_DPI_awareness">github
+branch</a>, though in the end maybe no code has to be added to FreeGLUT
+for this at all, its the host program's responsibility to decide on DPI
+awareness for his work.</td><td>Figure this out for 3.2</td></tr>
+
 <tr><td>GL2+ and GLES 1/2 clean API for fonts and menus</td><td>For
 stroke fonts, we can use a similar approach as for the shapes, should
 thus be straightforward. For the bitmap fonts, this is more complex.
