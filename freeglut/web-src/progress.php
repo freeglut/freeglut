@@ -49,6 +49,15 @@ href="https://github.com/dcnieho/FreeGLUT/tree/feature_IMECHAR_callback">github
 branch</a>. What can be done on the Linux side?</td><td>Figure this out
 for 3.2</td></tr>
 
+<tr><td>option to not deinitialize when mainloop terminates</td><td>As
+is often requested, in some usage cases, it would be advantageous if
+FreeGLUT did not automatically deinitialize when its last window is
+closed. This has been implemented, but is awaiting testing on platforms
+other than windows. Discussed <a
+href="http://sourceforge.net/p/freeglut/mailman/message/32926301/">here</a>.</td><td>As
+it has potential complications on mobile platforms, it was decided to
+leave this feature until after 3.0.</td></tr>
+
 <tr><td>High-DPI awareness.</td><td>As discussed <a
 href="http://sourceforge.net/p/freeglut/mailman/message/30859054/">here</a>,
 it is unclear what should be done. See also associated <a
