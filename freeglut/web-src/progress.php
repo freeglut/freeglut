@@ -43,6 +43,12 @@ or later.</td></tr>
 cube, cone, etc, as well as the teapot and other parts of the
 teaset)</td><td>3.0</td></tr>
 
+<tr><td>handling non-western script input to windows</td><td>For
+Windows, see associated <a
+href="https://github.com/dcnieho/FreeGLUT/tree/feature_IMECHAR_callback">github
+branch</a>. What can be done on the Linux side?</td><td>Figure this out
+for 3.2</td></tr>
+
 <tr><td>High-DPI awareness.</td><td>As discussed <a
 href="http://sourceforge.net/p/freeglut/mailman/message/30859054/">here</a>,
 it is unclear what should be done. See also associated <a
