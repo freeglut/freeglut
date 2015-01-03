@@ -522,6 +522,6 @@ IF(FREEGLUT_GLES)
   SET(PC_FILENAME "freeglut-gles.pc")
 ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.pc.in ${CMAKE_BINARY_DIR}/freeglut.pc @ONLY)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION share/pkgconfig/ RENAME ${PC_FILENAME})
+INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION lib/pkgconfig/ RENAME ${PC_FILENAME})
 # TODO: change the library and .pc name when building for GLES,
 # e.g. -lglut-GLES
