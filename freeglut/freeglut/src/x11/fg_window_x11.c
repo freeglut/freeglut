@@ -40,6 +40,10 @@
 #include "x11/fg_window_x11_glx.h"
 #endif
 
+#ifndef HOST_NAME_MAX
+#define HOST_NAME_MAX	255
+#endif
+
 /* Motif window hints, only define needed ones */
 typedef struct
 {
