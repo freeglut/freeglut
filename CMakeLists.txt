@@ -265,10 +265,6 @@ IF(UNIX AND NOT(ANDROID OR BLACKBERRY))
     ENDIF()
     IF(X11_xf86vmode_FOUND)
         SET(HAVE_X11_EXTENSIONS_XF86VMODE_H TRUE)
-        # Work-around http://www.cmake.org/Bug/bug_view_page.php?bug_id=6976
-        IF(NOT "${X11_Xxf86vm_LIB}")
-            SET(X11_Xxf86vm_LIB "Xxf86vm")
-        ENDIF()
         LIST(APPEND LIBS ${X11_Xxf86vm_LIB})
     ENDIF()
     IF(X11_Xinput_FOUND)
@@ -329,7 +325,7 @@ ENDIF()
 # ensure that all CMake-generated files are kept away from the main source tree.
 # As a result, the build directory must to be added to the include path list.
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
-INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
 ADD_DEFINITIONS(-DHAVE_CONFIG_H)
 IF(WIN32)
     # we also have to generate freeglut.rc, which contains the version
