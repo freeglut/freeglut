@@ -1,5 +1,8 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)
 PROJECT(freeglut)
+
+# for multiarch LIBDIR support (requires cmake>=2.8.8)
+INCLUDE(GNUInstallDirs)
 
 # NOTE: On Windows and Cygwin, the dll's are placed in the
 # CMAKE_RUNTIME_OUTPUT_DIRECTORY, while their corresponding import
@@ -254,6 +257,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCC)
 INCLUDE(CheckIncludeFiles)
 IF(UNIX AND NOT(ANDROID OR BLACKBERRY))
     FIND_PACKAGE(X11 REQUIRED)
+    INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
     LIST(APPEND LIBS ${X11_LIBRARIES})
     IF(X11_Xrandr_FOUND)
         SET(HAVE_X11_EXTENSIONS_XRANDR_H TRUE)
@@ -261,10 +265,6 @@ IF(UNIX AND NOT(ANDROID OR BLACKBERRY))
     ENDIF()
     IF(X11_xf86vmode_FOUND)
         SET(HAVE_X11_EXTENSIONS_XF86VMODE_H TRUE)
-        # Work-around http://www.cmake.org/Bug/bug_view_page.php?bug_id=6976
-        IF(NOT "${X11_Xxf86vm_LIB}")
-            SET(X11_Xxf86vm_LIB "Xxf86vm")
-        ENDIF()
         LIST(APPEND LIBS ${X11_Xxf86vm_LIB})
     ENDIF()
     IF(X11_Xinput_FOUND)
@@ -325,7 +325,7 @@ ENDIF()
 # ensure that all CMake-generated files are kept away from the main source tree.
 # As a result, the build directory must to be added to the include path list.
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
-INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
 ADD_DEFINITIONS(-DHAVE_CONFIG_H)
 IF(WIN32)
     # we also have to generate freeglut.rc, which contains the version
@@ -413,8 +413,8 @@ ENDIF()
 IF(FREEGLUT_BUILD_SHARED_LIBS)
     INSTALL(TARGETS freeglut
             RUNTIME DESTINATION bin
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
     IF(INSTALL_PDB)
         INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
@@ -425,8 +425,8 @@ ENDIF()
 IF(FREEGLUT_BUILD_STATIC_LIBS)
     INSTALL(TARGETS freeglut_static
             RUNTIME DESTINATION bin
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
     IF(INSTALL_PDB)
         INSTALL(FILES ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/Debug/freeglut_static${CMAKE_DEBUG_POSTFIX}.pdb
@@ -522,6 +522,6 @@ IF(FREEGLUT_GLES)
   SET(PC_FILENAME "freeglut-gles.pc")
 ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.pc.in ${CMAKE_BINARY_DIR}/freeglut.pc @ONLY)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION share/pkgconfig/ RENAME ${PC_FILENAME})
+INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/ RENAME ${PC_FILENAME})
 # TODO: change the library and .pc name when building for GLES,
 # e.g. -lglut-GLES
