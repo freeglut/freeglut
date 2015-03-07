@@ -3,17 +3,12 @@ freeglut/freeglut/AUTHORS svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/CMakeLists.txt svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/COPYING svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/ChangeLog svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/LISEZMOI.cygwin_mingw svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/LISEZ_MOI svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/NEWS svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/README svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/README.android -text
 freeglut/freeglut/README.cmake -text
 freeglut/freeglut/README.cygwin_mingw svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/README.mac -text
 freeglut/freeglut/README.mingw_cross svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/README.win32 svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/TODO svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/android/Android.mk -text
 freeglut/freeglut/android/README -text
 freeglut/freeglut/android_toolchain.cmake -text
