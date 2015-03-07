@@ -43,6 +43,7 @@ freeglut/freeglut/progs/demos/One/objects.ico -text
 freeglut/freeglut/progs/demos/One/one.c svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/progs/demos/One/one.rc -text
 freeglut/freeglut/progs/demos/Resizer/Resizer.cpp -text
+freeglut/freeglut/progs/demos/init_error_func/init_error_func.c -text
 freeglut/freeglut/progs/demos/multi-touch/multi-touch.c -text
 freeglut/freeglut/progs/demos/shapes/glmatrix.c -text
 freeglut/freeglut/progs/demos/shapes/glmatrix.h -text
