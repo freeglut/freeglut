@@ -33,7 +33,7 @@ events, to allow for trully portable OpenGL programs.</p>
 
 <p>The original GLUT library seems to have been abandoned with the most recent
 version (3.7) dating back to August 1998. Its license does not allow anyone to
-distribute modified library code. Which is really unfortunate, since GLUT is
+distribute modified library code. This is really unfortunate, since GLUT is
 getting old and really needs improvement. Also, GLUT's license is incompatible
 with some software distributions (e.g., XFree86).</p>
 
