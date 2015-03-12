@@ -65,7 +65,7 @@ platforms, being just some of them.</p>
 and BlackBerry 10 ports. Furthermore, ports to Cocoa on OSX, and maybe even
 Wayland are planned, along with some enhancements to the API and implementation.</p>
 
-See <a href="progress.php">here</a> for an overview of the major points
+<p>See <a href="progress.php">here</a> for an overview of the major points
 on our todo list. You can easily help out by forking the unofficial clone
 of our <a
 href="https://sourceforge.net/p/freeglut/code/HEAD/tree/">sourceforge.net
@@ -83,7 +83,7 @@ mailing list.</p>
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
-    Feel free to test by downloading a <a
+    <p>Feel free to test by downloading a <a
     href="https://sourceforge.net/p/freeglut/code/HEAD/tarball?path=/trunk/freeglut/freeglut">tarball
     of current trunk</a>, or <a href="help.php#svn">grabbing a copy from
     svn</a>, and give us feedback on how it worked for you. All this
@@ -143,7 +143,10 @@ incomplete:</p>
 	<li><a href="mailto:freeglut-bugs@lists.sourceforge.net">freeglut-bugs</a> [<a href="http://lists.sourceforge.net/lists/listinfo/freeglut-bugs">Subscribe</a>]</li>
 </ul>
 
-<p>Please note that <a href="http://sourceforge.net/p/freeglut/mailman/?source=navbar">you must subscribe before you can post</a> to our mailing lists. Sorry for the inconvenience.</p>
+<p>Please note that <a
+href="http://sourceforge.net/p/freeglut/mailman/?source=navbar">you must
+subscribe before you can post</a> to our mailing lists. Sorry for the
+inconvenience.</p>
 
 
 <?php generateFooter(); ?>
