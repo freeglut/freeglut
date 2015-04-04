@@ -52,8 +52,10 @@ ENDIF()
 # OpenGL ES support
 OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
 
-# option to build either as "glut" (ON) or "freeglut" (OFF)
 IF(NOT WIN32)
+    # Wayland support
+    OPTION(FREEGLUT_WAYLAND "Use Wayland (no X11)" OFF)
+    # option to build either as "glut" (ON) or "freeglut" (OFF)
     OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" ON)
 ENDIF()
 
@@ -167,36 +169,60 @@ ELSEIF(ANDROID OR BLACKBERRY)
             src/blackberry/fg_window_blackberry.c
         )
     ENDIF()
+
 ELSE()
-    LIST(APPEND FREEGLUT_SRCS
-        src/x11/fg_cursor_x11.c
-        src/x11/fg_ext_x11.c
-        src/x11/fg_gamemode_x11.c
-        src/x11/fg_glutfont_definitions_x11.c
-        src/x11/fg_init_x11.c
-        src/x11/fg_internal_x11.h
-        src/x11/fg_input_devices_x11.c
-        src/x11/fg_joystick_x11.c
-        src/x11/fg_main_x11.c
-        src/x11/fg_menu_x11.c
-        src/x11/fg_spaceball_x11.c
-        src/x11/fg_state_x11.c
-        src/x11/fg_structure_x11.c
-        src/x11/fg_window_x11.c
-        src/x11/fg_xinput_x11.c
-    )
-    IF(NOT(FREEGLUT_GLES))
+    # UNIX (Wayland)
+    IF(FREEGLUT_WAYLAND)
         LIST(APPEND FREEGLUT_SRCS
-            src/x11/fg_internal_x11_glx.h
-            src/x11/fg_display_x11_glx.c
-            src/x11/fg_state_x11_glx.c
-            src/x11/fg_state_x11_glx.h
-            src/x11/fg_window_x11_glx.c
-            src/x11/fg_window_x11_glx.h
+            src/wayland/fg_cursor_wl.c
+            src/wayland/fg_ext_wl.c
+            src/wayland/fg_gamemode_wl.c
+            src/wayland/fg_init_wl.c
+            src/wayland/fg_internal_wl.h
+            src/wayland/fg_input_devices_wl.c
+            src/wayland/fg_main_wl.c
+            src/wayland/fg_state_wl.c
+            src/wayland/fg_structure_wl.c
+            src/wayland/fg_window_wl.c
+            # font, serial port & joystick code are agnostic
+            src/x11/fg_glutfont_definitions_x11.c
+            src/x11/fg_input_devices_x11.c
+            src/x11/fg_joystick_x11.c
         )
+    # UNIX (X11)
+    ELSE()
+        LIST(APPEND FREEGLUT_SRCS
+            src/x11/fg_cursor_x11.c
+            src/x11/fg_ext_x11.c
+            src/x11/fg_gamemode_x11.c
+            src/x11/fg_glutfont_definitions_x11.c
+            src/x11/fg_init_x11.c
+            src/x11/fg_internal_x11.h
+            src/x11/fg_input_devices_x11.c
+            src/x11/fg_joystick_x11.c
+            src/x11/fg_main_x11.c
+            src/x11/fg_menu_x11.c
+            src/x11/fg_spaceball_x11.c
+            src/x11/fg_state_x11.c
+            src/x11/fg_structure_x11.c
+            src/x11/fg_window_x11.c
+            src/x11/fg_xinput_x11.c
+        )
+        IF(NOT(FREEGLUT_GLES))
+            LIST(APPEND FREEGLUT_SRCS
+                src/x11/fg_internal_x11_glx.h
+                src/x11/fg_display_x11_glx.c
+                src/x11/fg_state_x11_glx.c
+                src/x11/fg_state_x11_glx.h
+                src/x11/fg_window_x11_glx.c
+                src/x11/fg_window_x11_glx.h
+            )
+        ENDIF()
     ENDIF()
 ENDIF()
-IF(FREEGLUT_GLES)
+
+# OpenGL ES requires EGL, and so does Wayland
+IF(FREEGLUT_GLES OR FREEGLUT_WAYLAND)
     LIST(APPEND FREEGLUT_SRCS
         src/egl/fg_internal_egl.h
         src/egl/fg_display_egl.c
@@ -226,6 +252,12 @@ ELSE()
   INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
 ENDIF()
 
+# For Wayland: compile with -DFREEGLUT_WAYLAND and pull EGL
+IF(FREEGLUT_WAYLAND)
+  ADD_DEFINITIONS(-DFREEGLUT_WAYLAND)
+  LIST(APPEND LIBS wayland-client wayland-cursor wayland-egl EGL xkbcommon)
+ENDIF()
+
 # lib m for math, not needed on windows
 IF (NOT WIN32)
     # For compilation:
@@ -248,14 +280,14 @@ ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-  IF(NOT(ANDROID OR BLACKBERRY))
+  IF(NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND))
     # not setting -ansi as EGL/KHR headers doesn't support it
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic")
   ENDIF()
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 INCLUDE(CheckIncludeFiles)
-IF(UNIX AND NOT(ANDROID OR BLACKBERRY))
+IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND))
     FIND_PACKAGE(X11 REQUIRED)
     INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
     LIST(APPEND LIBS ${X11_LIBRARIES})
@@ -506,11 +538,17 @@ ELSEIF(FREEGLUT_GLES)
     ELSE()
       SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv2 -lGLESv1_CM -lEGL -lm")
     ENDIF()
+  ELSEIF(FREEGLUT_WAYLAND)
+    SET(PC_LIBS_PRIVATE "-lwayland-client -lwayland-cursor -lwayland-egl -lGLESv2 -lGLESv1_CM -lEGL -lxkbcommon -lm")
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv2 -lGLESv1_CM -lEGL -lm")
   ENDIF()
 ELSE()
-  SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGL -lm")
+  IF(FREEGLUT_WAYLAND)
+    SET(PC_LIBS_PRIVATE "-lwayland-client -lwayland-cursor -lwayland-egl -lGL -lxkbcommon -lm")
+  ELSE()
+    SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGL -lm")
+  ENDIF()
 ENDIF()
 # Client applications need to define FreeGLUT GLES version to
 # bootstrap headers inclusion in freeglut_std.h:
