@@ -1,77 +1,61 @@
+BRIEF OVERVIEW
+==============
 
-    BRIEF OVERVIEW
-    ==============
+This is the freeglut package.
 
-    This is the freeglut package.
+Freeglut, the Free OpenGL Utility Toolkit, is meant to be a free alternative to
+Mark Kilgard's GLUT library. Freeglut is free software, distributed under an
+MIT/X11 style license. You are free to use, modify, and redistribute FreeGLUT
+with or without modifications (see COPYING for details).
 
-    Freeglut, the Free openGL Utility Toolkit, is meant to be a free alter-
-    native to Mark Kilgard's GLUT library. It is distributed under an X-Consor-
-    tium style license (see COPYING for details), to offer you a chance to use 
-    and/or modify the source.
+PORTS
+=====
 
-    It makes use of OpenGL, GLU, and pthreads-win32 libraries. The library does
-    not make use of any GLUT code and is not 100% compatible. Code recompilation
-    and/or slight modifications might be required for your applications to work
-    with freeglut.
+Currently supported platforms:
+ - UNIX systems with X11 (such as GNU/Linux, FreeBSD, etc)
+ - MS Windows
+ - MacOS X with XQuartz (no native Cocoa support yet)
+ - Android (NDK)
+ - Blackberry
 
-
-    PORTS
-    =====
-
-    Both X11 and Win32 ports are in an advanced alpha stage, which means that
-    they provide limited functionality of GLUT API 3. A somewhat more
-    limited port (mostly due to limits of the OS) to Andriod is now also
-    available.
+Consult the platform-specific readme files for details on the level of support
+and build instructions.
 
 
-    INSTALLATION
-    ============
+INSTALLATION
+============
 
-    See README.cmake as a starting point, as well as the other README
-    files for further info.
-
-
-    CONTRIBUTING
-    ============
-
-    Bug and missing features patches are certainly welcome. Just as comments 
-    and FREEGLUT API propositions are.
-
-    Just please to make the fixes look visually just as the rest of the code 
-    does (tabs converted 4 white spaces). Comments are really welcome, as I 
-    believe it would be nice for people fresh new to OpenGL see how the things
-    are done... 
+See README.cmake as a starting point, as well as the other README
+files for further info.
 
 
-    WEB SITE AND CONTACTING THE AUTHOR
-    ==================================
+CONTRIBUTING
+============
 
-    Freeglut project has moved to the SourceForge:
-    http://freeglut.sourceforge.net
+Patches for bugfixes and new features are certainly welcome. Please send patches
+to the freeglut-developer mailing list (see CONTACT below).
 
+Feel free to report any bugs you encounter, using our bug tracking system:
+https://sourceforge.net/p/freeglut/bugs/
+Feature requests are also welcome at:
+https://sourceforge.net/p/freeglut/feature-requests/
 
-    THE HOPE
-    ========
-
-    Hope you find my work somehow useful.
-    Pawel W. Olszta, <olszta@sourceforge.net>
-
-
-    PASSING THE BATON
-    =================
-
-    In late December 2000, Pawel decided that he no longer
-    wished to maintain freeglut because he has moved out of
-    the graphics field.  I volunteered to take over from him
-    and have been running the project since Jan 13th 2001.
-
-    I'm also the author and maintainer of the PLIB library suite
-    and 'freeglut' really fits in well with that work.
-
-    I just hope I can live up to Pawel's high standards. Pawel
-    remains on the active developers list.
-
-    Steve Baker <sjbaker1@airmail.net>
-                http://plib.sourceforge.net
+If your bug report needs urgent attention, please also post a message to the
+aforementioned freeglut-developer mailing list, to make sure we'll see it ASAP.
 
 
+CONTACT
+=======
+
+FreeGLUT website: http://freeglut.sourceforge.net
+
+FreeGLUT mailing lists:
+ - developer: https://lists.sourceforge.net/lists/listinfo/freeglut-developer
+ - bugs: https://lists.sourceforge.net/lists/listinfo/freeglut-bugs
+ - announce: https://lists.sourceforge.net/lists/listinfo/freeglut-announce
+
+  You need to subscribe before posting to any of our mailing lists. Make sure
+  to avoid selecting "daily digest mode" if you intend to post, so that you can
+  reply properly to specific messages. Also, please do not top-post, and try to
+  send properly formated emails (text, hard-wrapped at 72 columns, no binary or
+  large attachements).
