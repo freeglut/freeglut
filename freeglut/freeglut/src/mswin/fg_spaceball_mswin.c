@@ -37,6 +37,7 @@
  */
 
 #include <GL/freeglut.h>
+#include <stdlib.h>
 #include "../fg_internal.h"
 
 enum {
@@ -121,7 +122,7 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	if (res == -1)
 		return;
 
-	rawInputBuffer = (BYTE*)malloc(size);
+	rawInputBuffer = malloc(size * sizeof *rawInputBuffer);
 	pRawInput = (PRAWINPUT)rawInputBuffer;
 
 	res = GetRawInputData(hRawInput, RID_INPUT, pRawInput, &size, sizeof(RAWINPUTHEADER));
