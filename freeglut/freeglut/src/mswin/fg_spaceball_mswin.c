@@ -30,7 +30,7 @@
  */
 
 /*
- * Modified by Jinrong Xie (stonexjr@gmail.com) 12/24/2014
+ * Modified by Jinrong Xie <stonexjr at gmail.com> 12/24/2014
  * for Space Navigator support on Windows.
  * This code is enhanced by at least supporting 3Dconnexion's 
  * six degree of freedom navigator.
