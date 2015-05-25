@@ -7,8 +7,11 @@
  * magellan X-based protocol.
  */
 
+
 #include <GL/freeglut.h>
 #include "fg_internal.h"
+
+#if(_WIN32_WINNT >= 0x0501)
 
 /* -- PRIVATE FUNCTIONS --------------------------------------------------- */
 
@@ -28,13 +31,12 @@ void fgInitialiseSpaceball(void)
     }
 
     fgPlatformInitializeSpaceball();
-
-    //sball_initialized = 1;
 }
 
 void fgSpaceballClose(void)
 {
-	fgPlatformSpaceballClose();}
+	fgPlatformSpaceballClose();
+}
 
 int fgHasSpaceball(void)
 {
@@ -74,3 +76,28 @@ void fgSpaceballSetWindow(SFG_Window *window)
     fgPlatformSpaceballSetWindow(window);
 }
 
+#else
+
+void fgInitialiseSpaceball(void)
+{
+}
+
+void fgSpaceballClose(void)
+{
+}
+
+int fgHasSpaceball(void)
+{
+	return 0;
+}
+
+int fgSpaceballNumButtons(void)
+{
+	return 0;
+}
+
+void fgSpaceballSetWindow(SFG_Window *window)
+{
+}
+
+#endif
