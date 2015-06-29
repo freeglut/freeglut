@@ -36,6 +36,8 @@
  * six degree of freedom navigator.
  */
 
+#if(_WIN32_WINNT >= 0x0501)
+
 #include <GL/freeglut.h>
 #include <stdlib.h>
 #include "../fg_internal.h"
@@ -190,3 +192,5 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		}
 	}
 }
+
+#endif
