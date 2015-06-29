@@ -1545,13 +1545,11 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 #endif
 	//Added by Jinrong Xie (stonexjr@gmail.com) 12/24/2014
 	//for SpaceNavigator support on Windows.
-	/*
-	case WM_ACTIVATEAPP:
-		fgInitialiseSpaceball();
-		break;
-	*/
 	case WM_INPUT:
-		fgSpaceballHandleWinEvent(hWnd, wParam, lParam);
+		if (fgHasSpaceball())
+		{
+			fgSpaceballHandleWinEvent(hWnd, wParam, lParam);
+		}
 		break;
     default:
         /* Handle unhandled messages */
