@@ -273,9 +273,20 @@ IF(WIN32)
         SET( CMAKE_DEBUG_POSTFIX "d" )
     ENDIF(MSVC)
     
+    IF(NOT(MSVC_VERSION LESS "1600"))
+    # minimum requirement for WM_TOUCH device
+        ADD_DEFINITIONS(-D_WIN32_WINNT=0x0601)
+        ADD_DEFINITIONS(-DWINVER=0x0601)
+    ELSEIF(NOT(MSVC_VERSION LESS "1300"))
+    # minimum requirement for spaceball device
+        ADD_DEFINITIONS(-D_WIN32_WINNT=0x0501)
+        ADD_DEFINITIONS(-DWINVER=0x0501)
+    ELSE()
     # enable the use of Win2000 APIs (needed for really old compilers like MSVC6)
-    ADD_DEFINITIONS(-D_WIN32_WINNT=0x0500)
-    ADD_DEFINITIONS(-DWINVER=0x0500)
+        ADD_DEFINITIONS(-D_WIN32_WINNT=0x0500)
+        ADD_DEFINITIONS(-DWINVER=0x0500)
+    ENDIF()
+
 ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
