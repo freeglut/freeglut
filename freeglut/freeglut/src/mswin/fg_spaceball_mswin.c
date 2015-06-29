@@ -53,7 +53,7 @@ RAWINPUTDEVICE __fgSpaceball = { 0x01, 0x08, 0x00, 0x00 };
 void fgPlatformInitializeSpaceball(void)
 {
 	HWND hwnd;
-    sball_initialized = 1;
+	sball_initialized = 1;
 	if (!fgStructure.CurrentWindow)
 	{
 		sball_initialized = 0;
