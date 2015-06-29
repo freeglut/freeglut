@@ -1543,14 +1543,16 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 		break;
 	}
 #endif
-	//Added by Jinrong Xie <stonexjr at gmail.com> 12/24/2014
-	//for SpaceNavigator support on Windows.
+
+#ifdef WM_INPUT
 	case WM_INPUT:
+        /* Added by Jinrong Xie <stonexjr at gmail.com> for SpaceNavigator support on Windows. Dec 2014 */
 		if (fgHasSpaceball())
 		{
 			fgSpaceballHandleWinEvent(hWnd, wParam, lParam);
 		}
 		break;
+#endif
     default:
         /* Handle unhandled messages */
         lRet = DefWindowProc( hWnd, uMsg, wParam, lParam );
