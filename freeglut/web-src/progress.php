@@ -34,6 +34,9 @@ enhancements: 3.0 or later.</td></tr>
 that take an additional void* that is passed back to the user upon
 invocation.</td><td>3.2</td></tr>
 
+<tr><td>Windows 8 touch support</td><td>Windows 8 replaced how touch
+input works, so we need to implement support for that.</td><td>3.2</td></tr>
+
 <tr><td>10bit display formats</td><td>GLUT supports that but FreeGLUT
 currently does not. Unfinished effort to implement <a
 href="https://github.com/dcnieho/FreeGLUT/tree/feature_30bit_framebuffer">here</a>.</td><td>3.0
