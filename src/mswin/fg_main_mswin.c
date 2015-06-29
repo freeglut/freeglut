@@ -1543,8 +1543,8 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 		break;
 	}
 #endif
-    //Added by Jinrong Xie (stonexjr@gmail.com) 12/24/2014
-    //for SpaceNavigator support on Windows.
+	//Added by Jinrong Xie <stonexjr at gmail.com> 12/24/2014
+	//for SpaceNavigator support on Windows.
 	case WM_INPUT:
 		if (fgHasSpaceball())
 		{
