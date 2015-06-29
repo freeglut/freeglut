@@ -148,7 +148,7 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		// X goes right, Y goes up and Z goes towards viewer, e.g.
 		// the one used in OpenGL
 		if (pRawInput->data.hid.bRawData[0] == 
-			SPNAV_EVENT_MOTION_TRANSLATION)//0x01)
+			SPNAV_EVENT_MOTION_TRANSLATION)
 		{ // Translation vector
 			short* pnData = (short*)(&pRawInput->data.hid.bRawData[1]);
 			short X =  pnData[0];
@@ -157,7 +157,7 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 			INVOKE_WCB(*window, SpaceMotion, (X, Y, Z));
 		}
 		else if (pRawInput->data.hid.bRawData[0] == 
-				SPNAV_EVENT_MOTION_ROTATION)//0x02)
+				SPNAV_EVENT_MOTION_ROTATION)
 		{ // Axis aligned rotation vector
 			short* pnData = (short*)(&pRawInput->data.hid.bRawData[1]);
 			short rX =  pnData[0];
@@ -166,7 +166,7 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 			INVOKE_WCB(*window, SpaceRotation, (rX, rY, rZ));
 		}
 		else if (pRawInput->data.hid.bRawData[0] == 
-				 SPNAV_EVENT_BUTTON)//0x03)
+				 SPNAV_EVENT_BUTTON)
 		{ // State of the keys
 			unsigned long dwKeystate = *(unsigned long*)(&pRawInput->data.hid.bRawData[1]);
 			unsigned int state = GLUT_UP;
