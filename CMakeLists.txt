@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0 FATAL_ERROR)
 PROJECT(freeglut)
 
 # for multiarch LIBDIR support (requires cmake>=2.8.8)
@@ -20,6 +20,7 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(VERSION_MAJOR 3)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
+set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 # Update fg_version.h to match the versions number here in cmake
 CONFIGURE_FILE(src/fg_version.h.in src/fg_version.h)
@@ -454,30 +455,34 @@ IF(FREEGLUT_BUILD_STATIC_LIBS)
 ENDIF()
 
 IF(FREEGLUT_BUILD_SHARED_LIBS)
-    INSTALL(TARGETS freeglut
+    INSTALL(TARGETS freeglut EXPORT FreeGLUTTargets
             RUNTIME DESTINATION bin
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            INCLUDES DESTINATION include
     )
     IF(INSTALL_PDB)
         INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
             DESTINATION bin
-			CONFIGURATIONS Debug)
+			CONFIGURATIONS Debug
+            COMPONENT Devel)
     ENDIF()
 ENDIF()
 IF(FREEGLUT_BUILD_STATIC_LIBS)
-    INSTALL(TARGETS freeglut_static
+    INSTALL(TARGETS freeglut_static EXPORT FreeGLUTTargets
             RUNTIME DESTINATION bin
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            INCLUDES DESTINATION include
     )
     IF(INSTALL_PDB)
         INSTALL(FILES ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/Debug/freeglut_static${CMAKE_DEBUG_POSTFIX}.pdb
             DESTINATION lib
-			CONFIGURATIONS Debug)
+            CONFIGURATIONS Debug
+            COMPONENT Devel)
     ENDIF()
 ENDIF()
-INSTALL(FILES ${FREEGLUT_HEADERS} DESTINATION include/GL)
+INSTALL(FILES ${FREEGLUT_HEADERS} DESTINATION include/GL COMPONENT Devel)
 
 
 
@@ -571,6 +576,36 @@ IF(FREEGLUT_GLES)
   SET(PC_FILENAME "freeglut-gles.pc")
 ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.pc.in ${CMAKE_BINARY_DIR}/freeglut.pc @ONLY)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/ RENAME ${PC_FILENAME})
+INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/ RENAME ${PC_FILENAME} COMPONENT Devel)
 # TODO: change the library and .pc name when building for GLES,
 # e.g. -lglut-GLES
+
+INCLUDE(CMakePackageConfigHelpers)
+WRITE_BASIC_PACKAGE_VERSION_FILE(
+    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfigVersion.cmake"
+    VERSION ${VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+# needs cmake 3.0 (as does the "INCLUDES DIRECTORY" argument to install(TARGETS)):
+EXPORT(EXPORT FreeGLUTTargets
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTTargets.cmake"
+    NAMESPACE FreeGLUT::
+)
+CONFIGURE_FILE(FreeGLUTConfig.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
+    @ONLY
+)
+SET(ConfigPackageLocation lib/cmake/FreeGLUT)
+INSTALL(EXPORT FreeGLUTTargets
+    FILE FreeGLUTTargets.cmake
+    NAMESPACE FreeGLUT::
+    DESTINATION ${ConfigPackageLocation}
+)
+INSTALL(
+    FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfigVersion.cmake"
+    DESTINATION ${ConfigPackageLocation}
+    COMPONENT Devel
+)
