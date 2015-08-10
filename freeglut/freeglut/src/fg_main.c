@@ -233,7 +233,7 @@ static void fghCheckTimers( void )
         fgListRemove( &fgState.Timers, &timer->Node );
         fgListAppend( &fgState.FreeTimers, &timer->Node );
 
-        timer->Callback( timer->ID );
+        timer->Callback( timer->ID, timer->CallbackData );
     }
 }
 
@@ -507,7 +507,7 @@ void FGAPIENTRY glutMainLoop( void )
                     fgStructure.CurrentWindow->IsMenu )
                     /* fail safe */
                     fgSetWindow( window );
-                fgState.IdleCallback( );
+                fgState.IdleCallback( fgState.IdleCallbackData );
             }
             else
                 fghSleepForEvents( );

@@ -210,6 +210,12 @@ static GLUTproc fghGetGLUTProcAddress( const char* procName )
     CHECK_NAME(glutSetVertexAttribCoord3);
     CHECK_NAME(glutSetVertexAttribNormal);
     CHECK_NAME(glutSetVertexAttribTexCoord2);
+
+    /* freeglut user callback functions */
+    CHECK_NAME(glutCreateMenuUcall);
+    CHECK_NAME(glutTimerFuncUcall);
+    CHECK_NAME(glutIdleFuncUcall);
+    //TODO
 #undef CHECK_NAME
 
     return NULL;

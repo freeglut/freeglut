@@ -70,6 +70,7 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       { NULL, NULL },         /* Timers */
                       { NULL, NULL },         /* FreeTimers */
                       NULL,                   /* IdleCallback */
+                      NULL,                   /* IdleCallbackData */
                       0,                      /* ActiveMenus */
                       NULL,                   /* MenuStateCallback */
                       NULL,                   /* MenuStatusCallback */
@@ -299,6 +300,7 @@ void fgDeinitialize( void )
     fgListInit( &fgState.FreeTimers );
 
     fgState.IdleCallback = NULL;
+    fgState.IdleCallbackData = NULL;
     fgState.MenuStateCallback = ( FGCBMenuState )NULL;
     fgState.MenuStatusCallback = ( FGCBMenuStatus )NULL;
 

@@ -609,7 +609,7 @@ GLboolean fgCheckActiveMenu ( SFG_Window *window, int button, GLboolean pressed,
 
                 /* Deactivate menu and then call callback (we don't want menu to stay in view while callback is executing, and user should be able to change menus in callback) */
                 fgDeactivateMenu( parent_window );
-                active_menu->Callback( active_entry->ID );
+                active_menu->Callback( active_entry->ID, active_menu->CallbackData );
 
                 /* Restore the current window and menu */
                 fgSetWindow( save_window );
@@ -780,14 +780,27 @@ void fghCalculateMenuBoxSize( void )
 /*
  * Creates a new menu object, adding it to the freeglut structure
  */
-int FGAPIENTRY glutCreateMenu( FGCBMenu callback )
+int FGAPIENTRY glutCreateMenuUcall( FGCBMenuUC callback, FGCBUserData userData )
 {
     /* The menu object creation code resides in fg_structure.c */
-    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenu" );
+    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenuUcall" );
     if (fgState.ActiveMenus)
         fgError("Menu manipulation not allowed while menus in use.");
 
-    return fgCreateMenu( callback )->ID;
+    return fgCreateMenu( callback, userData )->ID;
+}
+
+/* Standard glutCreateMenu */
+void glutCreateMenuCallback( int menu, FGCBUserData userData )
+{
+    FGCBMenu callback = (FGCBMenu)userData;
+    callback( menu );
+}
+
+int FGAPIENTRY glutCreateMenu( FGCBMenu callback )
+{
+    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenu" );
+    return glutCreateMenuUcall( glutCreateMenuCallback, (FGCBUserData)callback );
 }
 
 /*
