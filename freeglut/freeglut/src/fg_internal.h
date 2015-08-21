@@ -218,54 +218,87 @@
 /* Freeglut callbacks type definitions */
 typedef void* FGCBUserData;
 
-typedef void (* FGCBDisplay       )( void );
-typedef void (* FGCBReshape       )( int, int );
-typedef void (* FGCBPosition      )( int, int );
-typedef void (* FGCBVisibility    )( int );
-typedef void (* FGCBKeyboard      )( unsigned char, int, int );
-typedef void (* FGCBKeyboardUp    )( unsigned char, int, int );
-typedef void (* FGCBSpecial       )( int, int, int );
-typedef void (* FGCBSpecialUp     )( int, int, int );
-typedef void (* FGCBMouse         )( int, int, int, int );
-typedef void (* FGCBMouseWheel    )( int, int, int, int );
-typedef void (* FGCBMotion        )( int, int );
-typedef void (* FGCBPassive       )( int, int );
-typedef void (* FGCBEntry         )( int );
-typedef void (* FGCBWindowStatus  )( int );
-typedef void (* FGCBJoystick      )( unsigned int, int, int, int );
-typedef void (* FGCBOverlayDisplay)( void );
-typedef void (* FGCBSpaceMotion   )( int, int, int );
-typedef void (* FGCBSpaceRotation )( int, int, int );
-typedef void (* FGCBSpaceButton   )( int, int );
-typedef void (* FGCBDials         )( int, int );
-typedef void (* FGCBButtonBox     )( int, int );
-typedef void (* FGCBTabletMotion  )( int, int );
-typedef void (* FGCBTabletButton  )( int, int, int, int );
-typedef void (* FGCBDestroy       )( void );    /* Used for both window and menu destroy callbacks */
+typedef void (* FGCBDisplay         )( void );
+typedef void (* FGCBDisplayUC       )( FGCBUserData );
+typedef void (* FGCBReshape         )( int, int );
+typedef void (* FGCBReshapeUC       )( int, int, FGCBUserData );
+typedef void (* FGCBPosition        )( int, int );
+typedef void (* FGCBPositionUC      )( int, int, FGCBUserData );
+typedef void (* FGCBVisibility      )( int );
+typedef void (* FGCBVisibilityUC    )( int, FGCBUserData );
+typedef void (* FGCBKeyboard        )( unsigned char, int, int );
+typedef void (* FGCBKeyboardUC      )( unsigned char, int, int, FGCBUserData );
+typedef void (* FGCBKeyboardUp      )( unsigned char, int, int );
+typedef void (* FGCBKeyboardUpUC    )( unsigned char, int, int, FGCBUserData );
+typedef void (* FGCBSpecial         )( int, int, int );
+typedef void (* FGCBSpecialUC       )( int, int, int, FGCBUserData );
+typedef void (* FGCBSpecialUp       )( int, int, int );
+typedef void (* FGCBSpecialUpUC     )( int, int, int, FGCBUserData );
+typedef void (* FGCBMouse           )( int, int, int, int );
+typedef void (* FGCBMouseUC         )( int, int, int, int, FGCBUserData );
+typedef void (* FGCBMouseWheel      )( int, int, int, int );
+typedef void (* FGCBMouseWheelUC    )( int, int, int, int, FGCBUserData );
+typedef void (* FGCBMotion          )( int, int );
+typedef void (* FGCBMotionUC        )( int, int, FGCBUserData );
+typedef void (* FGCBPassive         )( int, int );
+typedef void (* FGCBPassiveUC       )( int, int, FGCBUserData );
+typedef void (* FGCBEntry           )( int );
+typedef void (* FGCBEntryUC         )( int, FGCBUserData );
+typedef void (* FGCBWindowStatus    )( int );
+typedef void (* FGCBWindowStatusUC  )( int, FGCBUserData );
+typedef void (* FGCBJoystick        )( unsigned int, int, int, int );
+typedef void (* FGCBJoystickUC      )( unsigned int, int, int, int, FGCBUserData );
+typedef void (* FGCBOverlayDisplay  )( void );
+typedef void (* FGCBOverlayDisplayUC)( FGCBUserData );
+typedef void (* FGCBSpaceMotion     )( int, int, int );
+typedef void (* FGCBSpaceMotionUC   )( int, int, int, FGCBUserData );
+typedef void (* FGCBSpaceRotation   )( int, int, int );
+typedef void (* FGCBSpaceRotationUC )( int, int, int, FGCBUserData );
+typedef void (* FGCBSpaceButton     )( int, int );
+typedef void (* FGCBSpaceButtonUC   )( int, int, FGCBUserData );
+typedef void (* FGCBDials           )( int, int );
+typedef void (* FGCBDialsUC         )( int, int, FGCBUserData );
+typedef void (* FGCBButtonBox       )( int, int );
+typedef void (* FGCBButtonBoxUC     )( int, int, FGCBUserData );
+typedef void (* FGCBTabletMotion    )( int, int );
+typedef void (* FGCBTabletMotionUC  )( int, int, FGCBUserData );
+typedef void (* FGCBTabletButton    )( int, int, int, int );
+typedef void (* FGCBTabletButtonUC  )( int, int, int, int, FGCBUserData );
+typedef void (* FGCBDestroy         )( void );    /* Used for both window and menu destroy callbacks */
+typedef void (* FGCBDestroyUC       )( FGCBUserData );
 
-typedef void (* FGCBMultiEntry   )( int, int );
-typedef void (* FGCBMultiButton  )( int, int, int, int, int );
-typedef void (* FGCBMultiMotion  )( int, int, int );
-typedef void (* FGCBMultiPassive )( int, int, int );
+typedef void (* FGCBMultiEntry      )( int, int );
+typedef void (* FGCBMultiEntryUC    )( int, int, FGCBUserData );
+typedef void (* FGCBMultiButton     )( int, int, int, int, int );
+typedef void (* FGCBMultiButtonUC   )( int, int, int, int, int, FGCBUserData );
+typedef void (* FGCBMultiMotion     )( int, int, int );
+typedef void (* FGCBMultiMotionUC   )( int, int, int, FGCBUserData );
+typedef void (* FGCBMultiPassive    )( int, int, int );
+typedef void (* FGCBMultiPassiveUC  )( int, int, int, FGCBUserData );
 
-typedef void (* FGCBInitContext)();
-typedef void (* FGCBAppStatus)(int);
+typedef void (* FGCBInitContext     )( void );
+typedef void (* FGCBInitContextUC   )( FGCBUserData );
+typedef void (* FGCBAppStatus       )( int );
+typedef void (* FGCBAppStatusUC     )( int, FGCBUserData );
 
 /* The global callbacks type definitions */
-typedef void (* FGCBIdle          )( void );
-typedef void (* FGCBIdleUC        )( FGCBUserData );
-typedef void (* FGCBTimer         )( int );
-typedef void (* FGCBTimerUC       )( int, FGCBUserData );
-typedef void (* FGCBMenuState     )( int );
-typedef void (* FGCBMenuStatus    )( int, int, int );
+typedef void (* FGCBIdle            )( void ); \
+typedef void (* FGCBIdleUC          )( FGCBUserData );
+typedef void (* FGCBTimer           )( int );
+typedef void (* FGCBTimerUC         )( int, FGCBUserData );
+typedef void (* FGCBMenuState       )( int );
+typedef void (* FGCBMenuStatus      )( int, int, int );
+typedef void (* FGCBMenuStatusUC    )( int, int, int, FGCBUserData );
 
 /* The callback used when creating/using menus */
-typedef void (* FGCBMenu          )( int );
-typedef void (* FGCBMenuUC        )( int, FGCBUserData );
+typedef void (* FGCBMenu            )( int );
+typedef void (* FGCBMenuUC          )( int, FGCBUserData );
 
 /* The FreeGLUT error/warning handler type definition */
-typedef void (* FGError           ) ( const char *fmt, va_list ap);
-typedef void (* FGWarning         ) ( const char *fmt, va_list ap);
+typedef void (* FGError             )( const char *fmt, va_list ap );
+typedef void (* FGErrorUC           )( const char *fmt, va_list ap, FGCBUserData userData );
+typedef void (* FGWarning           )( const char *fmt, va_list ap );
+typedef void (* FGWarningUC         )( const char *fmt, va_list ap, FGCBUserData userData );
 
 
 /* A list structure */
@@ -337,24 +370,25 @@ struct tagSFG_State
 
     int              ActiveMenus;          /* Num. of currently active menus */
     FGCBMenuState    MenuStateCallback;    /* Menu callbacks are global      */
-    FGCBMenuStatus   MenuStatusCallback;
+    FGCBMenuStatusUC MenuStatusCallback;
+    FGCBUserData     MenuStatusCallbackData;
     void*            MenuFont;             /* Font to be used for newly created menus */
 
     SFG_XYUse        GameModeSize;         /* Game mode screen's dimensions  */
     int              GameModeDepth;        /* The pixel depth for game mode  */
     int              GameModeRefresh;      /* The refresh rate for game mode */
 
-    int              ActionOnWindowClose; /* Action when user closes window  */
+    int              ActionOnWindowClose;  /* Action when user closes window  */
 
-    fgExecutionState ExecState;           /* Used for GLUT termination       */
-    char            *ProgramName;         /* Name of the invoking program    */
-    GLboolean        JoysticksInitialised;  /* Only initialize if application calls for them */
-    int              NumActiveJoysticks;    /* Number of active joysticks (callback defined and positive pollrate) -- if zero, don't poll joysticks */
-    GLboolean        InputDevsInitialised;  /* Only initialize if application calls for them */
+    fgExecutionState ExecState;            /* Used for GLUT termination       */
+    char            *ProgramName;          /* Name of the invoking program    */
+    GLboolean        JoysticksInitialised; /* Only initialize if application calls for them */
+    int              NumActiveJoysticks;   /* Number of active joysticks (callback defined and positive pollrate) -- if zero, don't poll joysticks */
+    GLboolean        InputDevsInitialised; /* Only initialize if application calls for them */
 
 	int              MouseWheelTicks;      /* Number of ticks the mouse wheel has turned */
 
-    int              AuxiliaryBufferNumber;  /* Number of auxiliary buffers */
+    int              AuxiliaryBufferNumber;/* Number of auxiliary buffers */
     int              SampleNumber;         /*  Number of samples per pixel  */
 
     GLboolean        SkipStaleMotion;      /* skip stale motion events */
@@ -367,8 +401,10 @@ struct tagSFG_State
     int              ContextFlags;         /* OpenGL context flags          */
     int              ContextProfile;       /* OpenGL context profile        */
     int              HasOpenGL20;          /* fgInitGL2 could find all OpenGL 2.0 functions */
-    FGError          ErrorFunc;            /* User defined error handler    */
-    FGWarning        WarningFunc;          /* User defined warning handler  */
+    FGErrorUC        ErrorFunc;            /* User defined error handler    */
+    FGCBUserData     ErrorFuncData;        /* User defined error handler user data */
+    FGWarningUC      WarningFunc;          /* User defined warning handler  */
+    FGCBUserData     WarningFuncData;      /* User defined warning handler user data */
 };
 
 /* The structure used by display initialization in fg_init.c */
@@ -519,11 +555,12 @@ typedef void (*SFG_Proc)();
 /*
  * SET_WCB() is used as:
  *
- *     SET_WCB( window, cbname, func );
+ *     SET_WCB( window, cbname, func, udata );
  *
  * ...where {window} is the freeglut window to set the callback,
  *          {cbname} is the window-specific callback to set,
- *          {func} is a function-pointer.
+ *          {func} is a function-pointer,
+ *          {udata} is a void* pointer for user data.
  *
  * Originally, {FETCH_WCB( ... ) = func} was rather sloppily used,
  * but this can cause warnings because the FETCH_WCB() macro type-
@@ -533,11 +570,14 @@ typedef void (*SFG_Proc)();
  * and for no other reason.  Since it's hidden in the macro, the
  * ugliness is felt to be rather benign.
  */
-#define SET_WCB(window,cbname,func)                            \
+#define SET_WCB(window,cbname,func,udata)                      \
 do                                                             \
 {                                                              \
     if( FETCH_WCB( window, cbname ) != (SFG_Proc)(func) )      \
+    {                                                          \
         (((window).CallBacks[WCB_ ## cbname]) = (SFG_Proc)(func)); \
+        (((window).CallbackDatas[WCB_ ## cbname]) = (udata));  \
+    }                                                          \
 } while( 0 )
 
 /*
@@ -553,6 +593,82 @@ do                                                             \
  */
 #define FETCH_WCB(window,cbname) \
     ((window).CallBacks[WCB_ ## cbname])
+
+/*
+ * FETCH_USER_DATA_WCB() is used as:
+ * 
+ *     FETCH_USER_DATA_WCB( window, cbname );
+ *
+ * ...where {window} is the freeglut window,
+ *          {cbname} is the window-specific callback to be invoked,
+ *
+ * This expects a variable named "window" of type tagSFG_Window to exist.
+ */
+/*
+ * FETCH_USER_DATA_WCB() is used as:
+ *
+ *     FETCH_USER_DATA_WCB( window, cbname );
+ *
+ * ...where {window} is the freeglut window to fetch the callback data from,
+ *          {cbname} is the window-specific callback data to fetch.
+ *
+ * The result is the callback data pointer.
+ */
+#define FETCH_USER_DATA_WCB(window,cbname) \
+    ((window).CallbackDatas[WCB_ ## cbname])
+
+/*
+ * EXPAND_WCB() is used as:
+ * 
+ *     EXPAND_WCB arg_list
+ * 
+ * ... where {(arg_list)} is the parameter list.
+ *
+ * This will take the arg_list and extend it by one argument, adding
+ * the argument "userData" to the end of the list.
+ * 
+ * All additional args are to get around trailing ',', argument counts,
+ * and not needing a GCC extension to make this work.
+ *
+ * Minor modification of:
+ * http://stackoverflow.com/questions/5355241/generating-function-declaration-using-a-macro-iteration/5355946#5355946
+ *
+ * Supports up to five arguments
+ */
+#if TARGET_HOST_MS_WINDOWS
+
+/* FIXME: Does VC6 support variadic macros? I don't think so (variadic macros came with C99. VC6 came out in 1998) */
+
+/* FIXME: VC++ has a greedy preprocessor.
+ * The preprocessor resolves the macros on use instead of after on argument completion/token usage.
+ * e.g.: PP_HAS_ARGS_IMPL2(ONE_OR_MORE, ...) -> PP_HAS_ARGS_IMPL2(, ...) -> "Error, not enough tokens for PP_HAS_ARGS_IMPL2"
+ */
+#define EXPAND_WCB(...) (__VA_ARGS__)
+
+#else // #if TARGET_HOST_MS_WINDOWS
+
+#define PP_HAS_ARGS_IMPL2(_0, _1, _2, _3, _4, _5, N, ...) N
+#define PP_HAS_ARGS_SOURCE() \
+    ONE_OR_MORE, ONE_OR_MORE, ONE_OR_MORE, ONE_OR_MORE, ONE_OR_MORE, ZERO
+
+#define PP_HAS_ARGS_IMPL(...) \
+    PP_HAS_ARGS_IMPL2(__VA_ARGS__)
+#define PP_HAS_ARGS(...) \
+    PP_HAS_ARGS_IMPL(NOT_EXIST, ##__VA_ARGS__, PP_HAS_ARGS_SOURCE())
+
+#define EXPAND_WCB_ZERO(x) \
+    (userData)
+#define EXPAND_WCB_ONE_OR_MORE(...) \
+    (__VA_ARGS__, userData)
+
+#define EXPAND_WCB_DISAMBIGUATE2(has_args, ...) \
+    EXPAND_WCB_ ## has_args (__VA_ARGS__)
+#define EXPAND_WCB_DISAMBIGUATE(has_args, ...) \
+    EXPAND_WCB_DISAMBIGUATE2(has_args, __VA_ARGS__)
+#define EXPAND_WCB(...) \
+    EXPAND_WCB_DISAMBIGUATE(PP_HAS_ARGS(__VA_ARGS__), __VA_ARGS__)
+
+#endif // #if TARGET_HOST_MS_WINDOWS
 
 /*
  * INVOKE_WCB() is used as:
@@ -579,9 +695,10 @@ do                                            \
 {                                             \
     if( FETCH_WCB( window, cbname ) )         \
     {                                         \
-        FGCB ## cbname func = (FGCB ## cbname)(FETCH_WCB( window, cbname )); \
+        FGCB ## cbname ## UC func = (FGCB ## cbname ## UC)(FETCH_WCB( window, cbname )); \
+        FGCBUserData userData = FETCH_USER_DATA_WCB( window, cbname ); \
         fgSetWindow( &window );               \
-        func arg_list;                        \
+        func EXPAND_WCB arg_list;             \
     }                                         \
 } while( 0 )
 #else
@@ -591,7 +708,8 @@ do                                            \
     if( FETCH_WCB( window, cbname ) )         \
     {                                         \
         fgSetWindow( &window );               \
-        ((FGCB ## cbname)FETCH_WCB( window, cbname )) arg_list; \
+        FGCBUserData userData = FETCH_USER_DATA_WCB( window, cbname ); \
+        ((FGCB ## cbname ## UC)FETCH_WCB( window, cbname )) EXPAND_WCB arg_list; \
     }                                         \
 } while( 0 )
 #endif
@@ -672,7 +790,8 @@ struct tagSFG_Menu
     SFG_List            Entries;      /* The menu entries list               */
     FGCBMenuUC          Callback;     /* The menu callback                   */
     FGCBUserData        CallbackData; /* The menu callback user data         */
-    FGCBDestroy         Destroy;      /* Destruction callback                */
+    FGCBDestroyUC       Destroy;      /* Destruction callback                */
+    FGCBUserData        DestroyData;  /* Destruction callback user data      */
     GLboolean           IsActive;     /* Is the menu selected?               */
     void*               Font;         /* Font to be used for displaying this menu */
     int                 Width;        /* Menu box width in pixels            */
@@ -710,10 +829,11 @@ struct tagSFG_Window
     SFG_Context         Window;                 /* Window and OpenGL context */
     SFG_WindowState     State;                  /* The window state          */
     SFG_Proc            CallBacks[ TOTAL_CALLBACKS ]; /* Array of window callbacks */
+    FGCBUserData        CallbackDatas[ TOTAL_CALLBACKS ]; /* Array of window callback datas */
     void               *UserData ;              /* For use by user           */
 
-    SFG_Menu*       Menu[ FREEGLUT_MAX_MENUS ]; /* Menus appended to window  */
-    SFG_Menu*       ActiveMenu;                 /* The window's active menu  */
+    SFG_Menu*           Menu[ FREEGLUT_MAX_MENUS ]; /* Menus appended to window  */
+    SFG_Menu*           ActiveMenu;             /* The window's active menu  */
 
     SFG_Window*         Parent;                 /* The parent to this window */
     SFG_List            Children;               /* The subwindows d.l. list  */

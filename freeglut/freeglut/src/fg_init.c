@@ -74,6 +74,7 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       0,                      /* ActiveMenus */
                       NULL,                   /* MenuStateCallback */
                       NULL,                   /* MenuStatusCallback */
+                      NULL,                   /* MenuStatusCallbackData */
                       FREEGLUT_MENU_FONT,
                       { -1, -1, GL_TRUE },    /* GameModeSize */
                       -1,                     /* GameModeDepth */
@@ -96,7 +97,9 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       0,                      /* OpenGL ContextProfile */
                       0,                      /* HasOpenGL20 */
                       NULL,                   /* ErrorFunc */
-                      NULL                    /* WarningFunc */
+                      NULL,                   /* ErrorFuncData */
+                      NULL,                   /* WarningFunc */
+                      NULL                    /* WarningFuncData */
 };
 
 
@@ -299,10 +302,11 @@ void fgDeinitialize( void )
     fgListInit( &fgState.Timers );
     fgListInit( &fgState.FreeTimers );
 
-    fgState.IdleCallback = NULL;
-    fgState.IdleCallbackData = NULL;
-    fgState.MenuStateCallback = ( FGCBMenuState )NULL;
-    fgState.MenuStatusCallback = ( FGCBMenuStatus )NULL;
+    fgState.IdleCallback           = ( FGCBIdleUC )NULL;
+    fgState.IdleCallbackData       = NULL;
+    fgState.MenuStateCallback      = ( FGCBMenuState )NULL;
+    fgState.MenuStatusCallback     = ( FGCBMenuStatusUC )NULL;
+    fgState.MenuStatusCallbackData = NULL;
 
     fgState.SwapCount   = 0;
     fgState.SwapTime    = 0;
@@ -670,19 +674,49 @@ void FGAPIENTRY glutInitContextProfile( int profile )
 /*
  * Sets the user error handler (note the use of va_list for the args to the fmt)
  */
-void FGAPIENTRY glutInitErrorFunc( FGError callback )
+void FGAPIENTRY glutInitErrorFuncUcall( FGErrorUC callback, FGCBUserData userData )
 {
     /* This allows user programs to handle freeglut errors */
     fgState.ErrorFunc = callback;
+    fgState.ErrorFuncData = userData;
+}
+
+static void glutInitErrorFuncCallback( const char *fmt, va_list ap, FGCBUserData userData )
+{
+    FGError callback = (FGError)userData;
+    callback( fmt, ap );
+}
+
+void FGAPIENTRY glutInitErrorFunc( FGError callback )
+{
+  if (callback)
+    glutInitErrorFuncUcall( glutInitErrorFuncCallback, (FGCBUserData)callback );
+  else
+    glutInitErrorFuncUcall( NULL, NULL );
 }
 
 /*
  * Sets the user warning handler (note the use of va_list for the args to the fmt)
  */
-void FGAPIENTRY glutInitWarningFunc( FGWarning callback )
+void FGAPIENTRY glutInitWarningFuncUcall( FGWarningUC callback, FGCBUserData userData )
 {
     /* This allows user programs to handle freeglut warnings */
     fgState.WarningFunc = callback;
+    fgState.WarningFuncData = userData;
+}
+
+static void glutInitWarningFuncCallback( const char *fmt, va_list ap, FGCBUserData userData )
+{
+    FGWarning callback = (FGWarning)userData;
+    callback( fmt, ap );
+}
+
+void FGAPIENTRY glutInitWarningFunc( FGWarning callback )
+{
+  if (callback)
+    glutInitWarningFuncUcall( glutInitWarningFuncCallback, (FGCBUserData)callback );
+  else
+    glutInitWarningFuncUcall( NULL, NULL );
 }
 
 /*** END OF FILE ***/
