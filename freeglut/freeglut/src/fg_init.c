@@ -88,6 +88,7 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       4,                      /* SampleNumber */
                       GL_FALSE,               /* SkipStaleMotion */
                       GL_FALSE,               /* StrokeFontDrawJoinDots */
+                      GL_FALSE,               /* AllowNegativeWindowPosition */
                       1,                      /* OpenGL context MajorVersion */
                       0,                      /* OpenGL context MinorVersion */
                       0,                      /* OpenGL ContextFlags */
@@ -357,7 +358,7 @@ void FGAPIENTRY glutInit( int* pargc, char** argv )
      * size.
      */
 
-    if (geometry )
+    if ( geometry )
     {
         unsigned int parsedWidth, parsedHeight;
         int mask = XParseGeometry( geometry,
@@ -370,10 +371,10 @@ void FGAPIENTRY glutInit( int* pargc, char** argv )
         if( (mask & (WidthValue|HeightValue)) == (WidthValue|HeightValue) )
             fgState.Size.Use = GL_TRUE;
 
-        if( mask & XNegative )
+        if( ( mask & XNegative ) && !fgState.AllowNegativeWindowPosition )
             fgState.Position.X += fgDisplay.ScreenWidth - fgState.Size.X;
 
-        if( mask & YNegative )
+        if( ( mask & YNegative ) && !fgState.AllowNegativeWindowPosition )
             fgState.Position.Y += fgDisplay.ScreenHeight - fgState.Size.Y;
 
         if( (mask & (XValue|YValue)) == (XValue|YValue) )
@@ -397,7 +398,7 @@ void FGAPIENTRY glutInitWindowPosition( int x, int y )
     fgState.Position.X = x;
     fgState.Position.Y = y;
 
-    if( ( x >= 0 ) && ( y >= 0 ) )
+    if( ( ( x >= 0 ) && ( y >= 0 ) ) || fgState.AllowNegativeWindowPosition )
         fgState.Position.Use = GL_TRUE;
     else
         fgState.Position.Use = GL_FALSE;
