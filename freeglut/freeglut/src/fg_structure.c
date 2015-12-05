@@ -75,6 +75,11 @@ SFG_Window* fgCreateWindow( SFG_Window* parent, const char* title,
     /* Have the window object created */
     SFG_Window *window = (SFG_Window *)calloc( 1, sizeof(SFG_Window) );
 
+    if( !window )
+    {
+        fgError( "Out of memory. Could not create window." );
+    }
+
 	fgPlatformCreateWindow ( window );
 
     fghClearCallBacks( window );
