@@ -40,10 +40,14 @@ How to build freeglut on UNIX
 - Make sure you have the basics for compiling code, such as C compiler
   (e.g., GCC) and the make package.
 - Also make sure you have packages installed that provide the relevant
-  header files for x11 (including xrandr) and opengl (e.g.,
-  libgl1-mesa-dev, libx11-dev and libxrandr-dev on Debian/Ubuntu).
-- Install XInput: libxi-dev / libXi-devel
-- Run 'cmake .' in the freeglut directory to generate the makefile.
+  header files for opengl (e.g., libgl1-mesa-dev on Debian/Ubuntu) and
+  the chosen backend :
+  - X11: x11 (e.g., libx11-dev, libxrandr-devel on Debian/Ubuntu) and
+  XInput (libxi-dev / libXi-devel)
+  - Wayland: wayland (e.g., libwayland-dev and libegl1-mesa-dev on
+  Debian/Ubuntu) and xkbcommon (libxkbcommon-dev /libxkbcommon-devel)
+- Run 'cmake .' (or 'cmake . -DFREEGLUT_WAYLAND=ON' for Wayland) in the
+  freeglut directory to generate the makefile.
 - Run 'make' to build, and 'make install' to install freeglut.
 - If you wish to change any build options run 'ccmake .'
 
@@ -59,6 +63,8 @@ FREEGLUT_BUILD_SHARED_LIBS  [ON, OFF] Build freeglut as a shared library
 FREEGLUT_BUILD_STATIC_LIBS  [ON, OFF] Build freeglut as a static library
 FREEGLUT_GLES               [ON, OFF] Link with GLEs libraries instead
                             of OpenGL
+FREEGLUT_WAYLAND            [ON, OFF] Link with Wayland libraries instead
+                            of X11
 FREEGLUT_PRINT_ERRORS       [ON, OFF] Controls whether errors are
                             default handled or not when user does not
                             provide an error callback
