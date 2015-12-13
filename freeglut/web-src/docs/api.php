@@ -313,10 +313,14 @@ upper left hand corner of the outside of the window (the non-client
 area) is at (x,y) and the size of the drawable (client) area is (w,h).
 The coordinates taken by <tt>glutInitPosition</tt> and
 <tt>glutPositionWindow</tt>, as well as the coordinates provided by
-<i>FreeGLUT</i> when it calls the <tt>glutPositionFunc</tt> callback,
-specify the top-left of the non-client area of the window.</li>
+<i>freeglut</i> when it calls the <tt>glutPositionFunc</tt> callback,
+specify the top-left of the non-client area of the window. By default
+only positive-signed coordinates are supported. If GLUT_ALLOW_NEGATIVE_WINDOW_POSITION
+is enabled, then negative coordinates are supported. An exception
+for <tt>glutPositionWindow</tt> exists as it's always supported negative
+window coordinates.</li>
 <li>When you query the size and position of the window using
-<tt>glutGet</tt>, <i>FreeGLUT</i> will return the size of the drawable
+<tt>glutGet</tt>, <i>freeglut</i> will return the size of the drawable
 area--the (w,h) that you specified when you created the window--and the
 coordinates of the upper left hand corner of the drawable (client)
 area--which is <u>NOT</u> the (x,y) position of the window you specified
@@ -440,7 +444,7 @@ functions specify a desired position and size for windows that
 <i>freeglut</i> will create in the future.
 The position is measured in pixels from the upper left hand corner of the
 screen, with "x" increasing to the right and "y" increasing towards the bottom
-of the screen.  The size is measured in pixels.  <i>Freeglut</i>
+of the screen.  The size is measured in pixels. <i>Freeglut</i>
 does not promise to follow these specifications in creating its windows,
 but it certainly makes an attempt to.
 </p>
@@ -463,7 +467,8 @@ coordinates. But if GLUT_ALLOW_NEGATIVE_WINDOW_POSITION is enabled,
 then negative window coordinates can be used. This is useful for
 multi-montitor setups where the second monitor may be in the negative
 desktop space of the primary monitor, as now the window can be placed
-on the additional monitors.
+on the additional monitors. Furthermore, this flag also determines how 
+negative coordinates and sizes are interpreted for subwindows.
 </p>
 
 <p>
