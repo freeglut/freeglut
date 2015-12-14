@@ -64,14 +64,16 @@ void fgPlatformInitializeSpaceball(void)
 	}
 	hwnd = fgStructure.CurrentWindow->Window.Handle;
 
-	BOOL ok;
-	UINT cbSize = sizeof(__fgSpaceball);
-	__fgSpaceball.hwndTarget = hwnd;
-	ok = RegisterRawInputDevices(&__fgSpaceball, 1, cbSize);
+	{
+		BOOL ok;
+		UINT cbSize = sizeof(__fgSpaceball);
+		__fgSpaceball.hwndTarget = hwnd;
+		ok = RegisterRawInputDevices(&__fgSpaceball, 1, cbSize);
 
-	if (!ok){
-		__fgSpaceball.hwndTarget = NULL;
-		sball_initialized = 0;
+		if (!ok){
+			__fgSpaceball.hwndTarget = NULL;
+			sball_initialized = 0;
+		}
 	}
 }
 
@@ -138,57 +140,58 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	res = GetRawInputDeviceInfo(pRawInput->header.hDevice, RIDI_DEVICEINFO, &sRidDeviceInfo, &size);
 	if (res == -1)
 		return;
-
-	SFG_Window* window = fgWindowByHandle(hwnd);
-	if ((window == NULL))
-		return;
-
-	if (sRidDeviceInfo.hid.dwVendorId == LOGITECH_VENDOR_ID)
 	{
-		// Motion data comes in two parts: motion type and 
-		// displacement/rotation along three axis.
-		// Orientation is a right handed coordinate system with 
-		// X goes right, Y goes up and Z goes towards viewer, e.g.
-		// the one used in OpenGL
-		if (pRawInput->data.hid.bRawData[0] == 
-			SPNAV_EVENT_MOTION_TRANSLATION)
-		{ // Translation vector
-			short* pnData = (short*)(&pRawInput->data.hid.bRawData[1]);
-			short X =  pnData[0];
-			short Y = -pnData[2];
-			short Z =  pnData[1];
-			INVOKE_WCB(*window, SpaceMotion, (X, Y, Z));
-		}
-		else if (pRawInput->data.hid.bRawData[0] == 
-				SPNAV_EVENT_MOTION_ROTATION)
-		{ // Axis aligned rotation vector
-			short* pnData = (short*)(&pRawInput->data.hid.bRawData[1]);
-			short rX =  pnData[0];
-			short rY = -pnData[2];
-			short rZ =  pnData[1];
-			INVOKE_WCB(*window, SpaceRotation, (rX, rY, rZ));
-		}
-		else if (pRawInput->data.hid.bRawData[0] == 
-				 SPNAV_EVENT_BUTTON)
-		{ // State of the keys
-			unsigned long dwKeystate = *(unsigned long*)(&pRawInput->data.hid.bRawData[1]);
-			unsigned int state = GLUT_UP;
-			if (FETCH_WCB(*window, SpaceButton))
-			{
-				int i;
-				for (i = 0; i < 32; i++)
-				{
-					unsigned long stateBefore = __fgSpaceKeystate&(1 << i);
-					unsigned long stateNow = dwKeystate&(1 << i);
+		SFG_Window* window = fgWindowByHandle(hwnd);
+		if ((window == NULL))
+			return;
 
-					if (stateBefore && !stateNow)
-						INVOKE_WCB(*window, SpaceButton, (stateBefore, GLUT_DOWN));
-					if (!stateBefore && stateNow)
-						INVOKE_WCB(*window, SpaceButton, (stateNow, GLUT_UP));
-
-				}
+		if (sRidDeviceInfo.hid.dwVendorId == LOGITECH_VENDOR_ID)
+		{
+			// Motion data comes in two parts: motion type and 
+			// displacement/rotation along three axis.
+			// Orientation is a right handed coordinate system with 
+			// X goes right, Y goes up and Z goes towards viewer, e.g.
+			// the one used in OpenGL
+			if (pRawInput->data.hid.bRawData[0] ==
+				SPNAV_EVENT_MOTION_TRANSLATION)
+			{ // Translation vector
+				short* pnData = (short*)(&pRawInput->data.hid.bRawData[1]);
+				short X = pnData[0];
+				short Y = -pnData[2];
+				short Z = pnData[1];
+				INVOKE_WCB(*window, SpaceMotion, (X, Y, Z));
 			}
-			__fgSpaceKeystate = dwKeystate;
+			else if (pRawInput->data.hid.bRawData[0] ==
+				SPNAV_EVENT_MOTION_ROTATION)
+			{ // Axis aligned rotation vector
+				short* pnData = (short*)(&pRawInput->data.hid.bRawData[1]);
+				short rX = pnData[0];
+				short rY = -pnData[2];
+				short rZ = pnData[1];
+				INVOKE_WCB(*window, SpaceRotation, (rX, rY, rZ));
+			}
+			else if (pRawInput->data.hid.bRawData[0] ==
+				SPNAV_EVENT_BUTTON)
+			{ // State of the keys
+				unsigned long dwKeystate = *(unsigned long*)(&pRawInput->data.hid.bRawData[1]);
+				unsigned int state = GLUT_UP;
+				if (FETCH_WCB(*window, SpaceButton))
+				{
+					int i;
+					for (i = 0; i < 32; i++)
+					{
+						unsigned long stateBefore = __fgSpaceKeystate&(1 << i);
+						unsigned long stateNow = dwKeystate&(1 << i);
+
+						if (stateBefore && !stateNow)
+							INVOKE_WCB(*window, SpaceButton, (stateBefore, GLUT_DOWN));
+						if (!stateBefore && stateNow)
+							INVOKE_WCB(*window, SpaceButton, (stateNow, GLUT_UP));
+
+					}
+				}
+				__fgSpaceKeystate = dwKeystate;
+			}
 		}
 	}
 }
