@@ -313,10 +313,14 @@ upper left hand corner of the outside of the window (the non-client
 area) is at (x,y) and the size of the drawable (client) area is (w,h).
 The coordinates taken by <tt>glutInitPosition</tt> and
 <tt>glutPositionWindow</tt>, as well as the coordinates provided by
-<i>FreeGLUT</i> when it calls the <tt>glutPositionFunc</tt> callback,
-specify the top-left of the non-client area of the window.</li>
+<i>freeglut</i> when it calls the <tt>glutPositionFunc</tt> callback,
+specify the top-left of the non-client area of the window. By default
+only positive-signed coordinates are supported. If GLUT_ALLOW_NEGATIVE_WINDOW_POSITION
+is enabled, then negative coordinates are supported. An exception
+for <tt>glutPositionWindow</tt> exists as it's always supported negative
+window coordinates.</li>
 <li>When you query the size and position of the window using
-<tt>glutGet</tt>, <i>FreeGLUT</i> will return the size of the drawable
+<tt>glutGet</tt>, <i>freeglut</i> will return the size of the drawable
 area--the (w,h) that you specified when you created the window--and the
 coordinates of the upper left hand corner of the drawable (client)
 area--which is <u>NOT</u> the (x,y) position of the window you specified
@@ -440,7 +444,7 @@ functions specify a desired position and size for windows that
 <i>freeglut</i> will create in the future.
 The position is measured in pixels from the upper left hand corner of the
 screen, with "x" increasing to the right and "y" increasing towards the bottom
-of the screen.  The size is measured in pixels.  <i>Freeglut</i>
+of the screen.  The size is measured in pixels. <i>Freeglut</i>
 does not promise to follow these specifications in creating its windows,
 but it certainly makes an attempt to.
 </p>
@@ -457,7 +461,14 @@ With <tt>glutGet</tt> information can be acquired about the current
 window's size, position and decorations. Note however that according to
 <a href="#Conventions">FreeGLUT's conventions</a>, the information
 returned about the window coordinates does not correspond to the
-coordinates used when setting window position.
+coordinates used when setting window position. In addition, GLUT only
+accepts positive window coordinates, and ignores all negative window
+coordinates. But if GLUT_ALLOW_NEGATIVE_WINDOW_POSITION is enabled,
+then negative window coordinates can be used. This is useful for
+multi-montitor setups where the second monitor may be in the negative
+desktop space of the primary monitor, as now the window can be placed
+on the additional monitors. Furthermore, this flag also determines how 
+negative coordinates and sizes are interpreted for subwindows.
 </p>
 
 <p>
@@ -477,6 +488,11 @@ For some reason, GLUT is not affected by the 104-pixel minimum window width.
 If the user clicks on the corner of a window which is narrower than this amount,
 the window will immediately snap out to this width, but the application can
 call <tt>glutReshapeWindow</tt> and make a window narrower again.
+</p>
+
+<p>
+If GLUT_ALLOW_NEGATIVE_WINDOW_POSITION is enabled, <tt>glutInitWindowPosition</tt>
+will accept negative window coordinates.
 </p>
 
 <h2>4.3 glutInitDisplayMode</h2>
@@ -634,9 +650,9 @@ will exit.
 <p>
 If the application has two nested calls to <tt>glutMainLoop</tt> and calls
 <tt>glutLeaveMainLoop</tt>, the behaviour
-of <i>freeglut</i> is undefined.  It may leave only the inner nested
+of <i>FreeGLUT</i> is undefined.  It may leave only the inner nested
 loop or it may leave both loops.  If the reader has a strong preference
-for one behaviour over the other he should contact the <i>freeglut</i> Programming
+for one behaviour over the other he should contact the <i>FreeGLUT</i> Programming
 Consortium and ask for the code to be fixed.
 </p>
 
@@ -649,6 +665,44 @@ Consortium and ask for the code to be fixed.
 <h2>6.1 glutCreateWindow</h2>
 
 <h2>6.2 glutCreateSubwindow</h2>
+
+<p>
+The <tt>glutCreateSubwindow</tt> function creates a subwindow of an existing window.
+</p>
+
+<p><b>Usage</b></p>
+
+<p>
+<tt>int glutCreateSubwindow(int window, int x, int y, int width, int height);</tt>
+</p>
+
+<p><b>Description</b></p>
+
+<p>
+Creates a subwindow of <i>window</i> that is at location <i>x</i> and <i>y</i>
+relative to the window's upper-left corner, and is of the specified <i>width</i> and <i>height</i>. The newly created
+window ID is returned by <tt>glutCreateSubwindow</tt>. By default, the position coordinates will only allow windows within the bounds of the parent.
+Negative coordinates be treated as coordinates from the opposite edge for a given axis. In addition, the width of the window will be taken into account.
+For example, if the parent window is 100 pixels wide, and the <i>x</i> is 10, and <i>width</i> is 20, the subwindow will be located at <tt>x = 10</tt>.
+If <i>x</i> is -10, then the subwindow will be located at 70 <tt>(parent - abs(pos) - dim)</tt>. If the <i>width</i> or <i>height</i> are negative, then the dimension is taken as a
+subtraction of the parent dimension. For example, if the parent window is 100 pixels wide, and the <i>x</i> is 10, and <i>width</i> is 20, the 
+subwindow will have a size of 20. If <i>width</i> is -20, then the subwindow will have a width of 70 <tt>(parent - pos - abs(dim))</tt>.
+</p>
+
+<p>
+If GLUT_ALLOW_NEGATIVE_WINDOW_POSITION is enabled, the window behavior differs. Negative window coordinates are now accepted and may result in windows outside
+of the viewing area, depending on the platform of operation. Negative <i>width</i> and <i>height</i> are still used as a subtraction of the parent window dimension,
+but they do not take <i>x</i> or <i>y</i> into account. For example, if the parent window is 100 pixels wide, and the <i>x</i> is 10, and <i>width</i> is 20, the 
+subwindow will be located at <tt>x = 10</tt>. If <i>x</i> is -10, then the subwindow will be located at <tt>x = -10</tt>. If the parent window is 100 pixels wide, 
+and the <i>x</i> is 10, and <i>width</i> is 20, the subwindow will have a size of 20. If <i>width</i> is -20, then the subwindow will have a width of 80 <tt>(parent - abs(dim))</tt>.
+</p>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>
+GLUT does not support negative <i>x</i> or <i>y</i>. Nor does it have GLUT_ALLOW_NEGATIVE_WINDOW_POSITION 
+which changes the the functionality of <tt>glutCreateSubwindow</tt>.
+</p>
 
 <h2>6.3 glutDestroyWindow</h2>
 
@@ -1528,6 +1582,8 @@ href="#GeometricObject"><i>FreeGLUT</i>'s geometric object rendering
 functions</a> also visualize the object's normals or not.</li>
 <li>GLUT_STROKE_FONT_DRAW_JOIN_DOTS - Set whether join dots are drawn
 between line segments when drawing letters of stroke fonts or not.</li>
+<li>GLUT_ALLOW_NEGATIVE_WINDOW_POSITION - Set if negative positions can be
+used for window coordinates.</li>
 </ul>
 </p>
 
@@ -1606,6 +1662,7 @@ glutInitDisplayMode or glutSetOption(GLUT_INIT_DISPLAY_MODE, value)</li>
 <li>GLUT_VERSION - Return value will be X*10000+Y*100+Z where X is the
     major version, Y is the minor version and Z is the patch level.
     This query is only supported in <i>freeglut</i> (version 2.0.0 or later).</li>
+<li>GLUT_ALLOW_NEGATIVE_WINDOW_POSITION - 1 if negative window positions are enabled, 0 otherwise</li>
 </ul>
 
 <h2>13.3 glutDeviceGet</h2>

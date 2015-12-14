@@ -354,6 +354,7 @@ struct tagSFG_State
     GLboolean        SkipStaleMotion;      /* skip stale motion events */
 
     GLboolean        StrokeFontDrawJoinDots;/* Draw dots between line segments of stroke fonts? */
+    GLboolean        AllowNegativeWindowPosition; /* GLUT, by default, doesn't allow negative window positions. Enable it? */
 
     int              MajorVersion;         /* Major OpenGL context version  */
     int              MinorVersion;         /* Minor OpenGL context version  */
