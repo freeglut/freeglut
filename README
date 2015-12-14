@@ -12,7 +12,7 @@ PORTS
 =====
 
 Currently supported platforms:
- - UNIX systems with X11 (such as GNU/Linux, FreeBSD, etc)
+ - UNIX systems with X11 and Wayland (such as GNU/Linux, FreeBSD, etc)
  - MS Windows
  - MacOS X with XQuartz (no native Cocoa support yet)
  - Android (NDK)
