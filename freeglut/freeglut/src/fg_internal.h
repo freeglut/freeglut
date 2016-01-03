@@ -220,66 +220,96 @@ typedef void* FGCBUserData;
 
 typedef void (* FGCBDisplay         )( void );
 typedef void (* FGCBDisplayUC       )( FGCBUserData );
+#define EXPAND_WCB_SUB_Display(args, userData) EXPAND_WCB_ZERO(args, userData)
 typedef void (* FGCBReshape         )( int, int );
 typedef void (* FGCBReshapeUC       )( int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_Reshape(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBPosition        )( int, int );
 typedef void (* FGCBPositionUC      )( int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_Position(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBVisibility      )( int );
 typedef void (* FGCBVisibilityUC    )( int, FGCBUserData );
+#define EXPAND_WCB_SUB_Visibility(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBKeyboard        )( unsigned char, int, int );
 typedef void (* FGCBKeyboardUC      )( unsigned char, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_Keyboard(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBKeyboardUp      )( unsigned char, int, int );
 typedef void (* FGCBKeyboardUpUC    )( unsigned char, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_KeyboardUp(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBSpecial         )( int, int, int );
 typedef void (* FGCBSpecialUC       )( int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_Special(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBSpecialUp       )( int, int, int );
 typedef void (* FGCBSpecialUpUC     )( int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_SpecialUp(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBMouse           )( int, int, int, int );
 typedef void (* FGCBMouseUC         )( int, int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_Mouse(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBMouseWheel      )( int, int, int, int );
 typedef void (* FGCBMouseWheelUC    )( int, int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_MouseWheel(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBMotion          )( int, int );
 typedef void (* FGCBMotionUC        )( int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_Motion(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBPassive         )( int, int );
 typedef void (* FGCBPassiveUC       )( int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_Passive(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBEntry           )( int );
 typedef void (* FGCBEntryUC         )( int, FGCBUserData );
+#define EXPAND_WCB_SUB_Entry(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBWindowStatus    )( int );
 typedef void (* FGCBWindowStatusUC  )( int, FGCBUserData );
+#define EXPAND_WCB_SUB_WindowStatus(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBJoystick        )( unsigned int, int, int, int );
 typedef void (* FGCBJoystickUC      )( unsigned int, int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_Joystick(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBOverlayDisplay  )( void );
 typedef void (* FGCBOverlayDisplayUC)( FGCBUserData );
+#define EXPAND_WCB_SUB_OverlayDisplay(args, userData) EXPAND_WCB_ZERO(args, userData)
 typedef void (* FGCBSpaceMotion     )( int, int, int );
 typedef void (* FGCBSpaceMotionUC   )( int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_SpaceMotion(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBSpaceRotation   )( int, int, int );
 typedef void (* FGCBSpaceRotationUC )( int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_SpaceRotation(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBSpaceButton     )( int, int );
 typedef void (* FGCBSpaceButtonUC   )( int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_SpaceButton(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBDials           )( int, int );
 typedef void (* FGCBDialsUC         )( int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_Dials(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBButtonBox       )( int, int );
 typedef void (* FGCBButtonBoxUC     )( int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_ButtonBox(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBTabletMotion    )( int, int );
 typedef void (* FGCBTabletMotionUC  )( int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_TabletMotion(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBTabletButton    )( int, int, int, int );
 typedef void (* FGCBTabletButtonUC  )( int, int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_TabletButton(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBDestroy         )( void );    /* Used for both window and menu destroy callbacks */
 typedef void (* FGCBDestroyUC       )( FGCBUserData );
+#define EXPAND_WCB_SUB_Destroy(args, userData) EXPAND_WCB_ZERO(args, userData)
 
 typedef void (* FGCBMultiEntry      )( int, int );
 typedef void (* FGCBMultiEntryUC    )( int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_MultiEntry(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBMultiButton     )( int, int, int, int, int );
 typedef void (* FGCBMultiButtonUC   )( int, int, int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_MultiButton(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBMultiMotion     )( int, int, int );
 typedef void (* FGCBMultiMotionUC   )( int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_MultiMotion(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 typedef void (* FGCBMultiPassive    )( int, int, int );
 typedef void (* FGCBMultiPassiveUC  )( int, int, int, FGCBUserData );
+#define EXPAND_WCB_SUB_MultiPassive(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 
 typedef void (* FGCBInitContext     )( void );
 typedef void (* FGCBInitContextUC   )( FGCBUserData );
+#define EXPAND_WCB_SUB_InitContext(args, userData) EXPAND_WCB_ZERO(args, userData)
 typedef void (* FGCBAppStatus       )( int );
 typedef void (* FGCBAppStatusUC     )( int, FGCBUserData );
+#define EXPAND_WCB_SUB_AppStatus(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
 
 /* The global callbacks type definitions */
 typedef void (* FGCBIdle            )( void ); \
@@ -617,6 +647,7 @@ do                                                             \
 #define FETCH_USER_DATA_WCB(window,cbname) \
     ((window).CallbackDatas[WCB_ ## cbname])
 
+#if 0
 /*
  * EXPAND_WCB() is used as:
  * 
@@ -635,17 +666,8 @@ do                                                             \
  *
  * Supports up to five arguments
  */
-#if TARGET_HOST_MS_WINDOWS
 
-/* FIXME: Does VC6 support variadic macros? I don't think so (variadic macros came with C99. VC6 came out in 1998) */
-
-/* FIXME: VC++ has a greedy preprocessor.
- * The preprocessor resolves the macros on use instead of after on argument completion/token usage.
- * e.g.: PP_HAS_ARGS_IMPL2(ONE_OR_MORE, ...) -> PP_HAS_ARGS_IMPL2(, ...) -> "Error, not enough tokens for PP_HAS_ARGS_IMPL2"
- */
-#define EXPAND_WCB(...) (__VA_ARGS__)
-
-#else // #if TARGET_HOST_MS_WINDOWS
+/* GCC-specific design that doesn't require per-callback defines */
 
 #define PP_HAS_ARGS_IMPL2(_0, _1, _2, _3, _4, _5, N, ...) N
 #define PP_HAS_ARGS_SOURCE() \
@@ -668,7 +690,36 @@ do                                                             \
 #define EXPAND_WCB(...) \
     EXPAND_WCB_DISAMBIGUATE(PP_HAS_ARGS(__VA_ARGS__), __VA_ARGS__)
 
-#endif // #if TARGET_HOST_MS_WINDOWS
+#else
+/*
+ * EXPAND_WCB() is used as:
+ * 
+ *     EXPAND_WCB( cbname )( arg_list, userData )
+ * 
+ * ... where {(arg_list)} is the parameter list and userData is user
+ * provided data.
+ *
+ * This will take the arg_list and extend it by one argument, adding
+ * the argument "userData" to the end of the list.
+ *
+ * In order for this to work, each callback must have a define that
+ * properly handles the arguments as needed by the callback.
+ * This callback is in the format of EXPAND_WCB_SUB_<cbname>.
+ * Two helper defines exist: EXPAND_WCB_ZERO and EXPAND_WCB_ONE_OR_MORE,
+ * each to handle callbacks that take zero-params (but take userData) and
+ * to take one or more params (along with userData).
+ * 
+ * An example for the "Entry" callback, where "Entry" is the cbname:
+ * typedef void (* FGCBEntry  )( int );
+ * typedef void (* FGCBEntryUC)( int, FGCBUserData );
+ * #define EXPAND_WCB_SUB_Entry(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
+ */
+#define EXPAND_WCB_UNPARAN(...) __VA_ARGS__
+#define EXPAND_WCB_ZERO(args, userData) ( userData )
+#define EXPAND_WCB_ONE_OR_MORE(args, userData) ( EXPAND_WCB_UNPARAN args, userData )
+
+#define EXPAND_WCB(cbname) EXPAND_WCB_SUB_ ## cbname
+#endif
 
 /*
  * INVOKE_WCB() is used as:
@@ -698,7 +749,7 @@ do                                            \
         FGCB ## cbname ## UC func = (FGCB ## cbname ## UC)(FETCH_WCB( window, cbname )); \
         FGCBUserData userData = FETCH_USER_DATA_WCB( window, cbname ); \
         fgSetWindow( &window );               \
-        func EXPAND_WCB arg_list;             \
+        func EXPAND_WCB( cbname )( arg_list, userData ); \
     }                                         \
 } while( 0 )
 #else
@@ -709,7 +760,7 @@ do                                            \
     {                                         \
         fgSetWindow( &window );               \
         FGCBUserData userData = FETCH_USER_DATA_WCB( window, cbname ); \
-        ((FGCB ## cbname ## UC)FETCH_WCB( window, cbname )) EXPAND_WCB arg_list; \
+        ((FGCB ## cbname ## UC)FETCH_WCB( window, cbname )) EXPAND_WCB( cbname )( arg_list, userData ); \
     }                                         \
 } while( 0 )
 #endif

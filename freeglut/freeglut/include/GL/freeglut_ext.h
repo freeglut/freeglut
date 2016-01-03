@@ -246,13 +246,13 @@ FGAPI void    FGAPIENTRY glutInitErrorFunc( void (* callback)( const char *fmt, 
 FGAPI void    FGAPIENTRY glutInitWarningFunc( void (* callback)( const char *fmt, va_list ap ) );
 
 /* OpenGL >= 2.0 support */
-FGAPI void    FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib);
-FGAPI void    FGAPIENTRY glutSetVertexAttribNormal(GLint attrib);
-FGAPI void    FGAPIENTRY glutSetVertexAttribTexCoord2(GLint attrib);
+FGAPI void    FGAPIENTRY glutSetVertexAttribCoord3( GLint attrib );
+FGAPI void    FGAPIENTRY glutSetVertexAttribNormal( GLint attrib );
+FGAPI void    FGAPIENTRY glutSetVertexAttribTexCoord2( GLint attrib );
 
 /* Mobile platforms lifecycle */
-FGAPI void    FGAPIENTRY glutInitContextFunc(void (* callback)());
-FGAPI void    FGAPIENTRY glutAppStatusFunc(void (* callback)(int));
+FGAPI void    FGAPIENTRY glutInitContextFunc( void (* callback)( void ) );
+FGAPI void    FGAPIENTRY glutAppStatusFunc( void (* callback)( int ) );
 /* state flags that can be passed to callback set by glutAppStatusFunc */
 #define GLUT_APPSTATUS_PAUSE                0x0001
 #define GLUT_APPSTATUS_RESUME               0x0002
