@@ -389,6 +389,7 @@ IF(FREEGLUT_BUILD_STATIC_LIBS)
 ENDIF()
 
 
+SET(LIBNAME freeglut)
 IF(WIN32)
     LIST(APPEND LIBS winmm)
     IF(FREEGLUT_BUILD_SHARED_LIBS)
@@ -424,8 +425,6 @@ ELSE()
     ELSE()
 		IF(FREEGLUT_REPLACE_GLUT)
 			SET(LIBNAME glut)
-		ELSE()
-			SET(LIBNAME freeglut)
 		ENDIF()
 	ENDIF()
 
@@ -563,7 +562,7 @@ ELSE()
 ENDIF()
 # Client applications need to define FreeGLUT GLES version to
 # bootstrap headers inclusion in freeglut_std.h:
-SET(PC_LIBNAME "glut")
+SET(PC_LIBNAME ${LIBNAME})
 SET(PC_FILENAME "freeglut.pc")
 IF(FREEGLUT_GLES)
   SET(PC_CFLAGS "-DFREEGLUT_GLES")
