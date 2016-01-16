@@ -82,6 +82,7 @@ SET(FREEGLUT_SRCS
     src/fg_init.c
     src/fg_init.h
     src/fg_internal.h
+    src/fg_callback_macros.h
     src/fg_input_devices.c
     src/fg_joystick.c
     src/fg_main.c
