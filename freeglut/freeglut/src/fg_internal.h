@@ -714,7 +714,13 @@ do                                                             \
  * typedef void (* FGCBEntryUC)( int, FGCBUserData );
  * #define EXPAND_WCB_SUB_Entry(args, userData) EXPAND_WCB_ONE_OR_MORE(args, userData)
  */
+#define FG_COMPILER_SUPPORTS_VA_ARGS
+#ifdef FG_COMPILER_SUPPORTS_VA_ARGS
 #define EXPAND_WCB_UNPARAN(...) __VA_ARGS__
+#else
+#error "Compiler does not support varadic argument macros"
+#endif
+
 #define EXPAND_WCB_ZERO(args, userData) ( userData )
 #define EXPAND_WCB_ONE_OR_MORE(args, userData) ( EXPAND_WCB_UNPARAN args, userData )
 
@@ -732,9 +738,10 @@ do                                                             \
  *
  * The callback is invoked as:
  *
- *    callback( arg_list );
+ *    callback( arg_list, userData );
  *
- * ...so the parentheses are REQUIRED in the {arg_list}.
+ * ...where userData is added to the arg_list, but the parentheses 
+ * are REQUIRED in the {arg_list}.
  *
  * NOTE that it does a sanity-check and also sets the
  * current window.
@@ -749,7 +756,7 @@ do                                            \
         FGCB ## cbname ## UC func = (FGCB ## cbname ## UC)(FETCH_WCB( window, cbname )); \
         FGCBUserData userData = FETCH_USER_DATA_WCB( window, cbname ); \
         fgSetWindow( &window );               \
-        func EXPAND_WCB( cbname )( arg_list, userData ); \
+		func EXPAND_WCB( cbname )( arg_list, userData ); \
     }                                         \
 } while( 0 )
 #else
@@ -760,7 +767,7 @@ do                                            \
     {                                         \
         fgSetWindow( &window );               \
         FGCBUserData userData = FETCH_USER_DATA_WCB( window, cbname ); \
-        ((FGCB ## cbname ## UC)FETCH_WCB( window, cbname )) EXPAND_WCB( cbname )( arg_list, userData ); \
+		((FGCB ## cbname ## UC)FETCH_WCB( window, cbname )) EXPAND_WCB( cbname )( arg_list, userData ); \
     }                                         \
 } while( 0 )
 #endif
