@@ -425,8 +425,7 @@ struct tagSFG_Context
 #define GLUT_DISPLAY_WORK     (1<<6)
 
 /*
- * An enumeration containing the state of the GLUT execution:
- * initializing, running, or stopping
+ * An enumeration containing the desired mapping state of a window
  */
 typedef enum
 {
