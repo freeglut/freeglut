@@ -1,5 +1,5 @@
 prefix=@CMAKE_INSTALL_PREFIX@
-libdir=${prefix}/lib
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
 includedir=${prefix}/include
 
 Name: glut

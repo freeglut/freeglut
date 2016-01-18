@@ -34,8 +34,13 @@ void fghPlatformInitializeEGL()
 {
   /* CreateDisplay */
   /* Using EGL_DEFAULT_DISPLAY, or a specific native display */
+#ifdef FREEGLUT_WAYLAND
+  fgDisplay.pDisplay.egl.Display = eglGetDisplay(
+              (EGLNativeDisplayType)fgDisplay.pDisplay.display);
+#else
   EGLNativeDisplayType nativeDisplay = EGL_DEFAULT_DISPLAY;
   fgDisplay.pDisplay.egl.Display = eglGetDisplay(nativeDisplay);
+#endif
 
   FREEGLUT_INTERNAL_ERROR_EXIT(fgDisplay.pDisplay.egl.Display != EGL_NO_DISPLAY,
 			       "No display available", "fgPlatformInitialize");

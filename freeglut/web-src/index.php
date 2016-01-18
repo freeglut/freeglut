@@ -16,27 +16,56 @@ generateHeader($_SERVER['PHP_SELF']);
 <p></p>
 
 <div class="textheader">What?</div>
-<p>FreeGLUT is a completely OpenSourced alternative to the OpenGL Utility Toolkit (GLUT) library. GLUT was originally written by Mark Kilgard to support the sample programs in the second edition OpenGL 'RedBook'. Since then, GLUT has been used in a wide variety of practical applications because it is simple, widely available and highly portable.</p>
-<p>GLUT (and hence FreeGLUT) allows the user to create and manage windows containing OpenGL contexts on a wide range of platforms and also read the mouse, keyboard and joystick functions.</p>
+
+<p>FreeGLUT is a free-software/open-source alternative to the OpenGL Utility
+Toolkit (GLUT) library. GLUT was originally written by Mark Kilgard to support
+the sample programs in the second edition OpenGL 'RedBook'. Since then, GLUT has
+been used in a wide variety of practical applications because it is simple,
+widely available and highly portable.</p>
+
+<p>GLUT (and hence FreeGLUT) takes care of all the system-specific chores
+required for creating windows, initializing OpenGL contexts, and handling input
+events, to allow for trully portable OpenGL programs.</p>
+
 <p>FreeGLUT is released under the X-Consortium license.</p>
 
 <div class="textheader">Why?</div>
-<p>The original GLUT library seems to have been abandoned with the most recent version (3.7) dating back to August 1998. Its license does not allow anyone to distribute modified library code. This would be OK, if not for the fact that GLUT is getting old and really needs improvement. Also, GLUT's license is incompatible with some software distributions (e.g., XFree86).</p>
+
+<p>The original GLUT library seems to have been abandoned with the most recent
+version (3.7) dating back to August 1998. Its license does not allow anyone to
+distribute modified library code. This is really unfortunate, since GLUT is
+getting old and really needs improvement. Also, GLUT's license is incompatible
+with some software distributions (e.g., XFree86).</p>
 
 <div class="textheader">Who?</div>
-<p>FreeGLUT was originally written by Pawel W. Olszta with contributions from Andreas Umbach and Steve Baker. Steve is now the official owner/maintainer of FreeGLUT.</p>
+
+<p>FreeGLUT was originally written by Pawel W. Olszta with contributions from
+Andreas Umbach and Steve Baker.</p>
+
+<p>John F. Fay, John Tsiombikas, and Diederick C. Niehorster are the current
+maintainers of the FreeGLUT project.</p>
 
 <div class="textheader">When?</div>
-<p>Pawel started FreeGLUT development on December 1st, 1999. The project is now virtually a 100% replacement for the original GLUT with only a few departures (such as the abandonment of SGI-specific features such as the Dials&amp;Buttons box and Dynamic Video Resolution) and a shrinking set of bugs.</p>
-<p>There are some additional features such as a larger set of predefined shapes for use in applications.</p>
+
+<p>Pawel started FreeGLUT development on December 1st, 1999. The project is now
+virtually a 100% replacement for the original GLUT with only a few departures
+(such as the abandonment of SGI-specific features such as the Dials&amp;Buttons
+box and Dynamic Video Resolution) and a shrinking set of bugs.</p>
+
+<p>FreeGLUT adds some additional features over the basic GLUT functionality,
+such as a larger set of predefined objects to use, the ability to run single
+iterations of the event loop, or exit from it gracefully, mousewheel input
+callbacks, optional OpenGL core/compatibility profile context creation,
+multitouch/multi-pointer input, and support for a larger and growing set of
+platforms, being just some of them.</p>
 
 <div class="textheader"><a name="download"></a>Help out!</div>
-<p>FreeGLUT 3.0 is in active development, and will feature ports to
-Android and BlackBerry 10 as well as a host of other enhancements. We are looking
-for developers to help out with further work on the Android and BlackBerry 10
-ports. Furthermore, ports to Cocoa/Carbon on OSX, and maybe even Wayland
-are planned, along with some enhancements to the API and implementation.
-See <a href="progress.php">here</a> for an overview of the major points
+
+<p>We are looking for developers to help out with further work on the Android
+and BlackBerry 10 ports. Furthermore, ports to Cocoa on OSX, and maybe even
+Wayland are planned, along with some enhancements to the API and implementation.</p>
+
+<p>See <a href="progress.php">here</a> for an overview of the major points
 on our todo list. You can easily help out by forking the unofficial clone
 of our <a
 href="https://sourceforge.net/p/freeglut/code/HEAD/tree/">sourceforge.net
@@ -54,34 +83,21 @@ mailing list.</p>
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
-    <p>Version 3.0.0, Release Candidate 1 was released on Wednesday,
-    October 29, 2014.</p>
-	<p>
-       <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.0.0-rc1.tar.gz?download">Freeglut 3.0.0 Release Candidate 1</a> [<i>Released: 29 Oct 2014</i>]<br/>
-    </p>
-    <p>Amongst many smaller enhancements and bugfixes, this RC includes
-    experimental ports to Android and BlackBerry 10 as well as other API
-    and implementation enhancements (e.g., move to CMake build system,
-    VBO and shader support for geometry). Also moved to CMake as build
-    system. Please try it out and give us feedback on how it worked for
-    you.
-<!--
-    Feel free to test by downloading a <a
+    <p>Feel free to test by downloading a <a
     href="https://sourceforge.net/p/freeglut/code/HEAD/tarball?path=/trunk/freeglut/freeglut">tarball
     of current trunk</a>, or <a href="help.php#svn">grabbing a copy from
     svn</a>, and give us feedback on how it worked for you. All this
-    will eventually become a FreeGLUT 3.0 release.</p>
-	<p>There are no presently active testing releases.
-	</p>
--->
+    will eventually become a FreeGLUT 3.1 release.</p>
+	<p>There are no presently active testing releases.</p>
 </div>
 
 
 <div class="indent">
-        <div class="textheader">Stable Releases</div>
-        <p>
+	<div class="textheader">Stable Releases</div>
+	<p>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.0.0.tar.gz?download">Freeglut 3.0.0</a> [<i>Released: 7 March 2015</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.1.tar.gz?download">Freeglut 2.8.1</a> [<i>Released: 5 April 2013</i>]<br/>
-    <a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.0.tar.gz?download">Freeglut 2.8.0</a> [<i>Released: 2 January 2012</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.0.tar.gz?download">Freeglut 2.8.0</a> [<i>Released: 2 January 2012</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.6.0.tar.gz?download">Freeglut 2.6.0</a> [<i>Released: 27 November 2009</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">Freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
@@ -89,7 +105,13 @@ mailing list.</p>
 	</p>
 
 	<div class="textheader">Prepackaged Releases</div>
-	<p>The FreeGLUT project does not support packaged versions of FreeGLUT excepting, of course, the tarballs distributed here. However, various members of the community have put time and effort into providing source or binary rollups, and we thank them for their efforts. Here's a list which is likely incomplete:</p>
+
+	<p>The FreeGLUT project does not support packaged versions of FreeGLUT
+excepting, of course, the tarballs distributed here. However, various members of
+the community have put time and effort into providing source or binary rollups,
+and we thank them for their efforts. Here's a list which is likely
+incomplete:</p>
+
 <!--
 	<p>
 		Andy Piper's <a href="http://jumpgate.homelinux.net/random/freeglut-fedora/">RedHat Fedora RPMs</a><br/>
@@ -121,7 +143,10 @@ mailing list.</p>
 	<li><a href="mailto:freeglut-bugs@lists.sourceforge.net">freeglut-bugs</a> [<a href="http://lists.sourceforge.net/lists/listinfo/freeglut-bugs">Subscribe</a>]</li>
 </ul>
 
-<p>Please note that <a href="http://sourceforge.net/p/freeglut/mailman/?source=navbar">you must subscribe before you can post</a> to our mailing lists. Sorry for the inconvenience.</p>
+<p>Please note that <a
+href="http://sourceforge.net/p/freeglut/mailman/?source=navbar">you must
+subscribe before you can post</a> to our mailing lists. Sorry for the
+inconvenience.</p>
 
 
 <?php generateFooter(); ?>

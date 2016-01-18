@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if [ -n "$1" ]; then
+	user=$1
+else
+	# read the username out of .sfuser
+	if [ -f .sfuser ]; then
+		user=$(cat .sfuser)
+	else
+		user=$USER
+	fi
+
+	if [ -z "$user" ]; then
+		echo "please pass your sourceforge username as argument, or create a .sfuser file" >&2
+		exit 1
+	fi
+fi
+
+echo "connecting as user: $user ..."
+rsync -vr --exclude='.sfuser' --exclude '*.swp' \
+	--rsh="ssh -l $user" * $user,freeglut@web.sourceforge.net:htdocs/

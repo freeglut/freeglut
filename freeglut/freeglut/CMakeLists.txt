@@ -1,5 +1,8 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0 FATAL_ERROR)
 PROJECT(freeglut)
+
+# for multiarch LIBDIR support (requires cmake>=2.8.8)
+INCLUDE(GNUInstallDirs)
 
 # NOTE: On Windows and Cygwin, the dll's are placed in the
 # CMAKE_RUNTIME_OUTPUT_DIRECTORY, while their corresponding import
@@ -17,6 +20,7 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(VERSION_MAJOR 3)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
+set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 # Update fg_version.h to match the versions number here in cmake
 CONFIGURE_FILE(src/fg_version.h.in src/fg_version.h)
@@ -48,6 +52,13 @@ ENDIF()
 
 # OpenGL ES support
 OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
+
+IF(NOT WIN32)
+    # Wayland support
+    OPTION(FREEGLUT_WAYLAND "Use Wayland (no X11)" OFF)
+    # option to build either as "glut" (ON) or "freeglut" (OFF)
+    OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" ON)
+ENDIF()
 
 
 SET(FREEGLUT_HEADERS
@@ -159,36 +170,60 @@ ELSEIF(ANDROID OR BLACKBERRY)
             src/blackberry/fg_window_blackberry.c
         )
     ENDIF()
+
 ELSE()
-    LIST(APPEND FREEGLUT_SRCS
-        src/x11/fg_cursor_x11.c
-        src/x11/fg_ext_x11.c
-        src/x11/fg_gamemode_x11.c
-        src/x11/fg_glutfont_definitions_x11.c
-        src/x11/fg_init_x11.c
-        src/x11/fg_internal_x11.h
-        src/x11/fg_input_devices_x11.c
-        src/x11/fg_joystick_x11.c
-        src/x11/fg_main_x11.c
-        src/x11/fg_menu_x11.c
-        src/x11/fg_spaceball_x11.c
-        src/x11/fg_state_x11.c
-        src/x11/fg_structure_x11.c
-        src/x11/fg_window_x11.c
-        src/x11/fg_xinput_x11.c
-    )
-    IF(NOT(FREEGLUT_GLES))
+    # UNIX (Wayland)
+    IF(FREEGLUT_WAYLAND)
         LIST(APPEND FREEGLUT_SRCS
-            src/x11/fg_internal_x11_glx.h
-            src/x11/fg_display_x11_glx.c
-            src/x11/fg_state_x11_glx.c
-            src/x11/fg_state_x11_glx.h
-            src/x11/fg_window_x11_glx.c
-            src/x11/fg_window_x11_glx.h
+            src/wayland/fg_cursor_wl.c
+            src/wayland/fg_ext_wl.c
+            src/wayland/fg_gamemode_wl.c
+            src/wayland/fg_init_wl.c
+            src/wayland/fg_internal_wl.h
+            src/wayland/fg_input_devices_wl.c
+            src/wayland/fg_main_wl.c
+            src/wayland/fg_state_wl.c
+            src/wayland/fg_structure_wl.c
+            src/wayland/fg_window_wl.c
+            # font, serial port & joystick code are agnostic
+            src/x11/fg_glutfont_definitions_x11.c
+            src/x11/fg_input_devices_x11.c
+            src/x11/fg_joystick_x11.c
         )
+    # UNIX (X11)
+    ELSE()
+        LIST(APPEND FREEGLUT_SRCS
+            src/x11/fg_cursor_x11.c
+            src/x11/fg_ext_x11.c
+            src/x11/fg_gamemode_x11.c
+            src/x11/fg_glutfont_definitions_x11.c
+            src/x11/fg_init_x11.c
+            src/x11/fg_internal_x11.h
+            src/x11/fg_input_devices_x11.c
+            src/x11/fg_joystick_x11.c
+            src/x11/fg_main_x11.c
+            src/x11/fg_menu_x11.c
+            src/x11/fg_spaceball_x11.c
+            src/x11/fg_state_x11.c
+            src/x11/fg_structure_x11.c
+            src/x11/fg_window_x11.c
+            src/x11/fg_xinput_x11.c
+        )
+        IF(NOT(FREEGLUT_GLES))
+            LIST(APPEND FREEGLUT_SRCS
+                src/x11/fg_internal_x11_glx.h
+                src/x11/fg_display_x11_glx.c
+                src/x11/fg_state_x11_glx.c
+                src/x11/fg_state_x11_glx.h
+                src/x11/fg_window_x11_glx.c
+                src/x11/fg_window_x11_glx.h
+            )
+        ENDIF()
     ENDIF()
 ENDIF()
-IF(FREEGLUT_GLES)
+
+# OpenGL ES requires EGL, and so does Wayland
+IF(FREEGLUT_GLES OR FREEGLUT_WAYLAND)
     LIST(APPEND FREEGLUT_SRCS
         src/egl/fg_internal_egl.h
         src/egl/fg_display_egl.c
@@ -210,12 +245,18 @@ ENDIF()
 # but do use GLES constants directly for all other needs
 # GLES1 and GLES2 libraries are compatible and can be co-linked.
 IF(FREEGLUT_GLES)
-  ADD_DEFINITIONS(-DFREEGLUT_GLES)
-  LIST(APPEND LIBS GLESv2 GLESv1_CM EGL)
+    LIST(APPEND PUBLIC_DEFINITIONS -DFREEGLUT_GLES)
+    LIST(APPEND LIBS GLESv2 GLESv1_CM EGL)
 ELSE()
   FIND_PACKAGE(OpenGL REQUIRED)
   LIST(APPEND LIBS ${OPENGL_gl_LIBRARY})
   INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+ENDIF()
+
+# For Wayland: compile with -DFREEGLUT_WAYLAND and pull EGL
+IF(FREEGLUT_WAYLAND)
+  ADD_DEFINITIONS(-DFREEGLUT_WAYLAND)
+  LIST(APPEND LIBS wayland-client wayland-cursor wayland-egl EGL xkbcommon)
 ENDIF()
 
 # lib m for math, not needed on windows
@@ -251,15 +292,16 @@ ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-  IF(NOT(ANDROID OR BLACKBERRY))
+  IF(NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND))
     # not setting -ansi as EGL/KHR headers doesn't support it
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic")
   ENDIF()
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 INCLUDE(CheckIncludeFiles)
-IF(UNIX AND NOT(ANDROID OR BLACKBERRY))
+IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND))
     FIND_PACKAGE(X11 REQUIRED)
+    INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
     LIST(APPEND LIBS ${X11_LIBRARIES})
     IF(X11_Xrandr_FOUND)
         SET(HAVE_X11_EXTENSIONS_XRANDR_H TRUE)
@@ -267,10 +309,6 @@ IF(UNIX AND NOT(ANDROID OR BLACKBERRY))
     ENDIF()
     IF(X11_xf86vmode_FOUND)
         SET(HAVE_X11_EXTENSIONS_XF86VMODE_H TRUE)
-        # Work-around http://www.cmake.org/Bug/bug_view_page.php?bug_id=6976
-        IF(NOT "${X11_Xxf86vm_LIB}")
-            SET(X11_Xxf86vm_LIB "Xxf86vm")
-        ENDIF()
         LIST(APPEND LIBS ${X11_Xxf86vm_LIB})
     ENDIF()
     IF(X11_Xinput_FOUND)
@@ -331,7 +369,7 @@ ENDIF()
 # ensure that all CMake-generated files are kept away from the main source tree.
 # As a result, the build directory must to be added to the include path list.
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
-INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
 ADD_DEFINITIONS(-DHAVE_CONFIG_H)
 IF(WIN32)
     # we also have to generate freeglut.rc, which contains the version
@@ -351,13 +389,14 @@ IF(FREEGLUT_BUILD_STATIC_LIBS)
 ENDIF()
 
 
+SET(LIBNAME freeglut)
 IF(WIN32)
     LIST(APPEND LIBS winmm)
     IF(FREEGLUT_BUILD_SHARED_LIBS)
-        SET_TARGET_PROPERTIES(freeglut PROPERTIES COMPILE_FLAGS -DFREEGLUT_EXPORTS)
+        TARGET_COMPILE_DEFINITIONS(freeglut PRIVATE FREEGLUT_EXPORTS)
     ENDIF()
     IF(FREEGLUT_BUILD_STATIC_LIBS)
-        SET_TARGET_PROPERTIES(freeglut_static PROPERTIES COMPILE_FLAGS -DFREEGLUT_STATIC)
+        TARGET_COMPILE_DEFINITIONS(freeglut_static PUBLIC FREEGLUT_STATIC)
         # need to set machine:x64 for linker, at least for VC10, and
         # doesn't hurt for older compilers:
         # http://public.kitware.com/Bug/view.php?id=11240#c22768
@@ -376,15 +415,18 @@ ELSE()
     #   or special-cased FreeGLUT long ago (e.g. .so.4 on OpenBSD), so
     #   the lack of support for current:revision:age in CMake should
     #   not be a problem.
-    # - the output library should be named glut so it'll be linkable with -lglut
+	# - the output library should be named glut so it'll be linkable with -lglut
+	#   (unless FREEGLUT_REPLACE_GLUT is false).
     # - the shared library should link to the dependency libraries so that the user
     #   won't have to link them explicitly (they shouldn't have to know that we depend
     #   on Xrandr or Xxf86vm)
     IF(FREEGLUT_GLES)
-      SET(LIBNAME freeglut-gles)
+		SET(LIBNAME freeglut-gles)
     ELSE()
-      SET(LIBNAME glut)
-    ENDIF()
+		IF(FREEGLUT_REPLACE_GLUT)
+			SET(LIBNAME glut)
+		ENDIF()
+	ENDIF()
 
     IF(FREEGLUT_BUILD_SHARED_LIBS)
       SET_TARGET_PROPERTIES(freeglut PROPERTIES VERSION ${SO_MAJOR}.${SO_MINOR}.${SO_REV} SOVERSION ${SO_MAJOR} OUTPUT_NAME ${LIBNAME})
@@ -406,36 +448,36 @@ ELSE()
 ENDIF()
 IF(FREEGLUT_BUILD_SHARED_LIBS)
     TARGET_LINK_LIBRARIES(freeglut ${LIBS})
+    TARGET_COMPILE_DEFINITIONS(freeglut PUBLIC ${PUBLIC_DEFINITIONS})
 ENDIF()
 IF(FREEGLUT_BUILD_STATIC_LIBS)
     TARGET_LINK_LIBRARIES(freeglut_static ${LIBS})
+    TARGET_COMPILE_DEFINITIONS(freeglut_static PUBLIC ${PUBLIC_DEFINITIONS})
 ENDIF()
 
 IF(FREEGLUT_BUILD_SHARED_LIBS)
-    INSTALL(TARGETS freeglut
+    INSTALL(TARGETS freeglut EXPORT FreeGLUTTargets
             RUNTIME DESTINATION bin
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            INCLUDES DESTINATION include
     )
     IF(INSTALL_PDB)
         INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
             DESTINATION bin
-			CONFIGURATIONS Debug)
+			CONFIGURATIONS Debug
+            COMPONENT Devel)
     ENDIF()
 ENDIF()
 IF(FREEGLUT_BUILD_STATIC_LIBS)
-    INSTALL(TARGETS freeglut_static
+    INSTALL(TARGETS freeglut_static EXPORT FreeGLUTTargets
             RUNTIME DESTINATION bin
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            INCLUDES DESTINATION include
     )
-    IF(INSTALL_PDB)
-        INSTALL(FILES ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/Debug/freeglut_static${CMAKE_DEBUG_POSTFIX}.pdb
-            DESTINATION lib
-			CONFIGURATIONS Debug)
-    ENDIF()
 ENDIF()
-INSTALL(FILES ${FREEGLUT_HEADERS} DESTINATION include/GL)
+INSTALL(FILES ${FREEGLUT_HEADERS} DESTINATION include/GL COMPONENT Devel)
 
 
 
@@ -460,7 +502,6 @@ MACRO(ADD_DEMO name)
         IF(FREEGLUT_BUILD_STATIC_LIBS)
             ADD_EXECUTABLE(${name}_static ${ARGN})
             TARGET_LINK_LIBRARIES(${name}_static ${DEMO_LIBS} freeglut_static)
-            SET_TARGET_PROPERTIES(${name}_static PROPERTIES COMPILE_FLAGS -DFREEGLUT_STATIC)
             IF(WIN32 AND MSVC)
                 SET_TARGET_PROPERTIES(${name}_static PROPERTIES DEBUG_POSTFIX d)
             ENDIF()
@@ -507,15 +548,21 @@ ELSEIF(FREEGLUT_GLES)
     ELSE()
       SET(PC_LIBS_PRIVATE "-lbps -lslog2 -lscreen -lGLESv2 -lGLESv1_CM -lEGL -lm")
     ENDIF()
+  ELSEIF(FREEGLUT_WAYLAND)
+    SET(PC_LIBS_PRIVATE "-lwayland-client -lwayland-cursor -lwayland-egl -lGLESv2 -lGLESv1_CM -lEGL -lxkbcommon -lm")
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGLESv2 -lGLESv1_CM -lEGL -lm")
   ENDIF()
 ELSE()
-  SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGL -lm")
+  IF(FREEGLUT_WAYLAND)
+    SET(PC_LIBS_PRIVATE "-lwayland-client -lwayland-cursor -lwayland-egl -lGL -lxkbcommon -lm")
+  ELSE()
+    SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGL -lm")
+  ENDIF()
 ENDIF()
 # Client applications need to define FreeGLUT GLES version to
 # bootstrap headers inclusion in freeglut_std.h:
-SET(PC_LIBNAME "glut")
+SET(PC_LIBNAME ${LIBNAME})
 SET(PC_FILENAME "freeglut.pc")
 IF(FREEGLUT_GLES)
   SET(PC_CFLAGS "-DFREEGLUT_GLES")
@@ -523,6 +570,36 @@ IF(FREEGLUT_GLES)
   SET(PC_FILENAME "freeglut-gles.pc")
 ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.pc.in ${CMAKE_BINARY_DIR}/freeglut.pc @ONLY)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION share/pkgconfig/ RENAME ${PC_FILENAME})
+INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/ RENAME ${PC_FILENAME} COMPONENT Devel)
 # TODO: change the library and .pc name when building for GLES,
 # e.g. -lglut-GLES
+
+INCLUDE(CMakePackageConfigHelpers)
+WRITE_BASIC_PACKAGE_VERSION_FILE(
+    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfigVersion.cmake"
+    VERSION ${VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+# needs cmake 3.0 (as does the "INCLUDES DIRECTORY" argument to install(TARGETS)):
+EXPORT(EXPORT FreeGLUTTargets
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTTargets.cmake"
+    NAMESPACE FreeGLUT::
+)
+CONFIGURE_FILE(FreeGLUTConfig.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
+    @ONLY
+)
+SET(ConfigPackageLocation lib/cmake/FreeGLUT)
+INSTALL(EXPORT FreeGLUTTargets
+    FILE FreeGLUTTargets.cmake
+    NAMESPACE FreeGLUT::
+    DESTINATION ${ConfigPackageLocation}
+)
+INSTALL(
+    FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfigVersion.cmake"
+    DESTINATION ${ConfigPackageLocation}
+    COMPONENT Devel
+)

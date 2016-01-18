@@ -51,7 +51,11 @@
 #   define  TARGET_HOST_BLACKBERRY  1
 
 #elif defined(__posix__) || defined(__unix__) || defined(__linux__) || defined(__sun)
-#   define  TARGET_HOST_POSIX_X11  1
+#   if defined(FREEGLUT_WAYLAND)
+#      define  TARGET_HOST_POSIX_WAYLAND  1
+#   else
+#      define  TARGET_HOST_POSIX_X11  1
+#   endif
 
 #elif defined(__APPLE__)
 /* This is a placeholder until we get native OSX support ironed out -- JFF 11/18/09 */
@@ -70,32 +74,36 @@
 #endif
 
 #ifndef TARGET_HOST_MS_WINDOWS
-#   define  TARGET_HOST_MS_WINDOWS 0
+#   define  TARGET_HOST_MS_WINDOWS     0
 #endif
 
 #ifndef TARGET_HOST_ANDROID
-#   define  TARGET_HOST_ANDROID    0
+#   define  TARGET_HOST_ANDROID        0
 #endif
 
 #ifndef TARGET_HOST_BLACKBERRY
-#   define  TARGET_HOST_BLACKBERRY 0
+#   define  TARGET_HOST_BLACKBERRY     0
+#endif
+
+#ifndef  TARGET_HOST_POSIX_WAYLAND
+#   define  TARGET_HOST_POSIX_WAYLAND  0
 #endif
 
 #ifndef  TARGET_HOST_POSIX_X11
-#   define  TARGET_HOST_POSIX_X11  0
+#   define  TARGET_HOST_POSIX_X11      0
 #endif
 
 #ifndef  TARGET_HOST_MAC_OSX
-#   define  TARGET_HOST_MAC_OSX    0
+#   define  TARGET_HOST_MAC_OSX        0
 #endif
 
 #ifndef  TARGET_HOST_SOLARIS
-#   define  TARGET_HOST_SOLARIS    0
+#   define  TARGET_HOST_SOLARIS        0
 #endif
 
 /* -- FIXED CONFIGURATION LIMITS ------------------------------------------- */
 
-#define  FREEGLUT_MAX_MENUS         3
+#define  FREEGLUT_MAX_MENUS            3
 
 /* These files should be available on every platform. */
 #include <stdio.h>
@@ -188,6 +196,9 @@
 #endif
 
 /* Platform-specific includes */
+#if TARGET_HOST_POSIX_WAYLAND
+#include "wayland/fg_internal_wl.h"
+#endif
 #if TARGET_HOST_POSIX_X11
 #include "x11/fg_internal_x11.h"
 #endif
@@ -343,6 +354,7 @@ struct tagSFG_State
     GLboolean        SkipStaleMotion;      /* skip stale motion events */
 
     GLboolean        StrokeFontDrawJoinDots;/* Draw dots between line segments of stroke fonts? */
+    GLboolean        AllowNegativeWindowPosition; /* GLUT, by default, doesn't allow negative window positions. Enable it? */
 
     int              MajorVersion;         /* Major OpenGL context version  */
     int              MinorVersion;         /* Minor OpenGL context version  */
@@ -413,8 +425,7 @@ struct tagSFG_Context
 #define GLUT_DISPLAY_WORK     (1<<6)
 
 /*
- * An enumeration containing the state of the GLUT execution:
- * initializing, running, or stopping
+ * An enumeration containing the desired mapping state of a window
  */
 typedef enum
 {

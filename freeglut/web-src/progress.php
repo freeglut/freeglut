@@ -8,7 +8,7 @@ setPageTitle("A Look At Progress");
 generateHeader($_SERVER['PHP_SELF']);
 ?>
 
-<div class="textheader">FreeGLUT 3.0</div>
+<div class="textheader">FreeGLUT 3.0 an onwards</div>
 <p>
 Major work, its status and planned milestone. <a
 href="help.php">Help</a> on any of these plans is very welcome! Fork the
@@ -26,8 +26,16 @@ points</a></td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
 
 <tr><td>BlackBerry 10 port</td><td>Basic but complete functionality
-by <a href="https://github.com/rcmaniac25">Vinnie Simonetti</a>.</td><td>Basic functionality as is now done: 3.0. Future
+by <a href="https://github.com/rcmaniac25">Vinnie
+Simonetti</a>.</td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
+
+<tr><td>callbacks with closures</td><td>Have versions of each callback
+that take an additional void* that is passed back to the user upon
+invocation.</td><td>3.2</td></tr>
+
+<tr><td>Windows 8 touch support</td><td>Windows 8 replaced how touch
+input works, so we need to implement support for that.</td><td>3.2</td></tr>
 
 <tr><td>10bit display formats</td><td>GLUT supports that but FreeGLUT
 currently does not. Unfinished effort to implement <a
@@ -38,6 +46,29 @@ or later.</td></tr>
 cube, cone, etc, as well as the teapot and other parts of the
 teaset)</td><td>3.0</td></tr>
 
+<tr><td>handling non-western script input to windows</td><td>For
+Windows, see associated <a
+href="https://github.com/dcnieho/FreeGLUT/tree/feature_IMECHAR_callback">github
+branch</a>. What can be done on the Linux side?</td><td>Figure this out
+for 3.2</td></tr>
+
+<tr><td>option to not deinitialize when mainloop terminates</td><td>As
+is often requested, in some usage cases, it would be advantageous if
+FreeGLUT did not automatically deinitialize when its last window is
+closed. This has been implemented, but is awaiting testing on platforms
+other than windows. Discussed <a
+href="http://sourceforge.net/p/freeglut/mailman/message/32926301/">here</a>.</td><td>As
+it has potential complications on mobile platforms, it was decided to
+leave this feature until after 3.0.</td></tr>
+
+<tr><td>High-DPI awareness.</td><td>As discussed <a
+href="http://sourceforge.net/p/freeglut/mailman/message/30859054/">here</a>,
+it is unclear what should be done. See also associated <a
+href="https://github.com/dcnieho/FreeGLUT/tree/feature_DPI_awareness">github
+branch</a>, though in the end maybe no code has to be added to FreeGLUT
+for this at all, its the host program's responsibility to decide on DPI
+awareness for his work.</td><td>Figure this out for 3.2</td></tr>
+
 <tr><td>GL2+ and GLES 1/2 clean API for fonts and menus</td><td>For
 stroke fonts, we can use a similar approach as for the shapes, should
 thus be straightforward. For the bitmap fonts, this is more complex.
@@ -47,17 +78,14 @@ href="http://nuclear.mutantstargoat.com/sw/libdrawtext/">libdrawtext
 library</a></td><td>The sooner the better, but will have to wait for
 asap after 3.0.</td></tr>
 
-<tr><td>At runtime loading of OpenGL, OpenGL ES1 or OpenGL ES2 libraries,
+<tr><td>At runtime loading of OpenGL or OpenGL ES libraries,
 like SDL.</td><td>Currently CMake variables define at compile time which
-of these three the library will be compiled against. No work has been
-done on moving this to an at-runtime API.</td><td>Having this in 3.0
-would be nice, but not essential.</td></tr>
+of the two the library will be compiled against. No work has been
+done to move this to an at-runtime API.</td><td>After 3.0</td></tr>
 
 <tr><td>Code reorganized such that platform-specific and display
-server-specific code are decoupled</td><td>Done, thanks John Fay! This
-already led to a port to Android and support for GLES 1/2 on X11
-(thanks Sylvain for both!), and paves the way for implementing native
-OSX and Wayland support</td><td>3.0</td></tr>
+server-specific code are decoupled</td><td>Done, thanks John
+Fay!</td><td>3.0</td></tr>
 
 <tr><td>Position callback</td><td>Done: we now have a position callback
 to notify the client when the position of the window

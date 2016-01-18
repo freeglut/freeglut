@@ -61,6 +61,7 @@ struct tag_cursorCacheEntry {
     unsigned int cursorShape;    /* an XC_foo value */
     Cursor cachedCursor;         /* None if the corresponding cursor has
                                     not been created yet */
+	Display *dpy;	/* display used to allocate this cursor */
 };
 
 /*
@@ -68,26 +69,26 @@ struct tag_cursorCacheEntry {
  * the "normal" GLUT_CURSOR_* values start a 0 and are consecutive.
  */ 
 static cursorCacheEntry cursorCache[] = {
-    { XC_arrow,               None }, /* GLUT_CURSOR_RIGHT_ARROW */
-    { XC_top_left_arrow,      None }, /* GLUT_CURSOR_LEFT_ARROW */
-    { XC_hand1,               None }, /* GLUT_CURSOR_INFO */
-    { XC_pirate,              None }, /* GLUT_CURSOR_DESTROY */
-    { XC_question_arrow,      None }, /* GLUT_CURSOR_HELP */
-    { XC_exchange,            None }, /* GLUT_CURSOR_CYCLE */
-    { XC_spraycan,            None }, /* GLUT_CURSOR_SPRAY */
-    { XC_watch,               None }, /* GLUT_CURSOR_WAIT */
-    { XC_xterm,               None }, /* GLUT_CURSOR_TEXT */
-    { XC_crosshair,           None }, /* GLUT_CURSOR_CROSSHAIR */
-    { XC_sb_v_double_arrow,   None }, /* GLUT_CURSOR_UP_DOWN */
-    { XC_sb_h_double_arrow,   None }, /* GLUT_CURSOR_LEFT_RIGHT */
-    { XC_top_side,            None }, /* GLUT_CURSOR_TOP_SIDE */
-    { XC_bottom_side,         None }, /* GLUT_CURSOR_BOTTOM_SIDE */
-    { XC_left_side,           None }, /* GLUT_CURSOR_LEFT_SIDE */
-    { XC_right_side,          None }, /* GLUT_CURSOR_RIGHT_SIDE */
-    { XC_top_left_corner,     None }, /* GLUT_CURSOR_TOP_LEFT_CORNER */
-    { XC_top_right_corner,    None }, /* GLUT_CURSOR_TOP_RIGHT_CORNER */
-    { XC_bottom_right_corner, None }, /* GLUT_CURSOR_BOTTOM_RIGHT_CORNER */
-    { XC_bottom_left_corner,  None }  /* GLUT_CURSOR_BOTTOM_LEFT_CORNER */
+    { XC_arrow,               None, 0 }, /* GLUT_CURSOR_RIGHT_ARROW */
+    { XC_top_left_arrow,      None, 0 }, /* GLUT_CURSOR_LEFT_ARROW */
+    { XC_hand1,               None, 0 }, /* GLUT_CURSOR_INFO */
+    { XC_pirate,              None, 0 }, /* GLUT_CURSOR_DESTROY */
+    { XC_question_arrow,      None, 0 }, /* GLUT_CURSOR_HELP */
+    { XC_exchange,            None, 0 }, /* GLUT_CURSOR_CYCLE */
+    { XC_spraycan,            None, 0 }, /* GLUT_CURSOR_SPRAY */
+    { XC_watch,               None, 0 }, /* GLUT_CURSOR_WAIT */
+    { XC_xterm,               None, 0 }, /* GLUT_CURSOR_TEXT */
+    { XC_crosshair,           None, 0 }, /* GLUT_CURSOR_CROSSHAIR */
+    { XC_sb_v_double_arrow,   None, 0 }, /* GLUT_CURSOR_UP_DOWN */
+    { XC_sb_h_double_arrow,   None, 0 }, /* GLUT_CURSOR_LEFT_RIGHT */
+    { XC_top_side,            None, 0 }, /* GLUT_CURSOR_TOP_SIDE */
+    { XC_bottom_side,         None, 0 }, /* GLUT_CURSOR_BOTTOM_SIDE */
+    { XC_left_side,           None, 0 }, /* GLUT_CURSOR_LEFT_SIDE */
+    { XC_right_side,          None, 0 }, /* GLUT_CURSOR_RIGHT_SIDE */
+    { XC_top_left_corner,     None, 0 }, /* GLUT_CURSOR_TOP_LEFT_CORNER */
+    { XC_top_right_corner,    None, 0 }, /* GLUT_CURSOR_TOP_RIGHT_CORNER */
+    { XC_bottom_right_corner, None, 0 }, /* GLUT_CURSOR_BOTTOM_RIGHT_CORNER */
+    { XC_bottom_left_corner,  None, 0 }  /* GLUT_CURSOR_BOTTOM_LEFT_CORNER */
 };
 
 void fgPlatformSetCursor ( SFG_Window *window, int cursorID )
@@ -104,10 +105,18 @@ void fgPlatformSetCursor ( SFG_Window *window, int cursorID )
     if( ( cursorIDToUse >= 0 ) &&
         ( cursorIDToUse < sizeof( cursorCache ) / sizeof( cursorCache[0] ) ) ) {
         cursorCacheEntry *entry = &cursorCache[ cursorIDToUse ];
-        if( entry->cachedCursor == None ) {
+
+		/* the second clause forces an invalidation of the cached cursor, if it was
+		 * created through a different display connection.
+		 * This can only happen, in the extremely rare case where the user program calls the
+		 * freeglut extension glutLeaveMainLoop, and then re-initializes freeglut and
+		 * starts over.
+		 */
+        if( entry->cachedCursor == None || entry->dpy != fgDisplay.pDisplay.Display ) {
             entry->cachedCursor =
                 XCreateFontCursor( fgDisplay.pDisplay.Display, entry->cursorShape );
-        }
+			entry->dpy = fgDisplay.pDisplay.Display;
+		}
         cursor = entry->cachedCursor;
     } else {
         switch( cursorIDToUse )
