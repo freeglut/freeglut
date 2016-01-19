@@ -784,14 +784,16 @@ int FGAPIENTRY glutCreateMenuUcall( FGCBMenuUC callback, FGCBUserData userData )
 {
     /* The menu object creation code resides in fg_structure.c */
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenuUcall" );
-    if (fgState.ActiveMenus)
-        fgError("Menu manipulation not allowed while menus in use.");
+	if (fgState.ActiveMenus)
+	{
+		fgError( "Menu manipulation not allowed while menus in use." );
+	}
 
     return fgCreateMenu( callback, userData )->ID;
 }
 
 /* Standard glutCreateMenu */
-static void glutCreateMenuCallback( int menu, FGCBUserData userData )
+static void fghCreateMenuCallback( int menu, FGCBUserData userData )
 {
     FGCBMenu callback = (FGCBMenu)userData;
     callback( menu );
@@ -801,8 +803,10 @@ int FGAPIENTRY glutCreateMenu( FGCBMenu callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenu" );
     if (!callback)
+	{
         return glutCreateMenuUcall( NULL, NULL );
-    return glutCreateMenuUcall( glutCreateMenuCallback, (FGCBUserData)callback );
+	}
+    return glutCreateMenuUcall( fghCreateMenuCallback, (FGCBUserData)callback );
 }
 
 /*
