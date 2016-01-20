@@ -1326,45 +1326,52 @@ as mouse buttons.
 
 <p>
 The <tt>glutSpaceballMotionFunc</tt> function is implemented in
-<i>freeglut</i> on X11 only.  On other platforms, function stubs are
+<i>freeglut</i> on X11 and Windows only.  On other platforms, function stubs are
 provided so that GLUT-based programs can compile and link against
 <i>freeglut</i> without modification.
+</p>
+<p>The <tt>glutSpaceballMotionFunc</tt> function sets the window's Spaceball motion callback. <i>Freeglut</i> invokes this callback when the user push/pull Spaceball cap in <i>x</i>, <i>y</i>, and <i>z</i> directions.
 </p>
 
 <p><b>Usage</b></p>
 
-<p><tt>void glutSpaceballMotionFunc ( void
-(* callback)( int x, int y, int z )</tt><tt> );</tt></p>
+<p><tt>void glutSpaceballMotionFunc ( void (* callback)( int x, int y, int z ) );</tt></p>
 
 <p><b>Description</b></p>
 
-<p>TODO</p>
+<p>The <i>x</i>, <i>y</i>, and <i>z</i> arguments indicate the amount of translation in integer along x, y, and z axis respectively.</p>
+<p>The x, y, and z axes form a common OpenGL right-handed coordinate system. A positive value of <i>x</i>, <i>y</i>, or <i>z</i> indicates movement along the positive direction of the respective axis, while the negative one denotes movement along negative direction.</p>
 
 <h2>12.16 glutSpaceballRotateFunc</h2>
 
 <p>
 The <tt>glutSpaceballRotateFunc</tt> function is implemented in
-<i>freeglut</i> on X11 only.  On other platforms, function stubs are
+<i>freeglut</i> on X11 and Windows only. On other platforms, function stubs are
 provided so that GLUT-based programs can compile and link against
 <i>freeglut</i> without modification.
+</p>
+<p>The <tt>glutSpaceballRotateFunc</tt> function sets the window's Spaceball rotation callback. <i>Freeglut</i> invokes this callback when the user rotates/twists Spaceball cap.
 </p>
 
 <p><b>Usage</b></p>
 
-<p><tt>void glutSpaceballRotateFunc ( void
-(* callback)( int x, int y, int z )</tt><tt> );</tt></p>
+<p><tt>void glutSpaceballRotateFunc ( void (* callback)( int rx, int ry, int rz ) );</tt></p>
 
 <p><b>Description</b></p>
 
-<p>TODO</p>
+<p>The <i>rx</i>, <i>ry</i>, and <i>rz</i> arguments indicate the amount of rotation in integer with respect to x, y, and z axis respectively.</p>
+<p>The x, y, and z axes form a common OpenGL right-handed coordinate system. Positive value of <i>rx</i>, <i>ry</i>, or <i>rz</i> indicates counter-clock wise rotation along the respective axis, while negative one denotes clock wise rotation.</p>
 
 <h2>12.17 glutSpaceballButtonFunc</h2>
 
 <p>
 The <tt>glutSpaceballButtonFunc</tt> function is implemented in
-<i>freeglut</i> on X11 only.  On other platforms, function stubs are
+<i>freeglut</i> on X11 and Windows only.  On other platforms, function stubs are
 provided so that GLUT-based programs can compile and link against
 <i>freeglut</i> without modification.
+</p>
+<p>
+The <tt>glutSpaceballButtonFunc</tt> function sets the window's Spaceball button callback. <i>Freeglut</i> invokes this callback when the user presses/releases one of the Spaceball buttons.
 </p>
 
 <p><b>Usage</b></p>
@@ -1374,7 +1381,18 @@ provided so that GLUT-based programs can compile and link against
 
 <p><b>Description</b></p>
 
-<p>TODO</p>
+<p>The <i>button</i> argument may take one of the following defined constant values</p>
+<ul>
+	<li>
+		GLUT_SPACEBALL_BUTTON_A(0x00000001), GLUT_SPACEBALL_BUTTON_B(0x00000002),..., GLUT_SPACEBALL_BUTTON_E(0x00000010)
+	</li>
+</ul>
+<p>The <i>updown</i> argument may take one of the two defined constant values</p>
+<ul>
+	<li>
+		GLUT_DOWN, GLUT_UP indicating if button is pressed or released.
+	</li>
+</ul>
 
 <h2>12.18 glutButtonBoxFunc</h2>
 

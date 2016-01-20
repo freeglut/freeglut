@@ -632,9 +632,9 @@ enum
     /* Presently ignored */
     WCB_Select,
     WCB_OverlayDisplay,
-    WCB_SpaceMotion,     /* presently implemented only on UNIX/X11 */
-    WCB_SpaceRotation,   /* presently implemented only on UNIX/X11 */
-    WCB_SpaceButton,     /* presently implemented only on UNIX/X11 */
+    WCB_SpaceMotion,     /* presently implemented only on UNIX/X11 and Windows */
+    WCB_SpaceRotation,   /* presently implemented only on UNIX/X11 and Windows */
+    WCB_SpaceButton,     /* presently implemented only on UNIX/X11 and Windows */
     WCB_Dials,
     WCB_ButtonBox,
     WCB_TabletMotion,

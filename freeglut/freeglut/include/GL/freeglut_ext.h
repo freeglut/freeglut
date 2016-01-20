@@ -127,6 +127,16 @@
 #define	GLUT_COMPATIBILITY_PROFILE          0x0002
 
 /*
+* GLUT API Extension macro definitions -- Spaceball button definitions
+*/
+
+#define  GLUT_SPACEBALL_BUTTON_A            0x0001
+#define  GLUT_SPACEBALL_BUTTON_B            0x0002
+#define  GLUT_SPACEBALL_BUTTON_C            0x0004
+#define  GLUT_SPACEBALL_BUTTON_D            0x0008
+#define  GLUT_SPACEBALL_BUTTON_E            0x0010
+
+/*
  * Process loop function, see fg_main.c
  */
 FGAPI void    FGAPIENTRY glutMainLoopEvent( void );

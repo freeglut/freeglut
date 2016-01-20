@@ -184,9 +184,9 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 						unsigned long stateNow = dwKeystate&(1 << i);
 
 						if (stateBefore && !stateNow)
-							INVOKE_WCB(*window, SpaceButton, (stateBefore, GLUT_DOWN));
+							INVOKE_WCB(*window, SpaceButton, (stateBefore, GLUT_UP));
 						if (!stateBefore && stateNow)
-							INVOKE_WCB(*window, SpaceButton, (stateNow, GLUT_UP));
+							INVOKE_WCB(*window, SpaceButton, (stateNow, GLUT_DOWN));
 
 					}
 				}
