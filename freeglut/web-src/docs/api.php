@@ -1381,18 +1381,30 @@ The <tt>glutSpaceballButtonFunc</tt> function sets the window's Spaceball button
 
 <p><b>Description</b></p>
 
-<p>The <i>button</i> argument may take one of the following defined constant values</p>
+<p>The <i>button</i> argument may take one of the following defined
+constant values:</p>
 <ul>
-	<li>
-		GLUT_SPACEBALL_BUTTON_A(0x00000001), GLUT_SPACEBALL_BUTTON_B(0x00000002),..., GLUT_SPACEBALL_BUTTON_E(0x00000010)
-	</li>
+	<li></tt>GLUT_SPACEBALL_BUTTON_A</tt> (0x00000001)</li>
+    <li></tt>GLUT_SPACEBALL_BUTTON_B</tt> (0x00000002)</li>
+    <li></tt>GLUT_SPACEBALL_BUTTON_C</tt> (0x00000004)</li>
+    <li></tt>GLUT_SPACEBALL_BUTTON_D</tt> (0x00000008)</li>
+    <li></tt>GLUT_SPACEBALL_BUTTON_E</tt> (0x00000010)</li>
 </ul>
-<p>The <i>updown</i> argument may take one of the two defined constant values</p>
+<p>The <i>updown</i> argument may take one of the two defined constant
+values:</p>
 <ul>
 	<li>
 		GLUT_DOWN, GLUT_UP indicating if button is pressed or released.
 	</li>
 </ul>
+
+<p><b>Changes From GLUT</b></p>
+
+<p>
+The <tt>GLUT_SPACEBALL_BUTTON_</tt> defines for the button argument of
+the callback are not provided by GLUT, but the numerical values returned
+are the same.
+</p>
 
 <h2>12.18 glutButtonBoxFunc</h2>
 
