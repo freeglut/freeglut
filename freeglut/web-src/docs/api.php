@@ -1384,7 +1384,7 @@ The <tt>glutSpaceballButtonFunc</tt> function sets the window's Spaceball button
 <p>The <i>button</i> argument may take one of the following defined constant values</p>
 <ul>
 	<li>
-		GLUT_SPACEBALL_BUTTON_A, GLUT_SPACEBALL_BUTTON_B,..., GLUT_SPACEBALL_BUTTON_E
+		GLUT_SPACEBALL_BUTTON_A(0x00000001), GLUT_SPACEBALL_BUTTON_B(0x00000002),..., GLUT_SPACEBALL_BUTTON_E(0x00000010)
 	</li>
 </ul>
 <p>The <i>updown</i> argument may take one of the two defined constant values</p>
