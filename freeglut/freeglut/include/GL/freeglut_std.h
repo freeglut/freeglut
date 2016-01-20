@@ -408,6 +408,13 @@
 #define  GLUT_GAME_MODE_DISPLAY_CHANGED     0x0006
 
 /*
+ * GLUT API macro definitions -- Spaceball button definitions
+ */
+
+#define  GLUT_SPACEBALL_BUTTON_A            0x0001
+#define  GLUT_SPACEBALL_BUTTON_B            0x0002
+
+/*
  * Initialization functions, see fglut_init.c
  */
 FGAPI void    FGAPIENTRY glutInit( int* pargc, char** argv );
