@@ -33,10 +33,10 @@
  * FG_COMPILER_SUPPORTS_VA_ARGS: if the compiler supports variadic macros
  */
 
-/* What supports variadic macros based off Wikipedia article on it */
-#if (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)) || \
-	(defined(__GNUC__) && (__GNUC__ >= 3)) || \
-	(defined(__clang__)) || \
+/* What supports variadic macros based off Wikipedia article on it (GCC-like must support C99 or higher to use variadic macros) */
+#if (((defined(__GNUC__) && (__GNUC__ >= 3)) || \
+	  (defined(__clang__))) && \
+		(defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L))) || \
 	(defined(_MSC_VER) && (_MSC_VER >= 1400)) || \
 	(defined(__BORLANDC__) && (__BORLANDC__ >= 0x570)) || \
 	(defined(__SUNPRO_C) && (__SUNPRO_C >= 0x530))
