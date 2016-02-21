@@ -319,7 +319,7 @@ void fgDeinitialize( void )
 
 
 /* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-#if defined(NEED_XPARSEGEOMETRY_IMPL)
+#if defined(NEED_XPARSEGEOMETRY_IMPL) || defined(TARGET_HOST_MS_WINDOWS)
 #   include "util/xparsegeometry_repl.h"
 #endif
 
