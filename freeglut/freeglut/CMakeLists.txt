@@ -428,18 +428,18 @@ ELSE()
     #   or special-cased FreeGLUT long ago (e.g. .so.4 on OpenBSD), so
     #   the lack of support for current:revision:age in CMake should
     #   not be a problem.
-	# - the output library should be named glut so it'll be linkable with -lglut
-	#   (unless FREEGLUT_REPLACE_GLUT is false).
+    # - the output library should be named glut so it'll be linkable with -lglut
+    #   (unless FREEGLUT_REPLACE_GLUT is false).
     # - the shared library should link to the dependency libraries so that the user
     #   won't have to link them explicitly (they shouldn't have to know that we depend
     #   on Xrandr or Xxf86vm)
     IF(FREEGLUT_GLES)
-		SET(LIBNAME freeglut-gles)
+        SET(LIBNAME freeglut-gles)
     ELSE()
-		IF(FREEGLUT_REPLACE_GLUT)
-			SET(LIBNAME glut)
-		ENDIF()
-	ENDIF()
+        IF(FREEGLUT_REPLACE_GLUT)
+            SET(LIBNAME glut)
+        ENDIF()
+    ENDIF()
 
     IF(FREEGLUT_BUILD_SHARED_LIBS)
       SET_TARGET_PROPERTIES(freeglut PROPERTIES VERSION ${SO_MAJOR}.${SO_MINOR}.${SO_REV} SOVERSION ${SO_MAJOR} OUTPUT_NAME ${LIBNAME})
@@ -478,7 +478,7 @@ IF(FREEGLUT_BUILD_SHARED_LIBS)
     IF(INSTALL_PDB)
         INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
             DESTINATION bin
-			CONFIGURATIONS Debug
+            CONFIGURATIONS Debug
             COMPONENT Devel)
     ENDIF()
 ENDIF()
