@@ -14,4 +14,4 @@ This copy of the svn repository was not created with ``git svn`` but with the ex
 - merge ``svn/trunk`` into local ``git_master``
 - push merge commit to github (its fast forward!)
 
-I will be unable to merge a pull request if the github clone is behind ``svn/trunk`` on srouceforge.net. Should you detect this, please contact me, maybe through making an issue here on github.
+I will be unable to merge a pull request if the github clone is behind ``svn/trunk`` on sourceforge.net. Should you detect this, please contact me, maybe through making an issue here on github.
