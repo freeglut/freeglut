@@ -53,11 +53,16 @@ ENDIF()
 # OpenGL ES support
 OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
 
+# option to build either as "glut" (ON) or "freeglut" (OFF)
+IF(WIN32)
+    OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" OFF)
+ELSE()
+    OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" ON)
+ENDIF()
+
 IF(NOT WIN32)
     # Wayland support
     OPTION(FREEGLUT_WAYLAND "Use Wayland (no X11)" OFF)
-    # option to build either as "glut" (ON) or "freeglut" (OFF)
-    OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" ON)
 ENDIF()
 
 
@@ -391,12 +396,20 @@ ENDIF()
 
 SET(LIBNAME freeglut)
 IF(WIN32)
+    IF(FREEGLUT_REPLACE_GLUT)
+        SET(LIBNAME glut)
+    ENDIF()
+
     LIST(APPEND LIBS winmm)
     IF(FREEGLUT_BUILD_SHARED_LIBS)
         TARGET_COMPILE_DEFINITIONS(freeglut PRIVATE FREEGLUT_EXPORTS)
+        SET_TARGET_PROPERTIES(freeglut PROPERTIES OUTPUT_NAME ${LIBNAME})
     ENDIF()
     IF(FREEGLUT_BUILD_STATIC_LIBS)
         TARGET_COMPILE_DEFINITIONS(freeglut_static PUBLIC FREEGLUT_STATIC)
+        IF(FREEGLUT_REPLACE_GLUT)
+            SET_TARGET_PROPERTIES(freeglut_static PROPERTIES OUTPUT_NAME ${LIBNAME})
+        ENDIF()
         # need to set machine:x64 for linker, at least for VC10, and
         # doesn't hurt for older compilers:
         # http://public.kitware.com/Bug/view.php?id=11240#c22768
@@ -563,11 +576,9 @@ ENDIF()
 # Client applications need to define FreeGLUT GLES version to
 # bootstrap headers inclusion in freeglut_std.h:
 SET(PC_LIBNAME ${LIBNAME})
-SET(PC_FILENAME "freeglut.pc")
+SET(PC_FILENAME "${LIBNAME}.pc")
 IF(FREEGLUT_GLES)
   SET(PC_CFLAGS "-DFREEGLUT_GLES")
-  SET(PC_LIBNAME "freeglut-gles")
-  SET(PC_FILENAME "freeglut-gles.pc")
 ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.pc.in ${CMAKE_BINARY_DIR}/freeglut.pc @ONLY)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/ RENAME ${PC_FILENAME} COMPONENT Devel)
