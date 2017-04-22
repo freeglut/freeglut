@@ -214,53 +214,7 @@
 
 
 /* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
-
-/* Freeglut callbacks type definitions */
-typedef void (* FGCBDisplay       )( void );
-typedef void (* FGCBReshape       )( int, int );
-typedef void (* FGCBPosition      )( int, int );
-typedef void (* FGCBVisibility    )( int );
-typedef void (* FGCBKeyboard      )( unsigned char, int, int );
-typedef void (* FGCBKeyboardUp    )( unsigned char, int, int );
-typedef void (* FGCBSpecial       )( int, int, int );
-typedef void (* FGCBSpecialUp     )( int, int, int );
-typedef void (* FGCBMouse         )( int, int, int, int );
-typedef void (* FGCBMouseWheel    )( int, int, int, int );
-typedef void (* FGCBMotion        )( int, int );
-typedef void (* FGCBPassive       )( int, int );
-typedef void (* FGCBEntry         )( int );
-typedef void (* FGCBWindowStatus  )( int );
-typedef void (* FGCBJoystick      )( unsigned int, int, int, int );
-typedef void (* FGCBOverlayDisplay)( void );
-typedef void (* FGCBSpaceMotion   )( int, int, int );
-typedef void (* FGCBSpaceRotation )( int, int, int );
-typedef void (* FGCBSpaceButton   )( int, int );
-typedef void (* FGCBDials         )( int, int );
-typedef void (* FGCBButtonBox     )( int, int );
-typedef void (* FGCBTabletMotion  )( int, int );
-typedef void (* FGCBTabletButton  )( int, int, int, int );
-typedef void (* FGCBDestroy       )( void );    /* Used for both window and menu destroy callbacks */
-
-typedef void (* FGCBMultiEntry   )( int, int );
-typedef void (* FGCBMultiButton  )( int, int, int, int, int );
-typedef void (* FGCBMultiMotion  )( int, int, int );
-typedef void (* FGCBMultiPassive )( int, int, int );
-
-typedef void (* FGCBInitContext)();
-typedef void (* FGCBAppStatus)(int);
-
-/* The global callbacks type definitions */
-typedef void (* FGCBIdle          )( void );
-typedef void (* FGCBTimer         )( int );
-typedef void (* FGCBMenuState     )( int );
-typedef void (* FGCBMenuStatus    )( int, int, int );
-
-/* The callback used when creating/using menus */
-typedef void (* FGCBMenu          )( int );
-
-/* The FreeGLUT error/warning handler type definition */
-typedef void (* FGError           ) ( const char *fmt, va_list ap);
-typedef void (* FGWarning         ) ( const char *fmt, va_list ap);
+#include <Gl\freeglut_types.h>
 
 
 /* A list structure */

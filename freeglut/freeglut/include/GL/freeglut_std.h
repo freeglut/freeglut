@@ -144,6 +144,9 @@
 #   include <GL/glu.h>
 #endif
 
+// freeglut types visible in this header
+#include "freeglut_types.h"
+
 /*
  * GLUT API macro definitions -- the special key codes:
  */
@@ -467,7 +470,7 @@ FGAPI void    FGAPIENTRY glutHideOverlay( void );
 /*
  * Menu stuff, see fg_menu.c
  */
-FGAPI int     FGAPIENTRY glutCreateMenu( void (* callback)( int menu ) );
+FGAPI int     FGAPIENTRY glutCreateMenu( FGCBMenu callback );
 FGAPI void    FGAPIENTRY glutDestroyMenu( int menu );
 FGAPI int     FGAPIENTRY glutGetMenu( void );
 FGAPI void    FGAPIENTRY glutSetMenu( int menu );
@@ -482,37 +485,37 @@ FGAPI void    FGAPIENTRY glutDetachMenu( int button );
 /*
  * Global callback functions, see fg_callbacks.c
  */
-FGAPI void    FGAPIENTRY glutTimerFunc( unsigned int time, void (* callback)( int ), int value );
-FGAPI void    FGAPIENTRY glutIdleFunc( void (* callback)( void ) );
+FGAPI void    FGAPIENTRY glutTimerFunc( unsigned int time, FGCBTimer callback, int value );
+FGAPI void    FGAPIENTRY glutIdleFunc( FGCBIdle callback );
 
 /*
  * Window-specific callback functions, see fg_callbacks.c
  */
-FGAPI void    FGAPIENTRY glutKeyboardFunc( void (* callback)( unsigned char, int, int ) );
-FGAPI void    FGAPIENTRY glutSpecialFunc( void (* callback)( int, int, int ) );
-FGAPI void    FGAPIENTRY glutReshapeFunc( void (* callback)( int, int ) );
-FGAPI void    FGAPIENTRY glutVisibilityFunc( void (* callback)( int ) );
-FGAPI void    FGAPIENTRY glutDisplayFunc( void (* callback)( void ) );
-FGAPI void    FGAPIENTRY glutMouseFunc( void (* callback)( int, int, int, int ) );
-FGAPI void    FGAPIENTRY glutMotionFunc( void (* callback)( int, int ) );
-FGAPI void    FGAPIENTRY glutPassiveMotionFunc( void (* callback)( int, int ) );
-FGAPI void    FGAPIENTRY glutEntryFunc( void (* callback)( int ) );
+FGAPI void    FGAPIENTRY glutKeyboardFunc( FGCBKeyboard callback );
+FGAPI void    FGAPIENTRY glutSpecialFunc( FGCBSpecial callback );
+FGAPI void    FGAPIENTRY glutReshapeFunc(FGCBReshape callback );
+FGAPI void    FGAPIENTRY glutVisibilityFunc( FGCBVisibility callback );
+FGAPI void    FGAPIENTRY glutDisplayFunc( FGCBDisplay callback );
+FGAPI void    FGAPIENTRY glutMouseFunc( FGCBMouse callback );
+FGAPI void    FGAPIENTRY glutMotionFunc( FGCBMotion callback );
+FGAPI void    FGAPIENTRY glutPassiveMotionFunc( FGCBPassive callback );
+FGAPI void    FGAPIENTRY glutEntryFunc( FGCBEntry callback );
 
-FGAPI void    FGAPIENTRY glutKeyboardUpFunc( void (* callback)( unsigned char, int, int ) );
-FGAPI void    FGAPIENTRY glutSpecialUpFunc( void (* callback)( int, int, int ) );
-FGAPI void    FGAPIENTRY glutJoystickFunc( void (* callback)( unsigned int, int, int, int ), int pollInterval );
-FGAPI void    FGAPIENTRY glutMenuStateFunc( void (* callback)( int ) );
-FGAPI void    FGAPIENTRY glutMenuStatusFunc( void (* callback)( int, int, int ) );
-FGAPI void    FGAPIENTRY glutOverlayDisplayFunc( void (* callback)( void ) );
-FGAPI void    FGAPIENTRY glutWindowStatusFunc( void (* callback)( int ) );
+FGAPI void    FGAPIENTRY glutKeyboardUpFunc( FGCBKeyboardUp callback );
+FGAPI void    FGAPIENTRY glutSpecialUpFunc( FGCBSpecialUp callback );
+FGAPI void    FGAPIENTRY glutJoystickFunc( FGCBJoystick callback, int pollInterval );
+FGAPI void    FGAPIENTRY glutMenuStateFunc( FGCBMenuState callback );
+FGAPI void    FGAPIENTRY glutMenuStatusFunc( FGCBMenuStatus callback );
+FGAPI void    FGAPIENTRY glutOverlayDisplayFunc( FGCBOverlayDisplay callback );
+FGAPI void    FGAPIENTRY glutWindowStatusFunc( FGCBWindowStatus callback );
 
-FGAPI void    FGAPIENTRY glutSpaceballMotionFunc( void (* callback)( int, int, int ) );
-FGAPI void    FGAPIENTRY glutSpaceballRotateFunc( void (* callback)( int, int, int ) );
-FGAPI void    FGAPIENTRY glutSpaceballButtonFunc( void (* callback)( int, int ) );
-FGAPI void    FGAPIENTRY glutButtonBoxFunc( void (* callback)( int, int ) );
-FGAPI void    FGAPIENTRY glutDialsFunc( void (* callback)( int, int ) );
-FGAPI void    FGAPIENTRY glutTabletMotionFunc( void (* callback)( int, int ) );
-FGAPI void    FGAPIENTRY glutTabletButtonFunc( void (* callback)( int, int, int, int ) );
+FGAPI void    FGAPIENTRY glutSpaceballMotionFunc( FGCBSpaceMotion callback );
+FGAPI void    FGAPIENTRY glutSpaceballRotateFunc( FGCBSpaceRotation callback );
+FGAPI void    FGAPIENTRY glutSpaceballButtonFunc( FGCBSpaceButton callback );
+FGAPI void    FGAPIENTRY glutButtonBoxFunc( FGCBButtonBox callback );
+FGAPI void    FGAPIENTRY glutDialsFunc( FGCBDials callback );
+FGAPI void    FGAPIENTRY glutTabletMotionFunc( FGCBTabletMotion callback );
+FGAPI void    FGAPIENTRY glutTabletButtonFunc( FGCBTabletButton callback );
 
 /*
  * State setting and retrieval functions, see fg_state.c

@@ -157,12 +157,12 @@ FGAPI void    FGAPIENTRY glutSetMenuFont( int menuID, void* font );
 /*
  * Window-specific callback functions, see fg_callbacks.c
  */
-FGAPI void    FGAPIENTRY glutMouseWheelFunc( void (* callback)( int, int, int, int ) );
-FGAPI void    FGAPIENTRY glutPositionFunc( void (* callback)( int, int ) );
-FGAPI void    FGAPIENTRY glutCloseFunc( void (* callback)( void ) );
-FGAPI void    FGAPIENTRY glutWMCloseFunc( void (* callback)( void ) );
+FGAPI void    FGAPIENTRY glutMouseWheelFunc( FGCBMouseWheel callback );
+FGAPI void    FGAPIENTRY glutPositionFunc( FGCBPosition callback );
+FGAPI void    FGAPIENTRY glutCloseFunc( FGCBClose callback );
+FGAPI void    FGAPIENTRY glutWMCloseFunc( FGCBWMClose callback );
 /* And also a destruction callback for menus */
-FGAPI void    FGAPIENTRY glutMenuDestroyFunc( void (* callback)( void ) );
+FGAPI void    FGAPIENTRY glutMenuDestroyFunc( FGCBDestroy callback );
 
 /*
  * State setting and retrieval functions, see fg_state.c
@@ -216,10 +216,10 @@ FGAPI GLUTproc FGAPIENTRY glutGetProcAddress( const char *procName );
 
 /* TODO: add device_id parameter,
    cf. http://sourceforge.net/mailarchive/forum.php?thread_name=20120518071314.GA28061%40perso.beuc.net&forum_name=freeglut-developer */
-FGAPI void FGAPIENTRY glutMultiEntryFunc( void (* callback)( int, int ) );
-FGAPI void FGAPIENTRY glutMultiButtonFunc( void (* callback)( int, int, int, int, int ) );
-FGAPI void FGAPIENTRY glutMultiMotionFunc( void (* callback)( int, int, int ) );
-FGAPI void FGAPIENTRY glutMultiPassiveFunc( void (* callback)( int, int, int ) );
+FGAPI void FGAPIENTRY glutMultiEntryFunc( FGCBMultiEntry callback );
+FGAPI void FGAPIENTRY glutMultiButtonFunc( FGCBMultiButton callback );
+FGAPI void FGAPIENTRY glutMultiMotionFunc( FGCBMultiMotion callback );
+FGAPI void FGAPIENTRY glutMultiPassiveFunc( FGCBMultiPassive callback );
 
 /*
  * Joystick functions, see fg_joystick.c
@@ -252,8 +252,8 @@ void    glutJoystickGetCenter( int ident, float *axes );
 FGAPI void    FGAPIENTRY glutInitContextVersion( int majorVersion, int minorVersion );
 FGAPI void    FGAPIENTRY glutInitContextFlags( int flags );
 FGAPI void    FGAPIENTRY glutInitContextProfile( int profile );
-FGAPI void    FGAPIENTRY glutInitErrorFunc( void (* callback)( const char *fmt, va_list ap ) );
-FGAPI void    FGAPIENTRY glutInitWarningFunc( void (* callback)( const char *fmt, va_list ap ) );
+FGAPI void    FGAPIENTRY glutInitErrorFunc( FGError callback );
+FGAPI void    FGAPIENTRY glutInitWarningFunc( FGWarning callback );
 
 /* OpenGL >= 2.0 support */
 FGAPI void    FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib);
@@ -261,8 +261,8 @@ FGAPI void    FGAPIENTRY glutSetVertexAttribNormal(GLint attrib);
 FGAPI void    FGAPIENTRY glutSetVertexAttribTexCoord2(GLint attrib);
 
 /* Mobile platforms lifecycle */
-FGAPI void    FGAPIENTRY glutInitContextFunc(void (* callback)());
-FGAPI void    FGAPIENTRY glutAppStatusFunc(void (* callback)(int));
+FGAPI void    FGAPIENTRY glutInitContextFunc( FGCBInitContext callback );
+FGAPI void    FGAPIENTRY glutAppStatusFunc( FGCBAppStatus callback );
 /* state flags that can be passed to callback set by glutAppStatusFunc */
 #define GLUT_APPSTATUS_PAUSE                0x0001
 #define GLUT_APPSTATUS_RESUME               0x0002

@@ -70,6 +70,7 @@ SET(FREEGLUT_HEADERS
     include/GL/freeglut.h
     include/GL/freeglut_ext.h
     include/GL/freeglut_std.h
+    include/GL/freeglut_types.h
     include/GL/glut.h
 )
 SET(FREEGLUT_SRCS
