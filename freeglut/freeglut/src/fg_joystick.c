@@ -68,8 +68,6 @@
 #        endif
 #    endif
 
-static int hatmap_x[9] = { 0, 0, 1, 1, 1, 0, -1, -1, -1 };
-static int hatmap_y[9] = { 0, 1, 1, 0, -1, -1, -1, 0, 1 };
 struct os_specific_s {
   char             fname [128 ];
   int              fd;
