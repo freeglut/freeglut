@@ -70,8 +70,12 @@ SET(FREEGLUT_HEADERS
     include/GL/freeglut.h
     include/GL/freeglut_ext.h
     include/GL/freeglut_std.h
-    include/GL/glut.h
 )
+IF(FREEGLUT_REPLACE_GLUT)
+    LIST(APPEND FREEGLUT_SRCS
+        include/GL/glut.h
+    )
+ENDIF()
 SET(FREEGLUT_SRCS
     ${FREEGLUT_HEADERS}
     src/fg_callbacks.c
