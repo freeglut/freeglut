@@ -27,7 +27,7 @@ widely available and highly portable.</p>
 required for creating windows, initializing OpenGL contexts, and handling input
 events, to allow for trully portable OpenGL programs.</p>
 
-<p>FreeGLUT is released under a license equivalent to the X-Consortium license.</p>
+<p>FreeGLUT is released under the X-Consortium license.</p>
 
 <div class="textheader">Why?</div>
 
