@@ -874,7 +874,7 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         /* Update visibility state of the window */
         if (wParam==SIZE_MINIMIZED)
             fghPlatformOnWindowStatusNotify(window,GL_FALSE,GL_FALSE);
-        else if (wParam==SIZE_RESTORED && !window->State.Visible)
+        else if ((wParam==SIZE_RESTORED || wParam == SIZE_MAXIMIZED) && !window->State.Visible)
             fghPlatformOnWindowStatusNotify(window,GL_TRUE,GL_FALSE);
 
         /* Check window visible, we don't want do anything when we get a WM_SIZE because the user or glutIconifyWindow minimized the window */
