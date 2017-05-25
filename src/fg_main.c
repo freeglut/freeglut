@@ -154,7 +154,7 @@ static void fghcbProcessWork( SFG_Window *window,
                               SFG_Enumerator *enumerator )
 {
     if( window->State.WorkMask )
-		fgProcessWork ( window );
+        fgProcessWork ( window );
 
     fgEnumSubWindows( window, fghcbProcessWork, enumerator );
 }
@@ -376,10 +376,10 @@ static void fghSleepForEvents( void )
     msec = fghNextTimer( );
     /* XXX Should use GLUT timers for joysticks... */
     /* XXX Dumb; forces granularity to .01sec */
-    if( fgState.NumActiveJoysticks>0 && ( msec > 10 ) )     
+    if( fgState.NumActiveJoysticks>0 && ( msec > 10 ) )
         msec = 10;
 
-	fgPlatformSleepForEvents ( msec );
+    fgPlatformSleepForEvents ( msec );
 }
 
 
@@ -479,14 +479,16 @@ void FGAPIENTRY glutMainLoop( void )
     if (!fgStructure.Windows.First)
         fgError(" ERROR:  glutMainLoop called with no windows created.");
 
-	fgPlatformMainLoopPreliminaryWork ();
+    fgPlatformMainLoopPreliminaryWork ();
 
     fgState.ExecState = GLUT_EXEC_STATE_RUNNING ;
-    while( fgState.ExecState == GLUT_EXEC_STATE_RUNNING )
+    for(;;)
     {
         SFG_Window *window;
 
         glutMainLoopEvent( );
+        if( fgState.ExecState != GLUT_EXEC_STATE_RUNNING )
+            break;
         /*
          * Step through the list of windows, seeing if there are any
          * that are not menus
