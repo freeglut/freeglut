@@ -324,7 +324,7 @@ static void fghJoystickRawRead( SFG_Joystick* joy, int* buttons, float* axes )
     if( joy->error )
         return;
 
-	fgPlatformJoystickRawRead ( joy, buttons, axes );
+    fgPlatformJoystickRawRead ( joy, buttons, axes );
 }
 
 /*
