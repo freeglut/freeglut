@@ -535,6 +535,7 @@ IF(UNIX)
 ENDIF()
 ADD_DEMO(subwin          progs/demos/subwin/subwin.c)
 ADD_DEMO(timer           progs/demos/timer/timer.c)
+ADD_DEMO(timer_callback  progs/demos/timer_callback/timer.c)
 
 
 
