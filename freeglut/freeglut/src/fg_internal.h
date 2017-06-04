@@ -291,7 +291,7 @@ typedef void (* FGCBAppStatus       )( int );
 typedef void (* FGCBAppStatusUC     )( int, FGCBUserData );
 
 /* The global callbacks type definitions */
-typedef void (* FGCBIdle            )( void ); \
+typedef void (* FGCBIdle            )( void );
 typedef void (* FGCBIdleUC          )( FGCBUserData );
 typedef void (* FGCBTimer           )( int );
 typedef void (* FGCBTimerUC         )( int, FGCBUserData );
