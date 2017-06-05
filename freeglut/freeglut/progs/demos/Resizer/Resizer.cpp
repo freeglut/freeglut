@@ -201,18 +201,30 @@ void SampleKeyboard( unsigned char cChar, int nMouseX, int nMouseY )
         if (nChildWindow!=-1 && cChar=='p') /* Capital P always changes pointer for the main window*/
         {
             glutSetWindow(nChildWindow);
-            if (glutGet(GLUT_WINDOW_CURSOR)==GLUT_CURSOR_TOP_SIDE)
-                glutSetCursor(GLUT_CURSOR_RIGHT_ARROW);
+			if (glutGet(GLUT_WINDOW_CURSOR)==GLUT_CURSOR_TOP_SIDE)
+			{
+				glutSetCursor(GLUT_CURSOR_RIGHT_ARROW);
+				printf("reverting child window cursor\n");
+			}
             else
-                glutSetCursor(GLUT_CURSOR_TOP_SIDE);
+			{
+				glutSetCursor(GLUT_CURSOR_TOP_SIDE);
+				printf("changing child window cursor\n");
+			}
         }
         else
         {
             glutSetWindow(nWindow);
             if (glutGet(GLUT_WINDOW_CURSOR)==GLUT_CURSOR_CYCLE)
-                glutSetCursor(GLUT_CURSOR_RIGHT_ARROW);
+			{
+				glutSetCursor(GLUT_CURSOR_RIGHT_ARROW);
+				printf("reverting main window cursor\n");
+			}
             else
-                glutSetCursor(GLUT_CURSOR_CYCLE);
+			{
+				glutSetCursor(GLUT_CURSOR_CYCLE);
+				printf("changing main window cursor\n");
+			}
         }
         break;
 
