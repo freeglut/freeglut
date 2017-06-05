@@ -109,8 +109,8 @@ void onMotion(int x, int y) {
 /* Using FG2.8 (reversed) prototype for now */
 /* void onMultiButton(int cursor_id, int button, int state, int x, int y) { */
 void onMultiButton(int cursor_id, int x, int y, int button, int state) {
-    if (cursor_id > NUM_CURSORS) {
-        fprintf(stderr, "cursor_id (%d) > NUM_CURSORS (%d)\n", cursor_id, NUM_CURSORS);
+    if (cursor_id >= NUM_CURSORS) {
+        fprintf(stderr, "cursor_id (%d) >= NUM_CURSORS (%d), out of slots\n", cursor_id, NUM_CURSORS);
         return;
     }
     if (button == 0) {
@@ -122,8 +122,8 @@ void onMultiButton(int cursor_id, int x, int y, int button, int state) {
 }
 
 void onMultiMotion(int cursor_id, int x, int y) {
-    if (cursor_id > NUM_CURSORS) {
-        fprintf(stderr, "cursor_id (%d) > NUM_CURSORS (%d)\n", cursor_id, NUM_CURSORS);
+    if (cursor_id >= NUM_CURSORS) {
+        fprintf(stderr, "cursor_id (%d) >= NUM_CURSORS (%d), out of slots\n", cursor_id, NUM_CURSORS);
         return;
     }
     cursors[0][cursor_id].x = (float)x;
