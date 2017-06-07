@@ -17,7 +17,7 @@ generateHeader($_SERVER['PHP_SELF']);
 <a name="intro"></a>
 <h1>Introduction</h1>
 
-<p>FreeGLUT can initialize an OpenGL ES (GLES) context.  It works under platforms that supports EGL:</p>
+<p>freeglut can initialize an OpenGL ES (GLES) context.  It works under platforms that supports EGL:</p>
 <ul>
   <li>Android (see <a href="android.php">dedicated page</a>)</li>
   <li>BlackBerry 10/BlackBerry PlayBook</li>
@@ -30,7 +30,7 @@ generateHeader($_SERVER['PHP_SELF']);
   </li>
 </ul>
 
-<p>FreeGLUT ES is provided as a separate library, because OpenGL ES
+<p>freeglut ES is provided as a separate library, because OpenGL ES
 has a distinct library from plain OpenGL (<tt>-lGLESv1_CM
 -lGLESv2</tt> instead of <tt>-lGL</tt>, and different headers too).
 We could consider dynamically loading the OpenGL symbols we need,
@@ -44,7 +44,7 @@ window.</p>
 <a name="compiling"></a>
 <h1>Compiling</h1>
 
-<p>The following explains how to use FreeGLUT ES for Mesa EGL.<br />
+<p>The following explains how to use freeglut ES for Mesa EGL.<br />
 See also the <a href="android.php">Android page</a>.</p>
 
 <p>First, check <tt>README.cmake</tt> to install the dependencies for your system.</p>
@@ -95,7 +95,7 @@ PKG_CONFIG_PATH=/tmp/freeglut-native-gles/share/pkgconfig/ cmake ..
     <a href="https://gitorious.org/wikibooks-opengl/modern-tutorials/source/HEAD:tut04_transform-gles2"><tt>tut04_transform-gles2</tt>
     example</a>: it uses a basic Makefile targeting <tt>freeglut-gles</tt></li>
   <li><tt>progs/test-shapes-gles1/</tt> in the source distribution:
-    it is a standalone CMake app that uses FreeGLUT GLES (v1).</li>
+    it is a standalone CMake app that uses freeglut GLES (v1).</li>
 </ul>
 
 <?php generateFooter(); ?>

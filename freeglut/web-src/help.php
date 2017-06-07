@@ -13,11 +13,11 @@ This is OpenGL at its finest.
 </div>
 
 <div class="textheader">This is better than GLUT.</div>
-<p>FreeGLUT started out as a GLUT clone, but now it's something much
+<p>freeglut started out as a GLUT clone, but now it's something much
 better than that. It's a GLUT replacement. Here are the features you
 have wanted -- and if you have ideas for more, share them (see below),
 or fork our <a href="https://github.com/dcnieho/FreeGLUT">github
-repository</a> and implement them! FreeGLUT is under continuous
+repository</a> and implement them! freeglut is under continuous
 development. Currently, work on 3.0 is in full swing.  See <a
 href=progress.php>here</a> for the list of work that is still to be
 done.</p> 
@@ -51,10 +51,10 @@ But simply, become involved!
 The project is not just software, it's the people that contribute, too.
 </p>
 
-<div class="textheader">FreeGLUT 3.0</div>
+<div class="textheader">freeglut 3.0</div>
 <p>
 <a href=progress.php>Click here</a> for an overview of the major work,
-its status and planned milestones for FreeGLUT 3.0 and beyond. Help on
+its status and planned milestones for freeglut 3.0 and beyond. Help on
 any of these plans, as well as suggestions and/or patches for anything
 else are very welcome!
 </p>

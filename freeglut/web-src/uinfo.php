@@ -1,5 +1,5 @@
 <?php 
-# Freeglut Web Page
+# freeglut Web Page
 # This block ensures that template.php is always hit, no matter what subdirectory 
 $slashes=substr_count ( $_SERVER['PHP_SELF'], "/");
 $require_target="";

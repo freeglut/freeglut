@@ -10,7 +10,7 @@ generateHeader($_SERVER['PHP_SELF']);
 
 <p>
 
-  FreeGLUT 3.0 introduces support for the Android platform.<br />
+  freeglut 3.0 introduces support for the Android platform.<br />
 
   This platform is different than traditional desktop platforms, requiring cross-compilation, interfacing with a touchscreen, and ability for your application to be paused and resumed at any time.<br />
 
@@ -50,7 +50,7 @@ generateHeader($_SERVER['PHP_SELF']);
 
     </li>
 
-    <li>Compile FreeGLUT and install it in your Android cross-compiler
+    <li>Compile freeglut and install it in your Android cross-compiler
         path:
 
       <pre>
@@ -111,7 +111,7 @@ generateHeader($_SERVER['PHP_SELF']);
       make install
     </pre>
 
-    <p>Check <code>progs/test-shapes-gles1/</code> in the FreeGLUT
+    <p>Check <code>progs/test-shapes-gles1/</code> in the freeglut
       source distribution for a complete, stand-alone example.</p>
 
 <h2>Compile your own project using the NDK build-system</h2>
@@ -120,7 +120,7 @@ generateHeader($_SERVER['PHP_SELF']);
 
     <li>
 
-      Create a module hierarchy pointing to FreeGLUT, with our Android.mk:
+      Create a module hierarchy pointing to freeglut, with our Android.mk:
 
       <pre>
         mkdir freeglut-gles/
@@ -218,7 +218,7 @@ New functions will be necessary to :
     ready to accept <code>onCreate</code> event to become active
     again.<br />
 
-    By default, FreeGLUT <code>exit()</code>s when the last window is
+    By default, freeglut <code>exit()</code>s when the last window is
     closed (without returning to your <code>main</code>).  But this
     behavior can be changed
     with <code>glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, ...)</code>,
@@ -240,7 +240,7 @@ New functions will be necessary to :
     Real buttons such as the Back button appear to work correctly
     (series of down events with proper getRepeatCount value).<br />
 
-    To work around this, FreeGLUT provides its own minimal virtual
+    To work around this, freeglut provides its own minimal virtual
     keypad.  It may be replaced by a virtual (touchscreen) joystick.
   </li>
 
