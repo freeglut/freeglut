@@ -58,7 +58,7 @@ void onDisplay(void) {
     glVertexPointer(2, GL_FLOAT, 0, square);
     for (d = 0; d < NUM_DEVICES; d++) {
         int c;
-        for (c = 0; d < NUM_DEVICES; d++) {
+        for (c = 0; c < NUM_CURSORS; c++) {
             Cursor C = &cursors[d][c];
             if (C->on) {
                 glMatrixMode(GL_MODELVIEW);
@@ -110,7 +110,7 @@ void onMotion(int x, int y) {
 /* void onMultiButton(int cursor_id, int button, int state, int x, int y) { */
 void onMultiButton(int cursor_id, int x, int y, int button, int state) {
     if (cursor_id > NUM_CURSORS) {
-        fprintf(stderr, "cursor_id(%d) > NUM_CURSORS(%d)\n", cursor_id, NUM_CURSORS);
+        fprintf(stderr, "cursor_id (%d) > NUM_CURSORS (%d)\n", cursor_id, NUM_CURSORS);
         return;
     }
     if (button == 0) {
@@ -123,7 +123,7 @@ void onMultiButton(int cursor_id, int x, int y, int button, int state) {
 
 void onMultiMotion(int cursor_id, int x, int y) {
     if (cursor_id > NUM_CURSORS) {
-        fprintf(stderr, "cursor_id(%d) > NUM_CURSORS(%d)\n", cursor_id, NUM_CURSORS);
+        fprintf(stderr, "cursor_id (%d) > NUM_CURSORS (%d)\n", cursor_id, NUM_CURSORS);
         return;
     }
     cursors[0][cursor_id].x = (float)x;
