@@ -8,7 +8,7 @@ setPageTitle("A Look At Progress");
 generateHeader($_SERVER['PHP_SELF']);
 ?>
 
-<div class="textheader">FreeGLUT 3.0 an onwards</div>
+<div class="textheader">freeglut 3.0 an onwards</div>
 <p>
 Major work, its status and planned milestone. <a
 href="help.php">Help</a> on any of these plans is very welcome! Fork the
@@ -37,7 +37,7 @@ invocation.</td><td>3.2</td></tr>
 <tr><td>Windows 8 touch support</td><td>Windows 8 replaced how touch
 input works, so we need to implement support for that.</td><td>3.2</td></tr>
 
-<tr><td>10bit display formats</td><td>GLUT supports that but FreeGLUT
+<tr><td>10bit display formats</td><td>GLUT supports that but freeglut
 currently does not. Unfinished effort to implement <a
 href="https://github.com/dcnieho/FreeGLUT/tree/feature_30bit_framebuffer">here</a>.</td><td>3.0
 or later.</td></tr>
@@ -54,7 +54,7 @@ for 3.2</td></tr>
 
 <tr><td>option to not deinitialize when mainloop terminates</td><td>As
 is often requested, in some usage cases, it would be advantageous if
-FreeGLUT did not automatically deinitialize when its last window is
+freeglut did not automatically deinitialize when its last window is
 closed. This has been implemented, but is awaiting testing on platforms
 other than windows. Discussed <a
 href="http://sourceforge.net/p/freeglut/mailman/message/32926301/">here</a>.</td><td>As
@@ -65,7 +65,7 @@ leave this feature until after 3.0.</td></tr>
 href="http://sourceforge.net/p/freeglut/mailman/message/30859054/">here</a>,
 it is unclear what should be done. See also associated <a
 href="https://github.com/dcnieho/FreeGLUT/tree/feature_DPI_awareness">github
-branch</a>, though in the end maybe no code has to be added to FreeGLUT
+branch</a>, though in the end maybe no code has to be added to freeglut
 for this at all, its the host program's responsibility to decide on DPI
 awareness for his work.</td><td>Figure this out for 3.2</td></tr>
 
@@ -102,10 +102,10 @@ together.</td><td>Undecided</td></tr>
 carefully on the mailing list first to minimize impact on the
 API.</td><td>Undecided</td></tr>
 
-<tr><td>Complete glutInitDisplayString support</td><td>FreeGLUT now only
+<tr><td>Complete glutInitDisplayString support</td><td>freeglut now only
 partially supports glutInitDisplayString, any spec (comparator and
 value) after each token are ignored. This is a significant way in which
-FreeGLUT is not compatible with GLUT. Could be a nice project for
+freeglut is not compatible with GLUT. Could be a nice project for
 someone who want to become familiar with the intricacies of requesting
 specific display formats on at least one of the various window servers
 (Windows, X11 and Android/BlackBerry 10/EGL at the

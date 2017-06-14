@@ -10,24 +10,24 @@ generateHeader($_SERVER['PHP_SELF']);
 <div class="img-right">
 	<img src="images/chessdemo.png" alt="chess demo"/><br/>
 	GLUT's "Chess" demo<br/>
-	running with FreeGLUT.
+	running with freeglut.
 </div>
 
 <p></p>
 
 <div class="textheader">What?</div>
 
-<p>FreeGLUT is a free-software/open-source alternative to the OpenGL Utility
+<p>freeglut is a free-software/open-source alternative to the OpenGL Utility
 Toolkit (GLUT) library. GLUT was originally written by Mark Kilgard to support
 the sample programs in the second edition OpenGL 'RedBook'. Since then, GLUT has
 been used in a wide variety of practical applications because it is simple,
 widely available and highly portable.</p>
 
-<p>GLUT (and hence FreeGLUT) takes care of all the system-specific chores
+<p>GLUT (and hence freeglut) takes care of all the system-specific chores
 required for creating windows, initializing OpenGL contexts, and handling input
 events, to allow for trully portable OpenGL programs.</p>
 
-<p>FreeGLUT is released under the X-Consortium license.</p>
+<p>freeglut is released under the X-Consortium license.</p>
 
 <div class="textheader">Why?</div>
 
@@ -39,20 +39,20 @@ with some software distributions (e.g., XFree86).</p>
 
 <div class="textheader">Who?</div>
 
-<p>FreeGLUT was originally written by Pawel W. Olszta with contributions from
+<p>freeglut was originally written by Pawel W. Olszta with contributions from
 Andreas Umbach and Steve Baker.</p>
 
 <p>John F. Fay, John Tsiombikas, and Diederick C. Niehorster are the current
-maintainers of the FreeGLUT project.</p>
+maintainers of the freeglut project.</p>
 
 <div class="textheader">When?</div>
 
-<p>Pawel started FreeGLUT development on December 1st, 1999. The project is now
+<p>Pawel started freeglut development on December 1st, 1999. The project is now
 virtually a 100% replacement for the original GLUT with only a few departures
 (such as the abandonment of SGI-specific features such as the Dials&amp;Buttons
 box and Dynamic Video Resolution) and a shrinking set of bugs.</p>
 
-<p>FreeGLUT adds some additional features over the basic GLUT functionality,
+<p>freeglut adds some additional features over the basic GLUT functionality,
 such as a larger set of predefined objects to use, the ability to run single
 iterations of the event loop, or exit from it gracefully, mousewheel input
 callbacks, optional OpenGL core/compatibility profile context creation,
@@ -79,7 +79,7 @@ href="mailto:freeglut-developer@lists.sourceforge.net">freeglut-developer</a>
 mailing list.</p>
 
 <div class="textheader"><a name="download"></a>Downloads...</div>
-<p>Below are file links for the FreeGLUT project. README files are included. Have fun!</p>
+<p>Below are file links for the freeglut project. README files are included. Have fun!</p>
 
 <div class="indent">
 	<div class="textheader">Testing Releases</div>
@@ -87,7 +87,7 @@ mailing list.</p>
     href="https://sourceforge.net/p/freeglut/code/HEAD/tarball?path=/trunk/freeglut/freeglut">tarball
     of current trunk</a>, or <a href="help.php#svn">grabbing a copy from
     svn</a>, and give us feedback on how it worked for you. All this
-    will eventually become a FreeGLUT 3.1 release.</p>
+    will eventually become a freeglut 3.1 release.</p>
 	<p>There are no presently active testing releases.</p>
 </div>
 
@@ -95,18 +95,18 @@ mailing list.</p>
 <div class="indent">
 	<div class="textheader">Stable Releases</div>
 	<p>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.0.0.tar.gz?download">Freeglut 3.0.0</a> [<i>Released: 7 March 2015</i>]<br/>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.1.tar.gz?download">Freeglut 2.8.1</a> [<i>Released: 5 April 2013</i>]<br/>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.0.tar.gz?download">Freeglut 2.8.0</a> [<i>Released: 2 January 2012</i>]<br/>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.6.0.tar.gz?download">Freeglut 2.6.0</a> [<i>Released: 27 November 2009</i>]<br/>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">Freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>]<br/>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">Freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
-	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.0.1.tar.gz?download">Freeglut 2.0.1</a> [<i>Released: 23 October 2003</i>]
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.0.0.tar.gz?download">freeglut 3.0.0</a> [<i>Released: 7 March 2015</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.1.tar.gz?download">freeglut 2.8.1</a> [<i>Released: 5 April 2013</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.0.tar.gz?download">freeglut 2.8.0</a> [<i>Released: 2 January 2012</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.6.0.tar.gz?download">freeglut 2.6.0</a> [<i>Released: 27 November 2009</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.4.0.tar.gz?download">freeglut 2.4.0</a> [<i>Released: 9 June 2005</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.2.0.tar.gz?download">freeglut 2.2.0</a> [<i>Released: 12 December 2003</i>]<br/>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.0.1.tar.gz?download">freeglut 2.0.1</a> [<i>Released: 23 October 2003</i>]
 	</p>
 
 	<div class="textheader">Prepackaged Releases</div>
 
-	<p>The FreeGLUT project does not support packaged versions of FreeGLUT
+	<p>The freeglut project does not support packaged versions of freeglut
 excepting, of course, the tarballs distributed here. However, various members of
 the community have put time and effort into providing source or binary rollups,
 and we thank them for their efforts. Here's a list which is likely
@@ -124,7 +124,7 @@ incomplete:</p>
 		<a href="http://tisch.sf.net/freeglut-2.6.0-mpx-latest.patch">Florian Echtler's MPX Patch</a>
 	</p>
 
-	<p>If you have problems with these packages, please contact their maintainers - we of the FreeGLUT team probably can't help.</p>
+	<p>If you have problems with these packages, please contact their maintainers - we of the freeglut team probably can't help.</p>
 	
 	<div class="textheader">Development Releases</div>
 	<p>
@@ -135,7 +135,7 @@ incomplete:</p>
 
 <div class="textheader">Questions?</div>
 <p>Don't be afraid to ask for help. We don't bite. Much.</p>
-<p>Send FreeGLUT related questions to the appropriate FreeGLUT mailing list:</p>
+<p>Send freeglut related questions to the appropriate freeglut mailing list:</p>
 
 <ul>
 	<li><a href="mailto:freeglut-developer@lists.sourceforge.net">freeglut-developer</a> [<a href="http://lists.sourceforge.net/lists/listinfo/freeglut-developer">Subscribe</a>],</li>
