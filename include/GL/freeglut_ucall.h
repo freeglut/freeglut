@@ -82,6 +82,27 @@ FGAPI void FGAPIENTRY glutInitWarningFuncUcall( void (* callback)( const char *f
 FGAPI void FGAPIENTRY glutInitContextFuncUcall( void (* callback)( void* ), void* user_data );
 FGAPI void FGAPIENTRY glutAppStatusFuncUcall( void (* callback)( int, void* ), void* user_data );
 
+/* 
+ * Continued "hack" from GLUT applied to Ucall functions.
+ * For more info, see bottom of freeglut_std.h
+ */
+
+/* to get the prototype for exit() */
+#include <stdlib.h>
+
+#if defined(_WIN32) && !defined(GLUT_DISABLE_ATEXIT_HACK) && !defined(__WATCOMC__)
+FGAPI int FGAPIENTRY __glutCreateMenuUcallWithExit(void(*func)(int, void*), void(__cdecl *exitfunc)(int), void* user_data);
+#ifndef FREEGLUT_BUILDING_LIB
+#if defined(__GNUC__)
+#define FGUNUSED __attribute__((unused))
+#else
+#define FGUNUSED
+#endif
+static int FGAPIENTRY FGUNUSED glutCreateMenuUcall_ATEXIT_HACK(void(*func)(int, void*), void* user_data) { return __glutCreateMenuUcallWithExit(func, exit, user_data); }
+#define glutCreateMenuUcall glutCreateMenuUcall_ATEXIT_HACK
+#endif
+#endif
+
 #ifdef __cplusplus
     }
 #endif
