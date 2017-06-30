@@ -35,18 +35,31 @@
  * Global callbacks.
  */
 /* Sets the global idle callback */
+void FGAPIENTRY glutIdleFuncUcall( FGCBIdleUC callback, FGCBUserData userData )
+{
+    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutIdleFuncUcall" );
+    fgState.IdleCallback = callback;
+    fgState.IdleCallbackData = userData;
+}
+
+void glutIdleFuncCallback( void* userData )
+{
+    FGCBIdle callback = (FGCBIdle)userData;
+    callback();
+}
+
 void FGAPIENTRY glutIdleFunc( FGCBIdle callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutIdleFunc" );
-    fgState.IdleCallback = callback;
+    glutIdleFuncUcall( glutIdleFuncCallback, (FGCBUserData)callback );
 }
 
 /* Creates a timer and sets its callback */
-void FGAPIENTRY glutTimerFunc( unsigned int timeOut, FGCBTimer callback, int timerID )
+void FGAPIENTRY glutTimerFuncUcall( unsigned int timeOut, FGCBTimerUC callback, int timerID, FGCBUserData userData )
 {
     SFG_Timer *timer, *node;
 
-    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutTimerFunc" );
+    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutTimerFuncUcall" );
 
     if( (timer = fgState.FreeTimers.Last) )
     {
@@ -59,9 +72,10 @@ void FGAPIENTRY glutTimerFunc( unsigned int timeOut, FGCBTimer callback, int tim
                      "Memory allocation failure in glutTimerFunc()" );
     }
 
-    timer->Callback  = callback;
-    timer->ID        = timerID;
-    timer->TriggerTime = fgElapsedTime() + timeOut;
+    timer->Callback     = callback;
+    timer->CallbackData = userData;
+    timer->ID           = timerID;
+    timer->TriggerTime  = fgElapsedTime() + timeOut;
 
     /* Insert such that timers are sorted by end-time */
     for( node = fgState.Timers.First; node; node = node->Node.Next )
@@ -71,6 +85,18 @@ void FGAPIENTRY glutTimerFunc( unsigned int timeOut, FGCBTimer callback, int tim
     }
 
     fgListInsert( &fgState.Timers, &node->Node, &timer->Node );
+}
+
+void glutTimerFuncCallback( int ID, FGCBUserData userData )
+{
+    FGCBTimer callback = (FGCBTimer)userData;
+    callback( ID );
+}
+
+void FGAPIENTRY glutTimerFunc( unsigned int timeOut, FGCBTimer callback, int timerID )
+{
+    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutTimerFunc" );
+    glutTimerFuncUcall( timeOut, glutTimerFuncCallback, timerID, (FGCBUserData)callback );
 }
 
 /* Deprecated version of glutMenuStatusFunc callback setting method */

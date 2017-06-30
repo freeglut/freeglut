@@ -116,7 +116,7 @@ SFG_Window* fgCreateWindow( SFG_Window* parent, const char* title,
 /*
  * This private function creates a menu and adds it to the menus list
  */
-SFG_Menu* fgCreateMenu( FGCBMenu menuCallback )
+SFG_Menu* fgCreateMenu( FGCBMenuUC menuCallback, FGCBUserData userData )
 {
     SFG_Window *current_window = fgStructure.CurrentWindow;
 
@@ -134,10 +134,11 @@ SFG_Menu* fgCreateMenu( FGCBMenu menuCallback )
     fgSetWindow( current_window );
 
     /* Initialize the object properties: */
-    menu->ID       = ++fgStructure.MenuID;
-    menu->Callback = menuCallback;
-    menu->ActiveEntry = NULL;
-    menu->Font     = fgState.MenuFont;
+    menu->ID           = ++fgStructure.MenuID;
+    menu->Callback     = menuCallback;
+    menu->CallbackData = userData;
+    menu->ActiveEntry  = NULL;
+    menu->Font         = fgState.MenuFont;
 
     fgListInit( &menu->Entries );
     fgListAppend( &fgStructure.Menus, &menu->Node );
