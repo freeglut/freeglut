@@ -890,8 +890,10 @@ void fgPlatformProcessSingleEvent ( void )
         case KeyRelease:
         case KeyPress:
         {
-            FGCBKeyboard keyboard_cb;
-            FGCBSpecial special_cb;
+            FGCBKeyboardUC keyboard_cb;
+            FGCBSpecialUC special_cb;
+            FGCBUserData keyboard_ud;
+            FGCBUserData special_ud;
 
             GETWINDOW( xkey );
             GETMOUSE( xkey );
@@ -932,13 +934,17 @@ void fgPlatformProcessSingleEvent ( void )
 
             if( event.type == KeyPress )
             {
-                keyboard_cb = (FGCBKeyboard)( FETCH_WCB( *window, Keyboard ));
-                special_cb  = (FGCBSpecial) ( FETCH_WCB( *window, Special  ));
+                keyboard_cb = (FGCBKeyboardUC)( FETCH_WCB( *window, Keyboard ));
+                special_cb  = (FGCBSpecialUC) ( FETCH_WCB( *window, Special  ));
+                keyboard_ud = FETCH_USER_DATA_WCB( *window, Keyboard );
+                special_ud  = FETCH_USER_DATA_WCB( *window, Special  );
             }
             else
             {
-                keyboard_cb = (FGCBKeyboard)( FETCH_WCB( *window, KeyboardUp ));
-                special_cb  = (FGCBSpecial) ( FETCH_WCB( *window, SpecialUp  ));
+                keyboard_cb = (FGCBKeyboardUC)( FETCH_WCB( *window, KeyboardUp ));
+                special_cb  = (FGCBSpecialUC) ( FETCH_WCB( *window, SpecialUp  ));
+                keyboard_ud = FETCH_USER_DATA_WCB( *window, KeyboardUp );
+                special_ud  = FETCH_USER_DATA_WCB( *window, SpecialUp  );
             }
 
             /* Is there a keyboard/special callback hooked for this window? */
@@ -963,7 +969,8 @@ void fgPlatformProcessSingleEvent ( void )
                         fgSetWindow( window );
                         fgState.Modifiers = fgPlatformGetModifiers( event.xkey.state );
                         keyboard_cb( asciiCode[ 0 ],
-                                     event.xkey.x, event.xkey.y
+                                     event.xkey.x, event.xkey.y,
+                                     keyboard_ud
                         );
                         fgState.Modifiers = INVALID_MODIFIERS;
                     }
@@ -1031,7 +1038,7 @@ void fgPlatformProcessSingleEvent ( void )
                     {
                         fgSetWindow( window );
                         fgState.Modifiers = fgPlatformGetModifiers( event.xkey.state );
-                        special_cb( special, event.xkey.x, event.xkey.y );
+                        special_cb( special, event.xkey.x, event.xkey.y, special_ud );
                         fgState.Modifiers = INVALID_MODIFIERS;
                     }
                 }
