@@ -274,6 +274,9 @@ FGAPI void    FGAPIENTRY glutAppStatusFunc(void (* callback)(int));
 #define  GLUT_BORDERLESS                    0x0800
 #define  GLUT_SRGB                          0x1000
 
+/* User-argument callbacks and implementation */
+#include "freeglut_ucall.h"
+
 #ifdef __cplusplus
     }
 #endif

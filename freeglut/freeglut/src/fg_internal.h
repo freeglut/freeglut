@@ -216,6 +216,8 @@
 /* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
 
 /* Freeglut callbacks type definitions */
+typedef void* FGCBUserData;
+
 typedef void (* FGCBDisplay       )( void );
 typedef void (* FGCBReshape       )( int, int );
 typedef void (* FGCBPosition      )( int, int );
@@ -251,12 +253,15 @@ typedef void (* FGCBAppStatus)(int);
 
 /* The global callbacks type definitions */
 typedef void (* FGCBIdle          )( void );
+typedef void (* FGCBIdleUC        )( FGCBUserData );
 typedef void (* FGCBTimer         )( int );
+typedef void (* FGCBTimerUC       )( int, FGCBUserData );
 typedef void (* FGCBMenuState     )( int );
 typedef void (* FGCBMenuStatus    )( int, int, int );
 
 /* The callback used when creating/using menus */
 typedef void (* FGCBMenu          )( int );
+typedef void (* FGCBMenuUC        )( int, FGCBUserData );
 
 /* The FreeGLUT error/warning handler type definition */
 typedef void (* FGError           ) ( const char *fmt, va_list ap);
@@ -327,7 +332,8 @@ struct tagSFG_State
     SFG_List         Timers;               /* The freeglut timer hooks       */
     SFG_List         FreeTimers;           /* The unused timer hooks         */
 
-    FGCBIdle         IdleCallback;         /* The global idle callback       */
+    FGCBIdleUC       IdleCallback;         /* The global idle callback       */
+    FGCBUserData     IdleCallbackData;     /* The global idle callback data  */
 
     int              ActiveMenus;          /* Num. of currently active menus */
     FGCBMenuState    MenuStateCallback;    /* Menu callbacks are global      */
@@ -384,7 +390,8 @@ struct tagSFG_Timer
 {
     SFG_Node        Node;
     int             ID;                 /* The timer ID integer              */
-    FGCBTimer       Callback;           /* The timer callback                */
+    FGCBTimerUC     Callback;           /* The timer callback                */
+    FGCBUserData    CallbackData;       /* The timer callback user data      */
     fg_time_t       TriggerTime;        /* The timer trigger time            */
 };
 
@@ -662,7 +669,8 @@ struct tagSFG_Menu
     void               *UserData;     /* User data passed back at callback   */
     int                 ID;           /* The global menu ID                  */
     SFG_List            Entries;      /* The menu entries list               */
-    FGCBMenu            Callback;     /* The menu callback                   */
+    FGCBMenuUC          Callback;     /* The menu callback                   */
+    FGCBUserData        CallbackData; /* The menu callback user data         */
     FGCBDestroy         Destroy;      /* Destruction callback                */
     GLboolean           IsActive;     /* Is the menu selected?               */
     void*               Font;         /* Font to be used for displaying this menu */
@@ -970,7 +978,7 @@ void        fgCloseWindows ();
 void        fgDestroyWindow( SFG_Window* window );
 
 /* Menu creation and destruction. Defined in fg_structure.c */
-SFG_Menu*   fgCreateMenu( FGCBMenu menuCallback );
+SFG_Menu*   fgCreateMenu( FGCBMenuUC menuCallback, FGCBUserData userData );
 void        fgDestroyMenu( SFG_Menu* menu );
 
 /* Joystick device management functions, defined in fg_joystick.c */
