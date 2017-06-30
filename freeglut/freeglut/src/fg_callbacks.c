@@ -42,7 +42,7 @@ void FGAPIENTRY glutIdleFuncUcall( FGCBIdleUC callback, FGCBUserData userData )
     fgState.IdleCallbackData = userData;
 }
 
-static void glutIdleFuncCallback( FGCBUserData userData )
+static void fghIdleFuncCallback( FGCBUserData userData )
 {
     FGCBIdle callback = (FGCBIdle)userData;
     callback();
@@ -52,7 +52,7 @@ void FGAPIENTRY glutIdleFunc( FGCBIdle callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutIdleFunc" );
     if( callback )
-        glutIdleFuncUcall( glutIdleFuncCallback, (FGCBUserData)callback );
+        glutIdleFuncUcall( fghIdleFuncCallback, (FGCBUserData)callback );
     else
         glutIdleFuncUcall( NULL, NULL );
 }
@@ -90,7 +90,7 @@ void FGAPIENTRY glutTimerFuncUcall( unsigned int timeOut, FGCBTimerUC callback, 
     fgListInsert( &fgState.Timers, &node->Node, &timer->Node );
 }
 
-static void glutTimerFuncCallback( int ID, FGCBUserData userData )
+static void fghTimerFuncCallback( int ID, FGCBUserData userData )
 {
     FGCBTimer callback = (FGCBTimer)userData;
     callback( ID );
@@ -100,7 +100,7 @@ void FGAPIENTRY glutTimerFunc( unsigned int timeOut, FGCBTimer callback, int tim
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutTimerFunc" );
     if( callback )
-        glutTimerFuncUcall( timeOut, glutTimerFuncCallback, timerID, (FGCBUserData)callback );
+        glutTimerFuncUcall( timeOut, fghTimerFuncCallback, timerID, (FGCBUserData)callback );
     else
         glutTimerFuncUcall( timeOut, NULL, timerID, NULL );
 }
@@ -120,7 +120,7 @@ void FGAPIENTRY glutMenuStatusFuncUcall( FGCBMenuStatusUC callback, FGCBUserData
     fgState.MenuStatusCallbackData = userData;
 }
 
-static void glutMenuStatusFuncCallback( int menuState, int mouseX, int mouseY, FGCBUserData userData )
+static void fghMenuStatusFuncCallback( int menuState, int mouseX, int mouseY, FGCBUserData userData )
 {
     FGCBMenuStatus callback = (FGCBMenuStatus)userData;
     callback( menuState, mouseX, mouseY );
@@ -130,7 +130,7 @@ void FGAPIENTRY glutMenuStatusFunc( FGCBMenuStatus callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutMenuStatusFunc" );
     if( callback )
-        glutMenuStatusFuncUcall( glutMenuStatusFuncCallback, (FGCBUserData)callback );
+        glutMenuStatusFuncUcall( fghMenuStatusFuncCallback, (FGCBUserData)callback );
     else
         glutMenuStatusFuncUcall( NULL, NULL );
 }
@@ -149,7 +149,7 @@ void FGAPIENTRY glutMenuDestroyFuncUcall( FGCBDestroyUC callback, FGCBUserData u
     }
 }
 
-static void glutMenuDestroyFuncCallback( FGCBUserData userData )
+static void fghMenuDestroyFuncCallback( FGCBUserData userData )
 {
     FGCBDestroy callback = (FGCBDestroy)userData;
     callback();
@@ -159,7 +159,7 @@ void FGAPIENTRY glutMenuDestroyFunc( FGCBDestroy callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutMenuDestroyFunc" );
     if( callback )
-        glutMenuDestroyFuncUcall( glutMenuDestroyFuncCallback, (FGCBUserData)callback );
+        glutMenuDestroyFuncUcall( fghMenuDestroyFuncCallback, (FGCBUserData)callback );
     else
         glutMenuDestroyFuncUcall( NULL, NULL );
 }
@@ -179,38 +179,38 @@ do                                                              \
  * Types need to be defined for callbacks. It's not ideal, but it works for this.
  */
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,b)                    \
-static void glut##a##FuncCallback( FGCBUserData userData )      \
+static void fgh##a##FuncCallback( FGCBUserData userData )      \
 {                                                               \
     FGCB##b callback = (FGCB##b)userData;                       \
     callback();                                                 \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG1(a,b)                    \
-static void glut##a##FuncCallback( int arg1val, FGCBUserData userData ) \
+static void fgh##a##FuncCallback( int arg1val, FGCBUserData userData ) \
 {                                                               \
     FGCB##b callback = (FGCB##b)userData;                       \
     callback( arg1val );                                        \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,b)                    \
-static void glut##a##FuncCallback( int arg1val, int arg2val, FGCBUserData userData ) \
+static void fgh##a##FuncCallback( int arg1val, int arg2val, FGCBUserData userData ) \
 {                                                               \
     FGCB##b callback = (FGCB##b)userData;                       \
     callback( arg1val, arg2val );                               \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG3_USER(a,b,arg1,arg2,arg3) \
-static void glut##a##FuncCallback( arg1 arg1val, arg2 arg2val, arg3 arg3val, FGCBUserData userData ) \
+static void fgh##a##FuncCallback( arg1 arg1val, arg2 arg2val, arg3 arg3val, FGCBUserData userData ) \
 {                                                               \
     FGCB##b callback = (FGCB##b)userData;                       \
     callback( arg1val, arg2val, arg3val );                      \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,b) IMPLEMENT_CALLBACK_FUNC_CB_ARG3_USER(a,b,int,int,int)
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG4(a,b)                    \
-static void glut##a##FuncCallback( int arg1val, int arg2val, int arg3val, int arg4val, FGCBUserData userData ) \
+static void fgh##a##FuncCallback( int arg1val, int arg2val, int arg3val, int arg4val, FGCBUserData userData ) \
 {                                                               \
     FGCB##b callback = (FGCB##b)userData;                       \
     callback( arg1val, arg2val, arg3val, arg4val );             \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG5(a,b)                    \
-static void glut##a##FuncCallback( int arg1val, int arg2val, int arg3val, int arg4val, int arg5val, FGCBUserData userData ) \
+static void fgh##a##FuncCallback( int arg1val, int arg2val, int arg3val, int arg4val, int arg5val, FGCBUserData userData ) \
 {                                                               \
     FGCB##b callback = (FGCB##b)userData;                       \
     callback( arg1val, arg2val, arg3val, arg4val, arg5val );    \
@@ -228,7 +228,7 @@ void FGAPIENTRY glut##a##Func( FGCB##b callback )               \
 {                                                               \
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glut"#a"Func" );        \
     if( callback )                                              \
-        glut##a##FuncUcall( glut##a##FuncCallback, (FGCBUserData)callback ); \
+        glut##a##FuncUcall( fgh##a##FuncCallback, (FGCBUserData)callback ); \
     else                                                        \
         glut##a##FuncUcall( NULL, NULL ); \
 }
@@ -310,7 +310,7 @@ void FGAPIENTRY glutDisplayFuncUcall( FGCBDisplayUC callback, FGCBUserData userD
     SET_CALLBACK( Display );
 }
 
-static void glutDisplayFuncCallback( FGCBUserData userData )
+static void fghDisplayFuncCallback( FGCBUserData userData )
 {
     FGCBDisplay callback = (FGCBDisplay)userData;
     callback();
@@ -320,7 +320,7 @@ void FGAPIENTRY glutDisplayFunc( FGCBDisplay callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutDisplayFunc" );
     if( callback )
-        glutDisplayFuncUcall( glutDisplayFuncCallback, (FGCBUserData)callback );
+        glutDisplayFuncUcall( fghDisplayFuncCallback, (FGCBUserData)callback );
     else
         glutDisplayFuncUcall( NULL, NULL );
 }
@@ -343,7 +343,7 @@ void FGAPIENTRY glutReshapeFuncUcall( FGCBReshapeUC callback, FGCBUserData userD
     SET_CALLBACK( Reshape );
 }
 
-static void glutReshapeFuncCallback( int width, int height, FGCBUserData userData )
+static void fghReshapeFuncCallback( int width, int height, FGCBUserData userData )
 {
     FGCBReshape callback = (FGCBReshape)userData;
     callback( width, height );
@@ -353,7 +353,7 @@ void FGAPIENTRY glutReshapeFunc( FGCBReshape callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutReshapeFunc" );
     if( callback )
-        glutReshapeFuncUcall( glutReshapeFuncCallback, (FGCBUserData)callback );
+        glutReshapeFuncUcall( fghReshapeFuncCallback, (FGCBUserData)callback );
     else
         glutReshapeFuncUcall( NULL, NULL );
 }
@@ -406,7 +406,7 @@ void FGAPIENTRY glutVisibilityFuncUcall( FGCBVisibilityUC callback, FGCBUserData
         glutWindowStatusFuncUcall( NULL, NULL );
 }
 
-static void glutVisibilityFuncCallback( int visibility, FGCBUserData userData )
+static void fghVisibilityFuncCallback( int visibility, FGCBUserData userData )
 {
     FGCBVisibility callback = (FGCBVisibility)userData;
     callback( visibility );
@@ -416,7 +416,7 @@ void FGAPIENTRY glutVisibilityFunc( FGCBVisibility callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutVisibilityFunc" );
     if( callback )
-        glutVisibilityFuncUcall( glutVisibilityFuncCallback, (FGCBUserData)callback );
+        glutVisibilityFuncUcall( fghVisibilityFuncCallback, (FGCBUserData)callback );
     else
         glutVisibilityFuncUcall( NULL, NULL );
 }
@@ -457,7 +457,7 @@ void FGAPIENTRY glutJoystickFuncUcall( FGCBJoystickUC callback, int pollInterval
         fgStructure.CurrentWindow->State.JoystickLastPoll -= pollInterval;
 }
 
-static void glutJoystickFuncCallback( unsigned int buttons, int axis0, int axis1, int axis2, FGCBUserData userData )
+static void fghJoystickFuncCallback( unsigned int buttons, int axis0, int axis1, int axis2, FGCBUserData userData )
 {
     FGCBJoystick callback = (FGCBJoystick)userData;
     callback( buttons, axis0, axis1, axis2 );
@@ -467,7 +467,7 @@ void FGAPIENTRY glutJoystickFunc( FGCBJoystick callback, int pollInterval )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickFunc" );
     if( callback )
-        glutJoystickFuncUcall( glutJoystickFuncCallback, pollInterval, (FGCBUserData)callback );
+        glutJoystickFuncUcall( fghJoystickFuncCallback, pollInterval, (FGCBUserData)callback );
     else
         glutJoystickFuncUcall( NULL, pollInterval, NULL );
 }
@@ -483,7 +483,7 @@ void FGAPIENTRY glutSpaceballMotionFuncUcall( FGCBSpaceMotionUC callback, FGCBUs
     SET_CALLBACK( SpaceMotion );
 }
 
-static void glutSpaceballMotionFuncCallback( int x, int y, int z, FGCBUserData userData )
+static void fghSpaceballMotionFuncCallback( int x, int y, int z, FGCBUserData userData )
 {
     FGCBSpaceMotion callback = (FGCBSpaceMotion)userData;
     callback( x, y, z );
@@ -493,7 +493,7 @@ void FGAPIENTRY glutSpaceballMotionFunc( FGCBSpaceMotion callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSpaceballMotionFunc" );
     if( callback )
-        glutSpaceballMotionFuncUcall( glutSpaceballMotionFuncCallback, (FGCBUserData)callback );
+        glutSpaceballMotionFuncUcall( fghSpaceballMotionFuncCallback, (FGCBUserData)callback );
     else
         glutSpaceballMotionFuncUcall( NULL, NULL );
 }
@@ -509,7 +509,7 @@ void FGAPIENTRY glutSpaceballRotateFuncUcall( FGCBSpaceRotationUC callback, FGCB
     SET_CALLBACK( SpaceRotation );
 }
 
-static void glutSpaceballRotateFuncCallback( int x, int y, int z, FGCBUserData userData )
+static void fghSpaceballRotateFuncCallback( int x, int y, int z, FGCBUserData userData )
 {
     FGCBSpaceRotation callback = (FGCBSpaceRotation)userData;
     callback( x, y, z );
@@ -519,7 +519,7 @@ void FGAPIENTRY glutSpaceballRotateFunc( FGCBSpaceRotation callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSpaceballRotateFunc" );
     if( callback )
-        glutSpaceballRotateFuncUcall( glutSpaceballRotateFuncCallback, (FGCBUserData)callback );
+        glutSpaceballRotateFuncUcall( fghSpaceballRotateFuncCallback, (FGCBUserData)callback );
     else
         glutSpaceballRotateFuncUcall( NULL, NULL );
 }
@@ -535,7 +535,7 @@ void FGAPIENTRY glutSpaceballButtonFuncUcall( FGCBSpaceButtonUC callback, FGCBUs
     SET_CALLBACK( SpaceButton );
 }
 
-static void glutSpaceballButtonFuncCallback( int button, int buttonState, FGCBUserData userData )
+static void fghSpaceballButtonFuncCallback( int button, int buttonState, FGCBUserData userData )
 {
     FGCBSpaceButton callback = (FGCBSpaceButton)userData;
     callback( button, buttonState );
@@ -545,7 +545,7 @@ void FGAPIENTRY glutSpaceballButtonFunc( FGCBSpaceButton callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSpaceballButtonFunc" );
     if( callback )
-        glutSpaceballButtonFuncUcall( glutSpaceballButtonFuncCallback, (FGCBUserData)callback );
+        glutSpaceballButtonFuncUcall( fghSpaceballButtonFuncCallback, (FGCBUserData)callback );
     else
         glutSpaceballButtonFuncUcall( NULL, NULL );
 }

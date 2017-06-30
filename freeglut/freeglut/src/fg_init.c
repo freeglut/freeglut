@@ -681,7 +681,7 @@ void FGAPIENTRY glutInitErrorFuncUcall( FGErrorUC callback, FGCBUserData userDat
     fgState.ErrorFuncData = userData;
 }
 
-static void glutInitErrorFuncCallback( const char *fmt, va_list ap, FGCBUserData userData )
+static void fghInitErrorFuncCallback( const char *fmt, va_list ap, FGCBUserData userData )
 {
     FGError callback = (FGError)userData;
     callback( fmt, ap );
@@ -689,10 +689,14 @@ static void glutInitErrorFuncCallback( const char *fmt, va_list ap, FGCBUserData
 
 void FGAPIENTRY glutInitErrorFunc( FGError callback )
 {
-  if (callback)
-    glutInitErrorFuncUcall( glutInitErrorFuncCallback, (FGCBUserData)callback );
-  else
-    glutInitErrorFuncUcall( NULL, NULL );
+	if (callback)
+	{
+		glutInitErrorFuncUcall( fghInitErrorFuncCallback, (FGCBUserData)callback );
+	}
+	else
+	{
+		glutInitErrorFuncUcall( NULL, NULL );
+	}
 }
 
 /*
@@ -705,7 +709,7 @@ void FGAPIENTRY glutInitWarningFuncUcall( FGWarningUC callback, FGCBUserData use
     fgState.WarningFuncData = userData;
 }
 
-static void glutInitWarningFuncCallback( const char *fmt, va_list ap, FGCBUserData userData )
+static void fghInitWarningFuncCallback( const char *fmt, va_list ap, FGCBUserData userData )
 {
     FGWarning callback = (FGWarning)userData;
     callback( fmt, ap );
@@ -713,10 +717,14 @@ static void glutInitWarningFuncCallback( const char *fmt, va_list ap, FGCBUserDa
 
 void FGAPIENTRY glutInitWarningFunc( FGWarning callback )
 {
-  if (callback)
-    glutInitWarningFuncUcall( glutInitWarningFuncCallback, (FGCBUserData)callback );
-  else
-    glutInitWarningFuncUcall( NULL, NULL );
+	if (callback)
+	{
+		glutInitWarningFuncUcall( fghInitWarningFuncCallback, (FGCBUserData)callback );
+	}
+	else
+	{
+		glutInitWarningFuncUcall( NULL, NULL );
+	}
 }
 
 /*** END OF FILE ***/
