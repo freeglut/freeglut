@@ -400,7 +400,7 @@ void fgProcessWork(SFG_Window *window)
             fgPlatformInitWork(window);
 
             /* Call init context callback */
-            INVOKE_WCB( *window, InitContext, ());
+            INVOKE_WCB( *window, InitContext, ( ) );
 
             /* Lastly, check if we have a display callback, error out if not
              * This is the right place to do it, as the redisplay will be
