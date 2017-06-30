@@ -665,7 +665,6 @@ do                                                             \
  * current window.
  *
  */
-#if TARGET_HOST_MS_WINDOWS && !defined(_WIN32_WCE) /* FIXME: also WinCE? */
 #define INVOKE_WCB(window,cbname,arg_list)    \
 do                                            \
 {                                             \
@@ -677,18 +676,6 @@ do                                            \
 		func EXPAND_WCB( cbname )(( arg_list, userData )); \
     }                                         \
 } while( 0 )
-#else
-#define INVOKE_WCB(window,cbname,arg_list)    \
-do                                            \
-{                                             \
-    if( FETCH_WCB( window, cbname ) )         \
-    {                                         \
-        fgSetWindow( &window );               \
-        FGCBUserData userData = FETCH_USER_DATA_WCB( window, cbname ); \
-		((FGCB ## cbname ## UC)FETCH_WCB( window, cbname )) EXPAND_WCB( cbname )(( arg_list, userData )); \
-    }                                         \
-} while( 0 )
-#endif
 
 /*
  * The window callbacks the user can supply us with. Should be kept portable.
