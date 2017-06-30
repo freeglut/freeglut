@@ -269,7 +269,7 @@ void fgError( const char *fmt, ... )
         va_start( ap, fmt );
 
         /* call user set error handler here */
-        fgState.ErrorFunc(fmt, ap);
+        fgState.ErrorFunc(fmt, ap, fgState.ErrorFuncData);
 
         va_end( ap );
 
@@ -302,7 +302,7 @@ void fgWarning( const char *fmt, ... )
         va_start( ap, fmt );
 
         /* call user set warning handler here */
-        fgState.WarningFunc(fmt, ap);
+        fgState.WarningFunc(fmt, ap, fgState.WarningFuncData);
 
         va_end( ap );
 

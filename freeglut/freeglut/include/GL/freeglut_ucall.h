@@ -45,7 +45,6 @@ FGAPI void FGAPIENTRY glutEntryFuncUcall( void (* callback)( int, void* ), void*
 FGAPI void FGAPIENTRY glutKeyboardUpFuncUcall( void (* callback)( unsigned char, int, int, void* ), void* user_data );
 FGAPI void FGAPIENTRY glutSpecialUpFuncUcall( void (* callback)( int, int, int, void* ), void* user_data );
 FGAPI void FGAPIENTRY glutJoystickFuncUcall( void (* callback)( unsigned int, int, int, int, void* ), int pollInterval, void* user_data );
-FGAPI void FGAPIENTRY glutMenuStateFuncUcall( void (* callback)( int, void* ), void* user_data );
 FGAPI void FGAPIENTRY glutMenuStatusFuncUcall( void (* callback)( int, int, int, void* ), void* user_data );
 FGAPI void FGAPIENTRY glutOverlayDisplayFuncUcall( void (* callback)( void* ), void* user_data );
 FGAPI void FGAPIENTRY glutWindowStatusFuncUcall( void (* callback)( int, void* ), void* user_data );
@@ -76,12 +75,12 @@ FGAPI void FGAPIENTRY glutMultiPassiveFuncUcall( void (* callback)( int, int, in
  * Initialization functions, see fg_init.c
  */
 #include <stdarg.h>
-FGAPI void FGAPIENTRY glutInitErrorFuncUcall( void (* callback)( const char *fmt, va_list ap, void* ), void* user_data );
-FGAPI void FGAPIENTRY glutInitWarningFuncUcall( void (* callback)( const char *fmt, va_list ap, void* ), void* user_data );
+FGAPI void FGAPIENTRY glutInitErrorFuncUcall( void (* callback)( const char *fmt, va_list ap, void* user_data ), void* user_data );
+FGAPI void FGAPIENTRY glutInitWarningFuncUcall( void (* callback)( const char *fmt, va_list ap, void* user_data ), void* user_data );
 
 /* Mobile platforms lifecycle */
-FGAPI void FGAPIENTRY glutInitContextFuncUcall(void (* callback)(void*), void* user_data);
-FGAPI void FGAPIENTRY glutAppStatusFuncUcall(void (* callback)(int, void*), void* user_data);
+FGAPI void FGAPIENTRY glutInitContextFuncUcall( void (* callback)( void* ), void* user_data );
+FGAPI void FGAPIENTRY glutAppStatusFuncUcall( void (* callback)( int, void* ), void* user_data );
 
 #ifdef __cplusplus
     }
