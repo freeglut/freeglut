@@ -301,7 +301,7 @@ and their compatibility with GLUT, are made explicit.
 
 <p>
 There is considerable confusion about the "right thing to do" concerning
-window  size and position.  GLUT itself is not consistent between
+window size and position. GLUT itself is not consistent between
 Windows and UNIX/X11; since platform independence is a virtue for
 <i>freeglut</i>, we decided to break with GLUT's behaviour. <br>
 Under UNIX/X11, it is apparently not possible to get the window border
@@ -326,6 +326,40 @@ coordinates of the upper left hand corner of the drawable (client)
 area--which is <u>NOT</u> the (x,y) position of the window you specified
 when you created it.</ul>
 </p>
+
+<h3>3.2.2 User-data callbacks</h3>
+
+<p>
+GLUT was created as a tool to help teach OpenGL programming. To simplify
+development, callbacks were used for handling display, input, and other
+events. But at the time it was developed, the purpose, or for some other 
+unknown reason, the callbacks lacked any user-provided data argument.
+This has caused considerable difficulties for any significantly advanced
+usage of GLUT, and now <i>freeglut</i>. This has prevented any attempt to 
+wrap <i>freeglut</i> in a C++ wrapper, make per-window, per-callback data
+structure, and potentially made it undesirable to modern C developers who
+tend to be well versed in "don't use globals". To combat these
+complaints and <i>issues</i>, many callbacks (with some deprecated 
+callbacks excluded) support user-data callbacks provided through additional
+functions provided in <i>freeglut</i>. All callbacks that support user-data
+callbacks are marked as such.
+</p>
+
+<p>
+The general rule to follow is to take the <i>freeglut</i> callback function 
+and append "Ucall" to the end of the function, add an additional <tt>void*</tt>
+argument to the end of the argument list of both the <i>freeglut</i> function
+and the callback function. This will pass the user-data to the callback when it's
+invoked.
+</p>
+
+<p><b>Examples</b></p>
+
+<p><tt>void glutPositionFunc ( void (* func)( int x, int y ) );</tt><br>
+<tt>void glutPositionFuncUcall ( void (* func)( int x, int y, void* user_data ), void* user_data );</tt></p>
+
+<p><tt>void glutKeyboardUpFunc ( void (* func)( unsigned char key, int x, int y ) );</tt><br>
+<tt>void glutKeyboardUpFuncUcall ( void (* func)( unsigned char key, int x, int y, void* user_data ), void* user_data );</tt></p>
 
 <h2>3.3 Terminology</h2>
 
@@ -523,6 +557,8 @@ from the library can be handled by the user.
 <p><b>Usage</b></p>
 <p><tt>void glutInitErrorFunc&nbsp;&nbsp;&nbsp;( void (* callback)( const char *fmt, va_list ap) );</tt><br/>
 <tt>void glutInitWarningFunc&nbsp;( void (* callback)( const char *fmt, va_list ap) );</tt> </p>
+
+<p>These functions have user-data callback functions.</p>
 
 <p><b>Description</b></p>
 <p>
@@ -943,6 +979,8 @@ The <tt>glutShowOverlay</tt> and <tt>glutHideOverlay</tt> functions are not impl
 
 <h2>10.1 glutCreateMenu</h2>
 
+<p>Has user-data callback function.</p>
+
 <h2>10.2 glutDestroyMenu</h2>
 
 <h2>10.3 glutGetMenu, glutSetMenu</h2>
@@ -985,9 +1023,13 @@ stroke font, or an unknown font.
 
 <h2>10.11 glutMenuDestroyFunc</h2>
 
+<p>Has user-data callback function.</p>
+
 <h1>11. <a name="GlobalCallback"></a>Global Callback Registration Functions</h1>
 
 <h2>11.1 glutTimerFunc</h2>
+
+<p>Has user-data callback function.</p>
 
 <h2>11.2 glutIdleFunc</h2>
 
@@ -998,11 +1040,11 @@ freeglut</i>  calls the idle callback when there are no inputs from the user.
 
 <p><b>Usage</b></p>
 
-<p><tt>void glutIdleFunc ( void (*func)
-( void ) );</tt> </p>
+<p><tt>void glutIdleFunc ( void (*func ) ( void ) );</tt> </p>
 
-<p><tt>func</tt>The new
-global idle callback function </p>
+<p><tt>func</tt> The new global idle callback function</p>
+
+<p>Has user-data callback function.</p>
 
 <p><b>Description</b></p>
 
@@ -1042,15 +1084,23 @@ the idle callback. </p>
 
 <h2>11.3 glutMenuStatusFunc</h2>
 
+<p>Has user-data callback function.</p>
+
 <h2>11.4 glutMenuStateFunc</h2>
 
 <h1>12. <a name="WindowCallback"></a>Window-Specific Callback Registration Functions</h1>
 
 <h2>12.1 glutDisplayFunc</h2>
 
+<p>Has user-data callback function.</p>
+
 <h2>12.2 glutOverlayDisplayFunc</h2>
 
+<p>Has user-data callback function.</p>
+
 <h2>12.3 glutReshapeFunc</h2>
+
+<p>Has user-data callback function.</p>
 
 <h2>12.4 glutPositionFunc</h2>
 
@@ -1064,6 +1114,8 @@ repositioned/moved programatically or by the user.
 
 <p><tt>void glutPositionFunc ( void
 (* func)( int x, int y) );</tt></p>
+
+<p>Has user-data callback function.</p>
 
 <p><b>Description</b></p>
 
@@ -1094,6 +1146,8 @@ about to be destroyed.
 <p><tt>func</tt> The window's new closure callback function <br/>
 </p>
 
+<p>Has user-data callback function.</p>
+
 <p><b>Description</b></p>
 
 <p>
@@ -1121,6 +1175,8 @@ alias to <tt>glutCloseFunc</tt>.
 
 <h2>12.6 glutKeyboardFunc</h2>
 
+<p>Has user-data callback function.</p>
+
 <h2>12.7 glutSpecialFunc</h2>
 
 <p>
@@ -1144,6 +1200,8 @@ to the window at the time the key is pressed <br/>
  <tt>y
 </tt>The y-coordinate of the mouse relative
 to the window at the time the key is pressed </p>
+
+<p>Has user-data callback function.</p>
 
 <p><b>Description</b></p>
 
@@ -1200,6 +1258,8 @@ to the window at the time the key is released <br/>
 </tt>The y-coordinate of the mouse relative
 to the window at the time the key is released </p>
 
+<p>Has user-data callback function.</p>
+
 <p><b>Description</b></p>
 
 <p>
@@ -1252,6 +1312,8 @@ to the window at the time the key is released <br/>
 </tt>The y-coordinate of the mouse relative
 to the window at the time the key is released </p>
 
+<p>Has user-data callback function.</p>
+
 <p><b>Description</b></p>
 
 <p>
@@ -1289,7 +1351,11 @@ have them fixed.
 
 <h2>12.10 glutMotionFunc, glutPassiveMotionFunc</h2>
 
+<p>Both functions have user-data callback functions.</p>
+
 <h2>12.11 glutMouseFunc</h2>
+
+<p>Has user-data callback function.</p>
 
 <h2>12.12 glutMouseWheelFunc</h2>
 
@@ -1303,6 +1369,8 @@ spins the mouse wheel.
 
 <p><tt>void glutMouseWheelFunc ( void( *callback )( int wheel, int
 direction, int x, int y ));</tt></p>
+
+<p>Has user-data callback function.</p>
 
 <p><b>Description</b></p>
 
@@ -1320,7 +1388,11 @@ as mouse buttons.
 
 <h2>12.13 glutEntryFunc</h2>
 
+<p>Has user-data callback function.</p>
+
 <h2>12.14 glutJoystickFunc</h2>
+
+<p>Has user-data callback function.</p>
 
 <h2>12.15 glutSpaceballMotionFunc</h2>
 
@@ -1336,6 +1408,8 @@ provided so that GLUT-based programs can compile and link against
 <p><b>Usage</b></p>
 
 <p><tt>void glutSpaceballMotionFunc ( void (* callback)( int x, int y, int z ) );</tt></p>
+
+<p>Has user-data callback function.</p>
 
 <p><b>Description</b></p>
 
@@ -1356,6 +1430,8 @@ provided so that GLUT-based programs can compile and link against
 <p><b>Usage</b></p>
 
 <p><tt>void glutSpaceballRotateFunc ( void (* callback)( int rx, int ry, int rz ) );</tt></p>
+
+<p>Has user-data callback function.</p>
 
 <p><b>Description</b></p>
 
@@ -1378,6 +1454,8 @@ The <tt>glutSpaceballButtonFunc</tt> function sets the window's Spaceball button
 
 <p><tt>void glutSpaceballButtonFunc ( void
 (* callback)( int button, int updown )</tt><tt> );</tt></p>
+
+<p>Has user-data callback function.</p>
 
 <p><b>Description</b></p>
 
@@ -1418,6 +1496,8 @@ The <tt>glutDialsFunc</tt> function sets the global dials&buttons box callback. 
 <tt>void glutButtonBoxFunc ( void (* callback)( int button, int updown ) );</tt>
 </p>
 
+<p>Has user-data callback function.</p>
+
 <p><b>Description</b></p>
 
 <p>
@@ -1441,6 +1521,8 @@ The <tt>glutDialsFunc</tt> function sets the global dials&buttons box callback. 
 
 <p><tt>void glutDialsFunc ( void (* callback)(
 int dial, int value )</tt><tt> );</tt></p>
+
+<p>Has user-data callback function.</p>
 
 <p><b>Description</b></p>
 
@@ -1469,6 +1551,8 @@ that a call to the function will not produce an error..
 <tt>void glutTabletMotionFunc ( void (* callback)( int x, int y ) );</tt>
 </p>
 
+<p>Has user-data callback function.</p>
+
 <p><b>Description</b></p>
 
 <p>The <tt>glutTabletMotionFunc</tt> function
@@ -1490,6 +1574,8 @@ that a call to the function will not produce an error..
 
 <p><tt>void glutTabletButtonFunc ( void
 (* callback)( int button, int updown, int x, int y )</tt><tt> );</tt></p>
+
+<p>Has user-data callback function.</p>
 
 <p><b>Description</b></p>
 
@@ -1516,6 +1602,8 @@ these callbacks when the visibility status of a window changes.
 <p><tt>void glutVisibilityFunc ( void( *callback )( int state ));</tt>
 <br><tt>void glutWindowStatusFunc ( void( *callback )( int state ));</tt>
 </p>
+
+<p>Both functions have user-data callback functions.</p>
 
 <p><b>Description</b></p>
 
@@ -2701,6 +2789,8 @@ Currently, under windows, the first (oldest) touch point also controls
 the mouse cursor, which triggers the non-multi callbacks as
 usual.<br />
 
+All these functions have user-data callback functions.
+
 <br />
 
 Limitation: currently on the cursor id is provided.  It may be
@@ -2729,9 +2819,11 @@ whether/how to implement it.</p>
 
 <ul>
 <li><code>glutInitContextFunc &larr; void</code> : called when the context
-is initialized or re-initialized (e.g. after a pause)</li>
+is initialized or re-initialized (e.g. after a pause). Has user-data callback 
+function.</li>
 <li><code>glutAppStatusFunc &larr; event</code> : called when the
-application's status changes, with event identifying the state entered.
+application's status changes, with event identifying the state entered. Has 
+user-data callback function.
 Possible states:
 <ul>
 <li>application goes on a pause (or a stop) &rarr; GLUT_APPSTATUS_PAUSE</li>

@@ -68,6 +68,7 @@ ENDIF()
 
 SET(FREEGLUT_HEADERS
     include/GL/freeglut.h
+    include/GL/freeglut_ucall.h
     include/GL/freeglut_ext.h
     include/GL/freeglut_std.h
 )
@@ -90,6 +91,7 @@ SET(FREEGLUT_SRCS
     src/fg_init.c
     src/fg_init.h
     src/fg_internal.h
+    src/fg_callback_macros.h
     src/fg_input_devices.c
     src/fg_joystick.c
     src/fg_main.c
@@ -551,6 +553,7 @@ IF(UNIX)
 ENDIF()
 ADD_DEMO(subwin          progs/demos/subwin/subwin.c)
 ADD_DEMO(timer           progs/demos/timer/timer.c)
+ADD_DEMO(timer_callback  progs/demos/timer_callback/timer.c)
 
 
 

@@ -233,7 +233,7 @@ static void fghCheckTimers( void )
         fgListRemove( &fgState.Timers, &timer->Node );
         fgListAppend( &fgState.FreeTimers, &timer->Node );
 
-        timer->Callback( timer->ID );
+        timer->Callback( timer->ID, timer->CallbackData );
     }
 }
 
@@ -269,7 +269,7 @@ void fgError( const char *fmt, ... )
         va_start( ap, fmt );
 
         /* call user set error handler here */
-        fgState.ErrorFunc(fmt, ap);
+        fgState.ErrorFunc(fmt, ap, fgState.ErrorFuncData);
 
         va_end( ap );
 
@@ -302,7 +302,7 @@ void fgWarning( const char *fmt, ... )
         va_start( ap, fmt );
 
         /* call user set warning handler here */
-        fgState.WarningFunc(fmt, ap);
+        fgState.WarningFunc(fmt, ap, fgState.WarningFuncData);
 
         va_end( ap );
 
@@ -400,7 +400,7 @@ void fgProcessWork(SFG_Window *window)
             fgPlatformInitWork(window);
 
             /* Call init context callback */
-            INVOKE_WCB( *window, InitContext, ());
+            INVOKE_WCB( *window, InitContext, ( ) );
 
             /* Lastly, check if we have a display callback, error out if not
              * This is the right place to do it, as the redisplay will be
@@ -509,7 +509,7 @@ void FGAPIENTRY glutMainLoop( void )
                     fgStructure.CurrentWindow->IsMenu )
                     /* fail safe */
                     fgSetWindow( window );
-                fgState.IdleCallback( );
+                fgState.IdleCallback( fgState.IdleCallbackData );
             }
             else
                 fghSleepForEvents( );

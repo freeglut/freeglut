@@ -71,8 +71,10 @@ void fghKeyboardInterpretKeysym(  SFG_Window* window,
                                   xkb_keysym_t sym,
                                   uint32_t state )
 {
-    FGCBKeyboard keyboard_cb;
-    FGCBSpecial special_cb;
+    FGCBKeyboardUC keyboard_cb;
+    FGCBSpecialUC special_cb;
+    FGCBUserData keyboard_ud;
+    FGCBUserData special_ud;
     char string[16];
     int special = -1;
 
@@ -81,13 +83,17 @@ void fghKeyboardInterpretKeysym(  SFG_Window* window,
      * others, which need to be translated to GLUT_KEY_Xs... */
     if( state )
     {
-        keyboard_cb = (FGCBKeyboard)( FETCH_WCB( *window, Keyboard ));
-        special_cb  = (FGCBSpecial) ( FETCH_WCB( *window, Special  ));
+        keyboard_cb = (FGCBKeyboardUC)( FETCH_WCB( *window, Keyboard ));
+        special_cb  = (FGCBSpecialUC) ( FETCH_WCB( *window, Special  ));
+        keyboard_ud = FETCH_USER_DATA_WCB( *window, Keyboard );
+        special_ud  = FETCH_USER_DATA_WCB( *window, Special  );
     }
     else
     {
-        keyboard_cb = (FGCBKeyboard)( FETCH_WCB( *window, KeyboardUp ));
-        special_cb  = (FGCBSpecial) ( FETCH_WCB( *window, SpecialUp  ));
+        keyboard_cb = (FGCBKeyboardUC)( FETCH_WCB( *window, KeyboardUp ));
+        special_cb  = (FGCBSpecialUC) ( FETCH_WCB( *window, SpecialUp  ));
+        keyboard_ud = FETCH_USER_DATA_WCB( *window, KeyboardUp );
+        special_ud  = FETCH_USER_DATA_WCB( *window, SpecialUp  );
     }
 
     switch( sym )
@@ -127,13 +133,13 @@ void fghKeyboardInterpretKeysym(  SFG_Window* window,
     if( special_cb && (special != -1) )
     {
         fgSetWindow( window );
-        special_cb( special, window->State.MouseX, window->State.MouseY );
+        special_cb( special, window->State.MouseX, window->State.MouseY, special_ud );
     }
     else if( keyboard_cb && (special == -1) )
     {
         fgSetWindow( window );
         xkb_keysym_to_utf8( sym, string, sizeof( string ) );
-        keyboard_cb( string[0], window->State.MouseX, window->State.MouseY );
+        keyboard_cb( string[0], window->State.MouseX, window->State.MouseY, keyboard_ud );
     }
 }
 

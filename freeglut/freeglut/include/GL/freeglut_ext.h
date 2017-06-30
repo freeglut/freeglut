@@ -256,13 +256,13 @@ FGAPI void    FGAPIENTRY glutInitErrorFunc( void (* callback)( const char *fmt, 
 FGAPI void    FGAPIENTRY glutInitWarningFunc( void (* callback)( const char *fmt, va_list ap ) );
 
 /* OpenGL >= 2.0 support */
-FGAPI void    FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib);
-FGAPI void    FGAPIENTRY glutSetVertexAttribNormal(GLint attrib);
-FGAPI void    FGAPIENTRY glutSetVertexAttribTexCoord2(GLint attrib);
+FGAPI void    FGAPIENTRY glutSetVertexAttribCoord3( GLint attrib );
+FGAPI void    FGAPIENTRY glutSetVertexAttribNormal( GLint attrib );
+FGAPI void    FGAPIENTRY glutSetVertexAttribTexCoord2( GLint attrib );
 
 /* Mobile platforms lifecycle */
-FGAPI void    FGAPIENTRY glutInitContextFunc(void (* callback)());
-FGAPI void    FGAPIENTRY glutAppStatusFunc(void (* callback)(int));
+FGAPI void    FGAPIENTRY glutInitContextFunc( void (* callback)( void ) );
+FGAPI void    FGAPIENTRY glutAppStatusFunc( void (* callback)( int ) );
 /* state flags that can be passed to callback set by glutAppStatusFunc */
 #define GLUT_APPSTATUS_PAUSE                0x0001
 #define GLUT_APPSTATUS_RESUME               0x0002
@@ -273,6 +273,9 @@ FGAPI void    FGAPIENTRY glutAppStatusFunc(void (* callback)(int));
 #define  GLUT_CAPTIONLESS                   0x0400
 #define  GLUT_BORDERLESS                    0x0800
 #define  GLUT_SRGB                          0x1000
+
+/* User-argument callbacks and implementation */
+#include "freeglut_ucall.h"
 
 #ifdef __cplusplus
     }
