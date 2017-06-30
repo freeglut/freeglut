@@ -113,9 +113,9 @@ void FGAPIENTRY glutMenuStateFunc( FGCBMenuState callback )
 }
 
 /* Sets the global menu status callback for the current window */
-void FGAPIENTRY glutMenuStatusFuncUCall( FGCBMenuStatusUC callback, FGCBUserData userData )
+void FGAPIENTRY glutMenuStatusFuncUcall( FGCBMenuStatusUC callback, FGCBUserData userData )
 {
-    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutMenuStatusFuncUCall" );
+    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutMenuStatusFuncUcall" );
     fgState.MenuStatusCallback = callback;
     fgState.MenuStatusCallbackData = userData;
 }
@@ -130,11 +130,10 @@ void FGAPIENTRY glutMenuStatusFunc( FGCBMenuStatus callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutMenuStatusFunc" );
     if( callback )
-        glutMenuStatusFuncUCall( glutMenuStatusFuncCallback, (FGCBUserData)callback );
+        glutMenuStatusFuncUcall( glutMenuStatusFuncCallback, (FGCBUserData)callback );
     else
-        glutMenuStatusFuncUCall( NULL, NULL );
+        glutMenuStatusFuncUcall( NULL, NULL );
 }
-
 
 /*
  * Menu specific callbacks.
@@ -180,7 +179,7 @@ do                                                              \
  * Types need to be defined for callbacks. It's not ideal, but it works for this.
  */
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,b)                    \
-static void glut##a##FuncCallback( FGCBUserData userData )             \
+static void glut##a##FuncCallback( FGCBUserData userData )      \
 {                                                               \
     FGCB##b callback = (FGCB##b)userData;                       \
     callback();                                                 \
