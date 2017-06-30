@@ -215,7 +215,41 @@ static GLUTproc fghGetGLUTProcAddress( const char* procName )
     CHECK_NAME(glutCreateMenuUcall);
     CHECK_NAME(glutTimerFuncUcall);
     CHECK_NAME(glutIdleFuncUcall);
-    //TODO
+    CHECK_NAME(glutKeyboardFuncUcall);
+    CHECK_NAME(glutSpecialFuncUcall);
+    CHECK_NAME(glutReshapeFuncUcall);
+    CHECK_NAME(glutVisibilityFuncUcall);
+    CHECK_NAME(glutDisplayFuncUcall);
+    CHECK_NAME(glutMouseFuncUcall);
+    CHECK_NAME(glutMotionFuncUcall);
+    CHECK_NAME(glutPassiveMotionFuncUcall);
+    CHECK_NAME(glutEntryFuncUcall);
+    CHECK_NAME(glutKeyboardUpFuncUcall);
+    CHECK_NAME(glutSpecialUpFuncUcall);
+    CHECK_NAME(glutJoystickFuncUcall);
+    CHECK_NAME(glutMenuStatusFuncUcall);
+    CHECK_NAME(glutOverlayDisplayFuncUcall);
+    CHECK_NAME(glutWindowStatusFuncUcall);
+    CHECK_NAME(glutSpaceballMotionFuncUcall);
+    CHECK_NAME(glutSpaceballRotateFuncUcall);
+    CHECK_NAME(glutSpaceballButtonFuncUcall);
+    CHECK_NAME(glutButtonBoxFuncUcall);
+    CHECK_NAME(glutDialsFuncUcall);
+    CHECK_NAME(glutTabletMotionFuncUcall);
+    CHECK_NAME(glutTabletButtonFuncUcall);
+    CHECK_NAME(glutMouseWheelFuncUcall);
+    CHECK_NAME(glutPositionFuncUcall);
+    CHECK_NAME(glutCloseFuncUcall);
+    CHECK_NAME(glutWMCloseFuncUcall);
+    CHECK_NAME(glutMenuDestroyFuncUcall);
+    CHECK_NAME(glutMultiEntryFuncUcall);
+    CHECK_NAME(glutMultiButtonFuncUcall);
+    CHECK_NAME(glutMultiMotionFuncUcall);
+    CHECK_NAME(glutMultiPassiveFuncUcall);
+    CHECK_NAME(glutInitErrorFuncUcall);
+    CHECK_NAME(glutInitWarningFuncUcall);
+    CHECK_NAME(glutInitContextFuncUcall);
+    CHECK_NAME(glutAppStatusFuncUcall);
 #undef CHECK_NAME
 
     return NULL;

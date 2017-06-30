@@ -531,7 +531,7 @@ static void fghActivateMenu( SFG_Window* window, int button )
             fgState.MenuStateCallback(GLUT_MENU_IN_USE);
         if (fgState.MenuStatusCallback)
             /* window->State.MouseX and window->State.MouseY are relative to client area origin, as needed */
-            fgState.MenuStatusCallback(GLUT_MENU_IN_USE, window->State.MouseX, window->State.MouseY);
+            fgState.MenuStatusCallback(GLUT_MENU_IN_USE, window->State.MouseX, window->State.MouseY, fgState.MenuStatusCallbackData);
     }
 
     fgSetWindow( menu->Window );
@@ -725,7 +725,7 @@ void fgDeactivateMenu( SFG_Window *window )
             SFG_XYUse mouse_pos;
             fghPlatformGetCursorPos(parent_window, GL_TRUE, &mouse_pos);
 
-            fgState.MenuStatusCallback(GLUT_MENU_NOT_IN_USE, mouse_pos.X, mouse_pos.Y);
+            fgState.MenuStatusCallback(GLUT_MENU_NOT_IN_USE, mouse_pos.X, mouse_pos.Y, fgState.MenuStatusCallbackData);
         }
     }
 }
@@ -791,7 +791,7 @@ int FGAPIENTRY glutCreateMenuUcall( FGCBMenuUC callback, FGCBUserData userData )
 }
 
 /* Standard glutCreateMenu */
-void glutCreateMenuCallback( int menu, FGCBUserData userData )
+static void glutCreateMenuCallback( int menu, FGCBUserData userData )
 {
     FGCBMenu callback = (FGCBMenu)userData;
     callback( menu );
@@ -800,6 +800,8 @@ void glutCreateMenuCallback( int menu, FGCBUserData userData )
 int FGAPIENTRY glutCreateMenu( FGCBMenu callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenu" );
+    if (!callback)
+        return glutCreateMenuUcall( NULL, NULL );
     return glutCreateMenuUcall( glutCreateMenuCallback, (FGCBUserData)callback );
 }
 
