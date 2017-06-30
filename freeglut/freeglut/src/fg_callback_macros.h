@@ -32,50 +32,6 @@
 #error "fg_internal.h needs to be included before this header"
 #endif
 
-#if 0 /* old. Remove once other testing is complete */
-/*
- * EXPAND_WCB() is used as:
- * 
- *     EXPAND_WCB arg_list
- * 
- * ... where {(arg_list)} is the parameter list.
- *
- * This will take the arg_list and extend it by one argument, adding
- * the argument "userData" to the end of the list.
- * 
- * All additional args are to get around trailing ',', argument counts,
- * and not needing a GCC extension to make this work.
- *
- * Minor modification of:
- * http://stackoverflow.com/questions/5355241/generating-function-declaration-using-a-macro-iteration/5355946#5355946
- *
- * Supports up to five arguments
- */
-
-/* GCC-specific design that doesn't require per-callback defines */
-
-#define PP_HAS_ARGS_IMPL2(_0, _1, _2, _3, _4, _5, N, ...) N
-#define PP_HAS_ARGS_SOURCE() \
-    ONE_OR_MORE, ONE_OR_MORE, ONE_OR_MORE, ONE_OR_MORE, ONE_OR_MORE, ZERO
-
-#define PP_HAS_ARGS_IMPL(...) \
-    PP_HAS_ARGS_IMPL2(__VA_ARGS__)
-#define PP_HAS_ARGS(...) \
-    PP_HAS_ARGS_IMPL(NOT_EXIST, ##__VA_ARGS__, PP_HAS_ARGS_SOURCE())
-
-#define EXPAND_WCB_ZERO(x) \
-    (userData)
-#define EXPAND_WCB_ONE_OR_MORE(...) \
-    (__VA_ARGS__, userData)
-
-#define EXPAND_WCB_DISAMBIGUATE2(has_args, ...) \
-    EXPAND_WCB_ ## has_args (__VA_ARGS__)
-#define EXPAND_WCB_DISAMBIGUATE(has_args, ...) \
-    EXPAND_WCB_DISAMBIGUATE2(has_args, __VA_ARGS__)
-#define EXPAND_WCB(...) \
-    EXPAND_WCB_DISAMBIGUATE(PP_HAS_ARGS(__VA_ARGS__), __VA_ARGS__)
-#endif
-
 /*
  * Compiler defines:
  * FG_COMPILER_SUPPORTS_GCC_VA_ARGS_HACK: if the compiler supports GCC's varadic macro implementation (AKA, ##__VA_ARGS__)
@@ -125,7 +81,8 @@
 #define EXPAND_WCB_ZERO(args, userData) ( userData )
 #define EXPAND_WCB_ONE_OR_MORE(args, userData) ( EXPAND_WCB_UNPARAN args, userData )
 
-#define EXPAND_WCB_DISAMBIGUATE(has_args, args, userData) EXPAND_WCB_ ## has_args ( args, userData )
+#define EXPAND_WCB_DISAMBIGUATE2(has_args, args, userData) EXPAND_WCB_ ## has_args ( args, userData )
+#define EXPAND_WCB_DISAMBIGUATE(has_args, args, userData) EXPAND_WCB_DISAMBIGUATE2( has_args, args, userData )
 
 #define EXPAND_WCB_UNWRAP_ARGS2(args, userData) EXPAND_WCB_DISAMBIGUATE( PP_HAS_ARGS args, args, userData )
 #define EXPAND_WCB_UNWRAP_ARGS(args) EXPAND_WCB_UNWRAP_ARGS2 args
