@@ -3,9 +3,8 @@
  *
  * The freeglut library callback macro file.
  *
- * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
- * Written by Pawel W. Olszta, <olszta@sourceforge.net>
- * Creation date: Thu Dec 2 1999
+ * Copyright (C) 2016 Vincent Simonetti
+ * Creation date: Sat Jan 16 2016
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -38,20 +37,65 @@
  * FG_COMPILER_SUPPORTS_VA_ARGS: if the compiler supports varadic macros
  */
 
+/*
+ * Info:
+ *
+ * This took a while to figure out, so be sure try to understand what is happening so that you can ensure that whatever you
+ * change won't break other areas.
+ * 
+ * If you are just adding a new callback/changing it's argument count, just go to the bottom of the file.
+ *
+ * This whole file exists purely for the sake of preventing the need to implement additional parsing logic for each callback
+ * to pass user arguments. Of course, the necessity to support older compilers means that, as seen in the line above, there
+ * is still a requirement to add/modify code to handle callbacks. If freeglut ever requires newer compilers (at minimum, ones
+ * that support C99 or higher), code can very slowly be removed from this file. Even better would be if the C standard eventually
+ * supports something similar to what GCC has implemented or offers an alternative. Another option is if C++ would be "allowed" by
+ * project maintaners, as then templates can be used and function overloading. Ironically, the template would probably look worse
+ * then the GCC macro, so maybe it's good to stay as is.
+ *
+ * Onto the different "versions" of macros:
+ * 
+ * There is one for GCC/Clang(/and supposedly the Intel compiler) which supports the non-standard ##__VA_ARGS__ token. The code may 
+ * look ugly, but the result is, if this was standard, no one would ever need to open this file unless they were curious (or needed 
+ * more then 5 arguments for a callback, but that's trivial to add). It works by adding many fake macros to a "picker" macro
+ * (PP_HAS_ARGS_IMPL2) which then indictaes which macro counter to use. As we can already use varadic macros (the VA in __VA_ARGS__),
+ * this just becomes a "reuse the arguments*.
+ * 
+ * The next is for any non-GCC/Clang/etc. compiler *cough* MSVC/compiler you probably shouldn't be using *cough* that supports C99
+ * by default. It requires each callback to have a specific argument count passthrough macro. The only reason there are specific
+ * count macros is so that (see paraghraph below) don't need have their own set of callback macros. Ideally, there would only be
+ * ZERO and ONE_OR_MORE. This works by having callback-specific macros call a specific handler macro to return user data (ZERO) or
+ * return one or more arguments along with userData (ONE_OR_MORE) where, with varadic macros, it just reuses the arguments.
+ *
+ * The last set is for the poor individual who has to use a compiler that doesn't support C99 by default, or may not support it at
+ * all. Stuff like MSVC6... It works by having a specific-count macro that "extracts" each argument to have them reused without the
+ * parathesis.
+ *
+ * A note on parathesis, as earlier mentioned, if the GCC varadic macro element was standard, then instead of needing:
+ *
+ * func EXPAND_WCB(Mouse)(( (GLUT_LEFT_BUTTON, GLUT_DOWN, 10, 30), userData));
+ *
+ * ...you can do the following:
+ *
+ * func EXPAND_WCB (GLUT_LEFT_BUTTON, GLUT_DOWN, 10, 30);
+ *
+ * Wow... so much nice and easier to understand. Sub-note: I have not worked on a version that explicitly takes userData, so for now
+ * if you can get to that version, look in the version control change history for this file and you'll find that version which
+ * implicitly passes "userData" and only works on GCC vardiac macro supporting compilers.
+ */
+
 #ifdef FG_COMPILER_SUPPORTS_GCC_VA_ARGS_HACK
 
  /*
  * EXPAND_WCB() is used as:
+ * 
+ *     EXPAND_WCB( cbname )(( arg_list, userData ))
+ * 
+ * ... where {(arg_list)} is the parameter list and userData is user
+ * provided data.
  *
- *     EXPAND_WCB arg_list
- *
- * ... where {(arg_list)} is the parameter list.
- *
- * This will take the arg_list and extend it by one argument, adding
- * the argument "userData" to the end of the list.
- *
- * All additional args are to get around trailing ',', argument counts,
- * and not needing a GCC extension to make this work.
+ * All additional macros are to get around trailing ',' for zero-arg
+ * callbacks.
  *
  * Modification of:
  * http://stackoverflow.com/questions/5355241/generating-function-declaration-using-a-macro-iteration/5355946#5355946
@@ -115,7 +159,6 @@
  * #define EXPAND_WCB_SUB_Entry(args) EXPAND_WCB_ONE args
  */
 
-#define FG_COMPILER_SUPPORTS_VA_ARGS //XXX (should be compiler defined)
 #ifdef FG_COMPILER_SUPPORTS_VA_ARGS
 
 #define EXPAND_WCB_UNPARAN(...) __VA_ARGS__
@@ -129,8 +172,17 @@
 
 #else
 
-//TODO
-#error "Compiler does not support varadic argument macros"
+#define EXTRACT_ONE_ARGS(arg1) arg1
+#define EXTRACT_TWO_ARGS(arg1, arg2) arg1, arg2
+#define EXTRACT_THREE_ARGS(arg1, arg2, arg3) arg1, arg2, arg3
+#define EXTRACT_FOUR_ARGS(arg1, arg2, arg3, arg4) arg1, arg2, arg3, arg4
+#define EXTRACT_FIVE_ARGS(arg1, arg2, arg3, arg4, arg5) arg1, arg2, arg3, arg4, arg5
+
+#define EXPAND_WCB_ONE(args, userData) (EXTRACT_ONE_ARGS args, userData)
+#define EXPAND_WCB_TWO(args, userData) (EXTRACT_TWO_ARGS args, userData)
+#define EXPAND_WCB_THREE(args, userData) (EXTRACT_THREE_ARGS args, userData)
+#define EXPAND_WCB_FOUR(args, userData) (EXTRACT_FOUR_ARGS args, userData)
+#define EXPAND_WCB_FIVE(args, userData) (EXTRACT_FIVE_ARGS args, userData)
 
 #endif
 
