@@ -34,9 +34,7 @@
  */
 
 /*
- * Compiler defines:
- * FG_COMPILER_SUPPORTS_GCC_VA_ARGS_HACK: if the compiler supports GCC's variadic macro implementation (AKA, ##__VA_ARGS__)
- * FG_COMPILER_SUPPORTS_VA_ARGS: if the compiler supports variadic macros
+ * Compiler define: FG_COMPILER_SUPPORTS_VA_ARGS: if the compiler supports variadic macros
  */
 
 /* What supports variadic macros based off Wikipedia article on it (GCC-like must support C99 or higher to use variadic macros) */
@@ -49,15 +47,6 @@
 #define FG_COMPILER_SUPPORTS_VA_ARGS 1
 #else
 #define FG_COMPILER_SUPPORTS_VA_ARGS 0
-#endif
-
-/* If __VA_ARGS__ is supported, it needs to be GCC(-like) or Clang (since Clang mimics GCC) */
-#if FG_COMPILER_SUPPORTS_VA_ARGS && \
-	(defined(__GNUC__)) || \
-	(defined(__clang__))
-#define FG_COMPILER_SUPPORTS_GCC_VA_ARGS_HACK 1
-#else
-#define FG_COMPILER_SUPPORTS_GCC_VA_ARGS_HACK 0
 #endif
 
 /*
@@ -82,85 +71,19 @@
  *
  * Onto the different "versions" of macros:
  * 
- * There is one for GCC/Clang(/and supposedly the Intel compiler) which supports the non-standard ##__VA_ARGS__ token. The code may 
- * look ugly, but the result is, if this was standard, no one would ever need to open this file unless they were curious (or needed 
- * more then 5 arguments for a callback, but that's trivial to add). It works by adding many fake macros to a "picker" macro
- * (PP_HAS_ARGS_IMPL2) which then indictaes which macro counter to use. As we can already use variadic macros (the VA in __VA_ARGS__),
- * this just becomes a "reuse the arguments*.
- * 
- * The next is for any non-GCC/Clang/etc. compiler *cough* MSVC/compiler you probably shouldn't be using *cough* that supports C99
- * by default. It requires each callback to have a specific argument count passthrough macro. The only reason there are specific
- * count macros is so that (see paraghraph below) don't need have their own set of callback macros. Ideally, there would only be
- * ZERO and ONE_OR_MORE. This works by having callback-specific macros call a specific handler macro to return user data (ZERO) or
- * return one or more arguments along with userData (ONE_OR_MORE) where, with variadic macros, it just reuses the arguments.
+ * The first is for any compiler that supports C99 by default. It requires each callback to have a specific argument count 
+ * passthrough macro. The only reason there are specific count macros is so that (see paraghraph below) don't need have their own 
+ * set of callback macros. Ideally, there would only be ZERO and ONE_OR_MORE. This works by having callback-specific macros call a 
+ * specific handler macro to return user data (ZERO) or return one or more arguments along with userData (ONE_OR_MORE) where, with 
+ * variadic macros, it just reuses the arguments.
  *
- * The last set is for the poor individual who has to use a compiler that doesn't support C99 by default, or may not support it at
- * all. Stuff like MSVC6... It works by having a specific-count macro that "extracts" each argument to have them reused without the
- * parathesis.
+ * The last macro set is for the poor individual who has to use a compiler that doesn't support C99 by default, or may not support 
+ * it at all. Stuff like MSVC6... It works by having a specific-count macro that "extracts" each argument to have them reused without 
+ * the parathesis.
  *
- * A note on parathesis, as earlier mentioned, if the GCC variadic macro element was standard, then instead of needing:
- *
- * func EXPAND_WCB(Mouse)(( (GLUT_LEFT_BUTTON, GLUT_DOWN, 10, 30), userData));
- *
- * ...you can do the following:
- *
- * func EXPAND_WCB (GLUT_LEFT_BUTTON, GLUT_DOWN, 10, 30);
- *
- * Wow... so much nice and easier to understand. Sub-note: I have not worked on a version that explicitly takes userData, so for now
- * if you can get to that version, look in the version control change history for this file and you'll find that version which
- * implicitly passes "userData" and only works on GCC vardiac macro supporting compilers.
+ * There is a 3rd macro set that only worked on GCC/Clang, and thus was removed (last seen in revision e9676fc of the GIT mirror. 
+ * Not sure at this time what the SVN number is.) as it's a non-standard functionality.
  */
-
-#if FG_COMPILER_SUPPORTS_GCC_VA_ARGS_HACK
-
- /*
- * EXPAND_WCB() is used as:
- * 
- *     EXPAND_WCB( cbname )(( arg_list, userData ))
- * 
- * ... where {(arg_list)} is the parameter list and userData is user
- * provided data.
- *
- * All additional macros are to get around trailing ',' for zero-arg
- * callbacks.
- *
- * Modification of:
- * http://stackoverflow.com/questions/5355241/generating-function-declaration-using-a-macro-iteration/5355946#5355946
- *
- * --------------
- *
- * GCC-specific design that doesn't require per-callback defines
- *
- * The naming is terrible... and it's very convuluted and complex, but
- * should not require any modification unless additional arguments are to 
- * be supported.
- * 
- * Supports callbacks up to 5 args (follow the pattern of 
- * EXPAND_WCB_PP_HAS_ARGS_IMPL2 and EXPAND_WCB_PP_HAS_ARGS_SOURCE to add more)
- *
- * Edit with care.
- */
-
-#define EXPAND_WCB_UNPARAN(...) __VA_ARGS__
-
-#define EXPAND_WCB_PP_HAS_ARGS_IMPL2(_0, _1, _2, _3, _4, _5, N, ...) N
-#define EXPAND_WCB_PP_HAS_ARGS_SOURCE() ONE_OR_MORE, ONE_OR_MORE, ONE_OR_MORE, ONE_OR_MORE, ONE_OR_MORE, ZERO
-
-#define EXPAND_WCB_PP_HAS_ARGS_IMPL(...) EXPAND_WCB_PP_HAS_ARGS_IMPL2( __VA_ARGS__ )
-#define EXPAND_WCB_PP_HAS_ARGS(...) EXPAND_WCB_PP_HAS_ARGS_IMPL( NOT_EXIST, ##__VA_ARGS__, EXPAND_WCB_PP_HAS_ARGS_SOURCE() )
-
-#define EXPAND_WCB_ZERO(args, userData) ( userData )
-#define EXPAND_WCB_ONE_OR_MORE(args, userData) ( EXPAND_WCB_UNPARAN args, userData )
-
-#define EXPAND_WCB_DISAMBIGUATE2(has_args, args, userData) EXPAND_WCB_ ## has_args ( args, userData )
-#define EXPAND_WCB_DISAMBIGUATE(has_args, args, userData) EXPAND_WCB_DISAMBIGUATE2( has_args, args, userData )
-
-#define EXPAND_WCB_UNWRAP_ARGS2(args, userData) EXPAND_WCB_DISAMBIGUATE( EXPAND_WCB_PP_HAS_ARGS args, args, userData )
-#define EXPAND_WCB_UNWRAP_ARGS(args) EXPAND_WCB_UNWRAP_ARGS2 args
-
-#define EXPAND_WCB(cbname) EXPAND_WCB_UNWRAP_ARGS
-
-#else
 
 /*
  * EXPAND_WCB() is used as:
@@ -254,8 +177,6 @@
 #define EXPAND_WCB_SUB_MultiPassive(args) EXPAND_WCB_THREE args
 #define EXPAND_WCB_SUB_InitContext(args) EXPAND_WCB_ZERO args
 #define EXPAND_WCB_SUB_AppStatus(args) EXPAND_WCB_ONE args
-
-#endif
 
 /*
  * ------------------------
