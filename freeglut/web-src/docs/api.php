@@ -332,7 +332,7 @@ when you created it.</ul>
 <p>
 GLUT was created as a tool to help teach OpenGL programming. To simplify
 development, callbacks were used for handling display, input, and other
-events. But the time it was developed, the purpose, or for some other 
+events. But at the time it was developed, the purpose, or for some other 
 unknown reason, the callbacks lacked any user-provided data argument.
 This has caused considerable difficulties for any significantly advanced
 usage of GLUT, and now <i>freeglut</i>. This has prevented any attempt to 
