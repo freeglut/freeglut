@@ -577,6 +577,12 @@ typedef void (*SFG_Proc)();
  * The {if( FETCH_WCB( ... ) != func )} test is to do type-checking
  * and for no other reason.  Since it's hidden in the macro, the
  * ugliness is felt to be rather benign.
+ *
+ * If the function-pointer is the same, the data will be the only
+ * value updated. If the function-pointer changes, the data will
+ * be changed as well, preventing stail data from being passed in.
+ * Just updating the data does nothing unless a function-pointer
+ * exists, as the data is otherwise already allocated.
  */
 #define SET_WCB(window,cbname,func,udata)                      \
 do                                                             \
@@ -586,6 +592,10 @@ do                                                             \
         (((window).CallBacks[WCB_ ## cbname]) = (SFG_Proc)(func)); \
         (((window).CallbackDatas[WCB_ ## cbname]) = (udata));  \
     }                                                          \
+	else if( FETCH_USER_DATA_WCB( window, cbname ) != udata )  \
+	{                                                          \
+		(((window).CallbackDatas[WCB_ ## cbname]) = (udata));  \
+	}                                                          \
 } while( 0 )
 
 /*
@@ -611,14 +621,6 @@ do                                                             \
  *          {cbname} is the window-specific callback to be invoked,
  *
  * This expects a variable named "window" of type tagSFG_Window to exist.
- */
-/*
- * FETCH_USER_DATA_WCB() is used as:
- *
- *     FETCH_USER_DATA_WCB( window, cbname );
- *
- * ...where {window} is the freeglut window to fetch the callback data from,
- *          {cbname} is the window-specific callback data to fetch.
  *
  * The result is the callback data pointer.
  */
