@@ -28,6 +28,12 @@
 #define FREEGLUT_CALLBACK_MACROS_H
 
 /*
+ * ----------------------------------------------------------------------------------------------------------------------
+ * There are two sets of macros here. One is for executing window callbacks, the others are for setting window callbacks.
+ * ----------------------------------------------------------------------------------------------------------------------
+ */
+
+/*
  * Compiler defines:
  * FG_COMPILER_SUPPORTS_GCC_VA_ARGS_HACK: if the compiler supports GCC's variadic macro implementation (AKA, ##__VA_ARGS__)
  * FG_COMPILER_SUPPORTS_VA_ARGS: if the compiler supports variadic macros
@@ -55,6 +61,10 @@
 #endif
 
 /*
+ * --------------------------
+ * Executing window callbacks
+ * --------------------------
+ *
  * Info:
  *
  * This took a while to figure out, so be sure try to understand what is happening so that you can ensure that whatever you
@@ -246,6 +256,156 @@
 #define EXPAND_WCB_SUB_AppStatus(args) EXPAND_WCB_ONE args
 
 #endif
+
+/*
+ * ------------------------
+ * Setting window callbacks
+ * ------------------------
+ *
+ * These originally existed in fg_callbacks.c
+ */
+
+/*
+ * All of the window-specific callbacks setting methods can be generalized to this:
+ */
+#define SET_CURRENT_WINDOW_CALLBACK(a)                                    \
+do                                                                        \
+{                                                                         \
+    if( fgStructure.CurrentWindow == NULL )                               \
+        return;                                                           \
+    SET_WCB( ( *( fgStructure.CurrentWindow ) ), a, callback, userData ); \
+} while( 0 )
+
+/*
+ * Types need to be defined for callbacks. It's not ideal, but it works for this.
+ */
+#define IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,b)                              \
+static void fgh##a##FuncCallback( FGCBUserData userData )                 \
+{                                                                         \
+    FGCB##b callback = (FGCB##b)userData;                                 \
+    callback();                                                           \
+}
+#define IMPLEMENT_CALLBACK_FUNC_CB_ARG1(a,b)                              \
+static void fgh##a##FuncCallback( int arg1val, FGCBUserData userData )    \
+{                                                                         \
+    FGCB##b callback = (FGCB##b)userData;                                 \
+    callback( arg1val );                                                  \
+}
+#define IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,b)                              \
+static void fgh##a##FuncCallback( int arg1val, int arg2val, FGCBUserData userData ) \
+{                                                                         \
+    FGCB##b callback = (FGCB##b)userData;                                 \
+    callback( arg1val, arg2val );                                         \
+}
+#define IMPLEMENT_CALLBACK_FUNC_CB_ARG3_USER(a,b,arg1,arg2,arg3)          \
+static void fgh##a##FuncCallback( arg1 arg1val, arg2 arg2val, arg3 arg3val, FGCBUserData userData ) \
+{                                                                         \
+    FGCB##b callback = (FGCB##b)userData;                                 \
+    callback( arg1val, arg2val, arg3val );                                \
+}
+#define IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,b) IMPLEMENT_CALLBACK_FUNC_CB_ARG3_USER(a,b,int,int,int)
+#define IMPLEMENT_CALLBACK_FUNC_CB_ARG4(a,b)                              \
+static void fgh##a##FuncCallback( int arg1val, int arg2val, int arg3val, int arg4val, FGCBUserData userData ) \
+{                                                                         \
+    FGCB##b callback = (FGCB##b)userData;                                 \
+    callback( arg1val, arg2val, arg3val, arg4val );                       \
+}
+#define IMPLEMENT_CALLBACK_FUNC_CB_ARG5(a,b)                              \
+static void fgh##a##FuncCallback( int arg1val, int arg2val, int arg3val, int arg4val, int arg5val, FGCBUserData userData ) \
+{                                                                         \
+    FGCB##b callback = (FGCB##b)userData;                                 \
+    callback( arg1val, arg2val, arg3val, arg4val, arg5val );              \
+}
+
+/*
+ * And almost every time the callback setter function can be implemented with these:
+ */
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT_UCALL(a,b)      \
+void FGAPIENTRY glut##a##FuncUcall( FGCB##b##UC callback, FGCBUserData userData ) \
+{                                                                         \
+    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glut"#a"FuncUcall" );             \
+    SET_CURRENT_WINDOW_CALLBACK( b );                                     \
+}
+#define IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)                      \
+void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
+{                                                                         \
+    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glut"#a"Func" );                  \
+    if( callback )                                                        \
+        glut##a##FuncUcall( fgh##a##FuncCallback, (FGCBUserData)callback ); \
+    else                                                                  \
+        glut##a##FuncUcall( NULL, NULL );                                 \
+}
+
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,b)            \
+		IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT_UCALL(a,b)      \
+		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
+
+/*
+ * Combine _glut and _cb macros:
+ */
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG0(a)                     \
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,a)                               \
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
+
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG0_2NAME(a,b)             \
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,b)                               \
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,b)
+
+#define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG0(a)                               \
+		IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,a)                               \
+		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
+
+#define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG0_2NAME(a,b)                       \
+		IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,b)                               \
+		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
+
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG1(a)                     \
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG1(a,a)                               \
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
+
+#define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG1(a)                               \
+		IMPLEMENT_CALLBACK_FUNC_CB_ARG1(a,a)                               \
+		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
+
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG2(a)                     \
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,a)                               \
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
+
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG2_2NAME(a,b)             \
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,b)                               \
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,b)
+
+#define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG2(a)                               \
+		IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,a)                               \
+		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
+
+#define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG2_2NAME(a,b)                       \
+		IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,b)                               \
+		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
+
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG3(a)                     \
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,a)                               \
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
+
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG3_USER(a,arg1,arg2,arg3) \
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG3_USER(a,a,arg1,arg2,arg3)           \
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
+
+#define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG3(a)                               \
+		IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,a)                               \
+		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
+
+#define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG3_2NAME(a,b)                       \
+		IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,b)                               \
+		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
+
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG4(a)                     \
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG4(a,a)                               \
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
+
+#define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG5(a)                     \
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG5(a,a)                               \
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
 
 #endif /* FREEGLUT_CALLBACK_MACROS_H */
 
