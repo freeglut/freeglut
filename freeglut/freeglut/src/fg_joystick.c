@@ -46,21 +46,20 @@
 
 #    ifdef HAVE_USB_JS
 #        if defined(__NetBSD__)
-/* XXX The below hack is done until freeglut's autoconf is updated. */
-#            define HAVE_USBHID_H 1
 #            ifdef HAVE_USBHID_H
 #                include <usbhid.h>
 #            else
 #                include <usb.h>
 #            endif
+#            include <dev/usb/usb.h>
 #        elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
 #            ifdef HAVE_USBHID_H
 #                include <usbhid.h>
 #            else
 #                include <libusbhid.h>
 #            endif
+#            include <legacy/dev/usb/usb.h>
 #        endif
-#        include <legacy/dev/usb/usb.h>
 #        include <dev/usb/usbhid.h>
 
 /* Compatibility with older usb.h revisions */
