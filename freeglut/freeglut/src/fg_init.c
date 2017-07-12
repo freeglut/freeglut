@@ -689,14 +689,14 @@ static void fghInitErrorFuncCallback( const char *fmt, va_list ap, FGCBUserData 
 
 void FGAPIENTRY glutInitErrorFunc( FGError callback )
 {
-	if (callback)
-	{
-		glutInitErrorFuncUcall( fghInitErrorFuncCallback, (FGCBUserData)callback );
-	}
-	else
-	{
-		glutInitErrorFuncUcall( NULL, NULL );
-	}
+    if (callback)
+    {
+        glutInitErrorFuncUcall( fghInitErrorFuncCallback, (FGCBUserData)callback );
+    }
+    else
+    {
+        glutInitErrorFuncUcall( NULL, NULL );
+    }
 }
 
 /*
@@ -717,14 +717,14 @@ static void fghInitWarningFuncCallback( const char *fmt, va_list ap, FGCBUserDat
 
 void FGAPIENTRY glutInitWarningFunc( FGWarning callback )
 {
-	if (callback)
-	{
-		glutInitWarningFuncUcall( fghInitWarningFuncCallback, (FGCBUserData)callback );
-	}
-	else
-	{
-		glutInitWarningFuncUcall( NULL, NULL );
-	}
+    if (callback)
+    {
+        glutInitWarningFuncUcall( fghInitWarningFuncCallback, (FGCBUserData)callback );
+    }
+    else
+    {
+        glutInitWarningFuncUcall( NULL, NULL );
+    }
 }
 
 /*** END OF FILE ***/
