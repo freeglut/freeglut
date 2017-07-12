@@ -139,9 +139,6 @@
  */
 #if defined(__FreeBSD__) || defined(__NetBSD__)
 #    define HAVE_USB_JS 1
-#    if defined(__NetBSD__) || ( defined(__FreeBSD__) && __FreeBSD_version >= 500000)
-#        define HAVE_USBHID_H 1
-#    endif
 #endif
 
 #if defined(_MSC_VER) || defined(__WATCOMC__)
