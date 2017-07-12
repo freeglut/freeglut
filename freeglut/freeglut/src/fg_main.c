@@ -179,7 +179,7 @@ static void fghcbCheckJoystickPolls( SFG_Window *window,
                                      SFG_Enumerator *enumerator )
 {
     fg_time_t checkTime;
-    
+
     if (window->State.JoystickPollRate > 0 && FETCH_WCB( *window, Joystick ))
     {
         /* This window has a joystick to be polled (if pollrate <= 0, user needs to poll manually with glutForceJoystickFunc */
@@ -200,7 +200,7 @@ static void fghcbCheckJoystickPolls( SFG_Window *window,
 
 /*
  * Check all windows for joystick polling
- * 
+ *
  * The real way to do this is to make use of the glutTimer() API
  * to more cleanly re-implement the joystick API.  Then, this code
  * and all other "joystick timer" code can be yanked.
@@ -237,18 +237,18 @@ static void fghCheckTimers( void )
     }
 }
 
- 
+
 /* Platform-dependent time in milliseconds, as an unsigned 64-bit integer.
  * This doesn't overflow in any reasonable time, so no need to worry about
  * that. The GLUT API return value will however overflow after 49.7 days,
  * which means you will still get in trouble when running the
  * application for more than 49.7 days.
- */  
+ */
 fg_time_t fgSystemTime(void)
 {
-	return fgPlatformSystemTime();
+    return fgPlatformSystemTime();
 }
-  
+
 /*
  * Elapsed Time
  */
@@ -446,7 +446,7 @@ void fgProcessWork(SFG_Window *window)
 void FGAPIENTRY glutMainLoopEvent( void )
 {
     /* Process input */
-	fgPlatformProcessSingleEvent ();
+    fgPlatformProcessSingleEvent ();
 
     if( fgState.Timers.First )
         fghCheckTimers( );
