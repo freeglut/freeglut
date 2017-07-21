@@ -683,15 +683,16 @@ void FGAPIENTRY glutInitErrorFuncUcall( FGErrorUC callback, FGCBUserData userDat
 
 static void fghInitErrorFuncCallback( const char *fmt, va_list ap, FGCBUserData userData )
 {
-    FGError callback = (FGError)userData;
-    callback( fmt, ap );
+    FGError* callback = (FGError*)&userData;
+    (*callback)( fmt, ap );
 }
 
 void FGAPIENTRY glutInitErrorFunc( FGError callback )
 {
     if (callback)
     {
-        glutInitErrorFuncUcall( fghInitErrorFuncCallback, (FGCBUserData)callback );
+        FGError* reference = &callback;
+        glutInitErrorFuncUcall( fghInitErrorFuncCallback, *((FGCBUserData*)reference) );
     }
     else
     {
@@ -711,15 +712,16 @@ void FGAPIENTRY glutInitWarningFuncUcall( FGWarningUC callback, FGCBUserData use
 
 static void fghInitWarningFuncCallback( const char *fmt, va_list ap, FGCBUserData userData )
 {
-    FGWarning callback = (FGWarning)userData;
-    callback( fmt, ap );
+    FGWarning* callback = (FGWarning*)&userData;
+    (*callback)( fmt, ap );
 }
 
 void FGAPIENTRY glutInitWarningFunc( FGWarning callback )
 {
     if (callback)
     {
-        glutInitWarningFuncUcall( fghInitWarningFuncCallback, (FGCBUserData)callback );
+        FGWarning* reference = &callback;
+        glutInitWarningFuncUcall( fghInitWarningFuncCallback, *((FGCBUserData*)reference) );
     }
     else
     {

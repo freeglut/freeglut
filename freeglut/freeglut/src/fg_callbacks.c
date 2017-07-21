@@ -83,7 +83,10 @@ void FGAPIENTRY glutTimerFunc( unsigned int timeOut, FGCBTimer callback, int tim
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutTimerFunc" );
     if( callback )
-        glutTimerFuncUcall( timeOut, fghTimerFuncCallback, timerID, (FGCBUserData)callback );
+    {
+        FGCBTimer* reference = &callback;
+        glutTimerFuncUcall( timeOut, fghTimerFuncCallback, timerID, *((FGCBUserData*)reference) );
+    }
     else
         glutTimerFuncUcall( timeOut, NULL, timerID, NULL );
 }
@@ -270,15 +273,18 @@ void FGAPIENTRY glutJoystickFuncUcall( FGCBJoystickUC callback, int pollInterval
 
 static void fghJoystickFuncCallback( unsigned int buttons, int axis0, int axis1, int axis2, FGCBUserData userData )
 {
-    FGCBJoystick callback = (FGCBJoystick)userData;
-    callback( buttons, axis0, axis1, axis2 );
+    FGCBJoystick* callback = (FGCBJoystick*)&userData;
+    (*callback)( buttons, axis0, axis1, axis2 );
 }
 
 void FGAPIENTRY glutJoystickFunc( FGCBJoystick callback, int pollInterval )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickFunc" );
     if( callback )
-        glutJoystickFuncUcall( fghJoystickFuncCallback, pollInterval, (FGCBUserData)callback );
+    {
+        FGCBJoystick* reference = &callback;
+        glutJoystickFuncUcall( fghJoystickFuncCallback, pollInterval, *((FGCBUserData*)reference) );
+    }
     else
         glutJoystickFuncUcall( NULL, pollInterval, NULL );
 }
