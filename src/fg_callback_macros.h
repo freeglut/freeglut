@@ -203,39 +203,39 @@ do                                                                        \
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,b)                              \
 static void fgh##a##FuncCallback( FGCBUserData userData )                 \
 {                                                                         \
-    FGCB##b callback = (FGCB##b)userData;                                 \
-    callback();                                                           \
+    FGCB##b* callback = (FGCB##b*)&userData;                              \
+    (*callback)();                                                        \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG1(a,b)                              \
 static void fgh##a##FuncCallback( int arg1val, FGCBUserData userData )    \
 {                                                                         \
-    FGCB##b callback = (FGCB##b)userData;                                 \
-    callback( arg1val );                                                  \
+    FGCB##b* callback = (FGCB##b*)&userData;                              \
+    (*callback)( arg1val );                                               \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,b)                              \
 static void fgh##a##FuncCallback( int arg1val, int arg2val, FGCBUserData userData ) \
 {                                                                         \
-    FGCB##b callback = (FGCB##b)userData;                                 \
-    callback( arg1val, arg2val );                                         \
+    FGCB##b* callback = (FGCB##b*)&userData;                              \
+    (*callback)( arg1val, arg2val );                                      \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG3_USER(a,b,arg1,arg2,arg3)          \
 static void fgh##a##FuncCallback( arg1 arg1val, arg2 arg2val, arg3 arg3val, FGCBUserData userData ) \
 {                                                                         \
-    FGCB##b callback = (FGCB##b)userData;                                 \
-    callback( arg1val, arg2val, arg3val );                                \
+    FGCB##b* callback = (FGCB##b*)&userData;                              \
+    (*callback)( arg1val, arg2val, arg3val );                             \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,b) IMPLEMENT_CALLBACK_FUNC_CB_ARG3_USER(a,b,int,int,int)
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG4(a,b)                              \
 static void fgh##a##FuncCallback( int arg1val, int arg2val, int arg3val, int arg4val, FGCBUserData userData ) \
 {                                                                         \
-    FGCB##b callback = (FGCB##b)userData;                                 \
-    callback( arg1val, arg2val, arg3val, arg4val );                       \
+    FGCB##b* callback = (FGCB##b*)&userData;                              \
+    (*callback)( arg1val, arg2val, arg3val, arg4val );                    \
 }
 #define IMPLEMENT_CALLBACK_FUNC_CB_ARG5(a,b)                              \
 static void fgh##a##FuncCallback( int arg1val, int arg2val, int arg3val, int arg4val, int arg5val, FGCBUserData userData ) \
 {                                                                         \
-    FGCB##b callback = (FGCB##b)userData;                                 \
-    callback( arg1val, arg2val, arg3val, arg4val, arg5val );              \
+    FGCB##b* callback = (FGCB##b*)&userData;                              \
+    (*callback)( arg1val, arg2val, arg3val, arg4val, arg5val );           \
 }
 
 /*
@@ -252,7 +252,10 @@ void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
 {                                                                         \
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glut"#a"Func" );                  \
     if( callback )                                                        \
-        glut##a##FuncUcall( fgh##a##FuncCallback, (FGCBUserData)callback ); \
+    {                                                                     \
+        FGCB##b* reference = &callback;                                   \
+        glut##a##FuncUcall( fgh##a##FuncCallback, *((FGCBUserData*)reference) ); \
+    }                                                                     \
     else                                                                  \
         glut##a##FuncUcall( NULL, NULL );                                 \
 }
