@@ -484,10 +484,17 @@ IF(FREEGLUT_BUILD_SHARED_LIBS)
             INCLUDES DESTINATION include
     )
     IF(INSTALL_PDB)
-        INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
-            DESTINATION bin
-            CONFIGURATIONS Debug
-            COMPONENT Devel)
+        IF(CMAKE_GENERATOR MATCHES "^Visual Studio")
+            INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
+                DESTINATION bin
+                CONFIGURATIONS Debug
+                COMPONENT Devel)
+        ELSE()
+            INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
+                DESTINATION bin
+                CONFIGURATIONS Debug
+                COMPONENT Devel)
+        ENDIF()
     ENDIF()
 ENDIF()
 IF(FREEGLUT_BUILD_STATIC_LIBS)
