@@ -14,9 +14,9 @@ PORTS
 Currently supported platforms:
  - UNIX systems with X11 and Wayland (such as GNU/Linux, FreeBSD, etc)
  - MS Windows
- - MacOS X with XQuartz (no native Cocoa support yet)
+ - macOS with XQuartz (no native Cocoa support yet)
  - Android (NDK)
- - Blackberry
+ - BlackBerry
 
 Consult the platform-specific readme files for details on the level of support
 and build instructions.
