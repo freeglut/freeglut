@@ -182,6 +182,11 @@ void fgAddToWindowDestroyList( SFG_Window* window )
         fghClearCallBacks( window );
         SET_WCB( *window, Destroy, destroy, destroyData );
     }
+
+	/*
+	 * Similarly, clear all work set for the window, none of this has to be executed anymore
+	 */
+	window->State.WorkMask = 0;
 }
 
 /*
