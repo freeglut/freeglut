@@ -157,6 +157,7 @@ FGAPI void    FGAPIENTRY glutSetMenuFont( int menuID, void* font );
 /*
  * Window-specific callback functions, see fg_callbacks.c
  */
+FGAPI void    FGAPIENTRY glutKeyboardExtFunc( void (* callback)( int, int, int ) );
 FGAPI void    FGAPIENTRY glutMouseWheelFunc( void (* callback)( int, int, int, int ) );
 FGAPI void    FGAPIENTRY glutPositionFunc( void (* callback)( int, int ) );
 FGAPI void    FGAPIENTRY glutCloseFunc( void (* callback)( void ) );

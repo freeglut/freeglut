@@ -579,6 +579,109 @@ __fg_unused static void fghPrintEvent( XEvent *event )
     }
 }
 
+/* UTF-8 decoding routine */
+enum
+{
+    Runeerror = 0xFFFD, /* decoding error in UTF */
+
+    Bit1 = 7,
+    Bitx = 6,
+    Bit2 = 5,
+    Bit3 = 4,
+    Bit4 = 3,
+    Bit5 = 2,
+
+    T1 = ((1<<(Bit1+1))-1) ^ 0xFF, /* 0000 0000 */
+    Tx = ((1<<(Bitx+1))-1) ^ 0xFF, /* 1000 0000 */
+    T2 = ((1<<(Bit2+1))-1) ^ 0xFF, /* 1100 0000 */
+    T3 = ((1<<(Bit3+1))-1) ^ 0xFF, /* 1110 0000 */
+    T4 = ((1<<(Bit4+1))-1) ^ 0xFF, /* 1111 0000 */
+    T5 = ((1<<(Bit5+1))-1) ^ 0xFF, /* 1111 1000 */
+
+    Rune1 = (1<<(Bit1+0*Bitx))-1, /* 0000 0000 0111 1111 */
+    Rune2 = (1<<(Bit2+1*Bitx))-1, /* 0000 0111 1111 1111 */
+    Rune3 = (1<<(Bit3+2*Bitx))-1, /* 1111 1111 1111 1111 */
+    Rune4 = (1<<(Bit4+3*Bitx))-1, /* 0001 1111 1111 1111 1111 1111 */
+
+    Maskx = (1<<Bitx)-1,	/* 0011 1111 */
+    Testx = Maskx ^ 0xFF,	/* 1100 0000 */
+
+    Bad = Runeerror,
+};
+
+static int chartorune(int *rune, const char *str)
+{
+    int c, c1, c2, c3;
+    int l;
+
+    /*
+     * one character sequence
+     *	00000-0007F => T1
+     */
+    c = *(const unsigned char*)str;
+    if(c < Tx) {
+        *rune = c;
+        return 1;
+    }
+
+    /*
+     * two character sequence
+     *	0080-07FF => T2 Tx
+     */
+    c1 = *(const unsigned char*)(str+1) ^ Tx;
+    if(c1 & Testx)
+        goto bad;
+    if(c < T3) {
+        if(c < T2)
+            goto bad;
+        l = ((c << Bitx) | c1) & Rune2;
+        if(l <= Rune1)
+            goto bad;
+        *rune = l;
+        return 2;
+    }
+
+    /*
+     * three character sequence
+     *	0800-FFFF => T3 Tx Tx
+     */
+    c2 = *(const unsigned char*)(str+2) ^ Tx;
+    if(c2 & Testx)
+        goto bad;
+    if(c < T4) {
+        l = ((((c << Bitx) | c1) << Bitx) | c2) & Rune3;
+        if(l <= Rune2)
+            goto bad;
+        *rune = l;
+        return 3;
+    }
+
+    /*
+     * four character sequence (21-bit value)
+     *	10000-1FFFFF => T4 Tx Tx Tx
+     */
+    c3 = *(const unsigned char*)(str+3) ^ Tx;
+    if (c3 & Testx)
+        goto bad;
+    if (c < T5) {
+        l = ((((((c << Bitx) | c1) << Bitx) | c2) << Bitx) | c3) & Rune4;
+        if (l <= Rune3)
+            goto bad;
+        *rune = l;
+        return 4;
+    }
+    /*
+     * Support for 5-byte or longer UTF-8 would go here, but
+     * since we don't have that, we'll just fall through to bad.
+     */
+
+    /*
+     * bad decoding
+     */
+bad:
+    *rune = Bad;
+    return 1;
+}
 
 extern char *fgClipboardBuffer[3];
 
@@ -779,6 +882,8 @@ void fgPlatformProcessSingleEvent ( void )
 #if _DEBUG
         fghPrintEvent( &event );
 #endif
+	if (XFilterEvent(&event, None))
+		continue;
 
         switch( event.type )
         {
@@ -1076,8 +1181,10 @@ void fgPlatformProcessSingleEvent ( void )
         case KeyRelease:
         case KeyPress:
         {
+            FGCBKeyboardExtUC keyboard_ext_cb;
             FGCBKeyboardUC keyboard_cb;
             FGCBSpecialUC special_cb;
+            FGCBUserData keyboard_ext_ud;
             FGCBUserData keyboard_ud;
             FGCBUserData special_ud;
 
@@ -1120,46 +1227,71 @@ void fgPlatformProcessSingleEvent ( void )
 
             if( event.type == KeyPress )
             {
+                keyboard_ext_cb = (FGCBKeyboardExtUC)( FETCH_WCB( *window, KeyboardExt ));
                 keyboard_cb = (FGCBKeyboardUC)( FETCH_WCB( *window, Keyboard ));
                 special_cb  = (FGCBSpecialUC) ( FETCH_WCB( *window, Special  ));
+                keyboard_ext_ud = FETCH_USER_DATA_WCB( *window, KeyboardExt );
                 keyboard_ud = FETCH_USER_DATA_WCB( *window, Keyboard );
                 special_ud  = FETCH_USER_DATA_WCB( *window, Special  );
             }
             else
             {
+                keyboard_ext_cb = NULL;
                 keyboard_cb = (FGCBKeyboardUC)( FETCH_WCB( *window, KeyboardUp ));
                 special_cb  = (FGCBSpecialUC) ( FETCH_WCB( *window, SpecialUp  ));
+                keyboard_ext_ud = NULL;
                 keyboard_ud = FETCH_USER_DATA_WCB( *window, KeyboardUp );
                 special_ud  = FETCH_USER_DATA_WCB( *window, SpecialUp  );
             }
 
+
             /* Is there a keyboard/special callback hooked for this window? */
-            if( keyboard_cb || special_cb )
+            if (keyboard_ext_cb || keyboard_cb || special_cb)
             {
-                XComposeStatus composeStatus;
-                char asciiCode[ 32 ];
+                static XComposeStatus composeStatus = { 0 }; /* keep state across invocations */
+                XIC ic = window->Window.pContext.IC;
+                Status status;
+                char buf[32], *utf8 = buf;
                 KeySym keySym;
-                int len;
+                int i, c, len;
 
                 /* Check for the ASCII/KeySym codes associated with the event: */
-                len = XLookupString( &event.xkey, asciiCode, sizeof(asciiCode),
-                                     &keySym, &composeStatus
-                );
-
-                /* GLUT API tells us to have two separate callbacks... */
-                if( len > 0 )
+                if (ic)
                 {
-                    /* ...one for the ASCII translateable keypresses... */
-                    if( keyboard_cb )
+                    len = Xutf8LookupString(ic, &event.xkey, buf, sizeof buf, &keySym, &status);
+                    if (status == XBufferOverflow)
                     {
-                        fgSetWindow( window );
-                        fgState.Modifiers = fgPlatformGetModifiers( event.xkey.state );
-                        keyboard_cb( asciiCode[ 0 ],
-                                     event.xkey.x, event.xkey.y,
-                                     keyboard_ud
-                        );
-                        fgState.Modifiers = INVALID_MODIFIERS;
+                        utf8 = malloc(len);
+                        len = Xutf8LookupString(ic, &event.xkey, utf8, len, &keySym, &status);
                     }
+                }
+                else
+                {
+                    len = XLookupString(&event.xkey, buf, sizeof buf, &keySym, &composeStatus);
+                }
+
+                /* GLUT API tells us to have three separate callbacks... */
+                if (len > 0)
+                {
+                    fgSetWindow(window);
+                    fgState.Modifiers = fgPlatformGetModifiers(event.xkey.state);
+
+                    i = 0;
+                    while (i < len)
+                    {
+                        i += chartorune(&c, utf8 + i);
+
+                        /* ...one for the Unicode translateable keypresses... */
+                        if (keyboard_ext_cb)
+                            keyboard_ext_cb(c, event.xkey.x, event.xkey.y, keyboard_ext_ud);
+
+                        /* ...one for the ASCII translateable keypresses... */
+                        if (keyboard_cb)
+                            if (c < 128)
+                                keyboard_cb(c, event.xkey.x, event.xkey.y, keyboard_ud);
+                    }
+
+                    fgState.Modifiers = INVALID_MODIFIERS;
                 }
                 else
                 {
@@ -1228,6 +1360,9 @@ void fgPlatformProcessSingleEvent ( void )
                         fgState.Modifiers = INVALID_MODIFIERS;
                     }
                 }
+
+                if (utf8 != buf)
+                    free(utf8);
             }
         }
         break;

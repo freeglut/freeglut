@@ -33,6 +33,8 @@
 #include "fg_init.h"
 #include "egl/fg_init_egl.h"
 
+#include <locale.h>
+
 /* Return the atom associated with "name". */
 static Atom fghGetAtom(const char * name)
 {
@@ -258,10 +260,46 @@ void fgPlatformInitialize( const char* displayName )
       fgDisplay.pDisplay.ClientMachine = fghGetAtom("WM_CLIENT_MACHINE");
     }
 
+    /* Open an input method */
+    setlocale(LC_ALL, ""); /* ugh! but we can't force the client to do it for us... */
+    if (!XSupportsLocale())
+        fgWarning("X doesn't support the current locale.");
+    if (!XSetLocaleModifiers(""))
+        fgWarning("Couldn't set X locale modifiers.");
+    fgDisplay.pDisplay.IM = XOpenIM(fgDisplay.pDisplay.Display, NULL, NULL, NULL);
+    if (!fgDisplay.pDisplay.IM)
+	fgWarning("Couldn't open X input method.");
+    else
+    {
+        XIMStyles *styles;
+        XIMStyle supported = XIMPreeditNothing | XIMStatusNothing;
+        XIMStyle best = 0;
+        unsigned int i;
+        char *res = XGetIMValues(fgDisplay.pDisplay.IM, XNQueryInputStyle, &styles, NULL);
+        if (res)
+            fgWarning("Couldn't get input method style: %s.", res);
+        else
+        {
+            for (i = 0; i < styles->count_styles; ++i)
+            {
+                XIMStyle style = styles->supported_styles[i];
+                if ((style & supported) == style)
+                    best = style;
+            }
+            fgDisplay.pDisplay.InputStyle = best;
+        }
+        XFree(styles);
+        if (best == 0)
+        {
+            fgWarning("Couldn't find a usable input method style.");
+            XCloseIM(fgDisplay.pDisplay.IM);
+            fgDisplay.pDisplay.IM = NULL;
+        }
+    }
+
     /* Get start time */
     fgState.Time = fgSystemTime();
     
-
     fgState.Initialised = GL_TRUE;
 
     atexit(fgDeinitialize);
@@ -286,6 +324,9 @@ void fgPlatformCloseDisplay ( void )
      * display closing
      */
     XSetCloseDownMode( fgDisplay.pDisplay.Display, DestroyAll );
+
+    if (fgDisplay.pDisplay.IM)
+        XCloseIM(fgDisplay.pDisplay.IM);
 
     /*
      * Close the display connection, destroying all windows we have

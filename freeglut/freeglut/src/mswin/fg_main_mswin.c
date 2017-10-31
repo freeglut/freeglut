@@ -739,9 +739,14 @@ static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean ke
     case VK_DELETE:
         /* The delete key should be treated as an ASCII keypress: */
         if (keydown)
+        {
+            INVOKE_WCB( *window, KeyboardExt,
+                        ( 127, window->State.MouseX, window->State.MouseY )
+            );
             INVOKE_WCB( *window, Keyboard,
                         ( 127, window->State.MouseX, window->State.MouseY )
             );
+        }
         else
             INVOKE_WCB( *window, KeyboardUp,
                         ( 127, window->State.MouseX, window->State.MouseY )
@@ -761,7 +766,8 @@ static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean ke
             if( ToAscii( (UINT)wParam, 0, state, code, 0 ) == 1 )
                 wParam=code[ 0 ];
 
-            INVOKE_WCB( *window, KeyboardUp,
+            if (wParam < 128)
+                INVOKE_WCB( *window, KeyboardUp,
                    ( (char)(wParam & 0xFF), /* and with 0xFF to indicate to runtime that we want to strip out higher bits - otherwise we get a runtime error when "Smaller Type Checks" is enabled */
                         window->State.MouseX, window->State.MouseY )
             );
@@ -1452,10 +1458,13 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
             break;
 
         fgState.Modifiers = fgPlatformGetModifiers( );
-        INVOKE_WCB( *window, Keyboard,
-                    ( (char)wParam,
-                      window->State.MouseX, window->State.MouseY )
+        INVOKE_WCB( *window, KeyboardExt,
+                ( wParam, window->State.MouseX, window->State.MouseY )
         );
+        if (wParam < 128)
+            INVOKE_WCB( *window, Keyboard,
+                    ( (char)wParam, window->State.MouseX, window->State.MouseY )
+            );
         fgState.Modifiers = INVALID_MODIFIERS;
     }
     break;
