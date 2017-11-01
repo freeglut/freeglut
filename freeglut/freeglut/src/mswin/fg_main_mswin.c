@@ -480,6 +480,81 @@ fg_time_t fgPlatformSystemTime ( void )
     return currTime32 | timeEpoch << 32;
 }
 
+static char *fgClipboardBuffer[3] = { NULL, NULL, NULL };
+
+void fgPlatformSetClipboard(int selection, const char *text)
+{
+	if (selection == GLUT_PRIMARY)
+	{
+		free(fgClipboardBuffer[GLUT_PRIMARY]);
+		fgClipboardBuffer[GLUT_PRIMARY] = strdup(text);
+	}
+	else if (selection == GLUT_SECONDARY)
+	{
+		free(fgClipboardBuffer[GLUT_SECONDARY]);
+		fgClipboardBuffer[GLUT_SECONDARY] = strdup(text);
+	}
+	else if (selection == GLUT_CLIPBOARD && text)
+	{
+		int n = MultiByteToWideChar(CP_UTF8, 0, text, -1, NULL, 0);
+		if (n > 0)
+		{
+			HANDLE object = GlobalAlloc(0, n * sizeof(WCHAR));
+			if (object)
+			{
+				WCHAR *wtext = GlobalLock(object);
+				if (wtext)
+				{
+					MultiByteToWideChar(CP_UTF8, 0, text, -1, wtext, n);
+					GlobalUnlock(object);
+					if (OpenClipboard(NULL))
+					{
+						EmptyClipboard();
+						SetClipboardData(CF_UNICODETEXT, object);
+						CloseClipboard();
+					}
+				}
+				GlobalFree(object);
+			}
+		}
+	}
+}
+
+const char *fgPlatformGetClipboard(int selection)
+{
+	if (selection == GLUT_PRIMARY)
+		return fgClipboardBuffer[GLUT_PRIMARY];
+	if (selection == GLUT_SECONDARY)
+		return fgClipboardBuffer[GLUT_SECONDARY];
+	if (selection == GLUT_CLIPBOARD)
+	{
+		free(fgClipboardBuffer[GLUT_CLIPBOARD]);
+		fgClipboardBuffer[GLUT_CLIPBOARD] = NULL;
+		if (OpenClipboard(NULL))
+		{
+			HANDLE object = GetClipboardData(CF_UNICODETEXT);
+			if (object)
+			{
+				WCHAR *wtext = GlobalLock(object);
+				if (wtext)
+				{
+					int n = WideCharToMultiByte(CP_UTF8, 0, wtext, -1, NULL, 0, NULL, NULL);
+					if (n > 0)
+					{
+						char *text = malloc(n);
+						fgClipboardBuffer[GLUT_CLIPBOARD] = text;
+						WideCharToMultiByte(CP_UTF8, 0, wtext, -1, text, n, NULL, NULL);
+					}
+					GlobalUnlock(object);
+				}
+				GlobalFree(object);
+			}
+			CloseClipboard();
+		}
+		return fgClipboardBuffer[GLUT_CLIPBOARD];
+	}
+	return NULL;
+}
 
 void fgPlatformSleepForEvents( fg_time_t msec )
 {

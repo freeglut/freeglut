@@ -187,6 +187,8 @@ static GLUTproc fghGetGLUTProcAddress( const char* procName )
     CHECK_NAME(glutStrokeString);
     CHECK_NAME(glutGetProcAddress);
     CHECK_NAME(glutMouseWheelFunc);
+    CHECK_NAME(glutGetClipboard);
+    CHECK_NAME(glutSetClipboard);
     CHECK_NAME(glutJoystickGetNumAxes);
     CHECK_NAME(glutJoystickGetNumButtons);
     CHECK_NAME(glutJoystickNotWorking);

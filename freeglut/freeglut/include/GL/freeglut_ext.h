@@ -176,6 +176,15 @@ FGAPI void*   FGAPIENTRY glutGetMenuData( void );
 FGAPI void    FGAPIENTRY glutSetMenuData(void* data);
 
 /*
+ * Clipboard access
+ */
+#define GLUT_CLIPBOARD 0
+#define GLUT_PRIMARY 1
+#define GLUT_SECONDARY 2
+FGAPI void         FGAPIENTRY glutSetClipboard(int selection, const char *string);
+FGAPI const char * FGAPIENTRY glutGetClipboard(int selection);
+
+/*
  * Font stuff, see fg_font.c
  */
 FGAPI int     FGAPIENTRY glutBitmapHeight( void* font );
