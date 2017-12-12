@@ -512,6 +512,7 @@ void fgPlatformSetClipboard(int selection, const char *text)
 						EmptyClipboard();
 						SetClipboardData(CF_UNICODETEXT, object);
 						CloseClipboard();
+						object = NULL; /* it is now owned by the system */
 					}
 				}
 				GlobalFree(object);
@@ -547,7 +548,6 @@ const char *fgPlatformGetClipboard(int selection)
 					}
 					GlobalUnlock(object);
 				}
-				GlobalFree(object);
 			}
 			CloseClipboard();
 		}
