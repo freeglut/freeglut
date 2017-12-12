@@ -319,6 +319,8 @@ void fgPlatformDeinitialiseInputDevices ( void )
 
 void fgPlatformCloseDisplay ( void )
 {
+    int i;
+
     /*
      * Make sure all X-client data we have created will be destroyed on
      * display closing
@@ -334,9 +336,11 @@ void fgPlatformCloseDisplay ( void )
      */
     XCloseDisplay( fgDisplay.pDisplay.Display );
 
-    free(fgClipboardBuffer[0]);
-    free(fgClipboardBuffer[1]);
-    free(fgClipboardBuffer[2]);
+    for (i = 0; i < 3; ++i)
+    {
+        free(fgClipboardBuffer[i]);
+        fgClipboardBuffer[i] = NULL;
+    }
 }
 
 

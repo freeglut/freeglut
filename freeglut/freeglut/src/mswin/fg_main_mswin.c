@@ -480,7 +480,7 @@ fg_time_t fgPlatformSystemTime ( void )
     return currTime32 | timeEpoch << 32;
 }
 
-static char *fgClipboardBuffer[3] = { NULL, NULL, NULL };
+extern char *fgClipboardBuffer[3];
 
 void fgPlatformSetClipboard(int selection, const char *text)
 {
