@@ -233,9 +233,11 @@ typedef void (* FGCBPositionUC      )( int, int, FGCBUserData );
 typedef void (* FGCBVisibility      )( int );
 typedef void (* FGCBVisibilityUC    )( int, FGCBUserData );
 typedef void (* FGCBKeyboard        )( unsigned char, int, int );
+typedef void (* FGCBKeyboardUC      )( unsigned char, int, int, FGCBUserData );
 typedef void (* FGCBKeyboardExt     )( int, int, int );
 typedef void (* FGCBKeyboardExtUC   )( int, int, int, FGCBUserData );
-typedef void (* FGCBKeyboardUC      )( unsigned char, int, int, FGCBUserData );
+typedef void (* FGCBKeyboardDown    )( unsigned char, int, int );
+typedef void (* FGCBKeyboardDownUC  )( unsigned char, int, int, FGCBUserData );
 typedef void (* FGCBKeyboardUp      )( unsigned char, int, int );
 typedef void (* FGCBKeyboardUpUC    )( unsigned char, int, int, FGCBUserData );
 typedef void (* FGCBSpecial         )( int, int, int );
@@ -695,6 +697,7 @@ enum
     WCB_Position,
     WCB_Keyboard,
     WCB_KeyboardExt,
+    WCB_KeyboardDown,
     WCB_KeyboardUp,
     WCB_Special,
     WCB_SpecialUp,
