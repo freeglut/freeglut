@@ -463,7 +463,9 @@ ELSE()
         # '-O0 -gstabs+' helps the currently buggy GDB port
         # Too late to manipulate ENV: SET(ENV{CFLAGS} "$ENV{CFLAGS} -mandroid")
         # Not using _INIT variables, they seem to be used internally only
-        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mandroid")
+        IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+            SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mandroid")
+        ENDIF()
         SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -gstabs+")
     ENDIF()
 ENDIF()
