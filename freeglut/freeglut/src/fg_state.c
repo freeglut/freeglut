@@ -270,7 +270,7 @@ int FGAPIENTRY glutDeviceGet( GLenum eWhat )
     case GLUT_NUM_DIALS:
         if ( fgState.InputDevsInitialised ) return 8;
         return 0;
- 
+
     case GLUT_NUM_BUTTON_BOX_BUTTONS:
         return 0;
 
@@ -293,7 +293,7 @@ int FGAPIENTRY glutDeviceGet( GLenum eWhat )
         return fgState.KeyRepeat;
 
     default:
-		return fgPlatformGlutDeviceGet ( eWhat );
+        return fgPlatformGlutDeviceGet ( eWhat );
     }
 }
 

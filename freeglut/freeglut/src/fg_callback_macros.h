@@ -39,11 +39,11 @@
 
 /* What supports variadic macros based off Wikipedia article on it (GCC-like must support C99 or higher to use variadic macros) */
 #if (((defined(__GNUC__) && (__GNUC__ >= 3)) || \
-	  (defined(__clang__))) && \
-		(defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L))) || \
-	(defined(_MSC_VER) && (_MSC_VER >= 1400)) || \
-	(defined(__BORLANDC__) && (__BORLANDC__ >= 0x570)) || \
-	(defined(__SUNPRO_C) && (__SUNPRO_C >= 0x530))
+      (defined(__clang__))) && \
+        (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L))) || \
+    (defined(_MSC_VER) && (_MSC_VER >= 1400)) || \
+    (defined(__BORLANDC__) && (__BORLANDC__ >= 0x570)) || \
+    (defined(__SUNPRO_C) && (__SUNPRO_C >= 0x530))
 #define FG_COMPILER_SUPPORTS_VA_ARGS 1
 #else
 #define FG_COMPILER_SUPPORTS_VA_ARGS 0
@@ -58,7 +58,7 @@
  *
  * This took a while to figure out, so be sure try to understand what is happening so that you can ensure that whatever you
  * change won't break other areas.
- * 
+ *
  * If you are just adding a new callback/changing it's argument count, just go to the bottom of the file.
  *
  * This whole file exists purely for the sake of preventing the need to implement additional parsing logic for each callback
@@ -70,26 +70,26 @@
  * then the GCC macro, so maybe it's good to stay as is.
  *
  * Onto the different "versions" of macros:
- * 
- * The first is for any compiler that supports C99 by default. It requires each callback to have a specific argument count 
- * passthrough macro. The only reason there are specific count macros is so that (see paraghraph below) don't need have their own 
- * set of callback macros. Ideally, there would only be ZERO and ONE_OR_MORE. This works by having callback-specific macros call a 
- * specific handler macro to return user data (ZERO) or return one or more arguments along with userData (ONE_OR_MORE) where, with 
+ *
+ * The first is for any compiler that supports C99 by default. It requires each callback to have a specific argument count
+ * passthrough macro. The only reason there are specific count macros is so that (see paraghraph below) don't need have their own
+ * set of callback macros. Ideally, there would only be ZERO and ONE_OR_MORE. This works by having callback-specific macros call a
+ * specific handler macro to return user data (ZERO) or return one or more arguments along with userData (ONE_OR_MORE) where, with
  * variadic macros, it just reuses the arguments.
  *
- * The last macro set is for the poor individual who has to use a compiler that doesn't support C99 by default, or may not support 
- * it at all. Stuff like MSVC6... It works by having a specific-count macro that "extracts" each argument to have them reused without 
+ * The last macro set is for the poor individual who has to use a compiler that doesn't support C99 by default, or may not support
+ * it at all. Stuff like MSVC6... It works by having a specific-count macro that "extracts" each argument to have them reused without
  * the parathesis.
  *
- * There is a 3rd macro set that only worked on GCC/Clang, and thus was removed (last seen in revision e9676fc of the GIT mirror. 
+ * There is a 3rd macro set that only worked on GCC/Clang, and thus was removed (last seen in revision e9676fc of the GIT mirror.
  * Not sure at this time what the SVN number is.) as it's a non-standard functionality.
  */
 
 /*
  * EXPAND_WCB() is used as:
- * 
+ *
  *     EXPAND_WCB( cbname )(( arg_list, userData ))
- * 
+ *
  * ... where {(arg_list)} is the parameter list and userData is user
  * provided data.
  *
@@ -140,7 +140,7 @@
 
 #define EXPAND_WCB(cbname) EXPAND_WCB_SUB_ ## cbname
 
-/* 
+/*
  * Freeglut callbacks type definitions macros
  *
  * Every time a callback is updated in fg_internal.h is updated, this needs updated
@@ -261,8 +261,8 @@ void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
 }
 
 #define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,b)            \
-		IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT_UCALL(a,b)      \
-		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
+        IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT_UCALL(a,b)      \
+        IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
 
 /*
  * Combine _glut and _cb macros:
@@ -276,20 +276,20 @@ void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
         IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,b)
 
 #define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG0(a)                               \
-		IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,a)                               \
-		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,a)                               \
+        IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
 
 #define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG0_2NAME(a,b)                       \
-		IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,b)                               \
-		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG0(a,b)                               \
+        IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
 
 #define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG1(a)                     \
         IMPLEMENT_CALLBACK_FUNC_CB_ARG1(a,a)                               \
         IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
 
 #define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG1(a)                               \
-		IMPLEMENT_CALLBACK_FUNC_CB_ARG1(a,a)                               \
-		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG1(a,a)                               \
+        IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
 
 #define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG2(a)                     \
         IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,a)                               \
@@ -300,12 +300,12 @@ void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
         IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,b)
 
 #define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG2(a)                               \
-		IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,a)                               \
-		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,a)                               \
+        IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
 
 #define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG2_2NAME(a,b)                       \
-		IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,b)                               \
-		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG2(a,b)                               \
+        IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
 
 #define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG3(a)                     \
         IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,a)                               \
@@ -316,12 +316,12 @@ void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
         IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
 
 #define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG3(a)                               \
-		IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,a)                               \
-		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,a)                               \
+        IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,a)
 
 #define IMPLEMENT_GLUT_CALLBACK_FUNC_ARG3_2NAME(a,b)                       \
-		IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,b)                               \
-		IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
+        IMPLEMENT_CALLBACK_FUNC_CB_ARG3(a,b)                               \
+        IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)
 
 #define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG4(a)                     \
         IMPLEMENT_CALLBACK_FUNC_CB_ARG4(a,a)                               \

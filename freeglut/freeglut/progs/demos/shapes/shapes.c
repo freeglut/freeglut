@@ -5,10 +5,10 @@
     in OpenGLUT.  It may also be useful to see which
     parameters control what behavior in the OpenGLUT
     objects.
- 
+
     Spinning wireframe and solid-shaded shapes are
     displayed.  Some parameters can be adjusted.
- 
+
    Keys:
       -    <tt>Esc &nbsp;</tt> Quit
       -    <tt>q Q &nbsp;</tt> Quit
@@ -34,7 +34,7 @@
 
     \author  Portions Copyright (C) 2004, the OpenGLUT project contributors. <br>
              OpenGLUT branched from freeglut in February, 2004.
- 
+
     \image   html openglut_shapes.png OpenGLUT Geometric Shapes Demonstration
     \include demos/shapes/shapes.c
 */
@@ -63,7 +63,7 @@ void checkError(const char *functionName)
 }
 
 /*
- * OpenGL 2+ shader mode needs some function and macro definitions, 
+ * OpenGL 2+ shader mode needs some function and macro definitions,
  * avoiding a dependency on additional libraries like GLEW or the
  * GL/glext.h header
  */
@@ -283,10 +283,10 @@ GLint getAttribOrUniformLocation(const char* name, GLuint program, GLboolean isA
         GLint attrib = gl_GetAttribLocation(program, name);
         if (attrib == -1)
         {
-            fprintf(stderr, "Warning: Could not bind attrib %s\n", name);  
+            fprintf(stderr, "Warning: Could not bind attrib %s\n", name);
         }
 
-		checkError ("getAttribOrUniformLocation");
+        checkError ("getAttribOrUniformLocation");
         return attrib;
     }
     else
@@ -294,16 +294,16 @@ GLint getAttribOrUniformLocation(const char* name, GLuint program, GLboolean isA
         GLint uniform = gl_GetUniformLocation(program, name);
         if (uniform == -1)
         {
-            fprintf(stderr, "Warning: Could not bind uniform %s\n", name);  
+            fprintf(stderr, "Warning: Could not bind uniform %s\n", name);
         }
 
-		checkError ("getAttribOrUniformLocation");
+        checkError ("getAttribOrUniformLocation");
         return uniform;
     }
 }
 
 GLuint program;
-GLint attribute_fg_coord = -1, attribute_fg_normal = -1;  
+GLint attribute_fg_coord = -1, attribute_fg_normal = -1;
 GLint uniform_m = -1, uniform_p = -1, uniform_m_3x3_inv_transp = -1;
 GLint shaderReady = 0;  /* Set to 1 when all initialization went well, to -1 when shader somehow unusable. */
 
@@ -800,10 +800,10 @@ key(unsigned char key, int x, int y)
     case '.':
     case '>': stacks++;                   break;
 
-    case '9': 
+    case '9':
     case '(': if( depth > -1 ) depth--;   break;
 
-    case '0': 
+    case '0':
     case ')': ++depth;                    break;
 
     case 'P':

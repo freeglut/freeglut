@@ -35,7 +35,7 @@ void fgInitialiseSpaceball(void)
 
 void fgSpaceballClose(void)
 {
-	fgPlatformSpaceballClose();
+    fgPlatformSpaceballClose();
 }
 
 int fgHasSpaceball(void)
@@ -88,12 +88,12 @@ void fgSpaceballClose(void)
 
 int fgHasSpaceball(void)
 {
-	return 0;
+    return 0;
 }
 
 int fgSpaceballNumButtons(void)
 {
-	return 0;
+    return 0;
 }
 
 void fgSpaceballSetWindow(SFG_Window *window)

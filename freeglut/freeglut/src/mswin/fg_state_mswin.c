@@ -32,7 +32,7 @@
 extern GLboolean fgSetupPixelFormat( SFG_Window* window, GLboolean checkOnly,
                                      unsigned char layer_type );
 
-/* 
+/*
  * Helper functions for getting client area from the window rect
  * and the window rect from the client area given the style of the window
  * (or a valid window pointer from which the style can be queried).
@@ -146,7 +146,7 @@ int fgPlatformGlutGet ( GLenum eWhat )
         HDC hdc = fgStructure.CurrentWindow->Window.pContext.Device;
         int iPixelFormat = GetPixelFormat( hdc );
         DescribePixelFormat(hdc, iPixelFormat, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
-        
+
         returnValue = pfd.cColorBits;
         if (pfd.iPixelType==PFD_TYPE_RGBA)
             returnValue += pfd.cAlphaBits;
@@ -183,7 +183,7 @@ int fgPlatformGlutGet ( GLenum eWhat )
         GetWindowRect( fgStructure.CurrentWindow->Window.Handle, &winRect);
 #else
         ClientToScreen(fgStructure.CurrentWindow->Window.Handle, &topLeft);
-        
+
         if (fgStructure.CurrentWindow->Parent)
             /* For child window, we should return relative to upper-left
              * of parent's client area.
@@ -257,7 +257,7 @@ int fgPlatformGlutGet ( GLenum eWhat )
              */
             borderWidth   = ((winRect.right-winRect.left)-(clientRect.right-clientRect.left))/2;
             captionHeight = (winRect.bottom-winRect.top)-(clientRect.bottom-clientRect.top)-borderWidth; /* include top border in caption height */
-            
+
             switch( eWhat )
             {
             case GLUT_WINDOW_BORDER_WIDTH:
@@ -289,7 +289,7 @@ int fgPlatformGlutGet ( GLenum eWhat )
         break;
     }
 
-	return -1;
+    return -1;
 }
 
 
