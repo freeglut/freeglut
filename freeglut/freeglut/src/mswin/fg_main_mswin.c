@@ -1626,6 +1626,7 @@ void fgPlatformPosResZordWork(SFG_Window* window, unsigned int workMask)
             RECT rect;
             HMONITOR hMonitor;
             MONITORINFO mi;
+            DWORD newStyle;
 
             /* save current window rect, style, exstyle and maximized state */
             window->State.pWState.OldMaximized = !!IsZoomed(window->Window.Handle);
@@ -1641,8 +1642,14 @@ void fgPlatformPosResZordWork(SFG_Window* window, unsigned int workMask)
             window->State.pWState.OldStyleEx = GetWindowLong(window->Window.Handle, GWL_EXSTYLE);
 
             /* remove decorations from style */
-            SetWindowLong(window->Window.Handle, GWL_STYLE,
-                            window->State.pWState.OldStyle & ~(WS_CAPTION | WS_THICKFRAME));
+            newStyle = window->State.pWState.OldStyle & ~(WS_CAPTION | WS_THICKFRAME);
+            if (fgState.DisplayMode & GLUT_STEREO)
+            {
+                /* stereo mode does not engage on nVidia stereo buffers. This kills child
+                   windows, but we make the guess that those are rare for stereo windows. */
+                newStyle |= WS_POPUP;
+            }
+            SetWindowLong(window->Window.Handle, GWL_STYLE, newStyle);
             SetWindowLong(window->Window.Handle, GWL_EXSTYLE,
                             window->State.pWState.OldStyleEx & ~(WS_EX_DLGMODALFRAME |
                             WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
