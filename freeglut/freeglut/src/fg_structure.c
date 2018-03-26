@@ -83,7 +83,7 @@ SFG_Window* fgCreateWindow( SFG_Window* parent, const char* title,
         fgError( "Out of memory. Could not create window." );
     }
 
-	fgPlatformCreateWindow ( window );
+    fgPlatformCreateWindow ( window );
 
     fghClearCallBacks( window );
     SET_WCB( *window, Reshape, fghDefaultReshape, NULL);
@@ -183,10 +183,10 @@ void fgAddToWindowDestroyList( SFG_Window* window )
         SET_WCB( *window, Destroy, destroy, destroyData );
     }
 
-	/*
-	 * Similarly, clear all work set for the window, none of this has to be executed anymore
-	 */
-	window->State.WorkMask = 0;
+    /*
+     * Similarly, clear all work set for the window, none of this has to be executed anymore
+     */
+    window->State.WorkMask = 0;
 }
 
 /*

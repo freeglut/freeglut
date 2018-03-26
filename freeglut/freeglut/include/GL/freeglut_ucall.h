@@ -82,7 +82,7 @@ FGAPI void FGAPIENTRY glutInitWarningFuncUcall( void (* callback)( const char *f
 FGAPI void FGAPIENTRY glutInitContextFuncUcall( void (* callback)( void* ), void* user_data );
 FGAPI void FGAPIENTRY glutAppStatusFuncUcall( void (* callback)( int, void* ), void* user_data );
 
-/* 
+/*
  * Continued "hack" from GLUT applied to Ucall functions.
  * For more info, see bottom of freeglut_std.h
  */
