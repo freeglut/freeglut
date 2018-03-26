@@ -214,7 +214,7 @@
 
 /* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
 
-/* 
+/*
  * Freeglut callbacks type definitions
  *
  * If anything here is modified or added, update fg_callback_macros.h functions.
@@ -392,7 +392,7 @@ struct tagSFG_State
     int              NumActiveJoysticks;   /* Number of active joysticks (callback defined and positive pollrate) -- if zero, don't poll joysticks */
     GLboolean        InputDevsInitialised; /* Only initialize if application calls for them */
 
-	int              MouseWheelTicks;      /* Number of ticks the mouse wheel has turned */
+    int              MouseWheelTicks;      /* Number of ticks the mouse wheel has turned */
 
     int              AuxiliaryBufferNumber;/* Number of auxiliary buffers */
     int              SampleNumber;         /*  Number of samples per pixel  */
@@ -417,7 +417,7 @@ struct tagSFG_State
 typedef struct tagSFG_Display SFG_Display;
 struct tagSFG_Display
 {
-	SFG_PlatformDisplay pDisplay;
+    SFG_PlatformDisplay pDisplay;
 
     int             ScreenWidth;        /* The screen's width in pixels      */
     int             ScreenHeight;       /* The screen's height in pixels     */
@@ -447,7 +447,7 @@ struct tagSFG_Context
     SFG_WindowHandleType  Handle;    /* The window's handle                 */
     SFG_WindowContextType Context;   /* The window's OpenGL/WGL context     */
 
-	SFG_PlatformContext pContext;    /* The window's FBConfig (X11) or device context (Windows) */
+    SFG_PlatformContext pContext;    /* The window's FBConfig (X11) or device context (Windows) */
 
     int             DoubleBuffered;  /* Treat the window as double-buffered */
 
@@ -536,7 +536,7 @@ struct tagSFG_WindowState   /* as per notes above, sizes always refer to the cli
     int             DesiredZOrder;      /* desired window Z Order position */
     fgDesiredVisibility DesiredVisibility;/* desired visibility (hidden, iconic, shown/normal) */
 
-	SFG_PlatformWindowState pWState;    /* Window width/height (X11) or rectangle/style (Windows) from before a resize, and other stuff only needed on specific platforms */
+    SFG_PlatformWindowState pWState;    /* Window width/height (X11) or rectangle/style (Windows) from before a resize, and other stuff only needed on specific platforms */
 
     long            JoystickPollRate;   /* The joystick polling rate         */
     fg_time_t       JoystickLastPoll;   /* When the last poll happened       */
@@ -589,10 +589,10 @@ do                                                             \
         (((window).CallBacks[WCB_ ## cbname]) = (SFG_Proc)(func)); \
         (((window).CallbackDatas[WCB_ ## cbname]) = (udata));  \
     }                                                          \
-	else if( FETCH_USER_DATA_WCB( window, cbname ) != udata )  \
-	{                                                          \
-		(((window).CallbackDatas[WCB_ ## cbname]) = (udata));  \
-	}                                                          \
+    else if( FETCH_USER_DATA_WCB( window, cbname ) != udata )  \
+    {                                                          \
+        (((window).CallbackDatas[WCB_ ## cbname]) = (udata));  \
+    }                                                          \
 } while( 0 )
 
 /*
@@ -611,7 +611,7 @@ do                                                             \
 
 /*
  * FETCH_USER_DATA_WCB() is used as:
- * 
+ *
  *     FETCH_USER_DATA_WCB( window, cbname );
  *
  * ...where {window} is the freeglut window,
@@ -626,9 +626,9 @@ do                                                             \
 
 /*
  * EXPAND_WCB() is used as:
- * 
+ *
  *     EXPAND_WCB( cbname )(( arg_list, userData ))
- * 
+ *
  * ... where {(arg_list)} is the parameter list and userData is user
  * provided data.
  *
@@ -655,7 +655,7 @@ do                                                             \
  *
  *    callback( arg_list, userData );
  *
- * ...where userData is added to the arg_list, but the parentheses 
+ * ...where userData is added to the arg_list, but the parentheses
  * are REQUIRED in the {arg_list}.
  *
  * NOTE that it does a sanity-check and also sets the
@@ -670,7 +670,7 @@ do                                            \
         FGCB ## cbname ## UC func = (FGCB ## cbname ## UC)(FETCH_WCB( window, cbname )); \
         FGCBUserData userData = FETCH_USER_DATA_WCB( window, cbname ); \
         fgSetWindow( &window );               \
-		func EXPAND_WCB( cbname )(( arg_list, userData )); \
+        func EXPAND_WCB( cbname )(( arg_list, userData )); \
     }                                         \
 } while( 0 )
 
@@ -945,7 +945,7 @@ struct tagSFG_PlatformJoystick
 typedef struct tagSFG_Joystick SFG_Joystick;
 struct tagSFG_Joystick
 {
-	SFG_PlatformJoystick pJoystick;
+    SFG_PlatformJoystick pJoystick;
 
     int          id;
     GLboolean    error;

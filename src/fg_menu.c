@@ -135,7 +135,7 @@ static void fghDeactivateSubMenu( SFG_MenuEntry *menuEntry )
 static GLvoid fghGetVMaxExtent( SFG_Window* window, int* x, int* y )
 {
     if( fgStructure.GameModeWindow )
-		fgPlatformGetGameModeVMaxExtent ( window, x, y );
+        fgPlatformGetGameModeVMaxExtent ( window, x, y );
     else
     {
         *x = fgDisplay.ScreenWidth;
@@ -784,10 +784,10 @@ int FGAPIENTRY glutCreateMenuUcall( FGCBMenuUC callback, FGCBUserData userData )
 {
     /* The menu object creation code resides in fg_structure.c */
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenuUcall" );
-	if (fgState.ActiveMenus)
-	{
-		fgError( "Menu manipulation not allowed while menus in use." );
-	}
+    if (fgState.ActiveMenus)
+    {
+        fgError( "Menu manipulation not allowed while menus in use." );
+    }
 
     return fgCreateMenu( callback, userData )->ID;
 }
