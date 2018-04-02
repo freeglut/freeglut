@@ -182,6 +182,8 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
             fgState.DisplayMode |= GLUT_DOUBLE ;
             fghChooseConfig(&WINDOW_CONFIG);
             fgState.DisplayMode &= ~GLUT_DOUBLE;
+
+            if( WINDOW_CONFIG ) goto done_retry;
         }
 #endif
 
@@ -190,8 +192,20 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
             fgState.DisplayMode &= ~GLUT_MULTISAMPLE ;
             fghChooseConfig(&WINDOW_CONFIG);
             fgState.DisplayMode |= GLUT_MULTISAMPLE;
+
+            if( WINDOW_CONFIG ) goto done_retry;
+        }
+
+        if( fgState.DisplayMode & GLUT_SRGB )
+        {
+            fgState.DisplayMode &= ~GLUT_SRGB ;
+            fghChooseConfig(&WINDOW_CONFIG);
+            fgState.DisplayMode |= GLUT_SRGB;
+
+            if( WINDOW_CONFIG ) goto done_retry;
         }
     }
+done_retry:
 
     FREEGLUT_INTERNAL_ERROR_EXIT( WINDOW_CONFIG != NULL,
                                   "FBConfig with necessary capabilities not found", "fgOpenWindow" );
