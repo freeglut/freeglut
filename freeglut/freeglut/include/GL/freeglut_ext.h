@@ -92,6 +92,8 @@
 
 #define  GLUT_ALLOW_NEGATIVE_WINDOW_POSITION 0x0207 /* GLUT doesn't allow negative window positions by default */
 
+#define  GLUT_WINDOW_SRGB                   0x007D
+
 /*
  * New tokens for glutInitDisplayMode.
  * Only one GLUT_AUXn bit may be used at a time.

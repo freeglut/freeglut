@@ -46,7 +46,14 @@ extern void fghComputeWindowRectFromClientArea_UseStyle( RECT *clientRect, const
  *   #include <GL/wglext.h>
  * So we copy the necessary parts out of it to support the multisampling query
  */
+#ifndef WGL_SAMPLES_ARB
 #define WGL_SAMPLES_ARB                0x2042
+#endif
+#ifndef WGL_FRAMEBUFFER_SRGB_CAPABLE_ARB
+#define WGL_FRAMEBUFFER_SRGB_CAPABLE_ARB 0x20A9
+#endif
+
+typedef BOOL (WINAPI * PFNWGLGETPIXELFORMATATTRIBIVARBPROC) (HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, int *piValues);
 
 #if defined(_WIN32_WCE)
 #   include <Aygshell.h>
@@ -282,6 +289,25 @@ int fgPlatformGlutGet ( GLenum eWhat )
         if( fgStructure.CurrentWindow != NULL )
             return GetPixelFormat( fgStructure.CurrentWindow->Window.pContext.Device );
 #endif /* defined(_WIN32_WCE) */
+        return 0;
+
+    case GLUT_WINDOW_SRGB:
+        if( fgStructure.CurrentWindow != NULL ) {
+            static int attr = WGL_FRAMEBUFFER_SRGB_CAPABLE_ARB;
+            static PFNWGLGETPIXELFORMATATTRIBIVARBPROC wglGetPixelFormatAttribivARB;
+            HDC hdc = fgStructure.CurrentWindow->Window.pContext.Device;
+            int ipixfmt = GetPixelFormat(hdc);
+            int val;
+
+            if(!wglGetPixelFormatAttribivARB) {
+                if(!(wglGetPixelFormatAttribivARB = (PFNWGLGETPIXELFORMATATTRIBIVARBPROC)wglGetProcAddress("wglGetPixelFormatAttribivARB"))) {
+                    return 0;
+                }
+            }
+            if(wglGetPixelFormatAttribivARB(hdc, ipixfmt, 0, 1, &attr, &val)) {
+                return val;
+            }
+        }
         return 0;
 
     default:
