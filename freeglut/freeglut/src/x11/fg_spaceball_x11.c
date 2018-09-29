@@ -136,7 +136,8 @@ void fgSpaceballHandleXEvent(const XEvent *xev)
             break;
 
         case SPNAV_EVENT_BUTTON:
-            INVOKE_WCB(*spnav_win, SpaceButton, (sev.button.bnum, sev.button.press ? GLUT_DOWN : GLUT_UP));
+            /* button numbers are 1-based in glutSpaceballButtonFunc */
+            INVOKE_WCB(*spnav_win, SpaceButton, (sev.button.bnum + 1, sev.button.press ? GLUT_DOWN : GLUT_UP));
             break;
 
         default:
