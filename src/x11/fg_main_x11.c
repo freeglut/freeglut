@@ -807,11 +807,8 @@ void fgPlatformProcessSingleEvent ( void )
         case ButtonRelease:
         case ButtonPress:
         {
-            GLboolean pressed = GL_TRUE;
-            int button;
-
-            if( event.type == ButtonRelease )
-                pressed = GL_FALSE ;
+            GLboolean pressed;
+            int button, x, y;
 
             /*
              * A mouse button has been pressed or released. Traditionally,
@@ -829,59 +826,46 @@ void fgPlatformProcessSingleEvent ( void )
              */
             button = event.xbutton.button - 1;
 
+            pressed = event.type == ButtonPress ? GL_TRUE : GL_FALSE;
+            x = event.xbutton.x;
+            y = event.xbutton.y;
+
             /*
              * Do not execute the application's mouse callback if a menu
              * is hooked to this button.  In that case an appropriate
              * private call should be generated.
              */
-            if( fgCheckActiveMenu( window, button, pressed,
-                                   event.xbutton.x, event.xbutton.y ) )
+            if(fgCheckActiveMenu( window, button, pressed, x, y))
                 break;
 
             /*
              * Check if there is a mouse or mouse wheel callback hooked to the
              * window
              */
-            if( ! FETCH_WCB( *window, Mouse ) &&
-                ! FETCH_WCB( *window, MouseWheel ) )
+            if(!FETCH_WCB(*window, Mouse) && !FETCH_WCB(*window, MouseWheel))
                 break;
 
-            fgState.Modifiers = fgPlatformGetModifiers( event.xbutton.state );
+            fgState.Modifiers = fgPlatformGetModifiers(event.xbutton.state);
 
-            /* Finally execute the mouse or mouse wheel callback */
-            if( ( button < glutDeviceGet ( GLUT_NUM_MOUSE_BUTTONS ) ) || ( ! FETCH_WCB( *window, MouseWheel ) ) )
-                INVOKE_WCB( *window, Mouse, ( button,
-                                              pressed ? GLUT_DOWN : GLUT_UP,
-                                              event.xbutton.x,
-                                              event.xbutton.y )
-                );
-            else
-            {
-                /*
-                 * Map 4 and 5 to wheel zero; EVEN to +1, ODD to -1
-                 *  "  6 and 7 "    "   one; ...
-                 *
-                 * XXX This *should* be behind some variables/macros,
-                 * XXX since the order and numbering isn't certain
-                 * XXX See XFree86 configuration docs (even back in the
-                 * XXX 3.x days, and especially with 4.x).
-                 *
-                 * XXX Note that {button} has already been decremented
-                 * XXX in mapping from X button numbering to GLUT.
-				 *
-				 * XXX Should add support for partial wheel turns as Windows does -- 5/27/11
-                 */
-                int wheel_number = (button - glutDeviceGet ( GLUT_NUM_MOUSE_BUTTONS )) / 2;
-                int direction = -1;
-                if( button % 2 )
-                    direction = 1;
-
-                if( pressed )
-                    INVOKE_WCB( *window, MouseWheel, ( wheel_number,
-                                                       direction,
-                                                       event.xbutton.x,
-                                                       event.xbutton.y )
-                    );
+            /* Finally execute the mouse or mouse wheel callback.
+             * The mouse wheel is reported as buttons 4 (down) and 5 (up) by
+             * the X server. "button" has been converted to 0-based above, so
+             * that's 3 and 4 for us.
+             * If a wheel callback hasn't been registered, we simply treat them
+             * as button presses and pass them to the mouse handler. This is
+             * important for compatibility with the original GLUT.
+             */
+            if(button < 3 || button > 4 || !FETCH_WCB(*window, MouseWheel)) {
+                INVOKE_WCB(*window, Mouse, (button, pressed ? GLUT_DOWN : GLUT_UP, x, y));
+            } else {
+                if(pressed) {
+                    int dir = button & 1 ? 1 : -1;
+                    /* there's no way to know if X buttons after 5 are more
+                     * wheels/wheel axes, or regular buttons. So we'll only
+                     * ever invoke the wheel CB for wheel 0.
+                     */
+                    INVOKE_WCB(*window, MouseWheel, (0, dir, x, y));
+                }
             }
             fgState.Modifiers = INVALID_MODIFIERS;
         }
