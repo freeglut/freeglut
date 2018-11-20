@@ -780,7 +780,6 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
     SFG_Window *window;
     LRESULT lRet = 1;
     static int setCaptureActive = 0;
-    int doClose = TRUE;
 
     FREEGLUT_INTERNAL_ERROR_EXIT_IF_NOT_INITIALISED ( "Event Handler" ) ;
 
@@ -1114,15 +1113,19 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
     case WM_CLOSE:
     {
         {
+            int doClose = GL_TRUE;
+
             SFG_Window *activeWindow = fgStructure.CurrentWindow;
             INVOKE_WCB(*window, BeforeClose, (&doClose));
             fgSetWindow(activeWindow);
+
+            if (!doClose)
+                return TRUE;
         }
-        if (doClose) {
-            fgDestroyWindow(window);
-            if (fgState.ActionOnWindowClose != GLUT_ACTION_CONTINUE_EXECUTION)
-                PostQuitMessage(0);
-        }
+
+        fgDestroyWindow(window);
+        if (fgState.ActionOnWindowClose != GLUT_ACTION_CONTINUE_EXECUTION)
+            PostQuitMessage(0);
     }
     break;
 
@@ -1453,8 +1456,22 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
                 break ;
 
             case SC_CLOSE      :
+            {
                 /* Followed very closely by a WM_CLOSE message */
-                break ;
+
+                {
+                    int doClose = GL_TRUE;
+
+                    SFG_Window *activeWindow = fgStructure.CurrentWindow;
+                    INVOKE_WCB(*window, BeforeClose, (&doClose));
+                    fgSetWindow(activeWindow);
+
+                    if (!doClose)
+                        return TRUE;
+                }
+
+                break;
+            }
 
             case SC_VSCROLL    :
                 break ;
