@@ -45,8 +45,8 @@ typedef struct _serialport SERIALPORT;
 void fgPlatformRegisterDialDevice ( const char *dial_device ) {
     fgWarning("GLUT_HAS_DIAL_AND_BUTTON_BOX: not implemented");
 }
-SERIALPORT *serial_open ( const char *device ) { return NULL; }
-void serial_close(SERIALPORT *port) {}
-int serial_getchar(SERIALPORT *port) { return EOF; }
-int serial_putchar(SERIALPORT *port, unsigned char ch) { return 0; }
-void serial_flush ( SERIALPORT *port ) {}
+SERIALPORT *fg_serial_open ( const char *device ) { return NULL; }
+void fg_serial_close(SERIALPORT *port) {}
+int fg_serial_getchar(SERIALPORT *port) { return EOF; }
+int fg_serial_putchar(SERIALPORT *port, unsigned char ch) { return 0; }
+void fg_serial_flush ( SERIALPORT *port ) {}

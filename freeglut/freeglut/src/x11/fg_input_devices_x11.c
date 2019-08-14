@@ -48,7 +48,7 @@ struct _serialport {
 
 typedef struct _serialport SERIALPORT;
 
-void serial_flush ( SERIALPORT *port );
+void fg_serial_flush ( SERIALPORT *port );
 
 /*****************************************************************/
 
@@ -59,7 +59,7 @@ void fgPlatformRegisterDialDevice ( const char *dial_device )
 {
 }
 
-SERIALPORT *serial_open ( const char *device )
+SERIALPORT *fg_serial_open ( const char *device )
 {
     int fd;
     struct termios termio;
@@ -88,11 +88,11 @@ SERIALPORT *serial_open ( const char *device )
     cfsetospeed(&termio, B9600);
     tcsetattr(fd,TCSANOW,&termio);
 
-    serial_flush(port);
+    fg_serial_flush(port);
     return port;
 }
 
-void serial_close(SERIALPORT *port)
+void fg_serial_close(SERIALPORT *port)
 {
     if (port)
     {
@@ -103,7 +103,7 @@ void serial_close(SERIALPORT *port)
     }
 }
 
-int serial_getchar(SERIALPORT *port)
+int fg_serial_getchar(SERIALPORT *port)
 {
     unsigned char ch;
     if (!port) return EOF;
@@ -111,13 +111,13 @@ int serial_getchar(SERIALPORT *port)
     return EOF;
 }
 
-int serial_putchar(SERIALPORT *port, unsigned char ch)
+int fg_serial_putchar(SERIALPORT *port, unsigned char ch)
 {
     if (!port) return 0;
     return write(port->fd,&ch,1);
 }
 
-void serial_flush ( SERIALPORT *port )
+void fg_serial_flush ( SERIALPORT *port )
 {
     tcflush ( port->fd, TCIOFLUSH );
 }
