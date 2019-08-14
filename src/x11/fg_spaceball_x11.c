@@ -14,7 +14,7 @@
 
 #include <X11/Xlib.h>
 
-extern int sball_initialized;
+extern int fg_sball_initialized;
 
 enum {
     SPNAV_EVENT_ANY,  /* used by spnav_remove_events() */
@@ -56,17 +56,17 @@ void fgPlatformInitializeSpaceball(void)
 {
     Window w;
 
-    sball_initialized = 1;
+    fg_sball_initialized = 1;
     if(!fgStructure.CurrentWindow)
     {
-        sball_initialized = -1;
+        fg_sball_initialized = -1;
         return;
     }
 
     w = fgStructure.CurrentWindow->Window.Handle;
     if(spnav_x11_open(fgDisplay.pDisplay.Display, w) == -1)
     {
-        sball_initialized = -1;
+        fg_sball_initialized = -1;
         return;
     }
 }
@@ -105,7 +105,7 @@ int fgIsSpaceballXEvent(const XEvent *xev)
         fgSpaceballSetWindow(fgStructure.CurrentWindow);
     }
 
-    if(sball_initialized != 1) {
+    if(fg_sball_initialized != 1) {
         return 0;
     }
 
@@ -116,9 +116,9 @@ void fgSpaceballHandleXEvent(const XEvent *xev)
 {
     spnav_event sev;
 
-    if(sball_initialized == 0) {
+    if(fg_sball_initialized == 0) {
         fgInitialiseSpaceball();
-        if(sball_initialized != 1) {
+        if(fg_sball_initialized != 1) {
             return;
         }
     }
