@@ -20,7 +20,7 @@
 extern int fgPlatformGetModifiers( int state );
 
 /* extension opcode for XInput */
-int xi_opcode = -1;
+static int xi_opcode = -1;
 
 /**
  * \brief Sets window up for XI2 events.

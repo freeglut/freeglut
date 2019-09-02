@@ -49,17 +49,17 @@ enum {
     SPNAV_EVENT_BUTTON  /* includes both press and release */
 };
 
-extern int sball_initialized;
+extern int fg_sball_initialized;
 unsigned int __fgSpaceKeystate = 0;
 RAWINPUTDEVICE __fgSpaceball = { 0x01, 0x08, 0x00, 0x00 };
 
 void fgPlatformInitializeSpaceball(void)
 {
     HWND hwnd;
-    sball_initialized = 1;
+    fg_sball_initialized = 1;
     if (!fgStructure.CurrentWindow)
     {
-        sball_initialized = 0;
+        fg_sball_initialized = 0;
         return;
     }
     hwnd = fgStructure.CurrentWindow->Window.Handle;
@@ -72,7 +72,7 @@ void fgPlatformInitializeSpaceball(void)
 
         if (!ok){
             __fgSpaceball.hwndTarget = NULL;
-            sball_initialized = 0;
+            fg_sball_initialized = 0;
         }
     }
 }
@@ -113,10 +113,10 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
     UINT res;
     RID_DEVICE_INFO sRidDeviceInfo;
 
-    if (!sball_initialized)
+    if (!fg_sball_initialized)
     {
         fgPlatformInitializeSpaceball();
-        if (!sball_initialized)
+        if (!fg_sball_initialized)
         {
             return;
         }

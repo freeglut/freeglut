@@ -22,11 +22,11 @@ extern int fgPlatformSpaceballNumButtons(void);
 extern void fgPlatformSpaceballSetWindow(SFG_Window *window);
 
 
-int sball_initialized = 0;
+int fg_sball_initialized = 0;
 
 void fgInitialiseSpaceball(void)
 {
-    if(sball_initialized != 0) {
+    if(fg_sball_initialized != 0) {
         return;
     }
 
@@ -40,9 +40,9 @@ void fgSpaceballClose(void)
 
 int fgHasSpaceball(void)
 {
-    if(sball_initialized == 0) {
+    if(fg_sball_initialized == 0) {
         fgInitialiseSpaceball();
-        if(sball_initialized != 1) {
+        if(fg_sball_initialized != 1) {
             fgWarning("fgInitialiseSpaceball failed\n");
             return 0;
         }
@@ -53,9 +53,9 @@ int fgHasSpaceball(void)
 
 int fgSpaceballNumButtons(void)
 {
-    if(sball_initialized == 0) {
+    if(fg_sball_initialized == 0) {
         fgInitialiseSpaceball();
-        if(sball_initialized != 1) {
+        if(fg_sball_initialized != 1) {
             fgWarning("fgInitialiseSpaceball failed\n");
             return 0;
         }
@@ -66,9 +66,9 @@ int fgSpaceballNumButtons(void)
 
 void fgSpaceballSetWindow(SFG_Window *window)
 {
-    if(sball_initialized == 0) {
+    if(fg_sball_initialized == 0) {
         fgInitialiseSpaceball();
-        if(sball_initialized != 1) {
+        if(fg_sball_initialized != 1) {
             return;
         }
     }
