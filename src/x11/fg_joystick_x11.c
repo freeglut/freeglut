@@ -599,12 +599,12 @@ void fgPlatformJoystickOpen( SFG_Joystick* joy )
      *  to the upper byte of an uninitialized word doesn't work.
      *  9 April 2003
      */
-    ioctl( joy->pJoystick.fd, JSIOCGAXES, &u );
-    joy->num_axes = u;
-    ioctl( joy->pJoystick.fd, JSIOCGBUTTONS, &u );
-    joy->num_buttons = u;
+    if(ioctl(joy->pJoystick.fd, JSIOCGAXES, &u) != -1)
+        joy->num_axes = u;
+    if(ioctl(joy->pJoystick.fd, JSIOCGBUTTONS, &u) != -1)
+        joy->num_buttons = u;
     ioctl( joy->pJoystick.fd, JSIOCGNAME( sizeof( joy->name ) ), joy->name );
-    fcntl( joy->pJoystick.fd, F_SETFL, O_NONBLOCK );
+    fcntl(joy->pJoystick.fd, F_SETFL, fcntl(joy->pJoystick.fd, F_GETFL) | O_NONBLOCK);
 #    endif
 
     /*
