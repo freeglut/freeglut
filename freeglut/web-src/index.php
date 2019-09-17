@@ -95,6 +95,7 @@ mailing list.</p>
 <div class="indent">
 	<div class="textheader">Stable Releases</div>
 	<p>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.2.0.tar.gz?download">freeglut 3.2.0</a> [<i>Released: 16 September 2019</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.0.0.tar.gz?download">freeglut 3.0.0</a> [<i>Released: 7 March 2015</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.1.tar.gz?download">freeglut 2.8.1</a> [<i>Released: 5 April 2013</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.0.tar.gz?download">freeglut 2.8.0</a> [<i>Released: 2 January 2012</i>]<br/>
