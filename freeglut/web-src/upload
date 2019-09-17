@@ -17,5 +17,5 @@ else
 fi
 
 echo "connecting as user: $user ..."
-rsync -vr --exclude='.sfuser' --exclude '*.swp' \
-	--rsh="ssh -l $user" * $user,freeglut@web.sourceforge.net:htdocs/
+rsync -avP -e ssh --exclude='.sfuser' --exclude '*.swp' \
+	* $user@web.sourceforge.net:/home/project-web/freeglut/htdocs/
