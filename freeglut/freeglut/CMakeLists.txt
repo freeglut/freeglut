@@ -73,7 +73,7 @@ SET(FREEGLUT_HEADERS
     include/GL/freeglut_std.h
 )
 IF(FREEGLUT_REPLACE_GLUT)
-    LIST(APPEND FREEGLUT_SRCS
+    LIST(APPEND FREEGLUT_HEADERS
         include/GL/glut.h
     )
 ENDIF()
