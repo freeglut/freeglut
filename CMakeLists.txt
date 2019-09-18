@@ -622,7 +622,7 @@ CONFIGURE_FILE(FreeGLUTConfig.cmake.in
     "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
     @ONLY
 )
-SET(ConfigPackageLocation lib/cmake/FreeGLUT)
+SET(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/FreeGLUT)
 INSTALL(EXPORT FreeGLUTTargets
     FILE FreeGLUTTargets.cmake
     NAMESPACE FreeGLUT::
