@@ -220,14 +220,14 @@ GLXContext fghCreateNewContext( SFG_Window* window )
   CreateContextAttribsProc createContextAttribs = (CreateContextAttribsProc) fgPlatformGetProcAddress( "glXCreateContextAttribsARB" );
  
   /* glXCreateContextAttribsARB not found, yet the user has requested the new context creation */
-  if ( !createContextAttribs && !fghIsLegacyContextRequested() ) {
+  if ( !createContextAttribs && !fghIsLegacyContextRequested(window) ) {
     fgWarning( "OpenGL >2.1 context requested but glXCreateContextAttribsARB is not available! Falling back to legacy context creation" );
 	fgState.MajorVersion = 2;
 	fgState.MinorVersion = 1;
   }
 
   /* If nothing fancy has been required, simply use the old context creation GLX API entry */
-  if ( fghIsLegacyContextRequested() || !createContextAttribs )
+  if ( fghIsLegacyContextRequested(window) || !createContextAttribs )
   {
     context = glXCreateNewContext( dpy, config, render_type, share_list, direct );
     if ( context == NULL ) {

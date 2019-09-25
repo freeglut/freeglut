@@ -1166,7 +1166,7 @@ SFG_Proc fgPlatformGetProcAddress( const char *procName );
 #define ATTRIB_VAL(a,v) {ATTRIB(a); ATTRIB(v);}
 
 int fghMapBit( int mask, int from, int to );
-int fghIsLegacyContextRequested( void );
+int fghIsLegacyContextRequested( SFG_Window *win );
 void fghContextCreationError( void );
 int fghNumberOfAuxBuffersRequested( void );
 

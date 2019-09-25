@@ -145,7 +145,7 @@ void fgNewWGLCreateContext( SFG_Window* window )
     PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB;
 
     /* If nothing fancy has been required, leave the context as it is */
-    if ( fghIsLegacyContextRequested() )
+    if ( fghIsLegacyContextRequested(window) )
     {
         return;
     }

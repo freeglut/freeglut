@@ -18,7 +18,7 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 # setup version numbers
 # TODO: Update these for each release!
 set(VERSION_MAJOR 3)
-set(VERSION_MINOR 0)
+set(VERSION_MINOR 2)
 set(VERSION_PATCH 0)
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
@@ -27,7 +27,7 @@ CONFIGURE_FILE(src/fg_version.h.in src/fg_version.h)
 
 # shared lib version numbers (change before release)
 set(SO_MAJOR 3)		# increment on backwards incompatible API/ABI changes
-set(SO_MINOR 10)	# increment on backwards compatible or internal changes
+set(SO_MINOR 11)	# increment on backwards compatible or internal changes
 set(SO_REV 0)		# if nothing else changed increment this
 
 # FREEGLUT_BUILD_SHARED_LIBS is already a standard CMake variable, but we need to
@@ -73,7 +73,7 @@ SET(FREEGLUT_HEADERS
     include/GL/freeglut_std.h
 )
 IF(FREEGLUT_REPLACE_GLUT)
-    LIST(APPEND FREEGLUT_SRCS
+    LIST(APPEND FREEGLUT_HEADERS
         include/GL/glut.h
     )
 ENDIF()
@@ -622,7 +622,7 @@ CONFIGURE_FILE(FreeGLUTConfig.cmake.in
     "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
     @ONLY
 )
-SET(ConfigPackageLocation lib/cmake/FreeGLUT)
+SET(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/FreeGLUT)
 INSTALL(EXPORT FreeGLUTTargets
     FILE FreeGLUTTargets.cmake
     NAMESPACE FreeGLUT::
