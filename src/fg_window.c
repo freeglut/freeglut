@@ -62,9 +62,15 @@ extern void fgPlatformGlutSetIconTitle( const char* title );
 
 /* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
 
-int fghIsLegacyContextRequested( void )
+int fghIsLegacyContextRequested( SFG_Window *win )
 {
-    return fgState.MajorVersion < 2 || (fgState.MajorVersion == 2 && fgState.MinorVersion <= 1);
+	int vmajor = fgState.MajorVersion;
+	int vminor = fgState.MinorVersion;
+	/* XXX: menu windows are drawn with the fixed function pipeline, therefore
+	 * the context created for them can't be a modern core-profile context.
+	 * Force the traditional context creation for menu windows.
+	 */
+    return vmajor < 2 || (vmajor == 2 && vminor <= 1) || win->IsMenu;
 }
 
 int fghNumberOfAuxBuffersRequested( void )
