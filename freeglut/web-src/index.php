@@ -87,7 +87,7 @@ mailing list.</p>
     href="https://sourceforge.net/p/freeglut/code/HEAD/tarball?path=/trunk/freeglut/freeglut">tarball
     of current trunk</a>, or <a href="help.php#svn">grabbing a copy from
     svn</a>, and give us feedback on how it worked for you. All this
-    will eventually become a freeglut 3.1 release.</p>
+    will eventually become a freeglut 3.4 release.</p>
 	<p>There are no presently active testing releases.</p>
 </div>
 
@@ -95,6 +95,7 @@ mailing list.</p>
 <div class="indent">
 	<div class="textheader">Stable Releases</div>
 	<p>
+	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.2.1.tar.gz?download">freeglut 3.2.1</a> [<i>Released: 29 September 2019</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.2.0.tar.gz?download">freeglut 3.2.0</a> [<i>Released: 16 September 2019</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-3.0.0.tar.gz?download">freeglut 3.0.0</a> [<i>Released: 7 March 2015</i>]<br/>
 	<a href="http://prdownloads.sourceforge.net/freeglut/freeglut-2.8.1.tar.gz?download">freeglut 2.8.1</a> [<i>Released: 5 April 2013</i>]<br/>
