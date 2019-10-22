@@ -102,7 +102,6 @@ struct tagSFG_PlatformWindowState
 #include <string.h>
 
 #    if defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__NetBSD__)
-/* XXX The below hack is done until freeglut's autoconf is updated. */
 #        define HAVE_USB_JS    1
 
 #        include <sys/joystick.h>
