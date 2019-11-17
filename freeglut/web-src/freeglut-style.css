@@ -113,3 +113,8 @@ h3 {
 	border-bottom: 1px #111166 solid ;
 	width: 100%;
 }
+
+th, td {
+	border-bottom: 1px solid #aaa;
+	vertical-align: top;
+}
