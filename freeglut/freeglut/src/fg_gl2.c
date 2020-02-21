@@ -27,6 +27,20 @@
 #include "fg_internal.h"
 #include "fg_gl2.h"
 
+#ifndef GL_ES_VERSION_2_0
+/* GLES2 has the corresponding entry points built-in, and these fgh-prefixed
+ * names are defined in fg_gl2.h header to reference them, for any other case,
+ * define them as function pointers here.
+ */
+FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
+FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
+FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
+FGH_PFNGLBUFFERDATAPROC fghBufferData;
+FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
+FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
+FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
+#endif
+
 void FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib) {
   if (fgStructure.CurrentWindow != NULL)
     fgStructure.CurrentWindow->Window.attribute_v_coord = attrib;
