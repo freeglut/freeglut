@@ -51,7 +51,11 @@ ELSE()
 ENDIF()
 
 # OpenGL ES support
-OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
+IF(ANDROID)
+    OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" ON)
+ELSE()
+    OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
+ENDIF()
 
 # option to build either as "glut" (ON) or "freeglut" (OFF)
 IF(WIN32)
