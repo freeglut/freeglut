@@ -21,7 +21,7 @@ mailing list to discuss your plans, and get cracking!</p>
 <tr>
 <th>Feature</th><th>Status</th><th>Milestone</th></tr>
 <tr><td>Android port</td><td>Basic but complete functionality by <a href="http://www.beuc.net/">Sylvain
-Beucler</a>, but there are <a href=docs/android.php#roadmap>todo
+Beucler</a>, but there are <a href="docs/android.php#roadmap">todo
 points</a></td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
 
@@ -30,10 +30,6 @@ by <a href="https://github.com/rcmaniac25">Vinnie
 Simonetti</a>.</td><td>Basic functionality as is now done: 3.0. Future
 enhancements: 3.0 or later.</td></tr>
 
-<tr><td>callbacks with closures</td><td>Have versions of each callback
-that take an additional void* that is passed back to the user upon
-invocation.</td><td>3.2</td></tr>
-
 <tr><td>Windows 8 touch support</td><td>Windows 8 replaced how touch
 input works, so we need to implement support for that.</td><td>3.2</td></tr>
 
@@ -41,10 +37,6 @@ input works, so we need to implement support for that.</td><td>3.2</td></tr>
 currently does not. Unfinished effort to implement <a
 href="https://github.com/dcnieho/FreeGLUT/tree/feature_30bit_framebuffer">here</a>.</td><td>3.0
 or later.</td></tr>
-
-<tr><td>GL2+ and GLES 1/2 clean API for geometry</td><td>Done for all (geometry like
-cube, cone, etc, as well as the teapot and other parts of the
-teaset)</td><td>3.0</td></tr>
 
 <tr><td>handling non-western script input to windows</td><td>For
 Windows, see associated <a
@@ -73,7 +65,7 @@ awareness for his work.</td><td>Figure this out for 3.2</td></tr>
 stroke fonts, we can use a similar approach as for the shapes, should
 thus be straightforward. For the bitmap fonts, this is more complex.
 John T suggested "using a glyph atlas texture with GL_STREAM_DRAW VBOs",
-which would get us somewhere. Code could be ripped from his </a
+which would get us somewhere. Code could be ripped from his <a
 href="http://nuclear.mutantstargoat.com/sw/libdrawtext/">libdrawtext
 library</a></td><td>The sooner the better, but will have to wait for
 asap after 3.0.</td></tr>
@@ -83,20 +75,13 @@ like SDL.</td><td>Currently CMake variables define at compile time which
 of the two the library will be compiled against. No work has been
 done to move this to an at-runtime API.</td><td>After 3.0</td></tr>
 
-<tr><td>Code reorganized such that platform-specific and display
-server-specific code are decoupled</td><td>Done, thanks John
-Fay!</td><td>3.0</td></tr>
-
 <tr><td>Position callback</td><td>Done: we now have a position callback
 to notify the client when the position of the window
 changed.</td><td>3.0</td></tr>
-<tr><td>
 
 <tr><td>Carbon/Cocoa port</td><td>Not started. As Carbon is legacy, one
 might want to port to Cocoa first or even forget about Carbon all
 together.</td><td>Undecided</td></tr>
-
-<tr><td>Wayland port</td><td>Not started.</td><td>Undecided</td></tr>
 
 <tr><td>Unicode support</td><td>Not started, we'd need to discuss this
 carefully on the mailing list first to minimize impact on the
@@ -111,6 +96,5 @@ specific display formats on at least one of the various window servers
 (Windows, X11 and Android/BlackBerry 10/EGL at the
 moment).</td><td>Undecided</td></tr>
 </table>
-</p>
 
 <?php generateFooter(); ?>
