@@ -1544,14 +1544,14 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
     }
 #endif
 
-#ifdef WM_INPUT	
-	case WM_INPUT_DEVICE_CHANGE:	/* Added by Shane Saxon. Dec 2020 */
-		fgSpaceballDeviceChangeWinEvent( hWnd, wParam, lParam );
+#ifdef WM_INPUT
+    case WM_INPUT_DEVICE_CHANGE: /* Added by Shane Saxon. Dec 2020 */
+        fgSpaceballDeviceChangeWinEvent( hWnd, wParam, lParam );
         break;
     case WM_INPUT:
         /* Added by Jinrong Xie <stonexjr at gmail.com> for SpaceNavigator support on Windows. Dec 2014 */
         if( fgHasSpaceball() )
-			fgSpaceballHandleWinEvent( hWnd, wParam, lParam );
+            fgSpaceballHandleWinEvent( hWnd, wParam, lParam );
         break;
 #endif
     default:
