@@ -121,7 +121,7 @@ void fgPlatformInitializeSpaceball(void)
 
     if( !fgStructure.CurrentWindow )
     {
-        fg_sball_initialized = -1;
+        fg_sball_initialized = 0;
         return;
     }
 
@@ -130,7 +130,7 @@ void fgPlatformInitializeSpaceball(void)
     if( RegisterRawInputDevices(&multiAxis, 1, sizeof(multiAxis)) == FALSE )
     {
         multiAxis.hwndTarget = NULL;
-        fg_sball_initialized = -1;
+        fg_sball_initialized = 0;
         return;
     }
         
@@ -289,14 +289,16 @@ void fgSpaceballHandleWinEvent( HWND hwnd, WPARAM wParam, LPARAM lParam )
     {
         fgPlatformInitializeSpaceball();
         if( !fg_sball_initialized )
+        {
              return;
+        }
     }
 
     if( GetRawInputData( hRawInput, RID_INPUT, NULL, &size,
             sizeof(RAWINPUTHEADER) ) == -1 )
         return;
 
-    rawInputBuffer = malloc( size * sizeof(void*) );
+    rawInputBuffer = malloc( size * sizeof(BYTE) );
     if( !rawInputBuffer )
     {
         fgError( "out of memory - rawInputBuffer");
@@ -427,8 +429,8 @@ void fgSpaceballHandleWinEvent( HWND hwnd, WPARAM wParam, LPARAM lParam )
             int i;
             for( i=0; i < 32; i++ )
             {
-                bool stateBefore = (prevBDF >> i) & 1;
-                bool stateNow = (nowBDF >> i) & 1;
+                int stateBefore = (prevBDF >> i) & 1;
+                int stateNow = (nowBDF >> i) & 1;
 
                 if( stateBefore && !stateNow )
                     INVOKE_WCB( *window, SpaceButton, (i+1, GLUT_UP) );
