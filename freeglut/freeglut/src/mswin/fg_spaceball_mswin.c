@@ -50,8 +50,6 @@
 #include <stdlib.h>
 #include "../fg_internal.h"
 
-extern int fg_sball_initialized;
-
 /* VID=0x046d devices have separate events for motion (translate) and rotate.
  * VID=0x256f devices combine translate and rotate into a single motion event.
  * All devices have the BITWISE button event (Report ID 0x03), the other button
@@ -74,9 +72,6 @@ extern int fg_sball_initialized;
 uint16_t fg_sball_buttons = 0;		/* number of buttons */
 uint16_t fg_sball_bitwise_bits = 0;	/* bitwise event 0x03 data size in bits*/
 
-/* Multi-axis Controller is 0x01, 0x08 and RIDEV_DEVNOTIFY is arrival/removal */
-RAWINPUTDEVICE multiAxis = { 0x01, 0x08, RIDEV_DEVNOTIFY, 0x00 };
-
 struct SFG_SpaceballConfig {
     uint16_t VID;
     uint16_t PID;
@@ -84,6 +79,11 @@ struct SFG_SpaceballConfig {
     uint8_t buttons;	/* number of buttons (physical + virtual) */
 };
 typedef struct SFG_SpaceballConfig SFG_SpaceballConfig;
+
+extern int fg_sball_initialized;
+
+/* Multi-axis Controller is 0x01, 0x08 and RIDEV_DEVNOTIFY is arrival/removal */
+RAWINPUTDEVICE __fgSpaceball = { 0x01, 0x08, RIDEV_DEVNOTIFY, 0x00 };
 
 /* Spaceball device list with: VID, PID, bits and buttons */
 static SFG_SpaceballConfig spaceballList[] = {
@@ -119,17 +119,17 @@ void fgPlatformInitializeSpaceball(void)
     if( fg_sball_initialized == 1 )
         return;
 
-    if( !fgStructure.CurrentWindow )
+    if (!fgStructure.CurrentWindow)
     {
         fg_sball_initialized = 0;
         return;
     }
 
-    multiAxis.hwndTarget = fgStructure.CurrentWindow->Window.Handle;
+    __fgSpaceball.hwndTarget = fgStructure.CurrentWindow->Window.Handle;
 
-    if( RegisterRawInputDevices(&multiAxis, 1, sizeof(multiAxis)) == FALSE )
+    if( RegisterRawInputDevices(&__fgSpaceball, 1, sizeof(__fgSpaceball)) == 0 )
     {
-        multiAxis.hwndTarget = NULL;
+        __fgSpaceball.hwndTarget = NULL;
         fg_sball_initialized = 0;
         return;
     }
@@ -159,11 +159,7 @@ int fgPlatformHasSpaceball(void)
 int fgPlatformSpaceballNumButtons(void)
 {
     if( !fg_sball_initialized )
-    {
         fgPlatformInitializeSpaceball();
-        if( fg_sball_initialized != 1 )
-             return 0;
-    }
 
     return fg_sball_buttons;
 }
@@ -181,7 +177,7 @@ int fgIsSpaceballWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 */
 
-void fgSpaceballDeviceChangeWinEvent( HWND hwnd, WPARAM wParam, LPARAM lParam) 
+void fgSpaceballDeviceChangeWinEvent( HWND hwnd, WPARAM wParam, LPARAM lParam )
 {
     /* printf("DEVICE CHANGE: %d\n", wParam ); // GIDC_ARRIVAL ); */
 
@@ -190,8 +186,7 @@ void fgSpaceballDeviceChangeWinEvent( HWND hwnd, WPARAM wParam, LPARAM lParam)
 
 void fgSpaceballUpdateDeviceList(void)
 {
-    unsigned int i;
-    unsigned int numDevices;
+    unsigned int i, numDevices;
     PRAWINPUTDEVICELIST pRawInputDeviceList;
 
     fg_sball_bitwise_bits = fg_sball_buttons = 0;
@@ -227,19 +222,19 @@ void fgSpaceballUpdateDeviceList(void)
         RID_DEVICE_INFO devInfo;
         unsigned int data_size = 1023;
 
-        /*
-            char device_name[1024];
-            printf("dev index: %d type: %d\n",i, pRawInputDeviceList[i].dwType);
-            if (GetRawInputDeviceInfo(
-                    pRawInputDeviceList[i].hDevice,
-                    RIDI_DEVICENAME,
-                    &device_name, &data_size) == -1)
-            {
-                fgError( "HID name" );
-                continue;
-            }
-            printf("    name: %s\n", device_name);
-        */
+#ifdef _DEBUG
+        char device_name[1024];
+        printf("dev index: %d type: %d\n",i, pRawInputDeviceList[i].dwType);
+        if (GetRawInputDeviceInfo(
+                pRawInputDeviceList[i].hDevice,
+                RIDI_DEVICENAME,
+                &device_name, &data_size) == -1)
+        {
+            fgError( "HID name" );
+            continue;
+        }
+        printf("    name: %s\n", device_name);
+#endif
 
         devInfo.cbSize = sizeof(RID_DEVICE_INFO);
         data_size = sizeof(RID_DEVICE_INFO);
@@ -266,31 +261,31 @@ void fgSpaceballUpdateDeviceList(void)
                     fg_sball_bitwise_bits = spaceballList[j].bits;
                     fg_sball_buttons = spaceballList[j].buttons;
                 }
-            /*
-                printf( "VID: 0x%04x  PID: 0x%04x  bits: %d  buttons: %d\n",
-                    devInfo.hid.dwVendorId, devInfo.hid.dwProductId, 
-                    fg_sball_bitwise_bits, fg_sball_buttons );
-            */
+#ifdef _DEBUG
+            printf( "VID: 0x%04x  PID: 0x%04x  bits: %d  buttons: %d\n",
+                devInfo.hid.dwVendorId, devInfo.hid.dwProductId, 
+                fg_sball_bitwise_bits, fg_sball_buttons );
+#endif
         }
     }
     free( pRawInputDeviceList );
 }
 
-void fgSpaceballHandleWinEvent( HWND hwnd, WPARAM wParam, LPARAM lParam )
+void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     SFG_Window* window;
     HRAWINPUT hRawInput = (HRAWINPUT)lParam;
+    UINT size;
+    BYTE *rawInputBuffer;
     PRAWINPUT pRawInput;
     RID_DEVICE_INFO sRidDeviceInfo;
-    BYTE *rawInputBuffer;
-    UINT size;
 
-    if( !fg_sball_initialized )
+    if (!fg_sball_initialized)
     {
         fgPlatformInitializeSpaceball();
-        if( !fg_sball_initialized )
+        if (!fg_sball_initialized)
         {
-             return;
+            return;
         }
     }
 
@@ -298,7 +293,7 @@ void fgSpaceballHandleWinEvent( HWND hwnd, WPARAM wParam, LPARAM lParam )
             sizeof(RAWINPUTHEADER) ) == -1 )
         return;
 
-    rawInputBuffer = malloc( size * sizeof(BYTE) );
+    rawInputBuffer = malloc( size );
     if( !rawInputBuffer )
     {
         fgError( "out of memory - rawInputBuffer");
