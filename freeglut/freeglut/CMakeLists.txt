@@ -272,7 +272,7 @@ IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND))
         CHECK_INCLUDE_FILES("${X11_Xinput_INCLUDE_PATH}/X11/extensions/XInput2.h" HAVE_X11_EXTENSIONS_XINPUT2_H)
         LIST(APPEND LIBS ${X11_Xinput_LIB})
     ELSE()
-        MESSAGE(FATAL_ERROR "Missing X11's XInput2.h (X11/extensions/XInput.h)")
+        MESSAGE(FATAL_ERROR "Missing X11's XInput2.h (X11/extensions/XInput2.h)")
     ENDIF()
 ENDIF()
 
@@ -294,7 +294,7 @@ ELSE()
       find_library(OPENGL_gl_LIBRARY NAME GL HINTS ${X11_LIB_PATH})
       find_library(OPENGL_glu_LIBRARY NAME GLU HINTS ${X11_LIB_PATH})
     endif()
-    
+
     FIND_PACKAGE(OpenGL REQUIRED)
     LIST(APPEND LIBS ${OPENGL_gl_LIBRARY})
     INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
