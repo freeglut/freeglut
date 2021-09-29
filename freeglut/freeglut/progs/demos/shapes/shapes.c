@@ -425,6 +425,7 @@ static GLboolean persProject = GL_TRUE;
 static GLboolean animateXRot = GL_FALSE;
 static GLboolean useShader   = GL_FALSE;
 static GLboolean visNormals  = GL_FALSE;
+static GLboolean flat;
 
 /*
  * Enum to tell drawSizeInfo what to draw for each object
@@ -653,10 +654,15 @@ static void drawInfo()
         shapesPrintf (row++, 1, "Perspective projection (p)");
     else
         shapesPrintf (row++, 1, "Orthographic projection (p)");
-    if (useShader)
+    if (useShader) {
         shapesPrintf (row++, 1, "Using shader (s)");
-    else
+    } else {
         shapesPrintf (row++, 1, "Using fixed function pipeline (s)");
+        if (flat)
+            shapesPrintf (row++, 1, "Flat shading (f)");
+        else
+            shapesPrintf (row++, 1, "Smooth shading (f)");
+    }
     if (animateXRot)
         shapesPrintf (row++, 1, "2D rotation (r)");
     else
@@ -682,6 +688,8 @@ static void display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glutSetOption(GLUT_GEOMETRY_VISUALIZE_NORMALS,visNormals);  /* Normals visualized or not? */
+
+    glShadeModel(flat ? GL_FLAT : GL_SMOOTH);  /* flat or gouraud shading */
 
     if (useShader && !shaderReady)
         initShader();
@@ -818,6 +826,11 @@ key(unsigned char key, int x, int y)
         /* Cuboctahedron can't be shown when in shader mode, move to next */
         if (useShader && NUMBEROF (table)-1 == ( unsigned )function_index)
                 function_index = 0;
+        break;
+
+    case 'F':
+    case 'f':
+        flat ^= 1;
         break;
 
     case 'N':
