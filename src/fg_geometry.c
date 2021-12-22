@@ -134,8 +134,10 @@ void fghDrawGeometryWire(GLfloat *vertices, GLfloat *normals, GLsizei numVertice
                                 GLushort *vertIdxs2, GLsizei numParts2, GLsizei numVertPerPart2
     )
 {
-    GLint attribute_v_coord  = fgStructure.CurrentWindow->Window.attribute_v_coord;
-    GLint attribute_v_normal = fgStructure.CurrentWindow->Window.attribute_v_normal;
+    SFG_Window *win = fgStructure.CurrentWindow;
+
+    GLint attribute_v_coord  = win ? win->Window.attribute_v_coord : -1;
+    GLint attribute_v_normal = win ? win->Window.attribute_v_normal : -1;
 
     if (fgState.HasOpenGL20 && (attribute_v_coord != -1 || attribute_v_normal != -1))
         /* User requested a 2.0 draw */
@@ -178,11 +180,17 @@ void fghDrawGeometryWire(GLfloat *vertices, GLfloat *normals, GLsizei numVertice
 void fghDrawGeometrySolid(GLfloat *vertices, GLfloat *normals, GLfloat *textcs, GLsizei numVertices,
                           GLushort *vertIdxs, GLsizei numParts, GLsizei numVertIdxsPerPart)
 {
-    GLint attribute_v_coord   = fgStructure.CurrentWindow->Window.attribute_v_coord;
-    GLint attribute_v_normal  = fgStructure.CurrentWindow->Window.attribute_v_normal;
-    GLint attribute_v_texture = fgStructure.CurrentWindow->Window.attribute_v_texture;
+    GLint attribute_v_coord, attribute_v_normal, attribute_v_texture;
+    SFG_Window *win = fgStructure.CurrentWindow;
+    if(win) {
+        attribute_v_coord   = win->Window.attribute_v_coord;
+        attribute_v_normal  = win->Window.attribute_v_normal;
+        attribute_v_texture = win->Window.attribute_v_texture;
+    } else {
+        attribute_v_coord = attribute_v_normal = attribute_v_texture = -1;
+    }
 
-    if (fgStructure.CurrentWindow->State.VisualizeNormals)
+    if (win && win->State.VisualizeNormals)
         /* generate normals for each vertex to be drawn as well */
         fghGenerateNormalVisualization(vertices, normals, numVertices);
 
@@ -193,7 +201,7 @@ void fghDrawGeometrySolid(GLfloat *vertices, GLfloat *normals, GLfloat *textcs, 
                                vertIdxs, numParts, numVertIdxsPerPart,
                                attribute_v_coord, attribute_v_normal, attribute_v_texture);
 
-        if (fgStructure.CurrentWindow->State.VisualizeNormals)
+        if (win && win->State.VisualizeNormals)
             /* draw normals for each vertex as well */
             fghDrawNormalVisualization20(attribute_v_coord);
     }
@@ -202,7 +210,7 @@ void fghDrawGeometrySolid(GLfloat *vertices, GLfloat *normals, GLfloat *textcs, 
         fghDrawGeometrySolid11(vertices, normals, textcs, numVertices,
                                vertIdxs, numParts, numVertIdxsPerPart);
 
-        if (fgStructure.CurrentWindow->State.VisualizeNormals)
+        if (win && win->State.VisualizeNormals)
             /* draw normals for each vertex as well */
             fghDrawNormalVisualization11();
     }
