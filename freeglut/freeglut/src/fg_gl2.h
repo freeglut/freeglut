@@ -1,5 +1,5 @@
 /*
- * fg_gl2.c
+ * fg_gl2.h
  *
  * Load OpenGL (ES) 2.0 functions used by fg_geometry
  *
