@@ -22,8 +22,6 @@ freeglut/freeglut/cross-woe
 freeglut/freeglut/debugfiles.list
 freeglut/freeglut/debugsources.list
 freeglut/freeglut/depcomp
-freeglut/freeglut/doc/Makefile
-freeglut/freeglut/doc/Makefile.in
 freeglut/freeglut/freeglut-*.tar.gz
 freeglut/freeglut/include/GL/Makefile
 freeglut/freeglut/include/GL/Makefile.in

@@ -16,19 +16,19 @@ SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 # setup version numbers
-# TODO: Update these for each release!
+# XXX: Update these for each release!
 set(VERSION_MAJOR 3)
 set(VERSION_MINOR 2)
-set(VERSION_PATCH 1)
+set(VERSION_PATCH 2)
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 # Update fg_version.h to match the versions number here in cmake
 CONFIGURE_FILE(src/fg_version.h.in src/fg_version.h)
 
-# shared lib version numbers (change before release)
+# shared lib version numbers (XXX: change before release)
 set(SO_MAJOR 3)		# increment on backwards incompatible API/ABI changes
-set(SO_MINOR 11)	# increment on backwards compatible or internal changes
-set(SO_REV 0)		# if nothing else changed increment this
+set(SO_MINOR 11)	# increment on backwards compatible API additions
+set(SO_REV 1)		# increment if only internal changes happened between releases
 
 # FREEGLUT_BUILD_SHARED_LIBS is already a standard CMake variable, but we need to
 # re-declare it here so it will show up in the GUI.

@@ -1,0 +1,39 @@
+Reminder about how to prepare a release
+---------------------------------------
+
+  1. Update VERSION_MAJOR/VERSION_MINOR/VERSION_PATCH in CMakeLists.txt. This
+     needs to reflect the freeglut version number, and has nothing to do with
+     sonames.
+
+  2. Update shared library version numbers:
+      - bump SO_MAJOR on backwards incompatiuble API/ABI changes (this shouldn't
+        ever be necessary).
+      - bump SO_MINOR on backwards compatible API/ABI changes (addition of new
+        enumerations, addition of new functions, etc).
+      - bump SO_REV if only internal changes happened between releases, which do
+        not change the API/ABI of freeglut.
+     At least one of these should be bumped on every release, change SO_REV if
+     nothing else changed.
+
+  3. After commiting the changes due to previous steps, tag the new release:
+     `svn cp trunk/freeglut/freeglut tags/FG_X_Y_Z` (X.Y.Z being the version
+     number). Commit the tagging.
+
+  4. Export a clean copy of the repo and package it:
+      - From the source dir: `svn export . /tmp/freeglut-X.Y.Z`.
+      - Check /tmp/freeglut-X.Y.Z and make sure everything is correct.
+      - From /tmp: `tar czvf freeglut-X.Y.Z.tar.gz freeglut-X.Y.Z`
+
+  5. Go to https://sourceforge.net/projects/freeglut/files/freeglut/ and upload
+     the tarball under a new directory named X.Y.Z.
+     To be safe, re-download the file you just uploaded, and make sure it
+     extracts, and builds correctly.
+
+  6. Update the release download list in trunk/freeglut/web-src/index.php and
+     run the upload script from the web-src directory to update the web page on
+     sourceforge. The upload script expects a file named .sfuser with the
+     sourceforge username of the uploader, otherwise it defaults to $USER. The
+     username can also be overriden by providing it as a command line argument.
+
+  7. Send a message to the freeglut-developer mailing list with the
+     announcement.

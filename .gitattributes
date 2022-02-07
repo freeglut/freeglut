@@ -13,14 +13,6 @@ freeglut/freeglut/android/Android.mk -text
 freeglut/freeglut/android/README -text
 freeglut/freeglut/android_toolchain.cmake -text
 freeglut/freeglut/config.h.in svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/doc/download.html svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/doc/freeglut.html svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/doc/freeglut_logo.png -text
-freeglut/freeglut/doc/freeglut_user_interface.html svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/doc/index.html svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/doc/ogl_sm.png -text
-freeglut/freeglut/doc/progress.html svn_keywords=Author+Date+Id+Revision
-freeglut/freeglut/doc/structure.html svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/freeglut.pc.in -text
 freeglut/freeglut/freeglut.rc.in svn_keywords=Author+Date+Id+Revision
 freeglut/freeglut/include/GL/freeglut.h svn_keywords=Author+Date+Id+Revision
@@ -174,3 +166,4 @@ freeglut/web-src/progress.php svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/template.php svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/uinfo.php svn_keywords=Author+Date+Id+Revision
 freeglut/web-src/upload -text
+/release_steps -text
