@@ -581,7 +581,7 @@ ADD_DEMO(timer_callback  progs/demos/timer_callback/timer.c)
 # pkg-config support, to install at $(libdir)/pkgconfig
 # Define static build dependencies
 IF(WIN32)
-  SET(PC_LIBS_PRIVATE "-lopengl32 -lwinmm -lgdi32 -lm")
+  SET(PC_LIBS_PRIVATE "-lopengl32 -lwinmm -lgdi32")
 ELSEIF(FREEGLUT_GLES)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv2 -lGLESv1_CM -lEGL -lm")
