@@ -135,6 +135,8 @@ int fgPlatformGetModifiers( int state )
         ret |= GLUT_ACTIVE_CTRL;
     if( state & Mod1Mask )
         ret |= GLUT_ACTIVE_ALT;
+    if( state & Mod2Mask )
+        ret |= GLUT_ACTIVE_SUPER;
 
     return ret;
 }
@@ -1012,6 +1014,14 @@ void fgPlatformProcessSingleEvent ( void )
                     case XK_Control_R: special = GLUT_KEY_CTRL_R;     break;
                     case XK_Alt_L:     special = GLUT_KEY_ALT_L;      break;
                     case XK_Alt_R:     special = GLUT_KEY_ALT_R;      break;
+                    case XK_Meta_L:
+                    case XK_Super_L:
+                        special = GLUT_KEY_SUPER_L;
+                        break;
+                    case XK_Meta_R:
+                    case XK_Super_R:
+                        special = GLUT_KEY_SUPER_R;
+                        break;
                     }
 
                     /*
