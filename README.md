@@ -1,5 +1,8 @@
+freeglut
+========
+
 BRIEF OVERVIEW
-==============
+--------------
 
 This is the freeglut package.
 
@@ -9,7 +12,7 @@ MIT/X11 style license. You are free to use, modify, and redistribute FreeGLUT
 with or without modifications (see COPYING for details).
 
 PORTS
-=====
+-----
 
 Currently supported platforms:
  - UNIX systems with X11 and Wayland (such as GNU/Linux, FreeBSD, etc)
@@ -23,29 +26,34 @@ and build instructions.
 
 
 INSTALLATION
-============
+------------
 
 See README.cmake as a starting point, as well as the other README
 files for further info.
 
 
 CONTRIBUTING
-============
+------------
 
-Patches for bugfixes and new features are certainly welcome. Please send patches
-to the freeglut-developer mailing list (see CONTACT below).
+Patches and pull requests for bugfixes and new features are certainly welcome.
+Please send patches to the freeglut-developer mailing list (see CONTACT below).
 
-Feel free to report any bugs you encounter, using our bug tracking system:
-https://sourceforge.net/p/freeglut/bugs/
-Feature requests are also welcome at:
-https://sourceforge.net/p/freeglut/feature-requests/
+Feel free to report any bugs you encounter, using the github *issues* system.
 
-If your bug report needs urgent attention, please also post a message to the
-aforementioned freeglut-developer mailing list, to make sure we'll see it ASAP.
+Older bug reports and feature requests are still reachable on:
+  - https://sourceforge.net/p/freeglut/bugs/
+  - https://sourceforge.net/p/freeglut/feature-requests/
+
+But you are encouraged to use github issues for new ones.
+
+Alternatively you can also send bug reports and feature requests to the
+freeglut-developer mailing list if you prefer. Extended discussions about new
+features and design issues for large contributions, are best suited to the
+mailing list.
 
 
 CONTACT
-=======
+-------
 
 FreeGLUT website: http://freeglut.sourceforge.net
 
