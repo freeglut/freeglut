@@ -1,9 +1,7 @@
 # CMake toolchain file, cf. README.mingw_cross
 SET(CMAKE_SYSTEM_NAME Windows)
-include(CMakeForceCompiler)
 IF("${GNU_HOST}" STREQUAL "")
-	SET(GNU_HOST i586-mingw32msvc)
+	SET(GNU_HOST x86_64-w64-mingw32)
 ENDIF()
-# Prefix detection only works with compiler id "GNU"
-CMAKE_FORCE_C_COMPILER(${GNU_HOST}-gcc GNU)
+SET(CMAKE_C_COMPILER  ${GNU_HOST}-gcc)
 SET(CMAKE_RC_COMPILER ${GNU_HOST}-windres)
