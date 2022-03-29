@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0 FATAL_ERROR)
-PROJECT(freeglut)
+PROJECT(freeglut C)
 
 # for multiarch LIBDIR support (requires cmake>=2.8.8)
 INCLUDE(GNUInstallDirs)
@@ -561,7 +561,7 @@ ELSE()
     ADD_DEMO(One             progs/demos/One/one.c
                              progs/demos/One/one.rc)
 ENDIF()
-ADD_DEMO(Resizer         progs/demos/Resizer/Resizer.cpp)
+ADD_DEMO(resizer         progs/demos/resizer/resizer.c)
 ADD_DEMO(multi-touch     progs/demos/multi-touch/multi-touch.c)
 ADD_DEMO(shapes          progs/demos/shapes/shapes.c
                          progs/demos/shapes/glmatrix.h

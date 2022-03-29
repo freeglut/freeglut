@@ -361,7 +361,7 @@ int main(int argc, char* argv[])
 {
     int border, caption;
     glutInit( &argc, argv );
-    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE /*| GLUT_BORDERLESS*/); // do try as well with GLUT_BORDERLESS and GLUT_CAPTIONLESS
+    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE /*| GLUT_BORDERLESS*/); /* do try as well with GLUT_BORDERLESS and GLUT_CAPTIONLESS */
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS);
     
     /* Get border and caption size of default window style */
