@@ -1,4 +1,7 @@
 2022-02-06  John Tsiombikas <nuclear@member.fsf.org>
+
+	freeglut 3.2.2 changes:
+
 	* Fix netbsd/aarch64 build by including sys/joystick.h instead of
 	machine/joystick.h.
 	* Fix build with gcc >= 10 which made -fno-common the default by no
@@ -12,6 +15,9 @@
 	tree.
 
 2019-09-29  John Tsiombikas <nuclear@member.fsf.org>
+
+	freeglut 3.2.1 changes:
+
 	* Fixed failure to install glut.h when the "replace glut" build option
 	is enabled.
 	* Take into account CMAKE_INSTALL_LIBDIR in the installed cmake module.
@@ -19,6 +25,9 @@
 	context.
 
 2019-09-16  John Tsiombikas <nuclear@member.fsf.org>
+
+	freeglut 3.2.0 changes:
+
 	* Added new callback registration functions and corresponding callback
 	types in the extended API, which take an extra user pointer, and pass
 	it through to the callbacks (ucall API).
