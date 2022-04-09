@@ -1,10 +1,71 @@
+2022-02-06  John Tsiombikas <nuclear@member.fsf.org>
+	* Fix netbsd/aarch64 build by including sys/joystick.h instead of
+	machine/joystick.h.
+	* Fix build with gcc >= 10 which made -fno-common the default by no
+	longer relying on COMMON symbols for globals.
+	* Fix android build (default to FREEGLUT_GLES, and check for debug
+	flags).
+	* Add flat shading option to the shapes demo.
+	* Fix crash when calling primitive drawing functions without creating a
+	window first.
+	* Dropped really old and unmaintained doc directory from the source
+	tree.
+
+2019-09-29  John Tsiombikas <nuclear@member.fsf.org>
+	* Fixed failure to install glut.h when the "replace glut" build option
+	is enabled.
+	* Take into account CMAKE_INSTALL_LIBDIR in the installed cmake module.
+	* Fixed broken menu drawing when the user requests a core profile
+	context.
+
+2019-09-16  John Tsiombikas <nuclear@member.fsf.org>
+	* Added new callback registration functions and corresponding callback
+	types in the extended API, which take an extra user pointer, and pass
+	it through to the callbacks (ucall API).
+	* Added initial wayland support.
+	* Fixed mousewheel callbacks on X11.
+	* Fallback to non-sRGB context, instead of crashing, if the user
+	requested SRGB but failed to get one.
+	* Added GLUT_WINDOW_SRGB query to check if the context supports sRGB or
+	the fallback was triggered.
+	* Added missing spaceball support for windows.
+	* Fixed crash on re-init after having set a custom cursor.
+	* Added init error handler demo.
+	* Added cmake package.
+	* Added GLUT_ALLOW_NEGATIVE_WINDOW_POSITION option.
+	* Fixed incorrect library name in pkg-config files when building with
+	"replace glut" option disabled.
+	* Added spaceball button definitions in the extended API header.
+	* Added the "replace glut" option on windows too.
+	* Fixed missing static defines from pkg-config.
+	* Fixed incorrectly trying to install glut.h when the "replace glut"
+	option is disabled.
+	* Take "maximized" state into account when updating the visibility flag
+	on windows.
+	* Corrected "exit state" checking in the main loop, by placing the check
+	after every glutMainLoopEvent invocation.
+	* Added checking for the XInput dependency in cmake.
+	* Fixed netbsd build (joystick code).
+	* Fixed -pedantic GCC warnings on GNU/Linux.
+	* Fixed PDB installation for nmake/msvc builds on windows.
+	* Clear window work mask when marking it for destruction.
+	* Fixed android build with clang.
+	* Fixed GLUT_STEREO on nvidia windows drivers, which don't play well
+	with fullscreen windows with frames.
+	* Fixed original-GLUT compatibility in spaceball button numbering.
+	* Dropped unnecessary X11 utility library dependencies.
+	* Fixed namespace pollution due to some global symbols missing the fg
+	prefix.
+	* Fixed improper setting of the non-blocking flag in the joystick code
+	on UNIX.
+
 2012-01-09  John F. Fay <johnffay@cybertron.com>
 	* Released freeglut 2.8.0 a few days ago and am restarting the ChangeLog
 	* Added 'cmake' support
 	* Moved source files from 'src' directory to 'src/Common' directory with
 	an eye to moving platform-specific code to separate files in separate
 	directories
- 
+
 2009-08-10  Sven Panne  <sven.panne@aedion.de>
 
 	* include/GL/freeglut_ext.h,include/GL/freeglut_std.h,src/freeglut_ext.c,
