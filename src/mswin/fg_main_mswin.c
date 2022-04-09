@@ -191,7 +191,7 @@ static struct WM_MESSAGE_MAP allMessages[] =
 #   endif /* _WIN32_WINNT >= 0x0500 */
 
 
-#   if(_WIN32_WINNT >= 0x0501)
+#   if(_WIN32_WINNT >= 0x0501) && defined(WM_INPUT_DEVICE_CHANGE)
         DEFINE_MESSAGE(WM_INPUT_DEVICE_CHANGE),
 #   endif /* _WIN32_WINNT >= 0x0501 */
 
@@ -407,7 +407,7 @@ static struct WM_MESSAGE_MAP allMessages[] =
 #   endif /* _WIN32_WINNT >= 0x0501 */
 
 
-#   if(_WIN32_WINNT >= 0x0501)
+#   if(_WIN32_WINNT >= 0x0501) && defined(WM_CLIPBOARDUPDATE)
         DEFINE_MESSAGE(WM_CLIPBOARDUPDATE),
 #   endif /* _WIN32_WINNT >= 0x0501 */
 
