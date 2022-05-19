@@ -30,3 +30,12 @@ stamp-h1
 cross-android
 cross-woe
 native
+*.exe
+*.dll
+lib*.a
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+freeglut.pc
+freeglut.rc
+FreeGLUT
