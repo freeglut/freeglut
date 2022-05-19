@@ -535,7 +535,7 @@ INSTALL(FILES ${FREEGLUT_HEADERS} DESTINATION include/GL COMPONENT Devel)
 
 
 # Optionally build demos, on by default.
-option( FREEGLUT_BUILD_DEMOS "Build FreeGLUT demos." ON )
+option( FREEGLUT_BUILD_DEMOS "Build FreeGLUT demos." OFF )
 
 SET(DEMO_LIBS ${OPENGL_glu_LIBRARY} ${LIBS})
 # lib m for math, not needed on windows
