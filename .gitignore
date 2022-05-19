@@ -11,8 +11,6 @@ configure
 configure.cache
 config.log
 config.status
-# config.h.in is now static and used with CMake, keep it:
-#config.h.in
 config.h
 depcomp
 install-sh
@@ -26,16 +24,16 @@ stamp-h1
 *.o
 *.a
 *~
-# my build dirs:
+*.swp
 cross-android
 cross-woe
 native
 *.exe
 *.dll
-lib*.a
+*.a
 CMakeCache.txt
-CMakeFiles
+CMakeFiles/
 cmake_install.cmake
 freeglut.pc
 freeglut.rc
-FreeGLUT
+FreeGLUT/
