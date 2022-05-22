@@ -99,7 +99,7 @@ Mod2Text(int mods, char *text)
         strcat(text,"none");
 }
 
-static void 
+static void
 Display(void)
 {
   int winIdx;
@@ -622,7 +622,7 @@ main(int argc, char *argv[])
 {
   char dummy_string[STRING_LENGTH];
 
-  int menuID, subMenuA, subMenuB;
+  int subMenuA, subMenuB;
 
   glutInitWarningFunc(Warning);
   glutInitErrorFunc(Error);
@@ -674,7 +674,7 @@ main(int argc, char *argv[])
   glutMenuDestroyFunc ( MenuDestroy );  /* callback specific to this menu */
   glutSetMenuFont(subMenuB, GLUT_BITMAP_9_BY_15);
 
-  menuID = glutCreateMenu( MenuCallback );
+  glutCreateMenu( MenuCallback );
   glutAddMenuEntry( "Entry one",   21 );
   glutAddMenuEntry( "Entry two",   22 );
   glutAddMenuEntry( "Entry three", 23 );
