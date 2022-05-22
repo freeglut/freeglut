@@ -18,7 +18,7 @@ Prerequisites:
     commandline tools from the apple store and install them first.
   - If you don't have XQuartz installed, get it from https://www.xquartz.org
   - Use homebrew to install cmake, and all the necessary libraries:
-      `brew install cmake libx11 libxi libxrandr libxf86vm pkg-config mesa`
+      `brew install cmake libx11 libxi libxrandr libxxf86vm pkg-config mesa`
 
 Build freeglut:
   - Create a build directory under the freeglut directory and change into it:
