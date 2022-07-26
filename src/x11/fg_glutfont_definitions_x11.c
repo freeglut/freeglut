@@ -91,14 +91,25 @@ struct freeglutBitmapFont
 };
 
 
-struct freeglutStrokeFont glutStrokeRoman ;
-struct freeglutStrokeFont glutStrokeMonoRoman ;
+static struct freeglutStrokeFont glutStrokeRoman_ ;
+static struct freeglutStrokeFont glutStrokeMonoRoman_ ;
 
-struct freeglutBitmapFont glutBitmap9By15 ;
-struct freeglutBitmapFont glutBitmap8By13 ;
-struct freeglutBitmapFont glutBitmapTimesRoman10 ;
-struct freeglutBitmapFont glutBitmapTimesRoman24 ;
-struct freeglutBitmapFont glutBitmapHelvetica10 ;
-struct freeglutBitmapFont glutBitmapHelvetica12 ;
-struct freeglutBitmapFont glutBitmapHelvetica18 ;
+static struct freeglutBitmapFont glutBitmap9By15_ ;
+static struct freeglutBitmapFont glutBitmap8By13_ ;
+static struct freeglutBitmapFont glutBitmapTimesRoman10_ ;
+static struct freeglutBitmapFont glutBitmapTimesRoman24_ ;
+static struct freeglutBitmapFont glutBitmapHelvetica10_ ;
+static struct freeglutBitmapFont glutBitmapHelvetica12_ ;
+static struct freeglutBitmapFont glutBitmapHelvetica18_ ;
 
+
+void *glutStrokeRoman = &glutStrokeRoman_ ;
+void *glutStrokeMonoRoman = &glutStrokeMonoRoman_ ;
+
+void *glutBitmap9By15 = &glutBitmap9By15_ ;
+void *glutBitmap8By13 = &glutBitmap8By13_ ;
+void *glutBitmapTimesRoman10 = &glutBitmapTimesRoman10_ ;
+void *glutBitmapTimesRoman24 = &glutBitmapTimesRoman24_ ;
+void *glutBitmapHelvetica10 = &glutBitmapHelvetica10_ ;
+void *glutBitmapHelvetica12 = &glutBitmapHelvetica12_ ;
+void *glutBitmapHelvetica18 = &glutBitmapHelvetica18_ ;
