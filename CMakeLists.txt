@@ -509,8 +509,8 @@ IF(FREEGLUT_BUILD_SHARED_LIBS)
             INCLUDES DESTINATION include
     )
     IF(INSTALL_PDB)
-        get_cmake_property(is_multi_config GENERATOR_IS_MULTI_CONFIG)
-        IF(is_multi_config)
+        IF(CMAKE_GENERATOR MATCHES "^Visual Studio" OR
+           CMAKE_GENERATOR MATCHES "Ninja Multi-Config")
             INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
                 DESTINATION bin
                 CONFIGURATIONS Debug
