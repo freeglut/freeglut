@@ -52,7 +52,7 @@
 #elif defined (__QNXNTO__) || defined (__PLAYBOOK__)
 #   define  TARGET_HOST_BLACKBERRY  1
 
-#elif defined(__posix__) || defined(__unix__) || defined(__linux__) || defined(__sun)
+#elif defined(__posix__) || defined(unix) || defined(__unix__) || defined(__linux__) || defined(__sun)
 #   if defined(FREEGLUT_WAYLAND)
 #      define  TARGET_HOST_POSIX_WAYLAND  1
 #   else
