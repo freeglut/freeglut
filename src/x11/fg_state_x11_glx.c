@@ -29,6 +29,10 @@
 #include "fg_internal.h"
 #include "x11/fg_window_x11_glx.h"
 
+#ifndef GL_SAMPLES
+#define GL_SAMPLES	0x80a9
+#endif
+
 /*
  * Queries the GL context about some attributes
  */
@@ -76,6 +80,7 @@ int fghPlatformGlutGetGLX ( GLenum eWhat )
 	int nsamples = 0;
 #ifdef GLX_VERSION_1_3
         glGetIntegerv(GL_SAMPLES, &nsamples);
+        glGetError();	/* clear error if GL_SAMPLES is not supported */
 #endif
         return nsamples;
       }
