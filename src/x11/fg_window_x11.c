@@ -75,7 +75,7 @@ static int fghResizeFullscrToggle(void)
         XGetWindowAttributes(fgDisplay.pDisplay.Display,
                 fgStructure.CurrentWindow->Window.Handle,
                 &attributes);
-        
+
         /*
          * The "x" and "y" members of "attributes" are the window's coordinates
          * relative to its parent, i.e. to the decoration window.
@@ -162,7 +162,11 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 #ifdef EGL_VERSION_1_0
 #define WINDOW_CONFIG window->Window.pContext.egl.Config
 #else
+#ifdef USE_FBCONFIG
 #define WINDOW_CONFIG window->Window.pContext.FBConfig
+#else
+#define WINDOW_CONFIG window->Window.pContext.visinf
+#endif  /* !def USE_FBCONFIG */
 #endif
     fghChooseConfig(&WINDOW_CONFIG);
 
@@ -207,8 +211,13 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     }
 done_retry:
 
-    FREEGLUT_INTERNAL_ERROR_EXIT( WINDOW_CONFIG != NULL,
-                                  "FBConfig with necessary capabilities not found", "fgOpenWindow" );
+#ifdef USE_FBCONFIG
+    FREEGLUT_INTERNAL_ERROR_EXIT(WINDOW_CONFIG != NULL,
+            "FBConfig with necessary capabilities not found", "fgOpenWindow");
+#else
+    FREEGLUT_INTERNAL_ERROR_EXIT(WINDOW_CONFIG != NULL,
+            "GLX Visual with necessary capabilities not found", "fgOpenWindow");
+#endif
 
     /*  Get the X visual.  */
 #ifdef EGL_VERSION_1_0
@@ -220,12 +229,16 @@ done_retry:
     visualTemplate.visualid = vid;
     visualInfo = XGetVisualInfo(fgDisplay.pDisplay.Display, VisualIDMask, &visualTemplate, &num_visuals);
 #else
+#ifdef USE_FBCONFIG
     visualInfo = glXGetVisualFromFBConfig( fgDisplay.pDisplay.Display,
 					   window->Window.pContext.FBConfig );
-#endif
 
     FREEGLUT_INTERNAL_ERROR_EXIT( visualInfo != NULL,
-                                  "visualInfo could not be retrieved from FBConfig", "fgOpenWindow" );
+            "visualInfo could not be retrieved from FBConfig", "fgOpenWindow");
+#else
+    visualInfo = window->Window.pContext.visinf;
+#endif  /* !def USE_FBCONFIG */
+#endif  /* GLX part */
 
     /*
      * XXX HINT: the masks should be updated when adding/removing callbacks.
@@ -246,6 +259,7 @@ done_retry:
     winAttr.background_pixel  = 0;
     winAttr.border_pixel      = 0;
 
+    /* TODO: fix for GLUT_INDEXED (AllocAll) */
     winAttr.colormap = XCreateColormap(
         fgDisplay.pDisplay.Display, fgDisplay.pDisplay.RootWindow,
         visualInfo->visual, AllocNone
@@ -447,7 +461,12 @@ done_retry:
         window->State.Visible = GL_TRUE;
     }
 
+#ifdef USE_FBCONFIG
+    /* on the non-fbconfig path, the visualInfo pointer is the one owned by the
+     * window, so delete only if we got this from glXGetVisualFromFBConfig
+     */
     XFree(visualInfo);
+#endif
 
     /* wait till window visible */
     if( !isSubWindow && !window->IsMenu)
@@ -477,8 +496,13 @@ void fgPlatformCloseWindow( SFG_Window* window )
 #else
     if( window->Window.Context )
         glXDestroyContext( fgDisplay.pDisplay.Display, window->Window.Context );
+#ifdef USE_FBCONFIG
     window->Window.pContext.FBConfig = NULL;
-#endif
+#else
+    XFree(window->Window.pContext.visinf);
+    window->Window.pContext.visinf = NULL;
+#endif  /* !def USE_FBCONFIG */
+#endif  /* GLX part */
 
     if( window->Window.Handle ) {
         XDestroyWindow( fgDisplay.pDisplay.Display, window->Window.Handle );

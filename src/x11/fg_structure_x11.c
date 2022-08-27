@@ -39,7 +39,11 @@ void fgPlatformCreateWindow ( SFG_Window *window )
 #ifdef EGL_VERSION_1_0
     fghPlatformCreateWindowEGL(window);
 #else
+#ifdef USE_FBCONFIG
     window->Window.pContext.FBConfig = NULL;
+#else
+    window->Window.pContext.visinf = NULL;
+#endif
 #endif
 
     window->State.pWState.OldHeight = window->State.pWState.OldWidth = -1;

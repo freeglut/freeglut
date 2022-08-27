@@ -32,18 +32,35 @@
 /*
  * Queries the GL context about some attributes
  */
-int fgPlatformGetConfig( int attribute )
+int fgPlatformGetConfig(int attribute)
 {
-  int returnValue = 0;
-  int result __fg_unused;  /*  Not checked  */
+	int res, retval = 0;
+	Display *dpy;
 
-  if( fgStructure.CurrentWindow )
-      result = glXGetFBConfigAttrib( fgDisplay.pDisplay.Display,
-                                     fgStructure.CurrentWindow->Window.pContext.FBConfig,
-                                     attribute,
-                                     &returnValue );
+	if(!fgStructure.CurrentWindow) {
+		return 0;
+	}
 
-  return returnValue;
+	dpy = fgDisplay.pDisplay.Display;
+	{
+#ifdef USE_FBCONFIG
+		GLXFBConfig fbcfg;
+		fbcfg = fgStructure.CurrentWindow->Window.pContext.FBConfig;
+		res = glXGetFBConfigAttrib(dpy, fbcfg, attribute, &retval);
+#else
+		XVisualInfo *vinf;
+		vinf = fgStructure.CurrentWindow->Window.pContext.visinf;
+		res = glXGetConfig(dpy, vinf, attribute, &retval);
+#endif
+	}
+
+	if(res != 0) {
+		if(res == GLX_BAD_ATTRIBUTE) {
+			fgWarning("Attempting to query invalid GLX attribute: 0x%04x\n", attribute);
+		}
+		return 0;
+	}
+	return retval;
 }
 
 int fghPlatformGlutGetGLX ( GLenum eWhat )
@@ -91,7 +108,11 @@ int fghPlatformGlutGetGLX ( GLenum eWhat )
     case GLUT_DISPLAY_MODE_POSSIBLE:
     {
         /*  We should not have to call fghChooseConfig again here.  */
+#ifdef USE_FBCONFIG
         GLXFBConfig config;
+#else
+		XVisualInfo *config;
+#endif
         return fghChooseConfig(&config);
     }
 
@@ -110,6 +131,7 @@ int fghPlatformGlutGetGLX ( GLenum eWhat )
 	return -1;
 }
 
+#ifdef USE_FBCONFIG
 int *fgPlatformGlutGetModeValues(GLenum eWhat, int *size)
 {
   int *array;
@@ -213,3 +235,14 @@ int *fgPlatformGlutGetModeValues(GLenum eWhat, int *size)
 
   return array;
 }
+
+#else	/* !def USE_FBCONFIG */
+
+int *fgPlatformGlutGetModeValues(GLenum what, int *size)
+{
+	/* TODO */
+	*size = 0;
+	return 0;
+}
+
+#endif	/* !def USE_FBCONFIG */

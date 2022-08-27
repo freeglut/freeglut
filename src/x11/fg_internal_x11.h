@@ -33,10 +33,10 @@
 #ifdef EGL_VERSION_1_0
 #include "egl/fg_internal_egl.h"
 #else
-#include <GL/glx.h>
 #include "x11/fg_internal_x11_glx.h"
 #endif
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/extensions/XInput.h>
@@ -105,8 +105,12 @@ struct tagSFG_PlatformContext
 #ifdef EGL_VERSION_1_0
     struct tagSFG_PlatformContextEGL egl;
 #else
+#ifdef USE_FBCONFIG
     GLXFBConfig    FBConfig;        /* The window's FBConfig               */
-#endif
+#else
+	XVisualInfo *visinf;			/* for older GLX keep the visual info */
+#endif	/* !def GLX_VERSION_1_3 */
+#endif	/* !def EGL_VERSION_1_0 */
 };
 
 

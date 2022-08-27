@@ -27,6 +27,8 @@
 #ifndef  FREEGLUT_INTERNAL_X11_GLX_H
 #define  FREEGLUT_INTERNAL_X11_GLX_H
 
+#include <GL/glx.h>
+
 /* If GLX is too old, we will fail during runtime when multisampling
    is requested, but at least freeglut compiles. */
 #ifndef GLX_SAMPLE_BUFFERS
@@ -79,6 +81,10 @@
 
 #ifndef GLX_RGBA_FLOAT_BIT
 #define GLX_RGBA_FLOAT_BIT 0x00000004
+#endif
+
+#ifdef GLX_VERSION_1_3
+#define USE_FBCONFIG
 #endif
 
 #endif

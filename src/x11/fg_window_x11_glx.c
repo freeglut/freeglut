@@ -38,6 +38,7 @@
  * Chooses a visual basing on the current display mode settings
  */
 
+#ifdef USE_FBCONFIG
 int fghChooseConfig(GLXFBConfig* fbconfig)
 {
   GLboolean wantIndexedMode = GL_FALSE;
@@ -143,7 +144,7 @@ int fghChooseConfig(GLXFBConfig* fbconfig)
 
                 if (bufferSizeMax > bufferSizeMin)
                 {
-                    /* 
+                    /*
                      * Free and reallocate fbconfigArray, keeping only FBConfigs
                      * with the largest buffer size.
                      */
@@ -166,12 +167,11 @@ int fghChooseConfig(GLXFBConfig* fbconfig)
         else
         {
            *fbconfig = NULL;
-	   return 0;
+		   return 0;
         }
-	XFree(fbconfigArray);
-
-        return 1;
+		XFree(fbconfigArray);
     }
+    return 1;
 }
 
 static void fghFillContextAttributes( int *attributes ) {
@@ -249,6 +249,102 @@ GLXContext fghCreateNewContext( SFG_Window* window )
   }
   return context;
 }
+
+#else	/* !defined USE_FBCONFIG */
+
+int fghChooseConfig(XVisualInfo **vinf_ret)
+{
+	Display *dpy = fgDisplay.pDisplay.Display;
+	int scr = DefaultScreen(dpy);
+	XVisualInfo *vi;
+	int attr[32];
+	int *aptr = attr;
+	int *samples = 0;
+	unsigned int mode = fgState.DisplayMode;
+
+	if(mode & GLUT_DOUBLE) {
+		*aptr++ = GLX_DOUBLEBUFFER;
+	}
+
+	if(mode & GLUT_INDEX) {
+		*aptr++ = GLX_BUFFER_SIZE;
+		*aptr++ = 1;
+	} else {
+		*aptr++ = GLX_RGBA;
+		*aptr++ = GLX_RED_SIZE; *aptr++ = 1;
+		*aptr++ = GLX_GREEN_SIZE; *aptr++ = 1;
+		*aptr++ = GLX_BLUE_SIZE; *aptr++ = 1;
+	}
+	if(mode & GLUT_ALPHA) {
+		*aptr++ = GLX_ALPHA_SIZE;
+		*aptr++ = 1;
+	}
+	if(mode & GLUT_DEPTH) {
+		*aptr++ = GLX_DEPTH_SIZE;
+		*aptr++ = 8;
+	}
+	if(mode & GLUT_STENCIL) {
+		*aptr++ = GLX_STENCIL_SIZE;
+		*aptr++ = 1;
+	}
+	if(mode & GLUT_ACCUM) {
+		*aptr++ = GLX_ACCUM_RED_SIZE; *aptr++ = 1;
+		*aptr++ = GLX_ACCUM_GREEN_SIZE; *aptr++ = 1;
+		*aptr++ = GLX_ACCUM_BLUE_SIZE; *aptr++ = 1;
+	}
+	if(mode & GLUT_STEREO) {
+		*aptr++ = GLX_STEREO;
+	}
+	if(mode & GLUT_SRGB) {
+		*aptr++ = GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB;
+	}
+	if(mode & GLUT_MULTISAMPLE) {
+		*aptr++ = GLX_SAMPLE_BUFFERS_ARB;
+		*aptr++ = 1;
+		*aptr++ = GLX_SAMPLES_ARB;
+		samples = aptr;
+		*aptr++ = 32;	/* start high and attempt halving each time below */
+	}
+	*aptr++ = None;
+
+	if(!samples) {
+		vi = glXChooseVisual(dpy, scr, attr);
+	} else {
+		while(!(vi = glXChooseVisual(dpy, scr, attr)) && *samples) {
+			*samples >>= 1;
+			if(!*samples) {
+				aptr[-3] = None;
+			}
+		}
+	}
+	if(vi) {
+		*vinf_ret = vi;
+		return 1;
+	}
+	return 0;
+}
+
+GLXContext fghCreateNewContext(SFG_Window* window)
+{
+	Display *dpy = fgDisplay.pDisplay.Display;
+	XVisualInfo *vi = window->Window.pContext.visinf;
+	GLXContext share_list = 0;
+	Bool direct = fgState.DirectContext != GLUT_FORCE_INDIRECT_CONTEXT;
+	GLXContext ctx;
+
+	if(!fghIsLegacyContextRequested(window)) {
+		fgWarning("Core profile context requested, but freeglut was compiled to "
+				"use the old GLX context creation mechanism.\n"
+				"Will create an unversioned old-style context instead.");
+	}
+
+	if(!(ctx = glXCreateContext(dpy, vi, share_list, direct))) {
+		fghContextCreationError();
+		return 0;
+	}
+	return ctx;
+}
+#endif	/* !defined USE_FBCONFIG */
 
 void fgPlatformSetWindow ( SFG_Window *window )
 {

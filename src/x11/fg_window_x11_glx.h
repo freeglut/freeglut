@@ -29,7 +29,13 @@
 #ifndef __FG_WINDOW_X11_GLX_H__
 #define __FG_WINDOW_X11_GLX_H__
 
-extern int fghChooseConfig( GLXFBConfig* fbconfig );
-extern GLXContext fghCreateNewContext( SFG_Window* window );
+#include "fg_internal_x11_glx.h"
+
+#ifdef USE_FBCONFIG
+int fghChooseConfig(GLXFBConfig *fbconfig);
+#else
+int fghChooseConfig(XVisualInfo **vinf_ret);
+#endif
+GLXContext fghCreateNewContext(SFG_Window* window);
 
 #endif

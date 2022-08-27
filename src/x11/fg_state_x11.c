@@ -227,16 +227,22 @@ int fgPlatformGlutGet ( GLenum eWhat )
 	  visualInfo = XGetVisualInfo(fgDisplay.pDisplay.Display, VisualIDMask, &visualTemplate, &num_visuals);
 #else
 	  {
-          const GLXFBConfig fbconfig =
-                fgStructure.CurrentWindow->Window.pContext.FBConfig;
+#ifdef USE_FBCONFIG
+          GLXFBConfig fbconfig;
 
-          visualInfo =
-                glXGetVisualFromFBConfig( fgDisplay.pDisplay.Display, fbconfig );
+          fbconfig = fgStructure.CurrentWindow->Window.pContext.FBConfig;
+          visualInfo = glXGetVisualFromFBConfig(fgDisplay.pDisplay.Display, fbconfig);
+#else
+          visualInfo = fgStructure.CurrentWindow->Window.pContext.visinf;
+#endif
 	  }
 #endif
           result = visualInfo->visual->map_entries;
 
+#ifdef USE_FBCONFIG
+		  /* only free if we got it from glXGetVisualFromFBConfig */
           XFree(visualInfo);
+#endif
 
           return result;
         }
