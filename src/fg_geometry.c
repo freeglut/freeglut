@@ -331,7 +331,7 @@ static void fghDrawGeometryWire11(GLfloat *vertices, GLfloat *normals,
                                   GLushort *vertIdxs2, GLsizei numParts2, GLsizei numVertPerPart2
     )
 {
-#ifdef GL_VERSION_1_1
+#if defined(GL_VERSION_1_1) || defined(GL_VERSION_ES_CM_1_0)
     int i;
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -365,7 +365,7 @@ static void fghDrawGeometryWire11(GLfloat *vertices, GLfloat *normals,
 static void fghDrawGeometrySolid11(GLfloat *vertices, GLfloat *normals, GLfloat *textcs, GLsizei numVertices,
                                    GLushort *vertIdxs, GLsizei numParts, GLsizei numVertIdxsPerPart)
 {
-#ifdef GL_VERSION_1_1
+#if defined(GL_VERSION_1_1) || defined(GL_VERSION_ES_CM_1_0)
     int i;
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -404,6 +404,7 @@ static void fghDrawGeometryWire20(GLfloat *vertices, GLfloat *normals, GLsizei n
                                   GLushort *vertIdxs2, GLsizei numParts2, GLsizei numVertPerPart2,
                                   GLint attribute_v_coord, GLint attribute_v_normal)
 {
+#if defined(GL_VERSION_1_1) || defined(GL_VERSION_ES_CM_1_0)
     GLuint vbo_coords = 0, vbo_normals = 0,
         ibo_elements = 0, ibo_elements2 = 0;
     GLsizei numVertIdxs = numParts * numVertPerPart;
@@ -505,6 +506,7 @@ static void fghDrawGeometryWire20(GLfloat *vertices, GLfloat *normals, GLsizei n
         fghDeleteBuffers(1, &ibo_elements);
     if (ibo_elements2 != 0)
         fghDeleteBuffers(1, &ibo_elements2);
+#endif	/* GL version at least 1.1 */
 }
 
 
@@ -515,6 +517,7 @@ static void fghDrawGeometrySolid20(GLfloat *vertices, GLfloat *normals, GLfloat 
                                    GLushort *vertIdxs, GLsizei numParts, GLsizei numVertIdxsPerPart,
                                    GLint attribute_v_coord, GLint attribute_v_normal, GLint attribute_v_texture)
 {
+#if defined(GL_VERSION_1_1) || defined(GL_VERSION_ES_CM_1_0)
     GLuint vbo_coords = 0, vbo_normals = 0, vbo_textcs = 0, ibo_elements = 0;
     GLsizei numVertIdxs = numParts * numVertIdxsPerPart;
     int i;
@@ -624,6 +627,7 @@ static void fghDrawGeometrySolid20(GLfloat *vertices, GLfloat *normals, GLfloat 
         fghDeleteBuffers(1, &vbo_textcs);
     if (ibo_elements != 0)
         fghDeleteBuffers(1, &ibo_elements);
+#endif	/* GL version at least 1.1 */
 }
 
 
@@ -653,7 +657,7 @@ static void fghGenerateNormalVisualization(GLfloat *vertices, GLfloat *normals, 
     }
 }
 
-#ifndef GL_VERSION_1_1
+#if !defined(GL_VERSION_1_1) && !defined(GL_VERSION_ES_CM_1_0)
 /* Version for OpenGL 1.0 */
 static void fghDrawNormalVisualization10(void)
 {
@@ -679,7 +683,7 @@ static void fghDrawNormalVisualization10(void)
 /* Version for OpenGL (ES) 1.1 */
 static void fghDrawNormalVisualization11(void)
 {
-#ifdef GL_VERSION_1_1
+#if defined(GL_VERSION_1_1) || defined(GL_VERSION_ES_CM_1_0)
     GLfloat currentColor[4];
     /* Setup draw color: (1,1,1)-shape's color */
     glGetFloatv(GL_CURRENT_COLOR,currentColor);
@@ -703,6 +707,7 @@ static void fghDrawNormalVisualization11(void)
 /* Version for OpenGL (ES) >= 2.0 */
 static void fghDrawNormalVisualization20(GLint attribute_v_coord)
 {
+#if defined(GL_VERSION_1_1) || defined(GL_VERSION_ES_CM_1_0)
     GLuint vbo_coords = 0;
 
     if (attribute_v_coord != -1) {
@@ -737,6 +742,7 @@ static void fghDrawNormalVisualization20(GLint attribute_v_coord)
 
     /* Done, free memory */
     free(verticesForNormalVisualization);
+#endif	/* GL version at least 1.1 */
 }
 
 /**
