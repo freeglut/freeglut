@@ -121,7 +121,11 @@ int fghPlatformGlutGetGLX ( GLenum eWhat )
         if( fgStructure.CurrentWindow == NULL )
             return 0;
 
+#ifdef USE_FBCONFIG
         return fgPlatformGetConfig( GLX_VISUAL_ID );
+#else
+		return fgStructure.CurrentWindow->Window.pContext.visinf->visualid;
+#endif
 
     default:
         fgWarning( "glutGet(): missing enum handle %d", eWhat );

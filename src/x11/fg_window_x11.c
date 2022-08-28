@@ -441,13 +441,16 @@ done_retry:
 
 #ifdef EGL_VERSION_1_0
     fghPlatformOpenWindowEGL(window);
-#else
+#elif defined(GLX_VERSION_1_3)
     glXMakeContextCurrent(
         fgDisplay.pDisplay.Display,
         window->Window.Handle,
         window->Window.Handle,
         window->Window.Context
     );
+#else
+	glXMakeCurrent(fgDisplay.pDisplay.Display, window->Window.Handle,
+			window->Window.Context);
 #endif
 
     /* register extension events _before_ window is mapped */

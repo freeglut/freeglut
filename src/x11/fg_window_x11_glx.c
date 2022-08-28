@@ -299,9 +299,9 @@ int fghChooseConfig(XVisualInfo **vinf_ret)
 		*aptr++ = GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB;
 	}
 	if(mode & GLUT_MULTISAMPLE) {
-		*aptr++ = GLX_SAMPLE_BUFFERS_ARB;
+		*aptr++ = GLX_SAMPLE_BUFFERS;
 		*aptr++ = 1;
-		*aptr++ = GLX_SAMPLES_ARB;
+		*aptr++ = GLX_SAMPLES;
 		samples = aptr;
 		*aptr++ = 32;	/* start high and attempt halving each time below */
 	}
@@ -350,11 +350,16 @@ void fgPlatformSetWindow ( SFG_Window *window )
 {
     if ( window )
     {
+#ifdef GLX_VERSION_1_3
         glXMakeContextCurrent(
             fgDisplay.pDisplay.Display,
             window->Window.Handle,
             window->Window.Handle,
             window->Window.Context
         );
+#else
+		glXMakeCurrent(fgDisplay.pDisplay.Display, window->Window.Handle,
+				window->Window.Context);
+#endif
     }
 }
