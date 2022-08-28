@@ -532,8 +532,12 @@ void fgPlatformEnterGameMode( void )
                ButtonPressMask | ButtonReleaseMask | ButtonMotionMask
                | PointerMotionMask,
                GrabModeAsync, GrabModeAsync,
-               fgStructure.GameModeWindow->Window.Handle, None, CurrentTime) )
-        usleep( 100 );
+               fgStructure.GameModeWindow->Window.Handle, None, CurrentTime) ) {
+		struct timespec ts;
+		ts.tv_sec = 0;
+		ts.tv_nsec = 100000000;
+		nanosleep(&ts, 0);
+	}
     /*
      * Change input focus to the new window. This will exit the application
      * if the new window is not viewable yet, see the XGrabPointer loop above.
