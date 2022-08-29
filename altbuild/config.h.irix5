@@ -1,0 +1,16 @@
+#define HAVE_SYS_TYPES_H
+#define HAVE_UNISTD_H
+#define HAVE_SYS_TIME_H
+#define HAVE_SYS_PARAM_H
+#define HAVE_SYS_IOCTL_H
+#define HAVE_FCNTL_H
+#define HAVE_ERRNO_H
+#define HAVE_GETTIMEOFDAY
+#define HAVE_VFPRINTF
+#define HAVE_DOPRNT
+#undef HAVE_INTTYPES_H
+#define HAVE_ULONG_LONG
+
+/* warning and errors printed? */
+#define FREEGLUT_PRINT_WARNINGS
+#define FREEGLUT_PRINT_ERRORS
