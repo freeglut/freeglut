@@ -3,7 +3,7 @@ Simple build files for freeglut
 This directory includes a number of simple ways to build freeglut, without
 relying on extra tools.
 
-The official build system used by freeglut is cmake. With the current minimum
+The official build system used by freeglut is cmake, with the current minimum
 cmake version required being set to 3.0. Installing and using cmake 3.0 or later
 to generate build files might be difficult or inconvenient in some cases.
 Installing modern versions of cmake on very old UNIX systems might be difficult
@@ -26,8 +26,7 @@ Before using any of these build files, first you'll need to select one of the
 `config.h.*` files provided, copy it to the project root directory with the name
 `config.h`. The following config files are available:
 
-  - config.h.gnulinux: GNU/Linux with X11
-  - config.h.bsd: FreeBSD, NetBSD, etc.
+  - config.h.unix: Modern UNIX with X11 (GNU/Linux, FreeBSD, etc).
   - config.h.msvc6: Windows build with MS Visual C/C++ 6.0.
   - config.h.irix5: IRIX 5.x build with the SGI compiler.
   - config.h.irix6: IRIX 6.x build with the SGI compiler.
