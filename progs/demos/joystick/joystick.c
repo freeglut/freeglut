@@ -8,6 +8,14 @@
 #include <math.h>
 #include <GL/freeglut.h>
 
+#ifndef M_PI
+#define M_PI	3.14159265358979323846
+#endif
+
+#ifdef _MSC_VER
+#pragma warning (disable: 4305 4244)
+#endif
+
 void display(void);
 void rect(float x0, float y0, float x1, float y1);
 void text(float x, float y, const char *fmt, ...);
