@@ -25,17 +25,16 @@ static int xi_opcode = -1;
 /**
  * \brief Sets window up for XI2 events.
  */
-void fgRegisterDevices( Display* dpy, Window* win ) {
-
+void fgRegisterDevices(Display* dpy, Window win)
+{
 	XIEventMask mask;
 	unsigned char flags[2] = { 0, 0 };
 	int event, error;
 
-	/*Display* dpy = fgDisplay.pDisplay.Display;
-	Window* win = glutGetXWindow();*/
-
 	/* get XInput extension opcode */
-	if (!XQueryExtension( dpy, "XInputExtension", &xi_opcode, &event, &error )) { xi_opcode = -1; }
+	if(!XQueryExtension(dpy, "XInputExtension", &xi_opcode, &event, &error)) {
+		xi_opcode = -1;
+	}
 
 	/* Select for motion events */
 	mask.deviceid = XIAllMasterDevices;
@@ -55,7 +54,7 @@ void fgRegisterDevices( Display* dpy, Window* win ) {
 	XISetMask(mask.mask, XI_FocusOut);
 	XISetMask(mask.mask, XI_HierarchyChanged);*/
 
-	XISelectEvents( dpy, *win, &mask, 1 );
+	XISelectEvents(dpy, win, &mask, 1);
 }
 
 

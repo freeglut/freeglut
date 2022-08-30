@@ -145,19 +145,32 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
                            GLboolean sizeUse, int w, int h,
                            GLboolean gameMode, GLboolean isSubWindow )
 {
-    XVisualInfo * visualInfo = NULL;
-    XSetWindowAttributes winAttr;
-    XTextProperty textProperty;
-    XSizeHints sizeHints;
-    XWMHints wmHints;
-    XEvent eventReturnBuffer; /* return buffer required for a call */
-    unsigned long mask;
-    unsigned int current_DisplayMode = fgState.DisplayMode ;
-    XEvent fakeEvent = {0};
+	Display *dpy = fgDisplay.pDisplay.Display;
+	Window rootwin = fgDisplay.pDisplay.RootWindow;
+	Window parent = window->Parent ? window->Parent->Window.Handle : 0;
+	Window win;
+	Colormap cmap;
+	XVisualInfo * visualInfo = NULL;
+	XSetWindowAttributes wattr;
+	XTextProperty txprop;
+	XSizeHints sizeHints;
+	XWMHints wmHints;
+	XEvent eventReturnBuffer; /* return buffer required for a call */
+	unsigned long mask;
+	unsigned int current_DisplayMode = fgState.DisplayMode;
+	XEvent fakeEvent = {0};
+	Atom xa_motif_wm_hints = XInternAtom(dpy, "_MOTIF_WM_HINTS", False);
 
-    /* Save the display mode if we are creating a menu window */
-    if( window->IsMenu && ( ! fgStructure.MenuContext ) )
-        fgState.DisplayMode = GLUT_DOUBLE | GLUT_RGB ;
+#ifdef EGL_VERSION_1_0
+	EGLint vid = 0;
+	XVisualInfo visualTemplate;
+	int num_visuals;
+#endif
+
+	/* Save the display mode if we are creating a menu window */
+	if(window->IsMenu && !fgStructure.MenuContext) {
+		fgState.DisplayMode = GLUT_DOUBLE | GLUT_RGB;
+	}
 
 #ifdef EGL_VERSION_1_0
 #define WINDOW_CONFIG window->Window.pContext.egl.Config
@@ -168,312 +181,266 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 #define WINDOW_CONFIG window->Window.pContext.visinf
 #endif  /* !def USE_FBCONFIG */
 #endif
-    fghChooseConfig(&WINDOW_CONFIG);
+	fghChooseConfig(&WINDOW_CONFIG);
 
-    if( window->IsMenu && ( ! fgStructure.MenuContext ) )
-        fgState.DisplayMode = current_DisplayMode ;
+	if(window->IsMenu && !fgStructure.MenuContext) {
+		fgState.DisplayMode = current_DisplayMode;
+	}
 
-    if( ! WINDOW_CONFIG )
-    {
-        /*
-         * The "fghChooseConfig" returned a null meaning that the visual
-         * context is not available.
-         * Try a couple of variations to see if they will work.
-         */
+	if(!WINDOW_CONFIG) {
+		/*
+		 * The "fghChooseConfig" returned a null meaning that the visual
+		 * context is not available.
+		 * Try a couple of variations to see if they will work.
+		 */
 #ifndef EGL_VERSION_1_0
-        if( !( fgState.DisplayMode & GLUT_DOUBLE ) )
-        {
-            fgState.DisplayMode |= GLUT_DOUBLE ;
-            fghChooseConfig(&WINDOW_CONFIG);
-            fgState.DisplayMode &= ~GLUT_DOUBLE;
+		if(!(fgState.DisplayMode & GLUT_DOUBLE)) {
+			fgState.DisplayMode |= GLUT_DOUBLE;
+			fghChooseConfig(&WINDOW_CONFIG);
+			fgState.DisplayMode &= ~GLUT_DOUBLE;
 
-            if( WINDOW_CONFIG ) goto done_retry;
-        }
+			if(WINDOW_CONFIG) goto done_retry;
+		}
 #endif
 
-        if( fgState.DisplayMode & GLUT_MULTISAMPLE )
-        {
-            fgState.DisplayMode &= ~GLUT_MULTISAMPLE ;
-            fghChooseConfig(&WINDOW_CONFIG);
-            fgState.DisplayMode |= GLUT_MULTISAMPLE;
+		if(fgState.DisplayMode & GLUT_MULTISAMPLE) {
+			fgState.DisplayMode &= ~GLUT_MULTISAMPLE;
+			fghChooseConfig(&WINDOW_CONFIG);
+			fgState.DisplayMode |= GLUT_MULTISAMPLE;
 
-            if( WINDOW_CONFIG ) goto done_retry;
-        }
+			if(WINDOW_CONFIG) goto done_retry;
+		}
 
-        if( fgState.DisplayMode & GLUT_SRGB )
-        {
-            fgState.DisplayMode &= ~GLUT_SRGB ;
-            fghChooseConfig(&WINDOW_CONFIG);
-            fgState.DisplayMode |= GLUT_SRGB;
+		if(fgState.DisplayMode & GLUT_SRGB) {
+			fgState.DisplayMode &= ~GLUT_SRGB;
+			fghChooseConfig(&WINDOW_CONFIG);
+			fgState.DisplayMode |= GLUT_SRGB;
 
-            if( WINDOW_CONFIG ) goto done_retry;
-        }
-    }
+			if(WINDOW_CONFIG) goto done_retry;
+		}
+	}
 done_retry:
 
 #ifdef USE_FBCONFIG
-    FREEGLUT_INTERNAL_ERROR_EXIT(WINDOW_CONFIG != NULL,
-            "FBConfig with necessary capabilities not found", "fgOpenWindow");
+	FREEGLUT_INTERNAL_ERROR_EXIT(WINDOW_CONFIG != NULL,
+			"FBConfig with necessary capabilities not found", "fgOpenWindow");
 #else
-    FREEGLUT_INTERNAL_ERROR_EXIT(WINDOW_CONFIG != NULL,
-            "GLX Visual with necessary capabilities not found", "fgOpenWindow");
+	FREEGLUT_INTERNAL_ERROR_EXIT(WINDOW_CONFIG != NULL,
+			"GLX Visual with necessary capabilities not found", "fgOpenWindow");
 #endif
 
-    /*  Get the X visual.  */
+	/*  Get the X visual.  */
 #ifdef EGL_VERSION_1_0
-    EGLint vid = 0;
-    XVisualInfo visualTemplate;
-    int num_visuals;
-    if (!eglGetConfigAttrib(fgDisplay.pDisplay.egl.Display, window->Window.pContext.egl.Config, EGL_NATIVE_VISUAL_ID, &vid))
-      fgError("eglGetConfigAttrib(EGL_NATIVE_VISUAL_ID) failed");
-    visualTemplate.visualid = vid;
-    visualInfo = XGetVisualInfo(fgDisplay.pDisplay.Display, VisualIDMask, &visualTemplate, &num_visuals);
+	if(!eglGetConfigAttrib(fgDisplay.pDisplay.egl.Display, window->Window.pContext.egl.Config, EGL_NATIVE_VISUAL_ID, &vid)) {
+		fgError("eglGetConfigAttrib(EGL_NATIVE_VISUAL_ID) failed");
+	}
+	visualTemplate.visualid = vid;
+	visualInfo = XGetVisualInfo(dpy, VisualIDMask, &visualTemplate, &num_visuals);
 #else
 #ifdef USE_FBCONFIG
-    visualInfo = glXGetVisualFromFBConfig( fgDisplay.pDisplay.Display,
-					   window->Window.pContext.FBConfig );
+	visualInfo = glXGetVisualFromFBConfig(dpy, window->Window.pContext.FBConfig);
 
-    FREEGLUT_INTERNAL_ERROR_EXIT( visualInfo != NULL,
-            "visualInfo could not be retrieved from FBConfig", "fgOpenWindow");
+	FREEGLUT_INTERNAL_ERROR_EXIT( visualInfo != NULL,
+			"visualInfo could not be retrieved from FBConfig", "fgOpenWindow");
 #else
-    visualInfo = window->Window.pContext.visinf;
+	visualInfo = window->Window.pContext.visinf;
 #endif  /* !def USE_FBCONFIG */
 #endif  /* GLX part */
 
-    /*
-     * XXX HINT: the masks should be updated when adding/removing callbacks.
-     * XXX       This might speed up message processing. Is that true?
-     * XXX
-     * XXX A: Not appreciably, but it WILL make it easier to debug.
-     * XXX    Try tracing old GLUT and try tracing freeglut.  Old GLUT
-     * XXX    turns off events that it doesn't need and is a whole lot
-     * XXX    more pleasant to trace.  (Think mouse-motion!  Tons of
-     * XXX    ``bonus'' GUI events stream in.)
-     */
-    winAttr.event_mask        =
-        StructureNotifyMask | SubstructureNotifyMask | ExposureMask |
-        ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask |
-        VisibilityChangeMask | EnterWindowMask | LeaveWindowMask |
-        PointerMotionMask | ButtonMotionMask;
-    winAttr.background_pixmap = None;
-    winAttr.background_pixel  = 0;
-    winAttr.border_pixel      = 0;
+	if(fgState.DisplayMode & GLUT_INDEX) {
+		cmap = XCreateColormap(dpy, rootwin, visualInfo->visual, AllocAll);
+		FREEGLUT_INTERNAL_ERROR_EXIT(cmap,
+				"Failed to allocate the whole colormap, which is required in index color mode", "fgOpenWindow");
+		window->Window.cmap_size = visualInfo->colormap_size;
+	} else {
+		cmap = XCreateColormap(dpy, rootwin, visualInfo->visual, AllocNone);
+		window->Window.cmap_size = 0;
+	}
+	window->Window.cmap = cmap;
 
-    /* TODO: fix for GLUT_INDEXED (AllocAll) */
-    winAttr.colormap = XCreateColormap(
-        fgDisplay.pDisplay.Display, fgDisplay.pDisplay.RootWindow,
-        visualInfo->visual, AllocNone
-    );
+	/*
+	 * XXX HINT: the masks should be updated when adding/removing callbacks.
+	 * XXX       This might speed up message processing. Is that true?
+	 * XXX
+	 * XXX A: Not appreciably, but it WILL make it easier to debug.
+	 * XXX    Try tracing old GLUT and try tracing freeglut.  Old GLUT
+	 * XXX    turns off events that it doesn't need and is a whole lot
+	 * XXX    more pleasant to trace.  (Think mouse-motion!  Tons of
+	 * XXX    ``bonus'' GUI events stream in.)
+	 *
+	 * TODO: we absolutely need to fix this. In network rendering, flooding the
+	 *       wire with unnecessary mouse motion events is Bad. At the very least
+	 *       make the PointerMotionMask dynamic.
+	 */
+	wattr.event_mask =
+		StructureNotifyMask | SubstructureNotifyMask | ExposureMask |
+		ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask |
+		VisibilityChangeMask | EnterWindowMask | LeaveWindowMask |
+		PointerMotionMask | ButtonMotionMask;
+	wattr.background_pixmap = None;
+	wattr.background_pixel  = 0;
+	wattr.border_pixel      = 0;
+	wattr.colormap = cmap;
 
-    mask = CWBackPixmap | CWBorderPixel | CWColormap | CWEventMask;
+	mask = CWBackPixmap | CWBorderPixel | CWColormap | CWEventMask;
 
-    if( window->IsMenu || ( gameMode == GL_TRUE ) )
-    {
-        winAttr.override_redirect = True;
-        mask |= CWOverrideRedirect;
-    }
+	if(window->IsMenu || gameMode) {
+		wattr.override_redirect = True;
+		mask |= CWOverrideRedirect;
+	}
 
-    if( ! positionUse )
-        x = y = -1; /* default window position */
-    if( ! sizeUse )
-        w = h = 300; /* default window size */
+	if(!positionUse)
+		x = y = -1; /* default window position */
+	if(!sizeUse)
+		w = h = 300; /* default window size */
 
-    window->Window.Handle = XCreateWindow(
-        fgDisplay.pDisplay.Display,
-        window->Parent == NULL ? fgDisplay.pDisplay.RootWindow :
-        window->Parent->Window.Handle,
-        x, y, w, h, 0,
-        visualInfo->depth, InputOutput,
-        visualInfo->visual, mask,
-        &winAttr
-    );
+	win = XCreateWindow(dpy, parent ? parent : rootwin, x, y, w, h, 0,
+			visualInfo->depth, InputOutput, visualInfo->visual, mask, &wattr);
+	window->Window.Handle = win;
 
-    /* Fake configure event to force viewport setup
-     * even with no window manager.
-     */
-    fakeEvent.xconfigure.type = ConfigureNotify;
-    fakeEvent.xconfigure.display = fgDisplay.pDisplay.Display;
-    fakeEvent.xconfigure.window = window->Window.Handle;
-    fakeEvent.xconfigure.x = x;
-    fakeEvent.xconfigure.y = y;
-    fakeEvent.xconfigure.width = w;
-    fakeEvent.xconfigure.height = h;
-    XPutBackEvent(fgDisplay.pDisplay.Display, &fakeEvent);
+	/* Fake configure event to force viewport setup
+	 * even with no window manager.
+	 */
+	fakeEvent.xconfigure.type = ConfigureNotify;
+	fakeEvent.xconfigure.display = dpy;
+	fakeEvent.xconfigure.window = win;
+	fakeEvent.xconfigure.x = x;
+	fakeEvent.xconfigure.y = y;
+	fakeEvent.xconfigure.width = w;
+	fakeEvent.xconfigure.height = h;
+	XPutBackEvent(dpy, &fakeEvent);
 
-    /*
-     * The GLX context creation, possibly trying the direct context rendering
-     *  or else use the current context if the user has so specified
-     */
+	/*
+	 * The GLX context creation, possibly trying the direct context rendering
+	 *  or else use the current context if the user has so specified
+	 */
+	if(window->IsMenu) {
+		/*
+		 * If there isn't already an OpenGL rendering context for menu
+		 * windows, make one
+		 */
+		if(!fgStructure.MenuContext) {
+			fgStructure.MenuContext = malloc(sizeof *fgStructure.MenuContext);
+			fgStructure.MenuContext->MContext = fghCreateNewContext(window);
+		}
 
-    if( window->IsMenu )
-    {
-        /*
-         * If there isn't already an OpenGL rendering context for menu
-         * windows, make one
-         */
-        if( !fgStructure.MenuContext )
-        {
-            fgStructure.MenuContext =
-                (SFG_MenuContext *)malloc( sizeof(SFG_MenuContext) );
-            fgStructure.MenuContext->MContext = fghCreateNewContext( window );
-        }
+		/* window->Window.Context = fgStructure.MenuContext->MContext; */
+		window->Window.Context = fghCreateNewContext(window);
 
-        /* window->Window.Context = fgStructure.MenuContext->MContext; */
-        window->Window.Context = fghCreateNewContext( window );
-    }
-    else if( fgState.UseCurrentContext )
-    {
-
+	} else if(fgState.UseCurrentContext) {
 #ifdef EGL_VERSION_1_0
-        window->Window.Context = eglGetCurrentContext( );
+		window->Window.Context = eglGetCurrentContext();
 #else
-        window->Window.Context = glXGetCurrentContext( );
+		window->Window.Context = glXGetCurrentContext();
 #endif
 
-        if( ! window->Window.Context )
-            window->Window.Context = fghCreateNewContext( window );
-    }
-    else
-        window->Window.Context = fghCreateNewContext( window );
+		if(!window->Window.Context) {
+			window->Window.Context = fghCreateNewContext(window);
+		}
+	} else {
+		window->Window.Context = fghCreateNewContext(window);
+	}
 
 #if !defined( __FreeBSD__ ) && !defined( __NetBSD__ ) && !defined(EGL_VERSION_1_0)
-    if(  !glXIsDirect( fgDisplay.pDisplay.Display, window->Window.Context ) )
-    {
-      if( fgState.DirectContext == GLUT_FORCE_DIRECT_CONTEXT )
-        fgError( "Unable to force direct context rendering for window '%s'",
-                 title );
-    }
+	if(!glXIsDirect(dpy, window->Window.Context)) {
+		if(fgState.DirectContext == GLUT_FORCE_DIRECT_CONTEXT) {
+			fgError("Unable to force direct context rendering for window '%s'", title);
+		}
+	}
 #endif
 
-    sizeHints.flags = 0;
-    if ( positionUse )
-        sizeHints.flags |= USPosition;
-    if ( sizeUse )
-        sizeHints.flags |= USSize;
+	sizeHints.flags = 0;
+	if(positionUse)
+		sizeHints.flags |= USPosition;
+	if(sizeUse)
+		sizeHints.flags |= USSize;
 
-    /*
-     * Fill in the size hints values now (the x, y, width and height
-     * settings are obsolete, are there any more WMs that support them?)
-     * Unless the X servers actually stop supporting these, we should
-     * continue to fill them in.  It is *not* our place to tell the user
-     * that they should replace a window manager that they like, and which
-     * works, just because *we* think that it's not "modern" enough.
-     */
-    sizeHints.x      = x;
-    sizeHints.y      = y;
-    sizeHints.width  = w;
-    sizeHints.height = h;
+	/*
+	 * Fill in the size hints values now (the x, y, width and height
+	 * settings are obsolete, are there any more WMs that support them?)
+	 * Unless the X servers actually stop supporting these, we should
+	 * continue to fill them in.  It is *not* our place to tell the user
+	 * that they should replace a window manager that they like, and which
+	 * works, just because *we* think that it's not "modern" enough.
+	 */
+	sizeHints.x      = x;
+	sizeHints.y      = y;
+	sizeHints.width  = w;
+	sizeHints.height = h;
 
-    wmHints.flags = StateHint;
-    wmHints.initial_state = fgState.ForceIconic ? IconicState : NormalState;
-    /* Prepare the window and iconified window names... */
-    XStringListToTextProperty( (char **) &title, 1, &textProperty );
+	wmHints.flags = StateHint;
+	wmHints.initial_state = fgState.ForceIconic ? IconicState : NormalState;
+	/* Prepare the window and iconified window names... */
+	XStringListToTextProperty((char**)&title, 1, &txprop);
 
-    XSetWMProperties(
-        fgDisplay.pDisplay.Display,
-        window->Window.Handle,
-        &textProperty,
-        &textProperty,
-        0,
-        0,
-        &sizeHints,
-        &wmHints,
-        NULL
-    );
-    XFree( textProperty.value );
+	XSetWMProperties(dpy, win, &txprop, &txprop, 0, 0, &sizeHints, &wmHints, 0);
+	XFree(txprop.value);
 
-    XSetWMProtocols( fgDisplay.pDisplay.Display, window->Window.Handle,
-                     &fgDisplay.pDisplay.DeleteWindow, 1 );
+	XSetWMProtocols(dpy, win, &fgDisplay.pDisplay.DeleteWindow, 1);
 
-    if (!isSubWindow && !window->IsMenu &&
-        ((fgState.DisplayMode & GLUT_BORDERLESS) || (fgState.DisplayMode & GLUT_CAPTIONLESS)))
-    {
-        /* _MOTIF_WM_HINTS is replaced by _NET_WM_WINDOW_TYPE, but that property does not allow precise
-         * control over the visual style of the window, which is what we are trying to achieve here.
-         * Stick with Motif and hope for the best... */
-        MotifWmHints hints = {0};
-        hints.flags = MWM_HINTS_DECORATIONS;
-        hints.decorations = (fgState.DisplayMode & GLUT_CAPTIONLESS) ? MWM_DECOR_BORDER:0;
+	if (!isSubWindow && !window->IsMenu &&
+			((fgState.DisplayMode & GLUT_BORDERLESS) || (fgState.DisplayMode & GLUT_CAPTIONLESS)))
+	{
+		/* _MOTIF_WM_HINTS is replaced by _NET_WM_WINDOW_TYPE, but that property does not allow precise
+		 * control over the visual style of the window, which is what we are trying to achieve here.
+		 * Stick with Motif and hope for the best... */
+		MotifWmHints hints = {0};
+		hints.flags = MWM_HINTS_DECORATIONS;
+		hints.decorations = (fgState.DisplayMode & GLUT_CAPTIONLESS) ? MWM_DECOR_BORDER:0;
 
-        XChangeProperty(fgDisplay.pDisplay.Display, window->Window.Handle,
-                        XInternAtom( fgDisplay.pDisplay.Display, "_MOTIF_WM_HINTS", False ),
-                        XInternAtom( fgDisplay.pDisplay.Display, "_MOTIF_WM_HINTS", False ), 32,
-                        PropModeReplace,
-                        (unsigned char*) &hints,
-                        sizeof(MotifWmHints) / sizeof(long));
-    }
+		XChangeProperty(dpy, win, xa_motif_wm_hints, xa_motif_wm_hints, 32, PropModeReplace,
+				(unsigned char*)&hints, sizeof(MotifWmHints) / sizeof(long));
+	}
 
 
-    if (fgDisplay.pDisplay.NetWMSupported
-        && fgDisplay.pDisplay.NetWMPid != None
-        && fgDisplay.pDisplay.ClientMachine != None)
-    {
-      char hostname[HOST_NAME_MAX];
-      pid_t pid = getpid();
+	if (fgDisplay.pDisplay.NetWMSupported
+			&& fgDisplay.pDisplay.NetWMPid != None
+			&& fgDisplay.pDisplay.ClientMachine != None)
+	{
+		char hostname[HOST_NAME_MAX];
+		pid_t pid = getpid();
 
-      if (pid > 0 && gethostname(hostname, sizeof(hostname)) > -1)
-      {
-        hostname[sizeof(hostname) - 1] = '\0';
+		if (pid > 0 && gethostname(hostname, sizeof(hostname)) > -1)
+		{
+			hostname[sizeof(hostname) - 1] = '\0';
 
-        XChangeProperty(
-            fgDisplay.pDisplay.Display,
-            window->Window.Handle,
-            fgDisplay.pDisplay.NetWMPid,
-            XA_CARDINAL,
-            32,
-            PropModeReplace,
-            (unsigned char *) &pid,
-            1
-        );
+			XChangeProperty(dpy, win, fgDisplay.pDisplay.NetWMPid, XA_CARDINAL, 32,
+					PropModeReplace, (unsigned char*)&pid, 1);
 
-        XChangeProperty(
-            fgDisplay.pDisplay.Display,
-            window->Window.Handle,
-            fgDisplay.pDisplay.ClientMachine,
-            XA_STRING,
-            8,
-            PropModeReplace,
-            (unsigned char *) hostname,
-            strlen(hostname)
-        );
-      }
-    }
+			XChangeProperty(dpy, win, fgDisplay.pDisplay.ClientMachine, XA_STRING, 8,
+					PropModeReplace, (unsigned char*)hostname, strlen(hostname));
+		}
+	}
 
 #ifdef EGL_VERSION_1_0
-    fghPlatformOpenWindowEGL(window);
+	fghPlatformOpenWindowEGL(window);
 #elif defined(GLX_VERSION_1_3)
-    glXMakeContextCurrent(
-        fgDisplay.pDisplay.Display,
-        window->Window.Handle,
-        window->Window.Handle,
-        window->Window.Context
-    );
+	glXMakeContextCurrent(dpy, win, win, window->Window.Context);
 #else
-	glXMakeCurrent(fgDisplay.pDisplay.Display, window->Window.Handle,
-			window->Window.Context);
+	glXMakeCurrent(dpy, win, window->Window.Context);
 #endif
 
-    /* register extension events _before_ window is mapped */
-    #ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
-       fgRegisterDevices( fgDisplay.pDisplay.Display, &(window->Window.Handle) );
-    #endif
+	/* register extension events _before_ window is mapped */
+#ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
+	fgRegisterDevices(dpy, win);
+#endif
 
-    if (!window->IsMenu)    /* Don't show window after creation if its a menu */
-    {
-        XMapWindow( fgDisplay.pDisplay.Display, window->Window.Handle );
-        window->State.Visible = GL_TRUE;
-    }
+	if(!window->IsMenu) {   /* Don't show window after creation if its a menu */
+		XMapWindow(dpy, win);
+		window->State.Visible = GL_TRUE;
+	}
 
 #ifdef USE_FBCONFIG
-    /* on the non-fbconfig path, the visualInfo pointer is the one owned by the
-     * window, so delete only if we got this from glXGetVisualFromFBConfig
-     */
-    XFree(visualInfo);
+	/* on the non-fbconfig path, the visualInfo pointer is the one owned by the
+	 * window, so delete only if we got this from glXGetVisualFromFBConfig
+	 */
+	XFree(visualInfo);
 #endif
 
-    /* wait till window visible */
-    if( !isSubWindow && !window->IsMenu)
-        XPeekIfEvent( fgDisplay.pDisplay.Display, &eventReturnBuffer, &fghWindowIsVisible, (XPointer)(window->Window.Handle) );
+	/* wait till window visible */
+	if(!isSubWindow && !window->IsMenu) {
+		XPeekIfEvent(dpy, &eventReturnBuffer, &fghWindowIsVisible, (XPointer)window->Window.Handle);
+	}
 #undef WINDOW_CONFIG
 }
 

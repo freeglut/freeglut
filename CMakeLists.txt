@@ -139,6 +139,7 @@ IF(WIN32)
         src/mswin/fg_state_mswin.c
         src/mswin/fg_structure_mswin.c
         src/mswin/fg_window_mswin.c
+	src/mswin/fg_cmap_mswin.c
         ${CMAKE_BINARY_DIR}/freeglut.rc # generated below from freeglut.rc.in
     )
     IF (MSVC AND NOT CMAKE_CL_64)
@@ -223,6 +224,7 @@ ELSE()
             src/x11/fg_structure_x11.c
             src/x11/fg_window_x11.c
             src/x11/fg_xinput_x11.c
+	    src/x11/fg_cmap_x11.c
         )
         IF(NOT(FREEGLUT_GLES))
             LIST(APPEND FREEGLUT_SRCS
@@ -594,6 +596,7 @@ ADD_DEMO(subwin          progs/demos/subwin/subwin.c)
 ADD_DEMO(timer           progs/demos/timer/timer.c)
 ADD_DEMO(timer_callback  progs/demos/timer_callback/timer.c)
 ADD_DEMO(keyboard        progs/demos/keyboard/keyboard.c)
+ADD_DEMO(indexed_color   progs/demos/indexed_color/idxcol.c)
 
 
 

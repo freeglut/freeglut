@@ -25,7 +25,8 @@ x11obj = src/x11/fg_state_x11_glx.o src/x11/fg_glutfont_definitions_x11.o \
 	src/x11/fg_state_x11.o src/x11/fg_main_x11.o src/x11/fg_spaceball_x11.o \
 	src/x11/fg_input_devices_x11.o src/x11/fg_ext_x11.o src/x11/fg_window_x11_glx.o \
 	src/x11/fg_gamemode_x11.o src/x11/fg_init_x11.o src/x11/fg_menu_x11.o \
-	src/x11/fg_xinput_x11.o src/x11/fg_window_x11.o src/x11/fg_display_x11_glx.o
+	src/x11/fg_xinput_x11.o src/x11/fg_window_x11.o src/x11/fg_display_x11_glx.o \
+	src/x11/fg_cmap_x11.o
 
 obj = $(coreobj) $(x11obj)
 

@@ -96,9 +96,11 @@ struct tagSFG_PlatformDisplay
  * much conditionally-compiled code later in the library.
  */
 #ifndef EGL_VERSION_1_0
-typedef Window     SFG_WindowHandleType ;
-typedef GLXContext SFG_WindowContextType ;
+typedef Window     SFG_WindowHandleType;
+typedef GLXContext SFG_WindowContextType;
 #endif
+typedef Colormap SFG_WindowColormapType;
+
 typedef struct tagSFG_PlatformContext SFG_PlatformContext;
 struct tagSFG_PlatformContext
 {
@@ -122,7 +124,6 @@ struct tagSFG_PlatformWindowState
     int             OldHeight;          /*   "    height  "    "    "   "    */
     GLboolean       KeyRepeating;       /* Currently in repeat mode?         */    
 };
-
 
 /* -- JOYSTICK-SPECIFIC STRUCTURES AND TYPES ------------------------------- */
 /*
@@ -212,18 +213,18 @@ struct tagSFG_PlatformJoystick
 
 /* -- PRIVATE FUNCTION DECLARATIONS ---------------------------------------- */
 /* spaceball device functions, defined in fg_spaceball.c */
-int             fgIsSpaceballXEvent( const XEvent *ev );
-void            fgSpaceballHandleXEvent( const XEvent *ev );
+int fgIsSpaceballXEvent(const XEvent *ev);
+void fgSpaceballHandleXEvent(const XEvent *ev);
 
 /*
  * Check if "hint" is present in "property" for "window".  See fg_init.c
  */
-int             fgHintPresent(Window window, Atom property, Atom hint);
+int fgHintPresent(Window window, Atom property, Atom hint);
 
 /* Handler for X extension Events */
 #ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
-  void          fgHandleExtensionEvents( XEvent * ev );
-  void          fgRegisterDevices( Display* dpy, Window* win );
+void fgHandleExtensionEvents(XEvent *ev);
+void fgRegisterDevices(Display *dpy, Window win);
 #endif
 
 
