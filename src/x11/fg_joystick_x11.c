@@ -60,7 +60,12 @@
 #            else
 #                include <libusbhid.h>
 #            endif
+#if __FreeBSD_version < 800061
 #            include <legacy/dev/usb/usb.h>
+#else
+#            include <dev/usb/usb_ioctl.h>
+#            include <dev/usb/usb.h>
+#endif
 #        endif
 #        include <dev/usb/usbhid.h>
 
@@ -115,6 +120,7 @@ static int hatmap_y[9] = {0, 1, 1, 0, -1, -1, -1, 0, 1};
 */
 static char *fghJoystickWalkUSBdev(int f, char *dev, char *out, int outlen)
 {
+#if __FreeBSD_version < 800061
     struct usb_device_info di;
     int i, a;
     char *cp;
@@ -136,6 +142,7 @@ static char *fghJoystickWalkUSBdev(int f, char *dev, char *out, int outlen)
                 return out;
             }
     }
+#endif
     return NULL;
 }
 
@@ -500,7 +507,7 @@ void fgPlatformJoystickOpen( SFG_Joystick* joy )
         joy->num_axes    =  2;
         joy->num_buttons = 32;
 
-        fghJoystickRawRead( joy, buttons, axes );
+        fgJoystickRawRead( joy, buttons, axes );
         joy->error = axes[ 0 ] < -1000000000.0f;
         if( joy->error )
             return;

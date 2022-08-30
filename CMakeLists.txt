@@ -276,6 +276,13 @@ IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND))
     ENDIF()
 ENDIF()
 
+# FreeBSD and NetBSD joystick code uses libusbhid
+IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD OR CMAKE_SYSTEM_NAME STREQUAL NetBSD)
+    IF(HAVE_USBHID_H)
+        LIST(APPEND LIBS "-lusbhid")
+    ENDIF()
+ENDIF()
+
 # For OpenGL ES (GLES): compile with -DFREEGLUT_GLES to cleanly
 # bootstrap headers inclusion in freeglut_std.h; this constant also
 # need to be defined in client applications (e.g. through pkg-config),

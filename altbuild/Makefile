@@ -30,8 +30,8 @@ x11obj = src/x11/fg_state_x11_glx.o src/x11/fg_glutfont_definitions_x11.o \
 obj = $(coreobj) $(x11obj)
 
 liba = libglut.a
-incpath = -I. -Isrc -Iinclude -I/usr/X11R6/include
-libpath = -L/usr/X11R6/lib
+incpath = -I. -Isrc -Iinclude -I/usr/local/include -I/usr/X11R6/include
+libpath = -L/usr/local/lib -L/usr/X11R6/lib
 
 CFLAGS = -O2 $(incpath) -DHAVE_CONFIG_H
 LDFLAGS = $(libpath)

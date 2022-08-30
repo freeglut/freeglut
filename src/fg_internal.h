@@ -1063,10 +1063,11 @@ SFG_Menu*   fgCreateMenu( FGCBMenuUC menuCallback, FGCBUserData userData );
 void        fgDestroyMenu( SFG_Menu* menu );
 
 /* Joystick device management functions, defined in fg_joystick.c */
-int         fgJoystickDetect( void );
-void        fgInitialiseJoysticks( void );
-void        fgJoystickClose( void );
-void        fgJoystickPollWindow( SFG_Window* window );
+int fgJoystickDetect(void);
+void fgInitialiseJoysticks(void);
+void fgJoystickClose(void);
+void fgJoystickPollWindow(SFG_Window *window);
+void fgJoystickRawRead(SFG_Joystick *joy, int *buttons, float *axes);
 
 /* InputDevice Initialisation and Closure */
 int         fgInputDeviceDetect( void );
