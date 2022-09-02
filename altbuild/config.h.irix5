@@ -1,6 +1,8 @@
 /* freeglut configuration file for building on SGI IRIX 5.x
  *
  * #define to enable, #undef or delete line to disable
+ *
+ * Copy to the freeglut root directory as config.h along with altbuild/Makefile
  */
 #define HAVE_SYS_TYPES_H
 #define HAVE_UNISTD_H

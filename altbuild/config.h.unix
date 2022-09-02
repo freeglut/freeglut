@@ -1,6 +1,8 @@
 /* freeglut configuration file for GNU/Linux and BSD
  *
  * #define to enable, #undef or delete line to disable
+ *
+ * Copy to the freeglut root directory as config.h along with altbuild/Makefile
  */
 
 /* XFree86 Video Mode extension, used for game mode, requires libXxf86vm */
