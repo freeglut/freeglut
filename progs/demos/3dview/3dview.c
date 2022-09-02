@@ -17,6 +17,14 @@
 #include <math.h>
 #include <GL/freeglut.h>
 
+#ifndef M_PI
+#define M_PI	3.14159265358979323846
+#endif
+
+#ifdef _MSC_VER
+#pragma warning (disable: 4305 4244)
+#endif
+
 static const char *helpprompt[] = {"Press F1 for help", 0};
 static const char *helptext[] = {
 	"Rotate: left mouse drag",
