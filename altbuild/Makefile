@@ -2,14 +2,23 @@
 # Builds freeglut as a static library.
 
 # ------- options --------
+
 # installation prefix
 PREFIX = /usr/local
+
 # subdirectory for libraries (lib, lib32, lib64?)
 LIBDIR = lib
+
 # optimization flags
 opt = -O3
+
 # debug symbols
 #dbg = -g
+
+# libraries to link when building the demo program (make demo). You might need
+# to adjust these, depending on the choices in config.h
+demo_libs = $(liba) -lGL -lX11 -lXmu -lXext -lXi -lXrandr -lXxf86vm -lm
+
 # ---- end of options ----
 
 coreobj = src/fg_gl2.o src/fg_misc.o src/fg_input_devices.o src/fg_ext.o \
@@ -41,12 +50,15 @@ LDFLAGS = $(libpath)
 $(liba): $(obj)
 	$(AR) rcs $@ $(obj)
 
+demo: progs/demos/3dview/3dview.o $(liba)
+	$(CC) -o $@ $< $(LDFLAGS) $(demo_libs)
+
 .c.o:
 	$(CC) -o $@ $(CFLAGS) -c $<
 
 .PHONY: clean
 clean:
-	rm -f $(obj) $(liba)
+	rm -f $(obj) $(liba) demo
 
 .PHONY: install
 install: $(liba)
