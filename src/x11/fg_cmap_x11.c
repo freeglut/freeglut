@@ -1,4 +1,4 @@
-/* fg_cmap_x11.h
+/* fg_cmap_x11.c
  *
  * X11 implementation of the colormap functions
  *
