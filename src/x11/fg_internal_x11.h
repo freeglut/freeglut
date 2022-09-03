@@ -98,8 +98,8 @@ struct tagSFG_PlatformDisplay
 #ifndef EGL_VERSION_1_0
 typedef Window     SFG_WindowHandleType;
 typedef GLXContext SFG_WindowContextType;
-#endif
 typedef Colormap SFG_WindowColormapType;
+#endif
 
 typedef struct tagSFG_PlatformContext SFG_PlatformContext;
 struct tagSFG_PlatformContext

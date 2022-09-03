@@ -132,3 +132,15 @@ void fgPlatformVisibilityWork( SFG_Window* window )
     }
 }
 
+/* dummy functions, not applicable on wayland */
+void fgPlatformSetColor(int idx, float r, float g, float b)
+{
+}
+
+float fgPlatformGetColor(int idx, int comp)
+{
+}
+
+void fgPlatformCopyColormap(int win)
+{
+}
