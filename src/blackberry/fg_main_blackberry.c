@@ -878,3 +878,16 @@ void fgPlatformVisibilityWork(SFG_Window* window)
         break;
     }
 }
+
+/* dummy functions, not applicable on blackberry */
+void fgPlatformSetColor(int idx, float r, float g, float b)
+{
+}
+
+float fgPlatformGetColor(int idx, int comp)
+{
+}
+
+void fgPlatformCopyColormap(int win)
+{
+}
