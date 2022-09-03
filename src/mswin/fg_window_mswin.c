@@ -567,6 +567,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     DWORD flags   = 0;
     DWORD exFlags = 0;
     BOOL atom;
+    HDC dc;
 
     /* Grab the window class we have registered on glutInit(): */
     atom = GetClassInfo( fgDisplay.pDisplay.Instance, _T("FREEGLUT"), &wc );
@@ -717,11 +718,11 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
         SetWindowPos(window->Window.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	}
 
+	dc = window->Window.pContext.Device;
 	/* for color index mode, create a palette */
 	if(fgState.DisplayMode & GLUT_INDEX) {
 		char buf[sizeof(LOGPALETTE) + 255 * sizeof(PALETTEENTRY)];
 		LOGPALETTE *logipal = (LOGPALETTE*)buf;
-		HDC dc = window->Window.pContext.Device;
 
 		GetSystemPaletteEntries(dc, 0, 256, logipal->palPalEntry);
 
@@ -735,6 +736,37 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 		RealizePalette(dc);
 
 		window->Window.cmap_size = 256;
+	} else {
+		int cur_bpp = GetDeviceCaps(dc, BITSPIXEL) * GetDeviceCaps(dc, PLANES);
+		if(cur_bpp <= 8) {
+			/* for RGB mode we also need a palette if we're running in a palettized mode */
+			/* XXX we'll just assume 256 colors for now. */
+			int i;
+			char buf[sizeof(LOGPALETTE) + 255 * sizeof(PALETTEENTRY)];
+			LOGPALETTE *logipal = (LOGPALETTE*)buf;
+
+			logipal->palVersion = 0x300;
+			logipal->palNumEntries = 256;
+
+			for(i=0; i<256; i++) {
+				int r = i & 7;
+				int g = (i >> 3) & 7;
+				int b = (i >> 5) & 3;
+
+				logipal->palPalEntry[i].peRed = (r << 5) | (r << 2) | (r >> 1);
+				logipal->palPalEntry[i].peGreen = (g << 5) | (g << 2) | (g >> 1);
+				logipal->palPalEntry[i].peBlue = (b << 6) | (b << 4) | (b << 2) | b;
+				logipal->palPalEntry[i].peFlags = PC_NOCOLLAPSE;
+			}
+
+			if(!(window->Window.cmap = CreatePalette(logipal))) {
+				fgWarning("Failed to create palette in RGB mode on %d bpp display, colors might be wrong\n", cur_bpp);
+			} else {
+				SelectPalette(dc, window->Window.cmap, 0);
+				RealizePalette(dc);
+			}
+			window->Window.cmap_size = 256;
+		}
 	}
 
     /* Enable multitouch: additional flag TWF_FINETOUCH, TWF_WANTPALM */
