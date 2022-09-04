@@ -141,6 +141,7 @@ int fgPlatformGetModifiers( int state )
     return ret;
 }
 
+#ifdef EVENT_DEBUG
 static const char* fghTypeToString( int type )
 {
     switch( type ) {
@@ -279,7 +280,7 @@ static const char* fghColormapStateToString( int state )
     }
 }
 
-__fg_unused static void fghPrintEvent( XEvent *event )
+static void fghPrintEvent( XEvent *event )
 {
     switch( event->type ) {
 
@@ -346,13 +347,11 @@ __fg_unused static void fghPrintEvent( XEvent *event )
         XKeymapEvent *e = &event->xkeymap;
         char buf[32 * 2 + 1];
         int i;
-        for ( i = 0; i < 32; i++ ) {
-            snprintf( &buf[ i * 2 ], sizeof( buf ) - i * 2,
-                      "%02x", e->key_vector[ i ] );
+        for(i=0; i<32; i++) {
+            sprintf(buf + i * 2, "%02x", e->key_vector[i]);
         }
-        buf[ i ] = '\0';
-        fgWarning( "%s: window=0x%x, %s", fghTypeToString( e->type ), e->window,
-                   buf );
+        buf[64] = 0;
+        fgWarning("%s: window=0x%x, %s", fghTypeToString(e->type), e->window, buf);
         break;
     }
 
@@ -537,31 +536,30 @@ __fg_unused static void fghPrintEvent( XEvent *event )
 
     case ClientMessage: {
         XClientMessageEvent *e = &event->xclient;
-        char buf[ 61 ];
-        char* p = buf;
-        char* end = buf + sizeof( buf );
+        char buf[61];
+        char *p = buf;
         int i;
-        switch( e->format ) {
+        switch(e->format) {
         case 8:
-          for ( i = 0; i < 20; i++, p += 3 ) {
-                snprintf( p, end - p, " %02x", e->data.b[ i ] );
+			for(i=0; i<20; i++, p+=3) {
+                sprintf(p, " %02x", e->data.b[i]);
             }
             break;
         case 16:
-            for ( i = 0; i < 10; i++, p += 5 ) {
-                snprintf( p, end - p, " %04x", e->data.s[ i ] );
+            for(i=0; i<10; i++, p+=5) {
+                sprintf(p, " %04x", e->data.s[i]);
             }
             break;
         case 32:
-            for ( i = 0; i < 5; i++, p += 9 ) {
-                snprintf( p, end - p, " %08lx", e->data.l[ i ] );
+            for(i=0; i<5; i++, p+=9) {
+                sprintf(p, " %08lx", e->data.l[i]);
             }
             break;
         }
         *p = '\0';
-        fgWarning( "%s: window=0x%x, message_type=%lu, format=%d, data=(%s )",
-                   fghTypeToString( e->type ), e->window,
-                   (unsigned long)e->message_type, e->format, buf );
+        fgWarning("%s: window=0x%x, message_type=%lu, format=%d, data=(%s )",
+                   fghTypeToString(e->type), e->window,
+                   (unsigned long)e->message_type, e->format, buf);
         break;
     }
 
@@ -574,12 +572,12 @@ __fg_unused static void fghPrintEvent( XEvent *event )
         break;
     }
 
-    default: {
+    default:
         fgWarning( "%s", fghTypeToString( event->type ) );
         break;
     }
-    }
 }
+#endif
 
 
 void fgPlatformProcessSingleEvent ( void )
@@ -602,7 +600,7 @@ void fgPlatformProcessSingleEvent ( void )
     while( XPending( fgDisplay.pDisplay.Display ) )
     {
         XNextEvent( fgDisplay.pDisplay.Display, &event );
-#if _DEBUG
+#ifdef EVENT_DEBUG
         fghPrintEvent( &event );
 #endif
 
