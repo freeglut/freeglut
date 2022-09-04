@@ -51,12 +51,12 @@ INSTALLATION
 Freeglut relies on cmake (minimum 3.0.0) to generate build files for all the
 different supported platforms and toolchains.
 
-See `README.cmake` as a starting point, as well as the other `README`
+See [README.cmake] as a starting point, as well as the other `README`
 files for further info.
 
 For those cases where using cmake is inconvenient, we also provide a set of
 unofficial, unsupported, possibly unmaintained, but potentially useful,
-alternative build files. See `altbuild/README.md` for details.
+alternative build files. See [altbuild/README.md] for details.
 
 
 CONTRIBUTING
