@@ -4,21 +4,38 @@ freeglut
 ![GNU/Linux (X11) build status](https://github.com/FreeGLUTProject/freeglut/actions/workflows/build_gnulinux_x11.yml/badge.svg)
 ![Windows build status](https://github.com/FreeGLUTProject/freeglut/actions/workflows/build_win_msvc.yml/badge.svg)
 
-BRIEF OVERVIEW
---------------
-
-This is the freeglut package.
+OVERVIEW
+--------
 
 Freeglut, the Free OpenGL Utility Toolkit, is meant to be a free alternative to
 Mark Kilgard's GLUT library. Freeglut is free software, distributed under an
-MIT/X11 style license. You are free to use, modify, and redistribute FreeGLUT
+MIT/X11 style license. You are free to use, modify, and redistribute freeglut
 with or without modifications (see COPYING for details).
+
+In short, freeglut can be used by OpenGL programs to perform those tasks which
+would normally require platform-specific code. Tasks like creating a window,
+creating an OpenGL context and binding it to the window, and processing input
+events. Freeglut provides a concise and elegant API to handle those tasks, in a
+platform-independent manner, keeping the application simple and portable.
+
+One of the main goals of freeglut, is maximum compatibility. Freeglut is both
+source and binary-compatible with the original GLUT, and can be used as a
+drop-in replacement for it. We take great care to maintain a stable API and ABI,
+and to introduce any new features and improvements in a way which does not
+compromise compatibility.
+
+Freeglut can be used with a wide range of OpenGL implementations, from the very
+early OpenGL 1.0 on SGI computers, to the very latest modern OpenGL versions on
+current GPUs. It can be used to create a classic OpenGL context, or a versioned
+core profile or compatibility context. Freeglut can also be used with OpenGL ES,
+on desktop or mobile devices.
+
 
 PORTS
 -----
 
 Currently supported platforms:
- - UNIX systems with X11 and Wayland (such as GNU/Linux, FreeBSD, etc)
+ - UNIX systems with X11 or Wayland (such as GNU/Linux, FreeBSD, IRIX, etc)
  - MS Windows
  - macOS with XQuartz (no native Cocoa support yet)
  - Android (NDK)
@@ -31,8 +48,15 @@ and build instructions.
 INSTALLATION
 ------------
 
-See README.cmake as a starting point, as well as the other README
+Freeglut relies on cmake (minimum 3.0.0) to generate build files for all the
+different supported platforms and toolchains.
+
+See [README.cmake](README.cmake) as a starting point, as well as the other `README`
 files for further info.
+
+For those cases where using cmake is inconvenient, we also provide a set of
+unofficial, unsupported, possibly unmaintained, but potentially useful,
+alternative build files. See [altbuild/README.md](altbuild/README.md) for details.
 
 
 CONTRIBUTING
