@@ -17,7 +17,7 @@ opt = -O3
 
 # libraries to link when building the demo program (make demo). You might need
 # to adjust these, depending on the choices in config.h
-demo_libs = $(liba) -lGL -lX11 -lXmu -lXext -lXi -lXrandr -lXxf86vm -lm
+demo_libs = $(liba) -lGL -lX11 -lXmu -lXext -lm# -lXi -lXrandr -lXxf86vm -lm
 
 # ---- end of options ----
 
@@ -51,7 +51,7 @@ $(liba): $(obj)
 	$(AR) rcs $@ $(obj)
 
 demo: progs/demos/3dview/3dview.o $(liba)
-	$(CC) -o $@ $< $(LDFLAGS) $(demo_libs)
+	$(CC) -o $@ progs/demos/3dview/3dview.o $(LDFLAGS) $(demo_libs)
 
 .c.o:
 	$(CC) -o $@ $(CFLAGS) -c $<
