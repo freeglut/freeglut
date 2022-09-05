@@ -18,6 +18,8 @@ GLboolean fgCheckActiveMenu ( SFG_Window *window, int button, GLboolean pressed,
   return GL_FALSE;
 }
 
+int FGAPIENTRY glutCreateMenuUcall( FGCBMenuUC callback, FGCBUserData userData ) { return 0; }
+
 int  glutCreateMenu( void (* callback)( int menu ) ) { return 0; }
 void glutDestroyMenu( int menu ) {}
 int  glutGetMenu( void ) { return 0; }
