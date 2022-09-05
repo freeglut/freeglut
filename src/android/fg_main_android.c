@@ -160,7 +160,7 @@ unsigned long fgPlatformSystemTime ( void )
  * Does the magic required to relinquish the CPU until something interesting
  * happens.
  */
-void fgPlatformSleepForEvents( long msec )
+void fgPlatformSleepForEvents( fg_time_t msec )
 {
     /* Android's NativeActivity relies on a Looper/ALooper object to
        notify about events.  The Looper object is plugged on two
