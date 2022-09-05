@@ -107,13 +107,13 @@ EGLContext fghCreateNewContextEGL( SFG_Window* window ) {
   }
 
   eglQueryContext(fgDisplay.pDisplay.egl.Display, context, EGL_CONTEXT_CLIENT_VERSION, &ver);
-  if (ver != fgState.MajorVersion) {
+  if (ver < fgState.MajorVersion) {
     fgError("Wrong GLES major version: %d\n", ver);
   }
 #ifdef EGL_CONTEXT_MINOR_VERSION
   if (fgDisplay.pDisplay.egl.MinorVersion >= 5) {
     eglQueryContext(fgDisplay.pDisplay.egl.Display, context, EGL_CONTEXT_MINOR_VERSION, &ver);
-    if (ver != fgState.MinorVersion) {
+    if (ver < fgState.MinorVersion) {
       fgError("Wrong GLES minor version: %d\n", ver);
     }
   }
