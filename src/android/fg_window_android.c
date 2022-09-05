@@ -114,7 +114,7 @@ void fgPlatformCloseWindow( SFG_Window* window )
 /*
  * This function makes the specified window visible
  */
-void fgPlatformShowWindow( void )
+void fgPlatformShowWindow( SFG_Window *window )
 {
   fprintf(stderr, "fgPlatformShowWindow: STUB\n");
 }
