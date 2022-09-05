@@ -15,7 +15,7 @@ None of the files in this directory are officially supported! Some of them might
 be completely unmaintained, broken, or out of date. Please report any issues,
 but be warned that you may have to fix them yourself.
 
-The simple build files in this directory do not build any demo programs, and do
+The simple build files in this directory do not build the demo programs, and do
 not provide the same flexibility of build options as the official cmake build.
 Most of them just build a default configuration of freeglut as a static library
 and that's it.
@@ -49,10 +49,18 @@ make utility.
   - `make install` to install. Change the `PREFIX` variable at the top of the
     `Makefile` to change the installation prefix.
 
+You can also attempt to build a simple statically linked demo program, by typing
+`make demo`. But be warned that you might need to modify the `demo_libs`
+variable at the top of the `Makefile` to adjust for whatever options are
+selected in the `config.h` you used to build freeglut.
+
 MS Visual Studio 6.0 project
 ----------------------------
 Project files for building freeglut on 32bit windows, using MSVC6.
 
   - Copy `config.h.msvc6` to the project root directory renamed to `config.h`.
   - Open the `freeglut.dsw` "workspace" file with visual studio 6.
-  - Select build all from the project menu.
+  - Select build all from the build menu.
+
+The MSVC6 project builds freeglut as both a static library and a DLL, and also
+builds a simple statically linked demo program.
