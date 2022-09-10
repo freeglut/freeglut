@@ -2846,4 +2846,4 @@ static const SFG_StrokeChar *StrokeMonoRoman_chars[] =
  &StrokeMonoRoman_ch120, &StrokeMonoRoman_ch121, &StrokeMonoRoman_ch122, &StrokeMonoRoman_ch123, &StrokeMonoRoman_ch124, &StrokeMonoRoman_ch125, &StrokeMonoRoman_ch126, &StrokeMonoRoman_ch127
 };
 
-const SFG_StrokeFont fgStrokeMonoRoman = {"MonoRoman",128,152.381f,StrokeMonoRoman_chars};
+SFG_StrokeFont fgStrokeMonoRoman = {"MonoRoman",128,152.381f,StrokeMonoRoman_chars};

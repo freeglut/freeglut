@@ -2846,4 +2846,4 @@ static const SFG_StrokeChar *StrokeRoman_chars[] =
  &StrokeRoman_ch120, &StrokeRoman_ch121, &StrokeRoman_ch122, &StrokeRoman_ch123, &StrokeRoman_ch124, &StrokeRoman_ch125, &StrokeRoman_ch126, &StrokeRoman_ch127
 };
 
-const SFG_StrokeFont fgStrokeRoman = {"Roman",128,152.381f,StrokeRoman_chars};
+SFG_StrokeFont fgStrokeRoman = {"Roman",128,152.381f,StrokeRoman_chars};
