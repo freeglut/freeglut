@@ -720,17 +720,15 @@ static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean ke
     }
 #endif
 
-    if( keypress != -1 )
-        if (keydown)
-            INVOKE_WCB( *window, Special,
-                        ( keypress,
-                            window->State.MouseX, window->State.MouseY )
-            );
-        else
-            INVOKE_WCB( *window, SpecialUp,
-                        ( keypress,
-                            window->State.MouseX, window->State.MouseY )
-            );
+    if(keypress != -1) {
+        if(keydown) {
+            INVOKE_WCB(*window, Special,
+                    (keypress, window->State.MouseX, window->State.MouseY));
+        } else {
+            INVOKE_WCB(*window, SpecialUp,
+                    (keypress, window->State.MouseX, window->State.MouseY));
+        }
+    }
 
     fgState.Modifiers = INVALID_MODIFIERS;
 
