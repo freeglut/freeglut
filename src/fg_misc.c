@@ -30,9 +30,9 @@
 
 
 /* platform-specific colormap functions */
-void fgPlatformSetColor(int idx, float r, float g, float b);
-float fgPlatformGetColor(int idx, int comp);
-void fgPlatformCopyColormap(int win);
+extern void fgPlatformSetColor(int idx, float r, float g, float b);
+extern float fgPlatformGetColor(int idx, int comp);
+extern void fgPlatformCopyColormap(int win);
 
 
 /* -- INTERFACE FUNCTIONS -------------------------------------------------- */

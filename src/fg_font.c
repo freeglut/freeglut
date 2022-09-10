@@ -39,15 +39,15 @@
 /*
  * These are the font faces defined in fg_font_data.c file:
  */
-extern SFG_Font fgFontFixed8x13;
-extern SFG_Font fgFontFixed9x15;
-extern SFG_Font fgFontHelvetica10;
-extern SFG_Font fgFontHelvetica12;
-extern SFG_Font fgFontHelvetica18;
-extern SFG_Font fgFontTimesRoman10;
-extern SFG_Font fgFontTimesRoman24;
-extern SFG_StrokeFont fgStrokeRoman;
-extern SFG_StrokeFont fgStrokeMonoRoman;
+extern const SFG_Font fgFontFixed8x13;
+extern const SFG_Font fgFontFixed9x15;
+extern const SFG_Font fgFontHelvetica10;
+extern const SFG_Font fgFontHelvetica12;
+extern const SFG_Font fgFontHelvetica18;
+extern const SFG_Font fgFontTimesRoman10;
+extern const SFG_Font fgFontTimesRoman24;
+extern const SFG_StrokeFont fgStrokeRoman;
+extern const SFG_StrokeFont fgStrokeMonoRoman;
 
 
 /* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
