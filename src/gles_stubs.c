@@ -1,5 +1,6 @@
 /* TODO: implement me! */
 
+#define FREEGLUT_BUILDING_LIB
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
