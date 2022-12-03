@@ -1,4 +1,4 @@
-name: FreeBSD build
+name: FreeBSD (X11) build
 
 on:
   push:
