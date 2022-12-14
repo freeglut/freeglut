@@ -44,8 +44,8 @@ extern void fgPlatformCheckMenuDeactivate(HWND newFocusWnd);
 #ifdef WM_TOUCH
 typedef BOOL (WINAPI *pGetTouchInputInfo)(HTOUCHINPUT,UINT,PTOUCHINPUT,int);
 typedef BOOL (WINAPI *pCloseTouchInputHandle)(HTOUCHINPUT);
-static pGetTouchInputInfo fghGetTouchInputInfo = (pGetTouchInputInfo)0xDEADBEEF;
-static pCloseTouchInputHandle fghCloseTouchInputHandle = (pCloseTouchInputHandle)0xDEADBEEF;
+static pGetTouchInputInfo fghGetTouchInputInfo = (pGetTouchInputInfo)((size_t)0xDEADBEEF);
+static pCloseTouchInputHandle fghCloseTouchInputHandle = (pCloseTouchInputHandle)((size_t)0xDEADBEEF);
 #endif
 
 #ifdef _WIN32_WCE
@@ -1507,7 +1507,7 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         unsigned int i = 0;
         TOUCHINPUT* ti = (TOUCHINPUT*)malloc( sizeof(TOUCHINPUT)*numInputs);
 
-        if (fghGetTouchInputInfo == (pGetTouchInputInfo)0xDEADBEEF) {
+        if (fghGetTouchInputInfo == (pGetTouchInputInfo)((size_t)0xDEADBEEF)) {
             fghGetTouchInputInfo = (pGetTouchInputInfo)GetProcAddress(GetModuleHandle("user32"),"GetTouchInputInfo");
             fghCloseTouchInputHandle = (pCloseTouchInputHandle)GetProcAddress(GetModuleHandle("user32"),"CloseTouchInputHandle");
         }
