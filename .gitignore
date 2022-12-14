@@ -37,3 +37,4 @@ cmake_install.cmake
 freeglut.pc
 freeglut.rc
 FreeGLUT/
+build*
