@@ -90,17 +90,17 @@ static pRegisterTouchWindow fghRegisterTouchWindow = (pRegisterTouchWindow)((siz
  * Setup the pixel format for a Win32 window
  */
 
-#if defined(_WIN32_WCE)
-static wchar_t* fghWstrFromStr(const char* str)
+TCHAR* fghTstrFromStr(const char* str)
 {
-    int i,len=strlen(str);
-    wchar_t* wstr = (wchar_t*)malloc(2*len+2);
-    for(i=0; i<len; i++)
-        wstr[i] = str[i];
-    wstr[len] = 0;
+#ifdef UNICODE
+    int len = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
+    wchar_t* wstr = (wchar_t*)calloc(len, sizeof(wchar_t));
+    MultiByteToWideChar(CP_UTF8, 0, str, -1, wstr, len);
     return wstr;
+#else
+    return strdup(str);
+#endif
 }
-#endif /* defined(_WIN32_WCE) */
 
 
 static void fghFillContextAttributes( int *attributes ) {
@@ -489,7 +489,7 @@ typedef struct
 {
       int *x;
       int *y;
-      const char *name;
+      const TCHAR *name;
 } m_proc_t;
 
 static BOOL CALLBACK m_proc(HMONITOR mon,
@@ -504,7 +504,7 @@ static BOOL CALLBACK m_proc(HMONITOR mon,
       res=GetMonitorInfo(mon,(LPMONITORINFO)&info);
       if( res )
       {
-          if( strcmp(dp->name,info.szDevice)==0 )
+          if( _tcscmp(dp->name,info.szDevice)==0 )
           {
               *(dp->x)=info.rcMonitor.left;
               *(dp->y)=info.rcMonitor.top;
@@ -568,6 +568,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     DWORD exFlags = 0;
     BOOL atom;
     HDC dc;
+    TCHAR* tstr = NULL;
 
     /* Grab the window class we have registered on glutInit(): */
     atom = GetClassInfo( fgDisplay.pDisplay.Instance, _T("FREEGLUT"), &wc );
@@ -661,35 +662,30 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     }
 #endif /* !defined(_WIN32_WCE) */
 
+    tstr = fghTstrFromStr(title);
 #if defined(_WIN32_WCE)
-    {
-        wchar_t* wstr = fghWstrFromStr(title);
+    window->Window.Handle = CreateWindow(
+        _T("FREEGLUT"),
+        tstr,
+        WS_VISIBLE | WS_POPUP,
+        0,0, 240,320,
+        NULL,
+        NULL,
+        fgDisplay.pDisplay.Instance,
+        (LPVOID) window
+    );
 
-        window->Window.Handle = CreateWindow(
-            _T("FREEGLUT"),
-            wstr,
-            WS_VISIBLE | WS_POPUP,
-            0,0, 240,320,
-            NULL,
-            NULL,
-            fgDisplay.pDisplay.Instance,
-            (LPVOID) window
-        );
-
-        free(wstr);
-
-        SHFullScreen(window->Window.Handle, SHFS_HIDESTARTICON);
-        SHFullScreen(window->Window.Handle, SHFS_HIDESIPBUTTON);
-        SHFullScreen(window->Window.Handle, SHFS_HIDETASKBAR);
-        MoveWindow(window->Window.Handle, 0, 0, 240, 320, TRUE);
-        ShowWindow(window->Window.Handle, SW_SHOW);
-        UpdateWindow(window->Window.Handle);
-    }
+    SHFullScreen(window->Window.Handle, SHFS_HIDESTARTICON);
+    SHFullScreen(window->Window.Handle, SHFS_HIDESIPBUTTON);
+    SHFullScreen(window->Window.Handle, SHFS_HIDETASKBAR);
+    MoveWindow(window->Window.Handle, 0, 0, 240, 320, TRUE);
+    ShowWindow(window->Window.Handle, SW_SHOW);
+    UpdateWindow(window->Window.Handle);
 #else
     window->Window.Handle = CreateWindowEx(
         exFlags,
         _T("FREEGLUT"),
-        title,
+        tstr,
         flags,
         x, y, w, h,
         (HWND) window->Parent == NULL ? NULL : window->Parent->Window.Handle,
@@ -705,7 +701,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
         fgError( "Failed to create a window (%s)!", title );
 
     /* Store title */
-    window->State.pWState.WindowTitle = strdup(title);
+    window->State.pWState.WindowTitle = tstr;
 
 #if !defined(_WIN32_WCE)
     /* Need to set requested style again, apparently Windows doesn't listen when requesting windows without title bar or borders */
@@ -772,7 +768,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     /* Enable multitouch: additional flag TWF_FINETOUCH, TWF_WANTPALM */
     #ifdef WM_TOUCH
         if (fghRegisterTouchWindow == (pRegisterTouchWindow)((size_t)0xDEADBEEF))
-            fghRegisterTouchWindow = (pRegisterTouchWindow)GetProcAddress(GetModuleHandle("user32"),"RegisterTouchWindow");
+            fghRegisterTouchWindow = (pRegisterTouchWindow)GetProcAddress(GetModuleHandleA("user32"),"RegisterTouchWindow");
         if (fghRegisterTouchWindow)
              fghRegisterTouchWindow( window->Window.Handle, TWF_FINETOUCH | TWF_WANTPALM );
     #endif
@@ -846,21 +842,18 @@ void fgPlatformHideWindow( SFG_Window* window )
  */
 void fgPlatformGlutSetWindowTitle( const char* title )
 {
+    TCHAR* newTitle = fghTstrFromStr(title);
 #ifdef _WIN32_WCE
-    {
-        wchar_t* wstr = fghWstrFromStr(title);
-        SetWindowText( fgStructure.CurrentWindow->Window.Handle, wstr );
-        free(wstr);
-    }
+    SetWindowText( fgStructure.CurrentWindow->Window.Handle, newTitle );
 #else
     if (!IsIconic(fgStructure.CurrentWindow->Window.Handle))
-        SetWindowText( fgStructure.CurrentWindow->Window.Handle, title );
+        SetWindowText( fgStructure.CurrentWindow->Window.Handle, newTitle );
 #endif
 
     /* Make copy of string to refer to later */
     if (fgStructure.CurrentWindow->State.pWState.WindowTitle)
         free(fgStructure.CurrentWindow->State.pWState.WindowTitle);
-    fgStructure.CurrentWindow->State.pWState.WindowTitle = strdup(title);
+    fgStructure.CurrentWindow->State.pWState.WindowTitle = newTitle;
 }
 
 /*
@@ -868,15 +861,16 @@ void fgPlatformGlutSetWindowTitle( const char* title )
  */
 void fgPlatformGlutSetIconTitle( const char* title )
 {
+    TCHAR* newTitle = fghTstrFromStr(title);
 #ifndef _WIN32_WCE
     if (IsIconic(fgStructure.CurrentWindow->Window.Handle))
-        SetWindowText( fgStructure.CurrentWindow->Window.Handle, title );
+        SetWindowText( fgStructure.CurrentWindow->Window.Handle, newTitle );
 #endif
 
     /* Make copy of string to refer to later */
     if (fgStructure.CurrentWindow->State.pWState.IconTitle)
         free(fgStructure.CurrentWindow->State.pWState.IconTitle);
-    fgStructure.CurrentWindow->State.pWState.IconTitle = strdup(title);
+    fgStructure.CurrentWindow->State.pWState.IconTitle = newTitle;
 }
 
 
@@ -887,4 +881,3 @@ int FGAPIENTRY __glutCreateWindowWithExit( const char *title, void (__cdecl *exi
   __glutExitFunc = exit_function;
   return glutCreateWindow( title );
 }
-

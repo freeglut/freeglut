@@ -1508,8 +1508,8 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         TOUCHINPUT* ti = (TOUCHINPUT*)malloc( sizeof(TOUCHINPUT)*numInputs);
 
         if (fghGetTouchInputInfo == (pGetTouchInputInfo)((size_t)0xDEADBEEF)) {
-            fghGetTouchInputInfo = (pGetTouchInputInfo)GetProcAddress(GetModuleHandle("user32"),"GetTouchInputInfo");
-            fghCloseTouchInputHandle = (pCloseTouchInputHandle)GetProcAddress(GetModuleHandle("user32"),"CloseTouchInputHandle");
+            fghGetTouchInputInfo = (pGetTouchInputInfo)GetProcAddress(GetModuleHandleA("user32"),"GetTouchInputInfo");
+            fghCloseTouchInputHandle = (pCloseTouchInputHandle)GetProcAddress(GetModuleHandleA("user32"),"CloseTouchInputHandle");
         }
 
         if (!fghGetTouchInputInfo) {

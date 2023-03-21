@@ -117,9 +117,11 @@ void fgPlatformJoystickRawRead( SFG_Joystick* joy, int* buttons, float* axes )
 
 static int fghJoystickGetOEMProductName ( SFG_Joystick* joy, char *buf, int buf_sz )
 {
-    char buffer [ 256 ];
+    TCHAR buffer [ 256 ];
+    const size_t bufferSize = sizeof buffer / sizeof buffer[0];
 
-    char OEMKey [ 256 ];
+    TCHAR OEMKey [ 256 ];
+    const size_t OEMKeySize = sizeof OEMKey / sizeof OEMKey[0];
 
     HKEY  hKey;
     DWORD dwcb;
@@ -129,19 +131,19 @@ static int fghJoystickGetOEMProductName ( SFG_Joystick* joy, char *buf, int buf_
         return 0;
 
     /* Open .. MediaResources\CurrentJoystickSettings */
-    _snprintf ( buffer, sizeof(buffer), "%s\\%s\\%s",
-                REGSTR_PATH_JOYCONFIG, joy->pJoystick.jsCaps.szRegKey,
-                REGSTR_KEY_JOYCURR );
+    _sntprintf ( buffer, bufferSize, _T("%s\\%s\\%s"),
+                 REGSTR_PATH_JOYCONFIG, joy->pJoystick.jsCaps.szRegKey,
+                 REGSTR_KEY_JOYCURR );
 
     lr = RegOpenKeyEx ( HKEY_LOCAL_MACHINE, buffer, 0, KEY_QUERY_VALUE, &hKey);
 
     if ( lr != ERROR_SUCCESS ) return 0;
 
     /* Get OEM Key name */
-    dwcb = sizeof(OEMKey);
+    dwcb = OEMKeySize;
 
     /* JOYSTICKID1-16 is zero-based; registry entries for VJOYD are 1-based. */
-    _snprintf ( buffer, sizeof(buffer), "Joystick%d%s", joy->pJoystick.js_id + 1, REGSTR_VAL_JOYOEMNAME );
+    _sntprintf ( buffer, bufferSize, _T("Joystick%d%s"), joy->pJoystick.js_id + 1, REGSTR_VAL_JOYOEMNAME );
 
     lr = RegQueryValueEx ( hKey, buffer, 0, 0, (LPBYTE) OEMKey, &dwcb);
     RegCloseKey ( hKey );
@@ -149,7 +151,7 @@ static int fghJoystickGetOEMProductName ( SFG_Joystick* joy, char *buf, int buf_
     if ( lr != ERROR_SUCCESS ) return 0;
 
     /* Open OEM Key from ...MediaProperties */
-    _snprintf ( buffer, sizeof(buffer), "%s\\%s", REGSTR_PATH_JOYOEM, OEMKey );
+    _sntprintf ( buffer, bufferSize, _T("%s\\%s"), REGSTR_PATH_JOYOEM, OEMKey );
 
     lr = RegOpenKeyEx ( HKEY_LOCAL_MACHINE, buffer, 0, KEY_QUERY_VALUE, &hKey );
 
@@ -195,7 +197,12 @@ void fgPlatformJoystickOpen( SFG_Joystick* joy )
                                              sizeof( joy->name ) ) )
         {
             fgWarning( "JS: Failed to read joystick name from registry" );
+#ifdef UNICODE
+            WideCharToMultiByte(CP_UTF8, 0, joy->pJoystick.jsCaps.szPname, MAXPNAMELEN,
+                                joy->name, sizeof( joy->name ), NULL, NULL);
+#else
             strncpy( joy->name, joy->pJoystick.jsCaps.szPname, sizeof( joy->name ) );
+#endif
         }
 
         /* Windows joystick drivers may provide any combination of
@@ -261,4 +268,3 @@ void fgPlatformJoystickClose ( int ident )
     /* Do nothing special */
 }
 #endif
-
