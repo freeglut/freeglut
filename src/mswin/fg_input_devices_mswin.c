@@ -71,8 +71,10 @@ SERIALPORT *fg_serial_open(const char *device){
     COMMTIMEOUTS timeouts;
     SERIALPORT *port;
 
-    fh = CreateFile(device,GENERIC_READ|GENERIC_WRITE,0,NULL,
+    TCHAR* tdevice = fghTstrFromStr(device);
+    fh = CreateFile(tdevice,GENERIC_READ|GENERIC_WRITE,0,NULL,
       OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+    free(tdevice);
     if (!fh) return NULL;
 
     port = malloc(sizeof(SERIALPORT));
@@ -84,7 +86,7 @@ SERIALPORT *fg_serial_open(const char *device){
     GetCommTimeouts(fh,&port->timeouts_save);
 
     dcb.DCBlength=sizeof(DCB);
-    BuildCommDCB("96,n,8,1",&dcb);
+    BuildCommDCBA("96,n,8,1",&dcb);
     SetCommState(fh,&dcb);
 
     ZeroMemory(&timeouts,sizeof(timeouts));
@@ -126,4 +128,3 @@ void fg_serial_flush ( SERIALPORT *port )
 {
     FlushFileBuffers(port->fh);
 }
-
