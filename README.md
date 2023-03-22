@@ -3,7 +3,8 @@ freeglut
 
 ![GNU/Linux (X11) build status](https://github.com/FreeGLUTProject/freeglut/actions/workflows/build_gnulinux_x11.yml/badge.svg)
 ![FreeBSD (X11) build status](https://github.com/FreeGLUTProject/freeglut/actions/workflows/build_freebsd_x11.yml/badge.svg)
-![Windows build status](https://github.com/FreeGLUTProject/freeglut/actions/workflows/build_win_msvc.yml/badge.svg)
+![Windows (MSVC) build status](https://github.com/FreeGLUTProject/freeglut/actions/workflows/build_win_msvc.yml/badge.svg)
+![Windows (MinGW) build status](https://github.com/FreeGLUTProject/freeglut/actions/workflows/build_win_mingw.yml/badge.svg)
 ![MacOS X (X11) build status](https://github.com/FreeGLUTProject/freeglut/actions/workflows/build_macosx_x11.yml/badge.svg)
 
 OVERVIEW
