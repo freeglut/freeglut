@@ -7,7 +7,7 @@ int nLoopMain = 0;
 GLboolean bChildPosDone = GL_FALSE, bChildSizeDone = GL_FALSE;
 
 void SampleKeyboard( unsigned char cChar, int nMouseX, int nMouseY );
-void Redisplay();
+void Redisplay(void);
 void Reshape(int width, int height);
 void Position(int x, int y);
 void WindowStatus(int state);
