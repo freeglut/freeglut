@@ -135,7 +135,7 @@ int fgPlatformGetModifiers( int state )
         ret |= GLUT_ACTIVE_CTRL;
     if( state & Mod1Mask )
         ret |= GLUT_ACTIVE_ALT;
-    if( state & Mod2Mask )
+    if( state & Mod4Mask )
         ret |= GLUT_ACTIVE_SUPER;
 
     return ret;
