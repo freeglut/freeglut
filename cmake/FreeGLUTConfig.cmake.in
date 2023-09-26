@@ -1,0 +1,6 @@
+get_filename_component(FREEGLUT_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(CMakeFindDependencyMacro)
+
+if(NOT TARGET FreeGLUT::freeglut AND NOT TARGET FreeGLUT::freeglut_static)
+    include("${FREEGLUT_CMAKE_DIR}/FreeGLUTTargets.cmake")
+endif()

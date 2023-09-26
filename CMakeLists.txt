@@ -1,26 +1,16 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0 FATAL_ERROR)
-PROJECT(freeglut C)
-
-# for multiarch LIBDIR support (requires cmake>=2.8.8)
-INCLUDE(GNUInstallDirs)
-
-# NOTE: On Windows and Cygwin, the dll's are placed in the
-# CMAKE_RUNTIME_OUTPUT_DIRECTORY, while their corresponding import
-# libraries end up in CMAKE_ARCHIVE_OUTPUT_DIRECTORY. On other
-# platforms, such as Linux, the shared libraries are put in
-# CMAKE_ARCHIVE_OUTPUT_DIRECTORY instead.
-# Static libraries end up in CMAKE_ARCHIVE_OUTPUT_DIRECTORY on all
-# platforms.
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
-SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 # setup version numbers
 # XXX: Update these for each release!
-set(VERSION_MAJOR 3)
-set(VERSION_MINOR 4)
-set(VERSION_PATCH 0)
-set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+set(FREEGLUT_VERSION_MAJOR 3)
+set(FREEGLUT_VERSION_MINOR 4)
+set(FREEGLUT_VERSION_PATCH 0)
+set(FREEGLUT_VERSION ${FREEGLUT_VERSION_MAJOR}.${FREEGLUT_VERSION_MINOR}.${FREEGLUT_VERSION_PATCH})
+
+PROJECT(freeglut VERSION ${FREEGLUT_VERSION} LANGUAGES C)
+
+# for multiarch LIBDIR support (requires cmake>=2.8.8)
+INCLUDE(GNUInstallDirs)
 
 # Update fg_version.h to match the versions number here in cmake
 CONFIGURE_FILE(src/fg_version.h.in src/fg_version.h)
@@ -421,9 +411,11 @@ ENDIF()
 
 IF(FREEGLUT_BUILD_SHARED_LIBS)
     ADD_LIBRARY(freeglut SHARED ${FREEGLUT_SRCS})
+    ADD_LIBRARY(FreeGLUT::freeglut ALIAS freeglut )
 ENDIF()
 IF(FREEGLUT_BUILD_STATIC_LIBS)
     ADD_LIBRARY(freeglut_static STATIC ${FREEGLUT_SRCS})
+    ADD_LIBRARY(FreeGLUT::freeglut_static ALIAS freeglut_static )
 ENDIF()
 
 
@@ -505,51 +497,34 @@ ELSE()
         ENDIF()
     ENDIF()
 ENDIF()
+
 IF(FREEGLUT_BUILD_SHARED_LIBS)
     TARGET_LINK_LIBRARIES(freeglut ${LIBS})
     TARGET_COMPILE_DEFINITIONS(freeglut PUBLIC ${PUBLIC_DEFINITIONS})
+    TARGET_INCLUDE_DIRECTORIES(freeglut
+    PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
 ENDIF()
 IF(FREEGLUT_BUILD_STATIC_LIBS)
     TARGET_LINK_LIBRARIES(freeglut_static ${LIBS})
     TARGET_COMPILE_DEFINITIONS(freeglut_static PUBLIC ${PUBLIC_DEFINITIONS})
-ENDIF()
-
-IF(FREEGLUT_BUILD_SHARED_LIBS)
-    INSTALL(TARGETS freeglut EXPORT FreeGLUTTargets
-            RUNTIME DESTINATION bin
-            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            INCLUDES DESTINATION include
-    )
-    IF(INSTALL_PDB)
-        IF(CMAKE_GENERATOR MATCHES "^Visual Studio" OR
-           CMAKE_GENERATOR MATCHES "Ninja Multi-Config")
-            INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
-                DESTINATION bin
-                CONFIGURATIONS Debug
-                COMPONENT Devel)
-        ELSE()
-            INSTALL(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
-                DESTINATION bin
-                CONFIGURATIONS Debug
-                COMPONENT Devel)
-        ENDIF()
-    ENDIF()
-ENDIF()
-IF(FREEGLUT_BUILD_STATIC_LIBS)
-    INSTALL(TARGETS freeglut_static EXPORT FreeGLUTTargets
-            RUNTIME DESTINATION bin
-            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            INCLUDES DESTINATION include
+    TARGET_INCLUDE_DIRECTORIES(freeglut_static
+    PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
 ENDIF()
-INSTALL(FILES ${FREEGLUT_HEADERS} DESTINATION include/GL COMPONENT Devel)
 
 
 
-# Optionally build demos, on by default.
-option( FREEGLUT_BUILD_DEMOS "Build FreeGLUT demos." ON )
+# Optionally build demos, off by default.
+option( FREEGLUT_BUILD_DEMOS "Build FreeGLUT demos." OFF )
 
 SET(DEMO_LIBS ${OPENGL_glu_LIBRARY} ${LIBS})
 # lib m for math, not needed on windows
@@ -645,32 +620,74 @@ INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION ${CMAKE_INSTALL_LIBDIR
 # TODO: change the library and .pc name when building for GLES,
 # e.g. -lglut-GLES
 
-INCLUDE(CMakePackageConfigHelpers)
-WRITE_BASIC_PACKAGE_VERSION_FILE(
-    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfigVersion.cmake"
-    VERSION ${VERSION}
-    COMPATIBILITY AnyNewerVersion
+# --- INSTALL ---
+
+set(INSTALL_CONFIGDIR "cmake")
+
+IF(FREEGLUT_BUILD_SHARED_LIBS)
+    install(TARGETS freeglut 
+    EXPORT FreeGLUT-targets
+    RUNTIME DESTINATION "bin"
+    ARCHIVE DESTINATION "lib"
+    LIBRARY DESTINATION "lib"
+    )
+
+    IF(INSTALL_PDB)
+        IF(CMAKE_GENERATOR MATCHES "^Visual Studio" OR
+           CMAKE_GENERATOR MATCHES "Ninja Multi-Config")
+            INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/Debug/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
+                DESTINATION bin
+                CONFIGURATIONS Debug
+                COMPONENT Devel)
+        ELSE()
+            INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/freeglut${CMAKE_DEBUG_POSTFIX}.pdb
+                DESTINATION bin
+                CONFIGURATIONS Debug
+                COMPONENT Devel)
+        ENDIF()
+    ENDIF()
+ENDIF()
+
+IF(FREEGLUT_BUILD_STATIC_LIBS)
+    install(TARGETS freeglut_static 
+    EXPORT FreeGLUT-targets
+    ARCHIVE DESTINATION "lib"
+    LIBRARY DESTINATION "lib"
+    )
+ENDIF()
+
+install(DIRECTORY include/ DESTINATION "include")
+
+install(EXPORT FreeGLUT-targets
+  FILE
+    FreeGLUTTargets.cmake
+  NAMESPACE
+    FreeGLUT::
+  DESTINATION
+    ${INSTALL_CONFIGDIR}
 )
 
-# needs cmake 3.0 (as does the "INCLUDES DIRECTORY" argument to install(TARGETS)):
-EXPORT(EXPORT FreeGLUTTargets
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTTargets.cmake"
-    NAMESPACE FreeGLUT::
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/FreeGLUTConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY AnyNewerVersion
 )
-CONFIGURE_FILE(FreeGLUTConfig.cmake.in
-    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
-    @ONLY
+
+configure_package_config_file(${CMAKE_CURRENT_LIST_DIR}/cmake/FreeGLUTConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/FreeGLUTConfig.cmake
+  INSTALL_DESTINATION ${INSTALL_CONFIGDIR}
 )
-SET(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/FreeGLUT)
-INSTALL(EXPORT FreeGLUTTargets
-    FILE FreeGLUTTargets.cmake
-    NAMESPACE FreeGLUT::
-    DESTINATION ${ConfigPackageLocation}
+
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/FreeGLUTConfig.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/FreeGLUTConfigVersion.cmake
+  DESTINATION ${INSTALL_CONFIGDIR}
 )
-INSTALL(
-    FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfigVersion.cmake"
-    DESTINATION ${ConfigPackageLocation}
-    COMPONENT Devel
+
+export(EXPORT FreeGLUT-targets
+  FILE ${CMAKE_CURRENT_BINARY_DIR}/FreeGLUTTargets.cmake
+  NAMESPACE FreeGLUT::
 )
+
+export(PACKAGE FreeGLUT)
