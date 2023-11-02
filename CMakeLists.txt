@@ -1,5 +1,5 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)
-PROJECT(freeglut C)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.11)
+PROJECT(freeglut LANGUAGES C)
 
 # for multiarch LIBDIR support (requires cmake>=2.8.8)
 INCLUDE(GNUInstallDirs)
@@ -292,7 +292,9 @@ ENDIF()
 # GLES1 and GLES2 libraries are compatible and can be co-linked.
 IF(FREEGLUT_GLES)
     LIST(APPEND PUBLIC_DEFINITIONS -DFREEGLUT_GLES)
-    LIST(APPEND LIBS GLESv2 GLESv1_CM EGL)
+    # todo Use the OpenGL GLES2 component from CMake 3.27 when available.
+    FIND_PACKAGE(OpenGL REQUIRED COMPONENTS EGL)
+    LIST(APPEND LIBS GLESv2 GLESv1_CM OpenGL::EGL)
 ELSE()
     # On OS X, we need to link against the X11 OpenGL libraries, NOT the Cocoa OpenGL libraries.
     # To do that, you need to manually find two of the libraries before calling FindOpenGL
@@ -304,15 +306,20 @@ ELSE()
       find_library(OPENGL_glu_LIBRARY NAME GLU HINTS ${X11_LIB_PATH})
     endif()
 
-    FIND_PACKAGE(OpenGL REQUIRED)
-    LIST(APPEND LIBS ${OPENGL_gl_LIBRARY})
-    INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+    FIND_PACKAGE(OpenGL REQUIRED COMPONENTS OpenGL)
+    LIST(APPEND LIBS OpenGL::GL)
 ENDIF()
 
 # For Wayland: compile with -DFREEGLUT_WAYLAND and pull EGL
 IF(FREEGLUT_WAYLAND)
   ADD_DEFINITIONS(-DFREEGLUT_WAYLAND)
-  LIST(APPEND LIBS wayland-client wayland-cursor wayland-egl EGL xkbcommon)
+  FIND_PACKAGE(OpenGL REQUIRED COMPONENTS EGL)
+  INCLUDE(FindPkgConfig)
+  PKG_CHECK_MODULES(wayland-client REQUIRED IMPORTED_TARGET wayland-client)
+  PKG_CHECK_MODULES(wayland-cursor REQUIRED IMPORTED_TARGET wayland-cursor)
+  PKG_CHECK_MODULES(wayland-egl REQUIRED IMPORTED_TARGET wayland-egl)
+  PKG_CHECK_MODULES(xkbcommon REQUIRED IMPORTED_TARGET xkbcommon)
+  LIST(APPEND LIBS OpenGL::EGL PkgConfig::wayland-client PkgConfig::wayland-cursor PkgConfig::wayland-egl PkgConfig::xkbcommon)
 ENDIF()
 
 # lib m for math, not needed on windows
