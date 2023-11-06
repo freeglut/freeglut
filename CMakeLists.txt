@@ -2,7 +2,13 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)
 PROJECT(freeglut LANGUAGES C)
 
 if (POLICY CMP0072)
-  cmake_policy(SET CMP0072 NEW)
+    # This policy sets libOpenGL.so (GLVND) as the default GL library to link
+    # when OpenGL::GL is specified below, instead of the traditional libGL.so on
+    # GNU/Linux. This is not expected to cause an issue, even if the application
+    # links with libGL, but keep an eye out for compatibility issues.
+    # See discussion about it in pull request:
+    # https://github.com/FreeGLUTProject/freeglut/pull/147
+    cmake_policy(SET CMP0072 NEW)
 endif()
 
 # for multiarch LIBDIR support (requires cmake>=2.8.8)
