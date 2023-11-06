@@ -1,5 +1,9 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.11)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 PROJECT(freeglut LANGUAGES C)
+
+if (POLICY CMP0072)
+  cmake_policy(SET CMP0072 NEW)
+endif()
 
 # for multiarch LIBDIR support (requires cmake>=2.8.8)
 INCLUDE(GNUInstallDirs)
@@ -292,9 +296,17 @@ ENDIF()
 # GLES1 and GLES2 libraries are compatible and can be co-linked.
 IF(FREEGLUT_GLES)
     LIST(APPEND PUBLIC_DEFINITIONS -DFREEGLUT_GLES)
-    # todo Use the OpenGL GLES2 component from CMake 3.27 when available.
-    FIND_PACKAGE(OpenGL REQUIRED COMPONENTS EGL)
-    LIST(APPEND LIBS GLESv2 GLESv1_CM OpenGL::EGL)
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.27")
+      FIND_PACKAGE(OpenGL REQUIRED COMPONENTS EGL GLES2 OpenGL)
+      LIST(APPEND LIBS GLESv1_CM OpenGL::EGL OpenGL::GLES2 OpenGL::OpenGL)
+    elseif(CMAKE_VERSION VERSION_GREATER_EQUAL "3.10")
+      FIND_PACKAGE(OpenGL REQUIRED COMPONENTS EGL OpenGL)
+      LIST(APPEND LIBS GLESv2 GLESv1_CM OpenGL::EGL OpenGL::OpenGL)
+    else()
+      FIND_PACKAGE(OpenGL REQUIRED)
+      LIST(APPEND LIBS GLESv2 GLESv1_CM ${OPENGL_egl_LIBRARY})
+      INCLUDE_DIRECTORIES(${OPENGL_EGL_INCLUDE_DIRS})
+    endif()
 ELSE()
     # On OS X, we need to link against the X11 OpenGL libraries, NOT the Cocoa OpenGL libraries.
     # To do that, you need to manually find two of the libraries before calling FindOpenGL
@@ -306,20 +318,42 @@ ELSE()
       find_library(OPENGL_glu_LIBRARY NAME GLU HINTS ${X11_LIB_PATH})
     endif()
 
-    FIND_PACKAGE(OpenGL REQUIRED COMPONENTS OpenGL)
-    LIST(APPEND LIBS OpenGL::GL)
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.10")
+      FIND_PACKAGE(OpenGL REQUIRED COMPONENTS OpenGL)
+      LIST(APPEND LIBS OpenGL::GL)
+    else()
+      FIND_PACKAGE(OpenGL REQUIRED)
+      LIST(APPEND LIBS ${OPENGL_gl_LIBRARY})
+      INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+    endif()
 ENDIF()
 
 # For Wayland: compile with -DFREEGLUT_WAYLAND and pull EGL
 IF(FREEGLUT_WAYLAND)
   ADD_DEFINITIONS(-DFREEGLUT_WAYLAND)
-  FIND_PACKAGE(OpenGL REQUIRED COMPONENTS EGL)
   INCLUDE(FindPkgConfig)
-  PKG_CHECK_MODULES(wayland-client REQUIRED IMPORTED_TARGET wayland-client)
-  PKG_CHECK_MODULES(wayland-cursor REQUIRED IMPORTED_TARGET wayland-cursor)
-  PKG_CHECK_MODULES(wayland-egl REQUIRED IMPORTED_TARGET wayland-egl)
-  PKG_CHECK_MODULES(xkbcommon REQUIRED IMPORTED_TARGET xkbcommon)
-  LIST(APPEND LIBS OpenGL::EGL PkgConfig::wayland-client PkgConfig::wayland-cursor PkgConfig::wayland-egl PkgConfig::xkbcommon)
+  if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.10")
+    FIND_PACKAGE(OpenGL REQUIRED COMPONENTS EGL OpenGL)
+    LIST(APPEND LIBS OpenGL::EGL OpenGL::OpenGL)
+  else()
+    FIND_PACKAGE(OpenGL REQUIRED)
+    LIST(APPEND LIBS ${OPENGL_egl_LIBRARY})
+    INCLUDE_DIRECTORIES(${OPENGL_EGL_INCLUDE_DIRS})
+  endif()
+  if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.6")
+    PKG_CHECK_MODULES(wayland-client REQUIRED IMPORTED_TARGET wayland-client)
+    PKG_CHECK_MODULES(wayland-cursor REQUIRED IMPORTED_TARGET wayland-cursor)
+    PKG_CHECK_MODULES(wayland-egl REQUIRED IMPORTED_TARGET wayland-egl)
+    PKG_CHECK_MODULES(xkbcommon REQUIRED IMPORTED_TARGET xkbcommon)
+    LIST(APPEND LIBS PkgConfig::wayland-client PkgConfig::wayland-cursor PkgConfig::wayland-egl PkgConfig::xkbcommon)
+  else()
+    PKG_CHECK_MODULES(wayland-client REQUIRED)
+    PKG_CHECK_MODULES(wayland-cursor REQUIRED)
+    PKG_CHECK_MODULES(wayland-egl REQUIRED)
+    PKG_CHECK_MODULES(xkbcommon REQUIRED)
+    LIST(APPEND LIBS ${wayland-client_LINK_LIBRARIES} ${wayland-cursor_LINK_LIBRARIES} ${wayland-egl_LINK_LIBRARIES} ${xkbcommon_LINK_LIBRARIES})
+    INCLUDE_DIRECTORIES(${wayland-client_INCLUDE_DIRS} ${wayland-cursor_INCLUDE_DIRS} ${wayland-egl_INCLUDE_DIRS} ${xkbcommon_INCLUDE_DIRS})
+  endif()
 ENDIF()
 
 # lib m for math, not needed on windows
@@ -660,7 +694,7 @@ EXPORT(EXPORT FreeGLUTTargets
     NAMESPACE FreeGLUT::
 )
 CONFIGURE_FILE(FreeGLUTConfig.cmake.in
-    "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
+    "${CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
     @ONLY
 )
 if(NOT FREEGLUT_INSTALL_CMAKECONFIGDIR)
