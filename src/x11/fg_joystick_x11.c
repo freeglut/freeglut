@@ -627,7 +627,7 @@ void fgPlatformJoystickOpen( SFG_Joystick* joy )
 
     do
     {
-        fghJoystickRawRead( joy, NULL, joy->center );
+        fgJoystickRawRead( joy, NULL, joy->center );
         counter++;
     } while( !joy->error &&
              counter < 100 &&
