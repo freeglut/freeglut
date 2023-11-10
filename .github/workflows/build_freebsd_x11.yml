@@ -8,13 +8,13 @@ on:
 jobs:
   build:
 
-    runs-on: macos-12
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
 
     - name: FreeBSD build
-      uses: vmactions/freebsd-vm@v0
+      uses: vmactions/freebsd-vm@v1
       with:
         run: |
           pkg install -y cmake mesa-libs libGLU libX11 libXi libXrandr
