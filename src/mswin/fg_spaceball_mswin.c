@@ -106,7 +106,6 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     #define LOGITECH_VENDOR_ID 0x46d
     HRAWINPUT hRawInput = (HRAWINPUT)lParam;
-    UINT inputCode = (UINT)wParam;
     UINT size;
     BYTE *rawInputBuffer;
     PRAWINPUT pRawInput;
@@ -174,7 +173,6 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
                 SPNAV_EVENT_BUTTON)
             { // State of the keys
                 unsigned long dwKeystate = *(unsigned long*)(&pRawInput->data.hid.bRawData[1]);
-                unsigned int state = GLUT_UP;
                 if (FETCH_WCB(*window, SpaceButton))
                 {
                     int i;
