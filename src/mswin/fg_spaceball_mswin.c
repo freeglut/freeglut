@@ -60,9 +60,9 @@ RAWINPUTDEVICE __fgSpaceball = { 0x01, 0x08, 0x00, 0x00 };
  * our own RAWHID structure.
  */
 struct fgRAWHID {
-	DWORD dwSizeHid;
-	DWORD dwCount;
-	BYTE bRawData[1];
+    DWORD dwSizeHid;
+    DWORD dwCount;
+    BYTE bRawData[1];
 };
 
 
@@ -159,10 +159,10 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
         if (sRidDeviceInfo.hid.dwVendorId == LOGITECH_VENDOR_ID)
         {
-			/* see definition of fgRAWHID at the top of this file, for an
-			 * explanation of why we're doing this.
-			 */
-			struct fgRAWHID *hid = (struct fgRAWHID*)&pRawInput->data.hid;
+            /* see definition of fgRAWHID at the top of this file, for an
+             * explanation of why we're doing this.
+             */
+            struct fgRAWHID *hid = (struct fgRAWHID*)&pRawInput->data.hid;
 
             /* Motion data comes in two parts: motion type and */
             /* displacement/rotation along three axis. */
