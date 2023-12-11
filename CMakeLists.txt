@@ -7,7 +7,7 @@ if (POLICY CMP0072)
     # GNU/Linux. This is not expected to cause an issue, even if the application
     # links with libGL, but keep an eye out for compatibility issues.
     # See discussion about it in pull request:
-    # https://github.com/FreeGLUTProject/freeglut/pull/147
+    # https://github.com/freeglut/freeglut/pull/147
     cmake_policy(SET CMP0072 NEW)
 endif()
 
