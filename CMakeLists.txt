@@ -330,6 +330,7 @@ ELSE()
       get_filename_component(X11_LIB_PATH ${X11_Xi_LIB} DIRECTORY)
 
       find_library(OPENGL_gl_LIBRARY NAME GL HINTS ${X11_LIB_PATH})
+      find_path(OPENGL_GLU_INCLUDE_DIR NAMES GL/glu.h OpenGL/glu.h HINTS ${X11_Xi_INCLUDE_PATH})
       find_library(OPENGL_glu_LIBRARY NAME GLU HINTS ${X11_LIB_PATH})
     endif()
 
@@ -340,6 +341,17 @@ ELSE()
       FIND_PACKAGE(OpenGL REQUIRED)
       LIST(APPEND LIBS ${OPENGL_gl_LIBRARY})
       INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+    endif()
+
+    if(NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
+      # CMake 3.29 properly locates the include directory for glu.h in the OPENGL_GLU_INCLUDE_DIR variable for us.
+      if(CMAKE_VERSION VERSION_LESS "3.29")
+        FIND_PATH(OPENGL_GLU_INCLUDE_DIR NAMES GL/glu.h OpenGL/glu.h HINTS ${OPENGL_INCLUDE_DIR})
+      endif()
+      if(NOT OPENGL_GLU_INCLUDE_DIR)
+        message(FATAL_ERROR "Failed to find the glu.h header file.")
+      endif()
+      INCLUDE_DIRECTORIES(${OPENGL_GLU_INCLUDE_DIR})
     endif()
 ENDIF()
 
@@ -601,7 +613,15 @@ INSTALL(FILES ${FREEGLUT_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GL COM
 # Optionally build demos, on by default.
 option( FREEGLUT_BUILD_DEMOS "Build FreeGLUT demos." ON )
 
-SET(DEMO_LIBS ${OPENGL_glu_LIBRARY} ${LIBS})
+set(DEMO_LIBS ${LIBS})
+if (FREEGLUT_BUILD_DEMOS)
+    if (OPENGL_GLU_FOUND)
+        list(APPEND DEMO_LIBS ${OPENGL_glu_LIBRARY})
+    else()
+        message(FATAL_ERROR "Failed to find the GLU library which is required to build the demos.")
+    endif()
+endif()
+
 # lib m for math, not needed on windows
 IF (NOT WIN32)
     LIST(APPEND DEMO_LIBS m)
