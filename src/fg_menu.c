@@ -864,12 +864,12 @@ void FGAPIENTRY glutAddMenuEntry( const char* label, int value )
 {
     SFG_MenuEntry* menuEntry;
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddMenuEntry" );
-    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
 
     freeglut_return_if_fail( fgStructure.CurrentMenu );
     if (fgState.ActiveMenus)
         fgError("Menu manipulation not allowed while menus in use.");
 
+    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
     menuEntry->Text = strdup( label );
     menuEntry->ID   = value;
 
@@ -888,7 +888,6 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
     SFG_Menu *subMenu;
 
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddSubMenu" );
-    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
     subMenu = fgMenuByID( subMenuID );
 
     freeglut_return_if_fail( fgStructure.CurrentMenu );
@@ -897,6 +896,7 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
 
     freeglut_return_if_fail( subMenu );
 
+    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
     menuEntry->Text    = strdup( label );
     menuEntry->SubMenu = subMenu;
     menuEntry->ID      = -1;
