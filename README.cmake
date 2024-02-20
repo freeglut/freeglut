@@ -1,5 +1,9 @@
 How to build freeglut with CMake on Windows (MS Visual Studio)
 --------------------------------------------------------------
+Note: If you are using a recent version of Visual Studio (2017 or newer),
+it may be simpler to use the built-in support for CMake (described in the
+next section), rather than installing CMake separately as shown here.
+
 1.  Download CMake (http://www.cmake.org/cmake/resources/software.html).
     Get one of the releases from the binary distribution section.
 2.  Run the CMake installer, install wherever you like. 
@@ -27,6 +31,26 @@ How to build freeglut with CMake on Windows (MS Visual Studio)
 You can now navigate to the build directory you specified in step 5.
 Open the freeglut.sln file that was generated in your build directory,
 and compile as usual
+
+
+How to build freeglut on Windows (Visual Studio 2017 or newer)
+--------------------------------------------------------------
+Starting from Visual Studio 2017, VS features built-in
+support for CMake projects:
+https://learn.microsoft.com/cpp/build/cmake-projects-in-visual-studio
+This means that installing CMake separately is not needed.
+
+1. Install the "Desktop development with C++" workload from
+   the VS Installer, which includes CMake and MSVC by default.
+2. Open the project folder from Visual Studio. At this point
+   it will attempt to configure CMake automatically. Once it's done,
+   click on "Open CMake Settings editor" or select
+   "Manage Configurations..." from the build configuration drop-down to
+   make further changes.
+3. After adjusting the CMake options (or just using the default
+   configuration), click on "Build > Build All". By default, this will
+   generate output in the "out" subdirectory of your project. A list of
+   available options is given below.
 
 
 How to build freeglut on UNIX
