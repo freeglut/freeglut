@@ -56,7 +56,11 @@ void fgSetCursor ( SFG_Window *window, int cursorID )
 /*
  * Set the cursor image to be used for the current window
  */
-void FGAPIENTRY glutSetCursor( int cursorID )
+//   Added at 2024/03/25 - Pelles C compiler show error ->
+//     src\fg_cursor.c(59): error #2166: Inconsistent linkage for 'glutSetCursor', previously declared at C:\src\OpenGL\freeglut-3.4.0\include\GL\freeglut_std.h
+//   You must prefixed all function's declarations by "FGAPI" into ALL sources of Freeglut for INTERFACE FUNCTIONS of DLL on Windows.
+FGAPI void FGAPIENTRY glutSetCursor( int cursorID )
+
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetCursor" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutSetCursor" );
@@ -68,7 +72,8 @@ void FGAPIENTRY glutSetCursor( int cursorID )
 /*
  * Moves the mouse pointer to given window coordinates
  */
-void FGAPIENTRY glutWarpPointer( int x, int y )
+
+FGAPI void FGAPIENTRY glutWarpPointer( int x, int y )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWarpPointer" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutWarpPointer" );

@@ -257,7 +257,7 @@ static GLUTproc fghGetGLUTProcAddress( const char* procName )
 
 
 
-GLUTproc FGAPIENTRY
+FGAPI GLUTproc FGAPIENTRY
 glutGetProcAddress( const char *procName )
 {
     GLUTproc p;

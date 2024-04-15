@@ -11,8 +11,126 @@ if (POLICY CMP0072)
     cmake_policy(SET CMP0072 NEW)
 endif()
 
+# NOTE :	Added at 2024/03/16, on Windows, you can choose many "free" compilers to generate Freeglut.
+#			All of these "free" compilers are installed on "specific" directory, same like MSVC (not in "/usr/bin" ... -))
+#			This addon, is mandatory to determine which compiler or devlopment environment is used and parameter this.
+#   WARNING : 		On my system, to choose "good" directories of binaries, include files and libraries, I decide to parameter
+#					many environment variables (system level) to point to these (because version's num defined directories ... GRRR) : 
+#									KIT_WIN_NUM  		valued at time 		10.0.22621.0
+#									KIT_WIN_VERSION  	valued at time 		10
+#									VS_NUM 				valued at time		14.39.33519
+#									VS_VERSION 			valued at time		2022
+#									CLANG_VERSION 		valued at time		18.1.3
+#									LLVM 				valued at time		"C:\Program Files (x86)\LLVM"  (only for command file)
+#									LLVM64 				valued at time		"C:\Program Files\LLVM"        (only for command file)
+#					These values can changed after upgrade of CLANG and Visual Studio 2022 Community on Windows 11.
+#					The change only on these variables permit update with "smoothly" impact...  (recently CLANG 18.1.2 to 18.1.3)
+#					I use many $ENV{xxxxx} in this parameter file to dereference/translate environment variable.
+#					Examine lines 72-73 or 78-79, nothing change after upgrade. Simply.
+#					Another solution can be : use many parameters during run of "cmake" with "-Dxxxxxxx=yyyyy" on command line. Very long line ...
+#					But, in this case, it is mandatory to exchange in this parameter file all the call function $ENV{xxxxx} by ${xxxxx}.
+#   WARNING(2): 	To parameter good configuration of CLANG and CYGWIN in this parameter file, I decide to use another environment 
+#					variables set by "-Dvar=value" during run of generation by cmake :
+#							 CLANG_BUILD_TOOL   valued by 	MSYS2 to generate MinGW32 / MinGW64 targets included in package MSYS2, 
+#														or  WINLIB to generate MinGW32 / MinGW64 targets included in package WINLIBS, 
+#														or  VC to generate Visual C/C++ + Development Kit Windows targets
+#							 CLANG_BUILD_ARCH   valued by 	x86 to generate 32 bits targets, x64 (or nothing) to generate 64 bits targets
+#							 CYGWIN_BUILD_ARCH  valued by 	x86 to generate 32 bits targets, x64 (or nothing) to generate 64 bits targets
+# 					Maybe two last variable can be "mutualized" in only one, but for best comprehension, I decide to conserve distinction. 
+#	WARNING(3) 		To suppress "hard naming" of directories of "root" compilers or devlopment packages in this file, it's possible to
+#					design it by another environment variables. I create these variables, but in the parameter file of cmake, I don't use.
+#					If you want, I can used it. What you think about this ? Interesting or not ? (example : var BORLANDC refer "C:\BCC55")
+#	Conclusion : This is my proposition to adapt each configuration of compilers. What you think about this ?	
+if (CMAKE_C_COMPILER_ID MATCHES "Clang")
+# 	If you want use "Clang" on Unix/Linux or Mac OS, maybe you must define good instructions here ?
+  IF (${CLANG_BUILD_TOOL} MATCHES MSYS2)
+    IF (${CLANG_BUILD_ARCH} MATCHES x86)
+	  SET(CMAKE_FIND_ROOT_PATH  "C:/msys64/mingw32/bin" )
+      MESSAGE("Clang - Setting CLANG flags for compile and link to generate Freeglut 32 bits - MSYS2.")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+      include_directories(BEFORE "C:/msys64/mingw32/include") 
+      link_directories(BEFORE "C:/msys64/mingw32/lib")
+    ELSE()
+	  SET(CMAKE_FIND_ROOT_PATH  "C:/msys64/mingw64/bin" )
+      MESSAGE("Clang - Setting CLANG flags for compile and link to generate Freeglut 64 bits - MSYS2.")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+      include_directories(BEFORE "C:/msys64/mingw64/include") 
+      link_directories(BEFORE "C:/msys64/mingw64/lib")
+    ENDIF()
+  ELSEIF(${CLANG_BUILD_TOOL} MATCHES WINLIB)
+    IF (${CLANG_BUILD_ARCH} MATCHES x86)
+	  SET(CMAKE_FIND_ROOT_PATH  "C:/mingw32/bin" )
+      MESSAGE("Clang - Setting CLANG flags for compile and link to generate Freeglut 32 bits - Winlibs.")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+      include_directories(BEFORE "C:/mingw32/i686-w64-mingw32/include" "C:/mingw32/include" ) 
+      link_directories(BEFORE "C:/mingw32/i686-w64-mingw32/lib" )
+    ELSE()
+	  SET(CMAKE_FIND_ROOT_PATH  "C:/mingw64/bin" )
+      MESSAGE("Clang - Setting CLANG flags for compile and link to generate Freeglut 64 bits - Winlibs.")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+      include_directories(BEFORE "C:/mingw64/x86_64-w64-mingw32/include" "C:/mingw64/include" ) 
+      link_directories(BEFORE "C:/mingw64/x86_64-w64-mingw32/lib" )
+    ENDIF()
+  ELSEIF(${CLANG_BUILD_TOOL} MATCHES VC)
+    IF (${CLANG_BUILD_ARCH} MATCHES x86)
+	  SET(CMAKE_FIND_ROOT_PATH  "C:/Program Files (x86)/LLVM/bin" )
+      MESSAGE("Clang - Setting CLANG flags for compile and link to generate Freeglut 32 bits - Visual C/C++.")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+      include_directories(BEFORE "C:/Program Files (x86)/LLVM/lib/clang/$ENV{CLANG_VERSION}/include" "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Include/$ENV{KIT_WIN_NUM}/um" "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Include/$ENV{KIT_WIN_NUM}/shared" "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Include/$ENV{KIT_WIN_NUM}/ucrt" "C:/Program Files/Microsoft Visual Studio/$ENV{VS_VERSION}/Community/VC/Tools/MSVC/$ENV{VS_NUM}/include") 
+      link_directories(BEFORE "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Lib/$ENV{KIT_WIN_NUM}/um/x86" "C:/Program Files (x86)/LLVM/lib/clang/$ENV{CLANG_VERSION}/lib/windows" "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Lib/$ENV{KIT_WIN_NUM}/ucrt/x86" "C:/Program Files/Microsoft Visual Studio/$ENV{VS_VERSION}/Community/VC/Tools/MSVC/$ENV{VS_NUM}/lib/x86")
+    ELSE()
+	  SET(CMAKE_FIND_ROOT_PATH  "C:/Program Files/LLVM/bin" )
+      MESSAGE("Clang - Setting CLANG flags for compile and link to generate Freeglut 64 bits - Visual C/C++.")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+      include_directories(BEFORE "C:/Program Files/LLVM/lib/clang/$ENV{CLANG_VERSION}/include" "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Include/$ENV{KIT_WIN_NUM}/um" "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Include/$ENV{KIT_WIN_NUM}/shared" "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Include/$ENV{KIT_WIN_NUM}/ucrt" "C:/Program Files/Microsoft Visual Studio/$ENV{VS_VERSION}/Community/VC/Tools/MSVC/$ENV{VS_NUM}/include") 
+      link_directories(BEFORE "C:/Program Files/LLVM/lib/clang/$ENV{CLANG_VERSION}/lib/windows" "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Lib/$ENV{KIT_WIN_NUM}/um/x64" "C:/Program Files (x86)/Windows Kits/$ENV{KIT_WIN_VERSION}/Lib/$ENV{KIT_WIN_NUM}/ucrt/x64" "C:/Program Files/Microsoft Visual Studio/$ENV{VS_VERSION}/Community/VC/Tools/MSVC/$ENV{VS_NUM}/lib/x64")
+    ENDIF()
+  ENDIF()	
+elseif (CYGWIN)
+  SET(CMAKE_FIND_ROOT_PATH  "C:/cygwin64/bin" )
+  # choice to determine which compilers to use for C and C++, 32 or 64 bits
+  #	Added at 2024/03/29, to determine which compiler or devlopment environment is used with CYGWIN
+  IF (${CYGWIN_BUILD_ARCH} MATCHES x86)
+	SET(CMAKE_C_COMPILER "i686-w64-mingw32-gcc.exe" )
+	# SET(CMAKE_CXX_COMPILER "i686-w64-mingw32-g++.exe" )
+	SET(CMAKE_RC_COMPILER "i686-w64-mingw32-windres.exe" )
+	message(STATUS "CYGWIN - Setting GCC flags to compile and link to generate Freeglut with i686-w64-mingw32-gcc.exe compiler.")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -D_WIN32")
+	set(CMAKE_LINK_FLAGS "${CMAKE_LINK_FLAGS} -mwindows")
+	include_directories(BEFORE "C:/cygwin64/usr/i686-w64-mingw32/sys-root/mingw/include" )
+	link_directories(BEFORE "C:/cygwin64/usr/i686-w64-mingw32/sys-root/mingw/lib" )
+  ELSE()
+	SET(CMAKE_C_COMPILER "x86_64-w64-mingw32-gcc.exe" )
+	# SET(CMAKE_CXX_COMPILER "x86_64-w64-mingw32-g++.exe" )
+	SET(CMAKE_RC_COMPILER "x86_64-w64-mingw32-windres.exe" )
+	message(STATUS "CYGWIN - Setting GCC flags to compile and link to generate Win32 application with x86_64-w64-mingw32-gcc.exe compiler.")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64 -D_WIN32")
+	set(CMAKE_LINK_FLAGS "${CMAKE_LINK_FLAGS} -mwindows")
+	include_directories(BEFORE "C:/cygwin64/usr/x86_64-w64-mingw32/sys-root/mingw/include" )
+	link_directories(BEFORE "C:/cygwin64/usr/x86_64-w64-mingw32/sys-root/mingw/lib" )
+  endif()
+elseif (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+  MESSAGE("GNU C Compiler used to generation of Freeglut.")
+elseif (CMAKE_C_COMPILER_ID STREQUAL "Intel")
+  MESSAGE("Intel Compiler used to generation of Freeglut.")
+elseif (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+  MESSAGE("MSVC [ot Visual C/C++] Compiler used to generation of Freeglut.")
+elseif (BORLAND)
+  MESSAGE("Borland C/C++ Compiler used to generation of Freeglut 32 bits.")
+elseif (CMAKE_C_COMPILER_ID MATCHES "OpenWatcom")
+  MESSAGE("OpenWatcom C/C++ Compiler used to generation of Freeglut 32 bits.")
+  #  Précision : "wcc386" option "-aa" allow non const initializers for local aggregates or unions. Mandatory.
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -aa")
+  include_directories(BEFORE "C:/WATCOM/h/nt" "C:/WATCOM/h" )
+  #  Précision : "wlink" need search library "freeglut.lib" or "freeglutd.lib" in directory ${PROJECT_BINARY_DIR}/lib
+  link_directories(BEFORE "C:/WATCOM/lib386/nt" "${PROJECT_BINARY_DIR}/lib" )
+endif()
+
 # for multiarch LIBDIR support (requires cmake>=2.8.8)
-INCLUDE(GNUInstallDirs)
+#   Modified at 2024/03/13 - added new test to limit avertissement (Warning) with Open Watcom by example.
+IF(CMAKE_COMPILER_IS_GNUCC)
+  INCLUDE(GNUInstallDirs)
+ENDIF()
 
 # NOTE: On Windows and Cygwin, the dll's are placed in the
 # CMAKE_RUNTIME_OUTPUT_DIRECTORY, while their corresponding import
@@ -155,11 +273,35 @@ IF(WIN32)
     IF (MSVC AND NOT CMAKE_CL_64)
         # .def file only for 32bit Windows builds (TODO: MSVC only right
         # now, needed for any other Windows platform?)
+		#  Added "def file" is mandatory only for Digital Mars Compiler. I use ${CMAKE_BINARY_DIR}/freeglut_dmc.def
+		#  		Syntax of the def file is very specific to this compiler.
+		#		WARNING : the name of DLL appear at first line of the def file. But with difference beetween Debug and Release name of 
+		#       the DLL, I must modify the first line "at the hand". But I don't use CMAKE to generate DMC version of Freeglut, only Code::Blocks
+		#		then, this comment is present only for general information to devlopers. I constraint CB to search this file by configuration. 
         LIST(APPEND FREEGLUT_SRCS
             ${CMAKE_BINARY_DIR}/freeglutdll.def # generated below from src/freeglutdll.def.in
         )
     ENDIF()
-
+	#	Modified at 2024/03/16, add this test to permit CYGWIN to generate Win32 application (not Unix/X11)
+ELSEIF(CYGWIN)
+    LIST(APPEND FREEGLUT_SRCS
+        src/mswin/fg_cursor_mswin.c
+        src/mswin/fg_display_mswin.c
+        src/mswin/fg_ext_mswin.c
+        src/mswin/fg_gamemode_mswin.c
+        src/mswin/fg_init_mswin.c
+        src/mswin/fg_internal_mswin.h
+        src/mswin/fg_input_devices_mswin.c
+        src/mswin/fg_joystick_mswin.c
+        src/mswin/fg_main_mswin.c
+        src/mswin/fg_menu_mswin.c
+        src/mswin/fg_spaceball_mswin.c
+        src/mswin/fg_state_mswin.c
+        src/mswin/fg_structure_mswin.c
+        src/mswin/fg_window_mswin.c
+		src/mswin/fg_cmap_mswin.c
+        ${CMAKE_BINARY_DIR}/freeglut.rc # generated below from freeglut.rc.in
+    )
 ELSEIF(ANDROID OR BLACKBERRY)
     # BlackBerry and Android share some similar design concepts and ideas, as with many mobile devices.
     # As such, some classes can be shared between the two. XXX: Possibly rename shareable classes to
@@ -267,6 +409,8 @@ IF(FREEGLUT_GLES OR FREEGLUT_WAYLAND)
 ENDIF()
 
 INCLUDE(CheckIncludeFiles)
+#    Added at 2024/03/10 - Bug with MinGW32/MinGW64 of CYGWIN (assimiled at UNIX by CMAKE ???) 
+IF(NOT CYGWIN)
 IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND))
     FIND_PACKAGE(X11 REQUIRED)
     INCLUDE_DIRECTORIES(${X11_X11_INCLUDE_PATH})
@@ -286,6 +430,7 @@ IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND))
     ELSE()
         MESSAGE(WARNING "Missing X11's XInput2.h (X11/extensions/XInput2.h)")
     ENDIF()
+ENDIF()
 ENDIF()
 
 # FreeBSD and NetBSD joystick code uses libusbhid
@@ -387,18 +532,29 @@ ENDIF()
 
 # lib m for math, not needed on windows
 IF (NOT WIN32)
-    # For compilation:
-    LIST(APPEND LIBS m)
-    # For CHECK_FUNCTION_EXISTS:
-    LIST(APPEND CMAKE_REQUIRED_LIBRARIES m)
+#	Added at I use CYGWIN only with MinGW32/MinGW64, not for compatibility Unix/X11 on Windows.
+#	WARNING : Note, It's not possible to generate Freeglut with CYGWIN / X11 because libraries of extensions XFree86 don't exist,
+#				like Xxf86vm !!! 
+	IF (NOT CYGWIN)
+      # For compilation:
+      LIST(APPEND LIBS m)
+      # For CHECK_FUNCTION_EXISTS:
+      LIST(APPEND CMAKE_REQUIRED_LIBRARIES m)
+	ENDIF()
 ENDIF()
 
 IF(WIN32)
     # hide insecure CRT warnings, common practice
     ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
-    IF(MSVC)
-        SET( CMAKE_DEBUG_POSTFIX "d" )
-    ENDIF(MSVC)
+	
+#    Modified at 2014/03/10, why this POSTFIX is not positioned with configuration "DEBUG" !!! ?
+#    Proposition : extract this test for it operate most generally on all platforms, not only WIN32 or CYGWIN
+#    If I propose that, it's for distinguish Debug and Release version of Freeglut on "same" directory /bin and /lib 
+#	 used by CMAKE (see below at the beginning of this file).
+#		What you think about this ?
+	IF(CMAKE_BUILD_TYPE MATCHES Debug)
+		SET( CMAKE_DEBUG_POSTFIX "d" )
+	ENDIF()
 
     IF(NOT(MSVC_VERSION LESS "1600"))
     # minimum requirement for WM_TOUCH device
@@ -413,7 +569,15 @@ IF(WIN32)
         ADD_DEFINITIONS(-D_WIN32_WINNT=0x0500)
         ADD_DEFINITIONS(-DWINVER=0x0500)
     ENDIF()
-
+#   Added, CYGWIN don't define variable _WIN32, and CMAKE ... don't range CYGWIN in category of WIN32 platform ...  
+ELSEIF(CYGWIN)
+#    Modified at 2014/03/10, why this POSTFIX is not positioned with configuration "DEBUG" !!! ?
+	IF(CMAKE_BUILD_TYPE MATCHES Debug)
+		SET( CMAKE_DEBUG_POSTFIX "d" )
+	ENDIF()
+    # minimum requirement for spaceball device
+    ADD_DEFINITIONS(-D_WIN32_WINNT=0x0501)
+    ADD_DEFINITIONS(-DWINVER=0x0501)
 ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -422,6 +586,18 @@ IF(CMAKE_COMPILER_IS_GNUCC)
     # not setting -ansi as EGL/KHR headers doesn't support it
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic")
   ENDIF()
+  #     Added, setting "good" options to differentiate Debug or Release generation with GCC compiler.
+  #     Verify if these options are the same on Linux, Mac OS, OS X and others platforms ? Correct on Windows platform.
+  #     If not, add a test on platform Windows (and compatible platforms) before this addon.
+  add_compile_options(
+	$<$<CONFIG:DEBUG>:-g3>
+	$<$<CONFIG:DEBUG>:-Og>
+	$<$<CONFIG:RELEASE>:-O3>
+  )
+
+  add_compile_definitions(
+	$<$<CONFIG:DEBUG>:DEBUG>
+  )
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 IF(ANDROID)
@@ -487,6 +663,9 @@ IF(WIN32)
         # .def file only for 32bit Windows builds with Visual Studio
         CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/freeglutdll.def.in ${CMAKE_BINARY_DIR}/freeglutdll.def)
     ENDIF()
+#   Added at 2024/03/21 - CYGWIN not recognize by test IF(WIN32) ... and I use MinGW32/MinGW64 on CYGWIN : "rc" file are authorized.
+ELSEIF(CYGWIN)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.rc.in ${CMAKE_BINARY_DIR}/freeglut.rc)
 ENDIF()
 
 IF(FREEGLUT_BUILD_SHARED_LIBS)
@@ -503,6 +682,14 @@ IF(WIN32)
         SET(LIBNAME glut)
     ENDIF()
 
+#	Modified at 2024/03/10, added this DEFINITION to compilers (not MSVC) because build demos crash 
+	IF(${CMAKE_BUILD_TYPE} MATCHES Release)
+	    IF(MSVC)
+			ADD_DEFINITIONS(-DNDEBUG)
+		ELSE()
+			ADD_DEFINITIONS(/DNDEBUG)
+		ENDIF()
+	ENDIF()
     LIST(APPEND LIBS winmm gdi32)
     IF(FREEGLUT_BUILD_SHARED_LIBS)
         TARGET_COMPILE_DEFINITIONS(freeglut PRIVATE FREEGLUT_EXPORTS)
@@ -522,6 +709,30 @@ IF(WIN32)
             ELSE()
                 SET_TARGET_PROPERTIES(freeglut_static PROPERTIES STATIC_LIBRARY_FLAGS "/machine:x64")
             ENDIF()
+        ENDIF()
+    ENDIF()
+	#	Modified at 2024/03/16, add this test to permit CYGWIN to generate Win32 application (not Unix)
+ELSEIF(CYGWIN)
+    IF(FREEGLUT_REPLACE_GLUT)
+        SET(LIBNAME glut)
+    ENDIF()
+#	Modified at 2024/03/10, added this DEFINITIONS to compiler because build demos crash 
+	IF(CMAKE_BUILD_TYPE MATCHES Release)
+	    IF(MSVC)
+			ADD_DEFINITIONS(-DNDEBUG)
+		ELSE()
+			ADD_DEFINITIONS(/DNDEBUG)
+		ENDIF()
+	ENDIF()
+	LIST(APPEND LIBS glu32 opengl32 winmm gdi32 user32)
+    IF(FREEGLUT_BUILD_SHARED_LIBS)
+        TARGET_COMPILE_DEFINITIONS(freeglut PRIVATE FREEGLUT_EXPORTS)
+        SET_TARGET_PROPERTIES(freeglut PROPERTIES OUTPUT_NAME ${LIBNAME})
+    ENDIF()
+    IF(FREEGLUT_BUILD_STATIC_LIBS)
+        TARGET_COMPILE_DEFINITIONS(freeglut_static PUBLIC FREEGLUT_STATIC)
+        IF(FREEGLUT_REPLACE_GLUT)
+            SET_TARGET_PROPERTIES(freeglut_static PROPERTIES OUTPUT_NAME ${LIBNAME})
         ENDIF()
     ENDIF()
 ELSE()
@@ -624,6 +835,7 @@ endif()
 
 # lib m for math, not needed on windows
 IF (NOT WIN32)
+#   Added at 2024/03/10 - Note : fortunatly, library "m" exist with MinGW32/MinGW64 of CYGWIN, and also with portability.
     LIST(APPEND DEMO_LIBS m)
 ENDIF()
 
@@ -632,16 +844,32 @@ MACRO(ADD_DEMO name)
         IF(FREEGLUT_BUILD_SHARED_LIBS)
             ADD_EXECUTABLE(${name} ${ARGN})
             TARGET_LINK_LIBRARIES(${name} ${DEMO_LIBS} freeglut)
-            IF(WIN32 AND MSVC)
-                SET_TARGET_PROPERTIES(${name} PROPERTIES DEBUG_POSTFIX d)
+		# 	Modified at 2014/03/10 - Why this test is not conditioned by configuration DEBUG, seriously ... !!!
+            IF(WIN32)
+				IF(CMAKE_BUILD_TYPE MATCHES Debug)
+					SET_TARGET_PROPERTIES(${name} PROPERTIES DEBUG_POSTFIX d)
+				ENDIF()
+            ENDIF()
+            IF(CYGWIN)
+				IF(CMAKE_BUILD_TYPE MATCHES Debug)
+					SET_TARGET_PROPERTIES(${name} PROPERTIES DEBUG_POSTFIX d)
+				ENDIF()
             ENDIF()
         ENDIF()
         IF(FREEGLUT_BUILD_STATIC_LIBS)
             ADD_EXECUTABLE(${name}_static ${ARGN})
             TARGET_LINK_LIBRARIES(${name}_static ${DEMO_LIBS} freeglut_static)
-            IF(WIN32 AND MSVC)
-                SET_TARGET_PROPERTIES(${name}_static PROPERTIES DEBUG_POSTFIX d)
-            ENDIF()
+# 	Modified at 2014/03/10 - Why this test is not conditioned by configuration DEBUG, seriously ... !!!
+            IF(WIN32)
+				IF(CMAKE_BUILD_TYPE MATCHES Debug)
+                	SET_TARGET_PROPERTIES(${name}_static PROPERTIES DEBUG_POSTFIX d)
+            	ENDIF()
+			ENDIF()
+            IF(CYGWIN)
+				IF(CMAKE_BUILD_TYPE MATCHES Debug)
+                	SET_TARGET_PROPERTIES(${name}_static PROPERTIES DEBUG_POSTFIX d)
+            	ENDIF()
+			ENDIF()
         ENDIF()
     ENDIF()
 ENDMACRO()
@@ -650,11 +878,14 @@ ADD_DEMO(CallbackMaker   progs/demos/CallbackMaker/CallbackMaker.c)
 ADD_DEMO(Fractals        progs/demos/Fractals/fractals.c)
 ADD_DEMO(Fractals_random progs/demos/Fractals_random/fractals_random.c)
 ADD_DEMO(Lorenz          progs/demos/Lorenz/lorenz.c)
-IF (NOT WIN32)
-    ADD_DEMO(One             progs/demos/One/one.c)
-ELSE()
+IF (WIN32)
     ADD_DEMO(One             progs/demos/One/one.c
                              progs/demos/One/one.rc)
+ELSEIF (CYGWIN)
+    ADD_DEMO(One             progs/demos/One/one.c
+                             progs/demos/One/one.rc)
+ELSE()
+    ADD_DEMO(One             progs/demos/One/one.c)
 ENDIF()
 ADD_DEMO(resizer         progs/demos/resizer/resizer.c)
 ADD_DEMO(multi-touch     progs/demos/multi-touch/multi-touch.c)

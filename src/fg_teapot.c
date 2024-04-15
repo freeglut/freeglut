@@ -478,7 +478,7 @@ static void fghTeaset( GLfloat scale, GLboolean useWireMode,
 /*
  * Renders a wired teapot...
  */
-void FGAPIENTRY glutWireTeapot( double size )
+FGAPI void FGAPIENTRY glutWireTeapot( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireTeapot" );
     fghTeaset( (GLfloat)size, GL_TRUE,
@@ -493,7 +493,7 @@ void FGAPIENTRY glutWireTeapot( double size )
 /*
  * Renders a filled teapot...
  */
-void FGAPIENTRY glutSolidTeapot( double size )
+FGAPI void FGAPIENTRY glutSolidTeapot( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidTeapot" );
     fghTeaset( (GLfloat)size, GL_FALSE,
@@ -509,7 +509,7 @@ void FGAPIENTRY glutSolidTeapot( double size )
 /*
  * Renders a wired teacup...
  */
-void FGAPIENTRY glutWireTeacup( double size )
+FGAPI void FGAPIENTRY glutWireTeacup( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireTeacup" );
     fghTeaset( (GLfloat)size/2.5f, GL_TRUE,
@@ -524,7 +524,7 @@ void FGAPIENTRY glutWireTeacup( double size )
 /*
  * Renders a filled teacup...
  */
-void FGAPIENTRY glutSolidTeacup( double size )
+FGAPI void FGAPIENTRY glutSolidTeacup( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidTeacup" );
     fghTeaset( (GLfloat)size/2.5f, GL_FALSE,
@@ -540,7 +540,7 @@ void FGAPIENTRY glutSolidTeacup( double size )
 /*
  * Renders a wired teaspoon...
  */
-void FGAPIENTRY glutWireTeaspoon( double size )
+FGAPI void FGAPIENTRY glutWireTeaspoon( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireTeaspoon" );
     fghTeaset( (GLfloat)size/2.5f, GL_TRUE,
@@ -555,7 +555,7 @@ void FGAPIENTRY glutWireTeaspoon( double size )
 /*
  * Renders a filled teaspoon...
  */
-void FGAPIENTRY glutSolidTeaspoon( double size )
+FGAPI void FGAPIENTRY glutSolidTeaspoon( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidTeaspoon" );
     fghTeaset( (GLfloat)size/2.5f, GL_FALSE,

@@ -41,17 +41,17 @@ FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
 FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
 #endif
 
-void FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib) {
+FGAPI void FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib) {
   if (fgStructure.CurrentWindow != NULL)
     fgStructure.CurrentWindow->Window.attribute_v_coord = attrib;
 }
 
-void FGAPIENTRY glutSetVertexAttribNormal(GLint attrib) {
+FGAPI void FGAPIENTRY glutSetVertexAttribNormal(GLint attrib) {
   if (fgStructure.CurrentWindow != NULL)
     fgStructure.CurrentWindow->Window.attribute_v_normal = attrib;
 }
 
-void FGAPIENTRY glutSetVertexAttribTexCoord2(GLint attrib) {
+FGAPI void FGAPIENTRY glutSetVertexAttribTexCoord2(GLint attrib) {
     if (fgStructure.CurrentWindow != NULL)
         fgStructure.CurrentWindow->Window.attribute_v_texture = attrib;
 }

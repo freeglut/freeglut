@@ -40,6 +40,11 @@
 
 #include <GL/freeglut.h>
 #include <stdlib.h>
+//       Added at 2024/03/14 - Borland C, force include of winuser.h.
+//  	Not suffisant : add many definition of structure, variables and functions in include file winuser.h of BC55, to satisfy compilation.
+#if defined(__BORLANDC__)
+#include <winuser.h>
+#endif
 #include "../fg_internal.h"
 
 enum {
@@ -51,25 +56,26 @@ enum {
 
 extern int fg_sball_initialized;
 unsigned int __fgSpaceKeystate = 0;
+//       Added at 2024/03/14 - Borland C is not compatible with C99, initialisation of structure don't be realize with {.....}
+#if defined(__BORLANDC__)
+RAWINPUTDEVICE __fgSpaceball ;
+#else
 RAWINPUTDEVICE __fgSpaceball = { 0x01, 0x08, 0x00, 0x00 };
-
-/* It seems like some versions of winuser.h define RAWHID.bRawData as an array
- * (which makes sense because that's where the data start), and some define it
- * as a single byte, which is insane. This is probably a mistake which got
- * distributed by accident, but it means we need to work around it by defining
- * our own RAWHID structure.
- */
-struct fgRAWHID {
-    DWORD dwSizeHid;
-    DWORD dwCount;
-    BYTE bRawData[1];
-};
-
+#endif
 
 void fgPlatformInitializeSpaceball(void)
 {
     HWND hwnd;
     fg_sball_initialized = 1;
+//       Added at 2024/03/14 - Borland C is not compatible with C99, initialisation of structure don't be realize with {.....}
+//       but with explicit affectation field by field ...   GRRRR !!!
+#if defined(__BORLANDC__)
+	__fgSpaceball.usUsagePage = 0x01 ;
+	__fgSpaceball.usUsage = 0x08 ;
+    __fgSpaceball.dwFlags = 0x00 ;
+    __fgSpaceball.hwndTarget =  0x00 ;
+#endif
+
     if (!fgStructure.CurrentWindow)
     {
         fg_sball_initialized = 0;
@@ -119,6 +125,7 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     #define LOGITECH_VENDOR_ID 0x46d
     HRAWINPUT hRawInput = (HRAWINPUT)lParam;
+    UINT inputCode = (UINT)wParam;
     UINT size;
     BYTE *rawInputBuffer;
     PRAWINPUT pRawInput;
@@ -159,35 +166,34 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
         if (sRidDeviceInfo.hid.dwVendorId == LOGITECH_VENDOR_ID)
         {
-            /* see definition of fgRAWHID at the top of this file, for an
-             * explanation of why we're doing this.
-             */
-            struct fgRAWHID *hid = (struct fgRAWHID*)&pRawInput->data.hid;
-
-            /* Motion data comes in two parts: motion type and */
-            /* displacement/rotation along three axis. */
-            /* Orientation is a right handed coordinate system with */
-            /* X goes right, Y goes up and Z goes towards viewer, e.g. */
-            /* the one used in OpenGL */
-            if (hid->bRawData[0] == SPNAV_EVENT_MOTION_TRANSLATION)
-            { /* Translation vector */
-                short* pnData = (short*)(&hid->bRawData[1]);
+            // Motion data comes in two parts: motion type and
+            // displacement/rotation along three axis.
+            // Orientation is a right handed coordinate system with
+            // X goes right, Y goes up and Z goes towards viewer, e.g.
+            // the one used in OpenGL
+            if (pRawInput->data.hid.bRawData[0] ==
+                SPNAV_EVENT_MOTION_TRANSLATION)
+            { // Translation vector
+                short* pnData = (short*)(&pRawInput->data.hid.bRawData[1]);
                 short X = pnData[0];
                 short Y = -pnData[2];
                 short Z = pnData[1];
                 INVOKE_WCB(*window, SpaceMotion, (X, Y, Z));
             }
-            else if (hid->bRawData[0] == SPNAV_EVENT_MOTION_ROTATION)
-            { /* Axis aligned rotation vector */
-                short* pnData = (short*)(&hid->bRawData[1]);
+            else if (pRawInput->data.hid.bRawData[0] ==
+                SPNAV_EVENT_MOTION_ROTATION)
+            { // Axis aligned rotation vector
+                short* pnData = (short*)(&pRawInput->data.hid.bRawData[1]);
                 short rX = pnData[0];
                 short rY = -pnData[2];
                 short rZ = pnData[1];
                 INVOKE_WCB(*window, SpaceRotation, (rX, rY, rZ));
             }
-            else if (hid->bRawData[0] == SPNAV_EVENT_BUTTON)
-            { /* State of the keys */
-                unsigned long dwKeystate = *(unsigned long*)(&hid->bRawData[1]);
+            else if (pRawInput->data.hid.bRawData[0] ==
+                SPNAV_EVENT_BUTTON)
+            { // State of the keys
+                unsigned long dwKeystate = *(unsigned long*)(&pRawInput->data.hid.bRawData[1]);
+                unsigned int state = GLUT_UP;
                 if (FETCH_WCB(*window, SpaceButton))
                 {
                     int i;

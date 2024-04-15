@@ -35,6 +35,31 @@
 /*
  * Under windows, we have to differentiate between static and dynamic libraries
  */
+ /*   Added at 2024/04/09
+  *     WARNING by use of _WIN32 on Windows, not all compilers define it by default ...
+  *     __NT__ with OpenWatcom, _WIN32 with GCC, MSVC, CLANG, Pelles C, lcc (?) __WIN32__ with Borland C/C++ defined Windows Operating System
+  *     I sugger use of next test - Reference : https://github.com/cpredef/predef/blob/master/OperatingSystems.md
+  *         (accept many configurations)
+  *
+  *     #if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(__DMC__) || defined(__NT__) || \
+  *         defined(__WIN32__) || defined(__LCC__)
+  *             #define OS_WIN
+  *     #endif
+  *     (I doubt about __MINGW32__ on Linux (cross compilation) ??)
+  *
+  *     After you can test like #ifdef OS_WIN ... in suitable oode ...
+  *     What decide you about this proposition ?
+  *
+  *     WARNING : in file src\fg_internal.h here the next test about "hosting" on Windows, but Open WATCOM run also on Unix/Linux platform ...
+  *
+  *     #if defined(_MSC_VER) || defined(__WATCOMC__) || defined(__MINGW32__) || defined(__DMC__) || defined(__BORLANDC__) \
+  *      || defined(_WIN32) || defined(_WIN32_WCE) \
+  *      || ( defined(__CYGWIN__) && defined(X_DISPLAY_MISSING) )
+  *     #   define  TARGET_HOST_MS_WINDOWS 1
+  *     #endif
+  *
+  *     Autoconf and Configure need presence of var X_DISPLAY_MISSING, but another build tool like CMAKE ? __CYGWIN__ only ?
+  */
 #ifdef _WIN32
 /* #pragma may not be supported by some compilers.
  * Discussion by FreeGLUT developers suggests that
@@ -47,6 +72,19 @@
  * The default behavior depends on the compiler/platform.
  */
 #   ifndef FREEGLUT_LIB_PRAGMAS
+/*  Added at 2024/04/09 - WARNING this test is insuffisant at date ... I suggest next test
+ * #if ( defined(_MSC_VER) || \
+ *      defined(__ICL) || \
+ *		defined(__MWERKS__) && defined(_WIN32) || \
+ *		defined(__BORLANDC__) || \
+ *		defined(__DMC__) || \
+ *		defined(__POCC__) || \
+ *      defined(__WATCOMC__) ) && !defined(_WIN32_WCE)
+ *	#       define FREEGLUT_LIB_PRAGMAS 1
+ *  #    else
+ *  #       define FREEGLUT_LIB_PRAGMAS 0
+ *	#endif
+ *  What decide you about this proposition ?  */
 #       if ( defined(_MSC_VER) || defined(__WATCOMC__) ) && !defined(_WIN32_WCE)
 #           define FREEGLUT_LIB_PRAGMAS 1
 #       else
@@ -79,8 +117,12 @@
 
 /* Windows shared library (DLL) */
 #   else
-
+//       Added at 2024/04/08 - LCC don't support "__stdcall" call convention with shared functions ...
+#if defined(__LCC__)
+#       define FGAPIENTRY
+#else
 #       define FGAPIENTRY __stdcall
+#endif
 #       if defined(FREEGLUT_EXPORTS)
 #           define FGAPI __declspec(dllexport)
 #       else
@@ -137,10 +179,6 @@
 #   include <GLES/gl.h>
 #   include <GLES2/gl2.h>
 #elif __APPLE__
-/* stop MacOSX GL headers for complaining that OpenGL is deprecated */
-#   ifndef GL_SILENCE_DEPRECATION
-#       define GL_SILENCE_DEPRECATION
-#   endif
 #   include <OpenGL/gl.h>
 #   include <OpenGL/glu.h>
 #else
@@ -217,7 +255,9 @@
  *
  * Steve Baker suggested to make it binary compatible with GLUT:
  */
-#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(__WATCOMC__)
+
+//     Added at 2024/03/20 -  "|| defined(__BORLANDC__)  || defined(__DMC__) || defined(__LCC__) || defined(__POCC__)"
+#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__DMC__) || defined(__LCC__) || defined(__POCC__)
 #   define  GLUT_STROKE_ROMAN               ((void *)0x0000)
 #   define  GLUT_STROKE_MONO_ROMAN          ((void *)0x0001)
 #   define  GLUT_BITMAP_9_BY_15             ((void *)0x0002)
@@ -254,6 +294,7 @@
 #   define  GLUT_BITMAP_HELVETICA_12        ((void *) &glutBitmapHelvetica12)
 #   define  GLUT_BITMAP_HELVETICA_18        ((void *) &glutBitmapHelvetica18)
 #endif
+
 
 /*
  * GLUT API macro definitions -- the glutGet parameters

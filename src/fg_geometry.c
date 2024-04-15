@@ -1190,6 +1190,10 @@ static GLubyte tetrahedron_vi[TETRAHEDRON_VERT_PER_OBJ] =
 };
 DECLARE_SHAPE_CACHE(tetrahedron,Tetrahedron,TETRAHEDRON)
 
+/*
+ *  Added at 2024/03/23 - LCC compiler own it internally function "ipow" in include file <math.h>
+ */
+#if !defined(__LCC__)
 /* -- Sierpinski Sponge -- */
 static unsigned int ipow (int x, unsigned int y)
 {
@@ -1206,6 +1210,7 @@ static unsigned int ipow (int x, unsigned int y)
         }
     }
 }
+#endif
 
 static void fghSierpinskiSpongeGenerate ( int numLevels, double offset[3], GLfloat scale, GLfloat* vertices, GLfloat* normals )
 {
@@ -2216,7 +2221,7 @@ static void fghTorus( GLfloat dInnerRadius, GLfloat dOuterRadius, GLint nSides, 
 /*
  * Draws a solid sphere
  */
-void FGAPIENTRY glutSolidSphere(double radius, GLint slices, GLint stacks)
+FGAPI void FGAPIENTRY glutSolidSphere(double radius, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidSphere" );
     fghSphere((GLfloat)radius, slices, stacks, GL_FALSE );
@@ -2225,7 +2230,7 @@ void FGAPIENTRY glutSolidSphere(double radius, GLint slices, GLint stacks)
 /*
  * Draws a wire sphere
  */
-void FGAPIENTRY glutWireSphere(double radius, GLint slices, GLint stacks)
+FGAPI void FGAPIENTRY glutWireSphere(double radius, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireSphere" );
     fghSphere((GLfloat)radius, slices, stacks, GL_TRUE );
@@ -2234,7 +2239,7 @@ void FGAPIENTRY glutWireSphere(double radius, GLint slices, GLint stacks)
 /*
  * Draws a solid cone
  */
-void FGAPIENTRY glutSolidCone( double base, double height, GLint slices, GLint stacks )
+FGAPI void FGAPIENTRY glutSolidCone( double base, double height, GLint slices, GLint stacks )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidCone" );
     fghCone((GLfloat)base, (GLfloat)height, slices, stacks, GL_FALSE );
@@ -2243,7 +2248,7 @@ void FGAPIENTRY glutSolidCone( double base, double height, GLint slices, GLint s
 /*
  * Draws a wire cone
  */
-void FGAPIENTRY glutWireCone( double base, double height, GLint slices, GLint stacks)
+FGAPI void FGAPIENTRY glutWireCone( double base, double height, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireCone" );
     fghCone((GLfloat)base, (GLfloat)height, slices, stacks, GL_TRUE );
@@ -2253,7 +2258,7 @@ void FGAPIENTRY glutWireCone( double base, double height, GLint slices, GLint st
 /*
  * Draws a solid cylinder
  */
-void FGAPIENTRY glutSolidCylinder(double radius, double height, GLint slices, GLint stacks)
+FGAPI void FGAPIENTRY glutSolidCylinder(double radius, double height, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidCylinder" );
     fghCylinder((GLfloat)radius, (GLfloat)height, slices, stacks, GL_FALSE );
@@ -2262,7 +2267,7 @@ void FGAPIENTRY glutSolidCylinder(double radius, double height, GLint slices, GL
 /*
  * Draws a wire cylinder
  */
-void FGAPIENTRY glutWireCylinder(double radius, double height, GLint slices, GLint stacks)
+FGAPI void FGAPIENTRY glutWireCylinder(double radius, double height, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireCylinder" );
     fghCylinder((GLfloat)radius, (GLfloat)height, slices, stacks, GL_TRUE );
@@ -2271,7 +2276,7 @@ void FGAPIENTRY glutWireCylinder(double radius, double height, GLint slices, GLi
 /*
  * Draws a wire torus
  */
-void FGAPIENTRY glutWireTorus( double dInnerRadius, double dOuterRadius, GLint nSides, GLint nRings )
+FGAPI void FGAPIENTRY glutWireTorus( double dInnerRadius, double dOuterRadius, GLint nSides, GLint nRings )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireTorus" );
     fghTorus((GLfloat)dInnerRadius, (GLfloat)dOuterRadius, nSides, nRings, GL_TRUE);
@@ -2280,7 +2285,7 @@ void FGAPIENTRY glutWireTorus( double dInnerRadius, double dOuterRadius, GLint n
 /*
  * Draws a solid torus
  */
-void FGAPIENTRY glutSolidTorus( double dInnerRadius, double dOuterRadius, GLint nSides, GLint nRings )
+FGAPI void FGAPIENTRY glutSolidTorus( double dInnerRadius, double dOuterRadius, GLint nSides, GLint nRings )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidTorus" );
     fghTorus((GLfloat)dInnerRadius, (GLfloat)dOuterRadius, nSides, nRings, GL_FALSE);
@@ -2291,23 +2296,23 @@ void FGAPIENTRY glutSolidTorus( double dInnerRadius, double dOuterRadius, GLint 
 /* -- INTERFACE FUNCTIONS -------------------------------------------------- */
 /* Macro to generate interface functions */
 #define DECLARE_SHAPE_INTERFACE(nameICaps)\
-    void FGAPIENTRY glutWire##nameICaps( void )\
+    FGAPI void FGAPIENTRY glutWire##nameICaps( void )\
     {\
         FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWire"#nameICaps );\
         fgh##nameICaps( GL_TRUE );\
     }\
-    void FGAPIENTRY glutSolid##nameICaps( void )\
+    FGAPI void FGAPIENTRY glutSolid##nameICaps( void )\
     {\
         FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolid"#nameICaps );\
         fgh##nameICaps( GL_FALSE );\
     }
 
-void FGAPIENTRY glutWireCube( double dSize )
+FGAPI void FGAPIENTRY glutWireCube( double dSize )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireCube" );
     fghCube( (GLfloat)dSize, GL_TRUE );
 }
-void FGAPIENTRY glutSolidCube( double dSize )
+FGAPI void FGAPIENTRY glutSolidCube( double dSize )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidCube" );
     fghCube( (GLfloat)dSize, GL_FALSE );
@@ -2318,12 +2323,12 @@ DECLARE_SHAPE_INTERFACE(Icosahedron)
 DECLARE_SHAPE_INTERFACE(Octahedron)
 DECLARE_SHAPE_INTERFACE(RhombicDodecahedron)
 
-void FGAPIENTRY glutWireSierpinskiSponge ( int num_levels, double offset[3], double scale )
+FGAPI void FGAPIENTRY glutWireSierpinskiSponge ( int num_levels, double offset[3], double scale )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireSierpinskiSponge" );
     fghSierpinskiSponge ( num_levels, offset, (GLfloat)scale, GL_TRUE );
 }
-void FGAPIENTRY glutSolidSierpinskiSponge ( int num_levels, double offset[3], double scale )
+FGAPI void FGAPIENTRY glutSolidSierpinskiSponge ( int num_levels, double offset[3], double scale )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidSierpinskiSponge" );
     fghSierpinskiSponge ( num_levels, offset, (GLfloat)scale, GL_FALSE );

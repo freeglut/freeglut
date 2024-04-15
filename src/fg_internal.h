@@ -1,3 +1,6 @@
+#ifndef HEADER_8EFE115C4BDEC61
+#define HEADER_8EFE115C4BDEC61
+
 /*
  * fg_internal.h
  *
@@ -41,7 +44,7 @@
  */
 #if !defined(TARGET_HOST_POSIX_X11) && !defined(TARGET_HOST_MS_WINDOWS) && !defined(TARGET_HOST_MAC_OSX) && !defined(TARGET_HOST_SOLARIS) && \
     !defined(TARGET_HOST_ANDROID) && !defined(TARGET_HOST_BLACKBERRY) && !defined(TARGET_HOST_POSIX_WAYLAND)
-#if defined(_MSC_VER) || defined(__WATCOMC__) || defined(__MINGW32__) \
+#if defined(_MSC_VER) || defined(__WATCOMC__) || defined(__MINGW32__) || defined(__DMC__) || defined(__BORLANDC__) \
     || defined(_WIN32) || defined(_WIN32_WCE) \
     || ( defined(__CYGWIN__) && defined(X_DISPLAY_MISSING) )
 #   define  TARGET_HOST_MS_WINDOWS 1
@@ -114,21 +117,26 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-/* These are included based on autoconf directives. */
+
+//      Modified at 2024/03/10  -  generator "nmake Makefiles" used, but in build directory, "nmake" generate an error : 				//
+//		fg_internal.h(122): fatal error C1083: Impossible d'ouvrir le fichier include : 'unistd.h' : No such file or directory (idem with Borland)  		//
+//		One solution finded : add test on unpresence of Visual C/C++ (and Borland C/C++) during generation, Not beautiful response, but it work perfectly.	//
+/* 	These are included based on autoconf directives. 		*/
 #ifdef HAVE_SYS_TYPES_H
 #    include <sys/types.h>
 #endif
-#ifdef HAVE_UNISTD_H
+#if defined( HAVE_UNISTD_H) && !defined(_MSC_VER) && !defined(__BORLANDC__)
 #    include <unistd.h>
 #endif
 #ifdef TIME_WITH_SYS_TIME
 #    include <sys/time.h>
 #    include <time.h>
-#elif defined(HAVE_SYS_TIME_H)
+#elif defined(HAVE_SYS_TIME_H) && !defined(_MSC_VER) && !defined(__BORLANDC__)
 #    include <sys/time.h>
 #else
 #    include <time.h>
 #endif
+
 
 /* -- AUTOCONF HACKS --------------------------------------------------------*/
 
@@ -171,11 +179,16 @@
 /* General defines */
 #define INVALID_MODIFIERS 0xffffffff
 
+//      Modified at 2024/03/10  -  generator "Borland Makefiles" used, but in build directory "make" generate an error : 	//
+//		Error E2209 C:\src\OpenGL\freeglut-3.4.0\src\fg_internal.h 125: Unable to open include file 'stdint.h' 				    	//
+//		One solution finded : add test on unpresence of Borland during generation. Not beautiful response, but it work perfectly.	//
 /* FreeGLUT internal time type */
-#if defined(HAVE_STDINT_H)
+#if defined(HAVE_STDINT_H) && !defined(__BORLANDC__)
 #   include <stdint.h>
     typedef uint64_t fg_time_t;
-#elif defined(HAVE_INTTYPES_H)
+//    Added at 2024/03/13  -  generator "Borland Makefiles" used, but in build directory "make" generate an error :	//
+//		Error E2209 C:\src\OpenGL\freeglut-3.4.0\src\fg_internal.h 125: Unable to open include file 'inttypes.h' 	//
+#elif defined(HAVE_INTTYPES_H) && !defined(__BORLANDC__)
 #   include <inttypes.h>
     typedef uint64_t fg_time_t;
 #elif defined(HAVE_U__INT64)
@@ -1176,3 +1189,5 @@ int fghNumberOfAuxBuffersRequested( void );
 #endif /* FREEGLUT_INTERNAL_H */
 
 /*** END OF FILE ***/
+#endif // header guard
+

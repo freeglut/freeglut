@@ -42,7 +42,7 @@ extern void fgPlatformLeaveGameMode( void );
 /*
  * Sets the game mode display string
  */
-void FGAPIENTRY glutGameModeString( const char* string )
+FGAPI void FGAPIENTRY glutGameModeString( const char* string )
 {
     int width = -1, height = -1, depth = -1, refresh = -1;
 
@@ -82,7 +82,7 @@ void FGAPIENTRY glutGameModeString( const char* string )
 /*
  * Enters the game mode
  */
-int FGAPIENTRY glutEnterGameMode( void )
+FGAPI int FGAPIENTRY glutEnterGameMode( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutEnterGameMode" );
 
@@ -113,7 +113,7 @@ int FGAPIENTRY glutEnterGameMode( void )
 /*
  * Leaves the game mode
  */
-void FGAPIENTRY glutLeaveGameMode( void )
+FGAPI void FGAPIENTRY glutLeaveGameMode( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutLeaveGameMode" );
 
@@ -130,7 +130,7 @@ void FGAPIENTRY glutLeaveGameMode( void )
 /*
  * Returns information concerning the freeglut game mode
  */
-int FGAPIENTRY glutGameModeGet( GLenum eWhat )
+FGAPI int FGAPIENTRY glutGameModeGet( GLenum eWhat )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGameModeGet" );
 
