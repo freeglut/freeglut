@@ -752,16 +752,19 @@ FGAPI void FGAPIENTRY glutForceJoystickFunc( void )
     fgJoystickPollWindow( fgStructure.CurrentWindow );
 #endif /* !defined(_WIN32_WCE) */
 }
+
 int  glutJoystickGetNumAxes( int ident )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetNumAxes" );
     return fgJoystick[ ident ]->num_axes;
 }
+
 int  glutJoystickGetNumButtons( int ident )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetNumButtons" );
     return fgJoystick[ ident ]->num_buttons;
 }
+
 int  glutJoystickNotWorking( int ident )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickNotWorking" );
@@ -773,6 +776,7 @@ float glutJoystickGetDeadBand( int ident, int axis )
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetDeadBand" );
     return fgJoystick[ ident ]->dead_band [ axis ];
 }
+
 void  glutJoystickSetDeadBand( int ident, int axis, float db )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickSetDeadBand" );
@@ -784,6 +788,7 @@ float glutJoystickGetSaturation( int ident, int axis )
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetSaturation" );
     return fgJoystick[ ident ]->saturate[ axis ];
 }
+
 void  glutJoystickSetSaturation( int ident, int axis, float st )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickSetSaturation" );
@@ -796,12 +801,14 @@ void glutJoystickSetMinRange( int ident, float *axes )
     memcpy( fgJoystick[ ident ]->min, axes,
             fgJoystick[ ident ]->num_axes * sizeof( float ) );
 }
+
 void glutJoystickSetMaxRange( int ident, float *axes )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickSetMaxRange" );
     memcpy( fgJoystick[ ident ]->max, axes,
             fgJoystick[ ident ]->num_axes * sizeof( float ) );
 }
+
 void glutJoystickSetCenter( int ident, float *axes )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickSetCenter" );
@@ -815,12 +822,14 @@ void glutJoystickGetMinRange( int ident, float *axes )
     memcpy( axes, fgJoystick[ ident ]->min,
             fgJoystick[ ident ]->num_axes * sizeof( float ) );
 }
+
 void glutJoystickGetMaxRange( int ident, float *axes )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetMaxRange" );
     memcpy( axes, fgJoystick[ ident ]->max,
             fgJoystick[ ident ]->num_axes * sizeof( float ) );
 }
+
 void glutJoystickGetCenter( int ident, float *axes )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetCenter" );
