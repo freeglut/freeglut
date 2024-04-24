@@ -122,7 +122,7 @@ SET(FREEGLUT_SRCS
     src/fg_window.c
 )
 # TODO: OpenGL ES requires a compatible version of these files:
-IF(NOT FREEGLUT_GLES)
+IF(NOT FREEGLUT_GLES AND NOT CMAKE_SYSTEM_NAME MATCHES "NintendoWii|NintendoGameCube")
     LIST(APPEND FREEGLUT_SRCS
         src/fg_font.c
         src/fg_menu.c
@@ -196,6 +196,27 @@ ELSEIF(ANDROID OR BLACKBERRY)
             src/blackberry/fg_window_blackberry.c
         )
     ENDIF()
+
+ELSEIF(CMAKE_SYSTEM_NAME MATCHES "NintendoWii|NintendoGameCube")
+
+    LIST(APPEND FREEGLUT_SRCS
+        src/ogc/fg_common_ogc.h
+        src/ogc/fg_cursor_ogc.c
+        src/ogc/fg_display_ogc.c
+        src/ogc/fg_ext_ogc.c
+        src/ogc/fg_gamemode_ogc.c
+        src/ogc/fg_init_ogc.c
+        src/ogc/fg_internal_ogc.h
+        src/ogc/fg_input_devices_ogc.c
+        src/ogc/fg_joystick_ogc.c
+        src/ogc/fg_main_ogc.c
+        src/ogc/fg_state_ogc.c
+        src/ogc/fg_structure_ogc.c
+        src/ogc/fg_window_ogc.c
+    )
+    SET(FREEGLUT_BUILD_SHARED_LIBS OFF)
+    # Only used in fg_window.c, to declare support for double buffering
+    ADD_DEFINITIONS(-DEGL_VERSION_1_0)
 
 ELSE()
     # UNIX (Wayland)

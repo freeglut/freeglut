@@ -64,6 +64,9 @@
 #   define  TARGET_HOST_POSIX_X11  1
 /* #   define  TARGET_HOST_MAC_OSX    1 */
 
+#elif defined(__wii__) || defined(__gamecube__)
+#   define TARGET_HOST_OGC  1
+
 #else
 #   error "Unrecognized target host!"
 
@@ -101,6 +104,10 @@
 
 #ifndef  TARGET_HOST_SOLARIS
 #   define  TARGET_HOST_SOLARIS        0
+#endif
+
+#ifndef  TARGET_HOST_OGC
+#   define  TARGET_HOST_OGC            0
 #endif
 
 /* -- FIXED CONFIGURATION LIMITS ------------------------------------------- */
@@ -209,6 +216,9 @@
 #endif
 #if TARGET_HOST_BLACKBERRY
 #include "blackberry/fg_internal_blackberry.h"
+#endif
+#if TARGET_HOST_OGC
+#include "ogc/fg_internal_ogc.h"
 #endif
 
 
