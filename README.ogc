@@ -1,0 +1,9 @@
+Freeglut on Wii/GameCube
+========================
+
+Build instructions
+------------------
+
+mkdir build
+cd build
+cmake -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/Wii.cmake" -DFREEGLUT_BUILD_DEMOS=OFF ..
