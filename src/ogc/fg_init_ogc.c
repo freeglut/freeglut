@@ -21,9 +21,30 @@
 
 #include "fg_common_ogc.h"
 
+#include <fat.h>
+#include <malloc.h>
+#include <opengx.h>
+
+#define FIFO_SIZE (256*1024)
+
 void fgPlatformInitialize(const char *displayName)
 {
-    fgWarning("%s() : not implemented", __func__);
+    VIDEO_Init();
+
+    void *fifoBuffer = MEM_K0_TO_K1(memalign(32, FIFO_SIZE));
+    memset(fifoBuffer, 0, FIFO_SIZE);
+
+    GX_Init(fifoBuffer, FIFO_SIZE);
+    fgDisplay.pDisplay.vmode = VIDEO_GetPreferredMode(NULL);
+    fgOgcDisplaySetupVideoMode();
+
+    ogx_initialize();
+
+    fatInitDefault();
+
+    fgState.Time = fgSystemTime();
+    fgState.FPSInterval = 2000;
+    fgState.Initialised = GL_TRUE;
 }
 
 void fgPlatformDeinitialiseInputDevices(void)

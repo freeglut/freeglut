@@ -23,7 +23,6 @@
 
 void fgPlatformSetWindow(SFG_Window *window)
 {
-    fgWarning("%s() : not implemented", __func__);
 }
 
 void fgPlatformOpenWindow(SFG_Window *window, const char *title,
@@ -31,7 +30,18 @@ void fgPlatformOpenWindow(SFG_Window *window, const char *title,
                           GLboolean sizeUse, int w, int h,
                           GLboolean gameMode, GLboolean isSubWindow)
 {
-    fgWarning("%s() : not implemented", __func__);
+    fgWarning("%s(): %d,%d - %dx%d", __func__, x, y, w, h);
+    /* We always ignore the requested size, we only support fullscreen windows
+     */
+    window->State.IsFullscreen = GL_TRUE;
+    window->State.Xpos = 0;
+    window->State.Ypos = 0;
+
+    window->State.WorkMask |= GLUT_INIT_WORK;
+    window->State.Visible = GL_TRUE;
+
+    /* This sets up the XFB for the chosen buffering scheme */
+    fgOgcDisplaySetupXfb();
 }
 
 void fgPlatformReshapeWindow(SFG_Window *window, int width, int height)

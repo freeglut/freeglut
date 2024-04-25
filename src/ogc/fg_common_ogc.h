@@ -25,4 +25,21 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
+#define MAX_GC_JOYSTICKS 4
+
+#ifdef __wii__
+#define MAX_WII_JOYSTICKS 4
+#else
+#define MAX_WII_JOYSTICKS 0
+#endif
+
+#define MAX_OGC_JOYSTICKS (MAX_GC_JOYSTICKS + MAX_WII_JOYSTICKS)
+
+extern void fghOnReshapeNotify(SFG_Window *window, int width, int height,
+                               GLboolean forceNotify);
+
+void fgOgcDisplaySetupVideoMode();
+void fgOgcDisplaySetupXfb();
+void fgOgcDisplayShowEFB();
+
 #endif /* FREEGLUT_COMMON_OGC_H */

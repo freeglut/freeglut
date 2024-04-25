@@ -21,8 +21,83 @@
 
 #include "fg_common_ogc.h"
 
+void fgOgcDisplaySetupXfb()
+{
+    GXRModeObj *vmode = fgDisplay.pDisplay.vmode;
+
+    if (fgDisplay.pDisplay.vmode_changed) {
+        /* The size of the XFB might be different, so reallocate it */
+        if (fgDisplay.pDisplay.xfb[0]) {
+            free(MEM_K1_TO_K0(fgDisplay.pDisplay.xfb[0]));
+            fgDisplay.pDisplay.xfb[0] = NULL;
+        }
+        if (fgDisplay.pDisplay.xfb[1]) {
+            free(MEM_K1_TO_K0(fgDisplay.pDisplay.xfb[1]));
+            fgDisplay.pDisplay.xfb[1] = NULL;
+        }
+    }
+
+    if (!fgDisplay.pDisplay.xfb[0]) {
+        fgDisplay.pDisplay.xfb[0] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(vmode));
+    }
+    if (fgState.DisplayMode & GLUT_DOUBLE && !fgDisplay.pDisplay.xfb[1]) {
+        fgDisplay.pDisplay.xfb[1] =
+            MEM_K0_TO_K1(SYS_AllocateFramebuffer(vmode));
+    }
+}
+
+void fgOgcDisplaySetupVideoMode()
+{
+    GXRModeObj *vmode = fgDisplay.pDisplay.vmode;
+
+    fgOgcDisplaySetupXfb();
+
+    VIDEO_Configure(vmode);
+    VIDEO_SetNextFramebuffer(fgDisplay.pDisplay.xfb[0]);
+    VIDEO_SetBlack(FALSE);
+    VIDEO_Flush();
+
+    VIDEO_WaitVSync();
+    if (vmode->viTVMode & VI_NON_INTERLACE) VIDEO_WaitVSync();
+
+    f32 yscale = GX_GetYScaleFactor(vmode->efbHeight, vmode->xfbHeight);
+    GX_SetDispCopyYScale(yscale);
+    GX_SetDispCopySrc(0, 0, vmode->fbWidth, vmode->efbHeight);
+    GX_SetDispCopyDst(vmode->fbWidth, vmode->xfbHeight);
+    GX_SetCopyFilter(vmode->aa, vmode->sample_pattern, GX_TRUE, vmode->vfilter);
+
+    fgDisplay.ScreenWidth = vmode->fbWidth;
+    fgDisplay.ScreenHeight = vmode->efbHeight;
+    fgDisplay.pDisplay.vmode_changed = 0;
+}
+
+void fgOgcDisplayShowEFB()
+{
+    void *xfb;
+    u8 mustClear, mustWait;
+
+    if (fgState.DisplayMode & GLUT_DOUBLE) {
+        mustClear = GX_TRUE;
+        mustWait = GX_TRUE;
+        xfb = fgDisplay.pDisplay.xfb[fgDisplay.pDisplay.fbIndex];
+        fgDisplay.pDisplay.fbIndex ^= 1;
+    } else {
+        mustClear = GX_FALSE;
+        mustWait = GX_FALSE;
+        xfb = fgDisplay.pDisplay.xfb[0];
+    }
+    GX_CopyDisp(xfb, mustClear);
+    GX_DrawDone();
+    GX_Flush();
+
+    VIDEO_SetNextFramebuffer(xfb);
+    VIDEO_Flush();
+    if (mustWait)
+        VIDEO_WaitVSync();
+}
+
 void fgPlatformGlutSwapBuffers(SFG_PlatformDisplay *pDisplayPtr,
                                SFG_Window *CurrentWindow)
 {
-    fgWarning("%s() : not implemented", __func__);
+    fgOgcDisplayShowEFB();
 }
