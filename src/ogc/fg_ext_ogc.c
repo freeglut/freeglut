@@ -23,13 +23,19 @@
 
 SFG_Proc fgPlatformGetProcAddress(const char *procName)
 {
-    fgWarning("%s() : not implemented", __func__);
+#define CHECK_NAME(x) if (strcmp(procName, #x) == 0) return (SFG_Proc)x
+    /* TODO: add functions here */
+#undef CHECK_NAME
+    fgWarning("%s() : not implemented (%s)", __func__, procName);
     return NULL;
 }
 
 GLUTproc fgPlatformGetGLUTProcAddress(const char *procName)
 {
-    fgWarning("%s() : not implemented", __func__);
+    if (strncmp(procName, "glut", 4) != 0)
+        return NULL;
+
+    fgWarning("%s() : not implemented (%s)", __func__, procName);
     return NULL;
 }
 

@@ -214,6 +214,7 @@ ELSEIF(CMAKE_SYSTEM_NAME MATCHES "NintendoWii|NintendoGameCube")
         src/ogc/fg_structure_ogc.c
         src/ogc/fg_window_ogc.c
     )
+    LIST(APPEND LIBS wiikeyboard fat)
     SET(FREEGLUT_BUILD_SHARED_LIBS OFF)
     # Only used in fg_window.c, to declare support for double buffering
     ADD_DEFINITIONS(-DEGL_VERSION_1_0)

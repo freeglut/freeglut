@@ -23,14 +23,22 @@
 #define FREEGLUT_INTERNAL_OGC_H
 
 /* -- PLATFORM-SPECIFIC INCLUDES ------------------------------------------- */
-/* TODO: add libogc and opengx */
+#include <ogc/gx.h>
+#include <ogc/gx_struct.h>
+#include <ogc/system.h>
+#include <ogc/video.h>
 
 /* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
 /* The structure used by display initialization in fg_init.c */
 typedef struct tagSFG_PlatformDisplay SFG_PlatformDisplay;
 struct tagSFG_PlatformDisplay
 {
-    bool unused;
+    /* The pointer(s) to the XFB(s). The second one can be NULL if double
+     * buffering is not used. */
+    void *xfb[2];
+    u8 fbIndex;
+    bool vmode_changed;
+    GXRModeObj *vmode;
 };
 
 /* The structure used by window creation in fg_window.c */
@@ -67,6 +75,7 @@ typedef uint32_t SFG_WindowColormapType;
 #define  FREEGLUT_MENU_PEN_HFORE_COLORS  {0.0f,  0.0f,  0.0f,  1.0f}
 #define  FREEGLUT_MENU_PEN_HBACK_COLORS  {1.0f,  1.0f,  1.0f,  1.0f}
 
-#define _JS_MAX_AXES  9
+#define _JS_MAX_AXES  4
+#define MAX_NUM_JOYSTICKS  8
 
 #endif /* FREEGLUT_INTERNAL_OGC_H */
