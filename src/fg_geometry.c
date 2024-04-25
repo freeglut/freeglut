@@ -404,7 +404,7 @@ static void fghDrawGeometryWire20(GLfloat *vertices, GLfloat *normals, GLsizei n
                                   GLushort *vertIdxs2, GLsizei numParts2, GLsizei numVertPerPart2,
                                   GLint attribute_v_coord, GLint attribute_v_normal)
 {
-#if defined(GL_VERSION_1_1) || defined(GL_VERSION_ES_CM_1_0)
+#if defined(GL_VERSION_2_0) || defined(GL_VERSION_ES_CM_1_0)
     GLuint vbo_coords = 0, vbo_normals = 0,
         ibo_elements = 0, ibo_elements2 = 0;
     GLsizei numVertIdxs = numParts * numVertPerPart;
@@ -506,7 +506,7 @@ static void fghDrawGeometryWire20(GLfloat *vertices, GLfloat *normals, GLsizei n
         fghDeleteBuffers(1, &ibo_elements);
     if (ibo_elements2 != 0)
         fghDeleteBuffers(1, &ibo_elements2);
-#endif	/* GL version at least 1.1 */
+#endif	/* GL version at least 2.0 */
 }
 
 
@@ -517,7 +517,7 @@ static void fghDrawGeometrySolid20(GLfloat *vertices, GLfloat *normals, GLfloat 
                                    GLushort *vertIdxs, GLsizei numParts, GLsizei numVertIdxsPerPart,
                                    GLint attribute_v_coord, GLint attribute_v_normal, GLint attribute_v_texture)
 {
-#if defined(GL_VERSION_1_1) || defined(GL_VERSION_ES_CM_1_0)
+#if defined(GL_VERSION_2_0) || defined(GL_VERSION_ES_CM_1_0)
     GLuint vbo_coords = 0, vbo_normals = 0, vbo_textcs = 0, ibo_elements = 0;
     GLsizei numVertIdxs = numParts * numVertIdxsPerPart;
     int i;
@@ -627,7 +627,7 @@ static void fghDrawGeometrySolid20(GLfloat *vertices, GLfloat *normals, GLfloat 
         fghDeleteBuffers(1, &vbo_textcs);
     if (ibo_elements != 0)
         fghDeleteBuffers(1, &ibo_elements);
-#endif	/* GL version at least 1.1 */
+#endif	/* GL version at least 2.0 */
 }
 
 
@@ -707,7 +707,7 @@ static void fghDrawNormalVisualization11(void)
 /* Version for OpenGL (ES) >= 2.0 */
 static void fghDrawNormalVisualization20(GLint attribute_v_coord)
 {
-#if defined(GL_VERSION_1_1) || defined(GL_VERSION_ES_CM_1_0)
+#if defined(GL_VERSION_2_0) || defined(GL_VERSION_ES_CM_1_0)
     GLuint vbo_coords = 0;
 
     if (attribute_v_coord != -1) {
@@ -742,7 +742,7 @@ static void fghDrawNormalVisualization20(GLint attribute_v_coord)
 
     /* Done, free memory */
     free(verticesForNormalVisualization);
-#endif	/* GL version at least 1.1 */
+#endif	/* GL version at least 2.0 */
 }
 
 /**
