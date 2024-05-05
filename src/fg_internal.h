@@ -912,6 +912,11 @@ struct tagSFG_StrokeFont
  */
 #define _JS_MAX_BUTTONS 32
 
+/* Platforms can override this in their internal include file */
+#ifndef MAX_NUM_JOYSTICKS
+#define MAX_NUM_JOYSTICKS 2
+#endif
+
 #if TARGET_HOST_MACINTOSH
 #    define _JS_MAX_AXES  9
 typedef struct tagSFG_PlatformJoystick SFG_PlatformJoystick;
