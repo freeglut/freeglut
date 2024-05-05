@@ -70,7 +70,6 @@ extern void fgPlatformJoystickClose ( int ident );
 /*
  * The static joystick structure pointer
  */
-#define MAX_NUM_JOYSTICKS  2
 SFG_Joystick *fgJoystick [ MAX_NUM_JOYSTICKS ];
 
 /*
