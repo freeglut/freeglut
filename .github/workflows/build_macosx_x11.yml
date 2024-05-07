@@ -18,7 +18,7 @@ jobs:
         brew install xquartz libx11 libxi libxrandr libxxf86vm pkg-config mesa
 
     - name: generate makefile
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DFREEGLUT_BUILD_DEMOS=OFF -DOPENGL_gl_LIBRARY=/opt/X11/lib/libGL.dylib .
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DFREEGLUT_BUILD_DEMOS=OFF -DOPENGL_gl_LIBRARY=/opt/homebrew/lib/libGL.dylib .
 
     - name: build freeglut
       run: make
