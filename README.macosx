@@ -17,14 +17,19 @@ Prerequisites:
   - If you don't already have a compiler toolchain installed, download the Xcode
     commandline tools from the apple store and install them first.
   - If you don't have XQuartz installed, get it from https://www.xquartz.org
+    Alternatively you can install it with homebrew:
+      `brew install xquartz`
   - Use homebrew to install cmake, and all the necessary libraries:
       `brew install cmake libx11 libxi libxrandr libxxf86vm pkg-config mesa`
 
 Build freeglut:
   - Create a build directory under the freeglut directory and change into it:
       `mkdir build && cd build`
-  - Run cmake to generate the makefile:
+  - Run cmake to generate the makefile. On **intel macs**, homebrew installs mesa in
+    the traditional /usr/local prefix, so use this command:
       `cmake -DFREEGLUT_BUILD_DEMOS=OFF -DOPENGL_gl_LIBRARY=/usr/local/lib/libGL.dylib ..`
+    On **ARM macs** homebrew installs under /opt/homebrew, so do this instead:
+      `cmake -DFREEGLUT_BUILD_DEMOS=OFF -DOPENGL_gl_LIBRARY=/opt/homebrew/lib/libGL.dylib ..`
   - Run `make` to build freeglut, and `make install` to install it.
 
 Usage
