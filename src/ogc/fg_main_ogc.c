@@ -151,6 +151,8 @@ static void updateMouse()
 {
     int oldX, oldY;
     WPADData *data = WPAD_Data(0);
+    if (!data->ir.valid) return;
+
     SFG_Window *window = fgStructure.CurrentWindow;
     if (!window) return;
 
