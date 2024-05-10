@@ -76,6 +76,8 @@ void fgOgcDisplayShowEFB()
     void *xfb;
     u8 mustClear, mustWait;
 
+    fgOgcCursorDraw();
+
     if (fgState.DisplayMode & GLUT_DOUBLE) {
         mustClear = GX_TRUE;
         mustWait = GX_TRUE;
