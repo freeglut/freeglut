@@ -29,7 +29,16 @@ int fgPlatformGlutDeviceGet(GLenum eWhat)
 
 int fgPlatformGlutGet(GLenum eWhat)
 {
-    fgWarning("%s() : not implemented", __func__);
+    switch (eWhat) {
+    case GLUT_WINDOW_WIDTH:
+        return fgStructure.CurrentWindow ?
+            fgStructure.CurrentWindow->State.Width : 0;
+    case GLUT_WINDOW_HEIGHT:
+        return fgStructure.CurrentWindow ?
+            fgStructure.CurrentWindow->State.Height : 0;
+    default:
+        fgWarning("%s() : not implemented for %d", __func__, eWhat);
+    }
     return -1;
 }
 
