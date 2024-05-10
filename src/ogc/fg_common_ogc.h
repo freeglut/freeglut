@@ -38,6 +38,8 @@
 extern void fghOnReshapeNotify(SFG_Window *window, int width, int height,
                                GLboolean forceNotify);
 
+void fgOgcCursorDraw();
+
 void fgOgcDisplaySetupVideoMode();
 void fgOgcDisplaySetupXfb();
 void fgOgcDisplayShowEFB();
