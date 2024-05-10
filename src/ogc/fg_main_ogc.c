@@ -123,7 +123,6 @@ static void updateJoysticks()
 #ifdef __wii__
     /* The WPAD data is also used for the mouse, so we read it even if
      * joysticks haven't been initialized */
-    WPAD_ScanPads();
     WPAD_ReadPending(WPAD_CHAN_ALL, NULL);
     if (fgState.JoysticksInitialised) {
         for (int i = 0; i < MAX_WII_JOYSTICKS; i++) {
