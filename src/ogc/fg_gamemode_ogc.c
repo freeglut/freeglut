@@ -39,7 +39,9 @@ GLvoid fgPlatformGetGameModeVMaxExtent(SFG_Window *window, int *x, int *y)
 GLboolean fgPlatformChangeDisplayMode(GLboolean haveToTest)
 {
     fgWarning("%s() : not implemented", __func__);
-    return GL_FALSE;
+    /* Until we implement this, let's return TRUE. Otherwise all fullscreen
+     * applications won't run at all. */
+    return GL_TRUE;
 }
 
 
