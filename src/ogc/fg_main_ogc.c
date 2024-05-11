@@ -137,15 +137,17 @@ static void updateJoysticks()
 /* We don't have a mouse-like device we can use on the GameCube. On the Wii,
  * we'll use the first WiiMote IR. */
 #ifdef __wii__
-#define MAX_WII_MOUSE_BUTTONS 2
 
 static const struct {
     int wii;
     int mouse;
-} s_mouse_button_map[MAX_WII_MOUSE_BUTTONS] = {
+} s_mouse_button_map[] = {
     { WPAD_BUTTON_B, GLUT_LEFT_BUTTON },
     { WPAD_BUTTON_A, GLUT_RIGHT_BUTTON },
+    { WPAD_BUTTON_PLUS, GLUT_MIDDLE_BUTTON },
 };
+#define MAX_WII_MOUSE_BUTTONS \
+    (sizeof(s_mouse_button_map) / sizeof(s_mouse_button_map[0]))
 
 static void updateMouse()
 {
