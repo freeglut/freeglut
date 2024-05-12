@@ -443,7 +443,7 @@ void fgProcessWork(SFG_Window *window)
 /*
  * Executes a single iteration in the freeglut processing loop.
  */
-void FGAPIENTRY glutMainLoopEvent( void )
+FGAPI void FGAPIENTRY glutMainLoopEvent( void )
 {
     /* Process input */
     fgPlatformProcessSingleEvent ();
@@ -470,7 +470,7 @@ void FGAPIENTRY glutMainLoopEvent( void )
  * Enters the freeglut processing loop.
  * Stays until the "ExecState" changes to "GLUT_EXEC_STATE_STOP".
  */
-void FGAPIENTRY glutMainLoop( void )
+FGAPI void FGAPIENTRY glutMainLoop( void )
 {
     int action;
 
@@ -531,7 +531,7 @@ void FGAPIENTRY glutMainLoop( void )
 /*
  * Leaves the freeglut processing loop.
  */
-void FGAPIENTRY glutLeaveMainLoop( void )
+FGAPI void FGAPIENTRY glutLeaveMainLoop( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutLeaveMainLoop" );
     fgState.ExecState = GLUT_EXEC_STATE_STOP ;

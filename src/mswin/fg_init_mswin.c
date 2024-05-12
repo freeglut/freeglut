@@ -47,7 +47,7 @@ void fgPlatformInitialize( const char* displayName )
 
     /* What we need to do is to initialize the fgDisplay global structure here. */
     fgDisplay.pDisplay.Instance = GetModuleHandle( NULL );
-    fgDisplay.pDisplay.DisplayName= displayName ? fghTstrFromStr(displayName) : 0 ;
+    fgDisplay.pDisplay.DisplayName= displayName ? strdup(displayName) : 0 ;
     atom = GetClassInfo( fgDisplay.pDisplay.Instance, _T("FREEGLUT"), &wc );
 
     if( atom == 0 )
@@ -169,8 +169,9 @@ void fgPlatformDestroyContext ( SFG_PlatformDisplay pDisplay, SFG_WindowContextT
 
 void (__cdecl *__glutExitFunc)( int return_value ) = NULL;
 
-void FGAPIENTRY __glutInitWithExit( int *pargc, char **argv, void (__cdecl *exit_function)(int) )
+FGAPI void FGAPIENTRY __glutInitWithExit( int *pargc, char **argv, void (__cdecl *exit_function)(int) )
 {
   __glutExitFunc = exit_function;
   glutInit(pargc, argv);
 }
+

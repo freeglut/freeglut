@@ -75,7 +75,11 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       NULL,                   /* MenuStateCallback */
                       NULL,                   /* MenuStatusCallback */
                       NULL,                   /* MenuStatusCallbackData */
+#ifdef __LCC__
+                      ((void *)0x0003),        /* LCC bug if use directly FREEGLUT_MENU_FONT : undefined reference to '_glutBitmap8By13' */
+#else
                       FREEGLUT_MENU_FONT,
+#endif
                       { -1, -1, GL_TRUE },    /* GameModeSize */
                       -1,                     /* GameModeDepth */
                       -1,                     /* GameModeRefresh */
@@ -333,7 +337,7 @@ void fgDeinitialize( void )
  * Perform initialization. This usually happens on the program startup
  * and restarting after glutMainLoop termination...
  */
-void FGAPIENTRY glutInit( int* pargc, char** argv )
+FGAPI void FGAPIENTRY glutInit( int* pargc, char** argv )
 {
     char* displayName = NULL;
     char* geometry = NULL;
@@ -391,7 +395,7 @@ void FGAPIENTRY glutInit( int* pargc, char** argv )
 /*
  * Undoes all the "glutInit" stuff
  */
-void FGAPIENTRY glutExit ( void )
+FGAPI void FGAPIENTRY glutExit ( void )
 {
   fgDeinitialize ();
 }
@@ -399,7 +403,7 @@ void FGAPIENTRY glutExit ( void )
 /*
  * Sets the default initial window position for new windows
  */
-void FGAPIENTRY glutInitWindowPosition( int x, int y )
+FGAPI void FGAPIENTRY glutInitWindowPosition( int x, int y )
 {
     fgState.Position.X = x;
     fgState.Position.Y = y;
@@ -413,7 +417,7 @@ void FGAPIENTRY glutInitWindowPosition( int x, int y )
 /*
  * Sets the default initial window size for new windows
  */
-void FGAPIENTRY glutInitWindowSize( int width, int height )
+FGAPI void FGAPIENTRY glutInitWindowSize( int width, int height )
 {
     fgState.Size.X = width;
     fgState.Size.Y = height;
@@ -427,7 +431,7 @@ void FGAPIENTRY glutInitWindowSize( int width, int height )
 /*
  * Sets the default display mode for all new windows
  */
-void FGAPIENTRY glutInitDisplayMode( unsigned int displayMode )
+FGAPI void FGAPIENTRY glutInitDisplayMode( unsigned int displayMode )
 {
     /* We will make use of this value when creating a new OpenGL context... */
     fgState.DisplayMode = displayMode;
@@ -448,7 +452,7 @@ static char* Tokens[] =
 };
 #define NUM_TOKENS             (sizeof(Tokens) / sizeof(*Tokens))
 
-void FGAPIENTRY glutInitDisplayString( const char* displayMode )
+FGAPI void FGAPIENTRY glutInitDisplayString( const char* displayMode )
 {
     int glut_state_flag = 0 ;
     /*
@@ -649,7 +653,7 @@ void FGAPIENTRY glutInitDisplayString( const char* displayMode )
 
 /* -- SETTING OPENGL 3.0 CONTEXT CREATION PARAMETERS ---------------------- */
 
-void FGAPIENTRY glutInitContextVersion( int majorVersion, int minorVersion )
+FGAPI void FGAPIENTRY glutInitContextVersion( int majorVersion, int minorVersion )
 {
     /* We will make use of these value when creating a new OpenGL context... */
     fgState.MajorVersion = majorVersion;
@@ -657,13 +661,13 @@ void FGAPIENTRY glutInitContextVersion( int majorVersion, int minorVersion )
 }
 
 
-void FGAPIENTRY glutInitContextFlags( int flags )
+FGAPI void FGAPIENTRY glutInitContextFlags( int flags )
 {
     /* We will make use of this value when creating a new OpenGL context... */
     fgState.ContextFlags = flags;
 }
 
-void FGAPIENTRY glutInitContextProfile( int profile )
+FGAPI void FGAPIENTRY glutInitContextProfile( int profile )
 {
     /* We will make use of this value when creating a new OpenGL context... */
     fgState.ContextProfile = profile;
@@ -674,7 +678,7 @@ void FGAPIENTRY glutInitContextProfile( int profile )
 /*
  * Sets the user error handler (note the use of va_list for the args to the fmt)
  */
-void FGAPIENTRY glutInitErrorFuncUcall( FGErrorUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutInitErrorFuncUcall( FGErrorUC callback, FGCBUserData userData )
 {
     /* This allows user programs to handle freeglut errors */
     fgState.ErrorFunc = callback;
@@ -687,7 +691,7 @@ static void fghInitErrorFuncCallback( const char *fmt, va_list ap, FGCBUserData 
     (*callback)( fmt, ap );
 }
 
-void FGAPIENTRY glutInitErrorFunc( FGError callback )
+FGAPI void FGAPIENTRY glutInitErrorFunc( FGError callback )
 {
     if (callback)
     {
@@ -703,7 +707,7 @@ void FGAPIENTRY glutInitErrorFunc( FGError callback )
 /*
  * Sets the user warning handler (note the use of va_list for the args to the fmt)
  */
-void FGAPIENTRY glutInitWarningFuncUcall( FGWarningUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutInitWarningFuncUcall( FGWarningUC callback, FGCBUserData userData )
 {
     /* This allows user programs to handle freeglut warnings */
     fgState.WarningFunc = callback;
@@ -716,7 +720,7 @@ static void fghInitWarningFuncCallback( const char *fmt, va_list ap, FGCBUserDat
     (*callback)( fmt, ap );
 }
 
-void FGAPIENTRY glutInitWarningFunc( FGWarning callback )
+FGAPI void FGAPIENTRY glutInitWarningFunc( FGWarning callback )
 {
     if (callback)
     {

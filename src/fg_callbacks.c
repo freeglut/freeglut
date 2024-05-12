@@ -35,7 +35,7 @@
  */
 
 /* Sets the global idle callback */
-void FGAPIENTRY glutIdleFuncUcall( FGCBIdleUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutIdleFuncUcall( FGCBIdleUC callback, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutIdleFuncUcall" );
     fgState.IdleCallback = callback;
@@ -45,7 +45,7 @@ void FGAPIENTRY glutIdleFuncUcall( FGCBIdleUC callback, FGCBUserData userData )
 IMPLEMENT_GLUT_CALLBACK_FUNC_ARG0(Idle)
 
 /* Creates a timer and sets its callback */
-void FGAPIENTRY glutTimerFuncUcall( unsigned int timeOut, FGCBTimerUC callback, int timerID, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutTimerFuncUcall( unsigned int timeOut, FGCBTimerUC callback, int timerID, FGCBUserData userData )
 {
     SFG_Timer *timer, *node;
 
@@ -79,7 +79,7 @@ void FGAPIENTRY glutTimerFuncUcall( unsigned int timeOut, FGCBTimerUC callback, 
 
 IMPLEMENT_CALLBACK_FUNC_CB_ARG1(Timer, Timer)
 
-void FGAPIENTRY glutTimerFunc( unsigned int timeOut, FGCBTimer callback, int timerID )
+FGAPI void FGAPIENTRY glutTimerFunc( unsigned int timeOut, FGCBTimer callback, int timerID )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutTimerFunc" );
     if( callback )
@@ -92,14 +92,14 @@ void FGAPIENTRY glutTimerFunc( unsigned int timeOut, FGCBTimer callback, int tim
 }
 
 /* Deprecated version of glutMenuStatusFunc callback setting method */
-void FGAPIENTRY glutMenuStateFunc( FGCBMenuState callback )
+FGAPI void FGAPIENTRY glutMenuStateFunc( FGCBMenuState callback )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutMenuStateFunc" );
     fgState.MenuStateCallback = callback;
 }
 
 /* Sets the global menu status callback for the current window */
-void FGAPIENTRY glutMenuStatusFuncUcall( FGCBMenuStatusUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutMenuStatusFuncUcall( FGCBMenuStatusUC callback, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutMenuStatusFuncUcall" );
     fgState.MenuStatusCallback = callback;
@@ -112,7 +112,7 @@ IMPLEMENT_GLUT_CALLBACK_FUNC_ARG3(MenuStatus)
  * Menu specific callbacks.
  */
 /* Callback upon menu destruction */
-void FGAPIENTRY glutMenuDestroyFuncUcall( FGCBDestroyUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutMenuDestroyFuncUcall( FGCBDestroyUC callback, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutMenuDestroyFuncUcall" );
     if( fgStructure.CurrentMenu )
@@ -154,7 +154,7 @@ IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_ARG1(AppStatus)
 /*
  * Sets the Display callback for the current window
  */
-void FGAPIENTRY glutDisplayFuncUcall( FGCBDisplayUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutDisplayFuncUcall( FGCBDisplayUC callback, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutDisplayFuncUcall" );
     if( !callback )
@@ -170,10 +170,10 @@ void fghDefaultReshape( int width, int height, FGCBUserData userData )
     glViewport( 0, 0, width, height );
 }
 
-void FGAPIENTRY glutReshapeFuncUcall( FGCBReshapeUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutReshapeFuncUcall( FGCBReshapeUC callback, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutReshapeFuncUcall" );
-    
+
     if( !callback )
     {
         callback = fghDefaultReshape;
@@ -216,7 +216,7 @@ static void fghVisibility( int status, FGCBUserData userData )
     INVOKE_WCB( *( fgStructure.CurrentWindow ), Visibility, ( vis_status ) );
 }
 
-void FGAPIENTRY glutVisibilityFuncUcall( FGCBVisibilityUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutVisibilityFuncUcall( FGCBVisibilityUC callback, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutVisibilityFuncUcall" );
 
@@ -238,7 +238,7 @@ IMPLEMENT_GLUT_CALLBACK_FUNC_ARG1(Visibility)
 /*
  * Sets the joystick callback and polling rate for the current window
  */
-void FGAPIENTRY glutJoystickFuncUcall( FGCBJoystickUC callback, int pollInterval, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutJoystickFuncUcall( FGCBJoystickUC callback, int pollInterval, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickFuncUcall" );
     fgInitialiseJoysticks ();
@@ -247,15 +247,15 @@ void FGAPIENTRY glutJoystickFuncUcall( FGCBJoystickUC callback, int pollInterval
            fgStructure.CurrentWindow->State.JoystickPollRate <= 0 ||        /* Joystick callback was disabled */
            !FETCH_WCB(*fgStructure.CurrentWindow,Joystick)
          ) &&
-         ( 
+         (
            callback && ( pollInterval > 0 )                                 /* but is now enabled */
          ) )
         ++fgState.NumActiveJoysticks;
-    else if ( ( 
+    else if ( (
                 fgStructure.CurrentWindow->State.JoystickPollRate > 0 &&    /* Joystick callback was enabled */
                 FETCH_WCB(*fgStructure.CurrentWindow,Joystick)
-              ) &&  
-              ( 
+              ) &&
+              (
                 !callback || ( pollInterval <= 0 )                          /* but is now disabled */
               ) )
         --fgState.NumActiveJoysticks;
@@ -277,7 +277,7 @@ static void fghJoystickFuncCallback( unsigned int buttons, int axis0, int axis1,
     (*callback)( buttons, axis0, axis1, axis2 );
 }
 
-void FGAPIENTRY glutJoystickFunc( FGCBJoystick callback, int pollInterval )
+FGAPI void FGAPIENTRY glutJoystickFunc( FGCBJoystick callback, int pollInterval )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickFunc" );
     if( callback )
@@ -292,7 +292,7 @@ void FGAPIENTRY glutJoystickFunc( FGCBJoystick callback, int pollInterval )
 /*
  * Sets the spaceball motion callback for the current window
  */
-void FGAPIENTRY glutSpaceballMotionFuncUcall( FGCBSpaceMotionUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutSpaceballMotionFuncUcall( FGCBSpaceMotionUC callback, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSpaceballMotionFuncUcall" );
     fgInitialiseSpaceball();
@@ -305,7 +305,7 @@ IMPLEMENT_GLUT_CALLBACK_FUNC_ARG3_2NAME(SpaceballMotion, SpaceMotion)
 /*
  * Sets the spaceball rotate callback for the current window
  */
-void FGAPIENTRY glutSpaceballRotateFuncUcall( FGCBSpaceRotationUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutSpaceballRotateFuncUcall( FGCBSpaceRotationUC callback, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSpaceballRotateFuncUcall" );
     fgInitialiseSpaceball();
@@ -318,7 +318,7 @@ IMPLEMENT_GLUT_CALLBACK_FUNC_ARG3_2NAME(SpaceballRotate, SpaceRotation)
 /*
  * Sets the spaceball button callback for the current window
  */
-void FGAPIENTRY glutSpaceballButtonFuncUcall( FGCBSpaceButtonUC callback, FGCBUserData userData )
+FGAPI void FGAPIENTRY glutSpaceballButtonFuncUcall( FGCBSpaceButtonUC callback, FGCBUserData userData )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSpaceballButtonFuncUcall" );
     fgInitialiseSpaceball();

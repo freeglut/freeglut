@@ -33,9 +33,13 @@
 
 #include <GL/freeglut.h>
 #include "fg_internal.h"
-#ifdef HAVE_SYS_PARAM_H
+//     Modified at 2024/03/10 - used generator "nmake Makefiles", but command "nmake" in build directory generate an arror :     //
+// 		fg_joystick.c(37): fatal error C1083: Impossible d'ouvrir le fichier include : 'sys/param.h' : No such file or directory. Idem with BCC32	//
+//		One solution finded : add test on presence of Visual Studio or Borland C during generation. Not beautiful response, but it work perfectly.  //
+#if defined(HAVE_SYS_PARAM_H) && !defined(_MSC_VER) && !defined(__BORLANDC__)
 #    include <sys/param.h>
 #endif
+
 
 #define JS_TRUE  1
 #define JS_FALSE 0
@@ -738,7 +742,7 @@ int fgJoystickDetect( void )
 /*
  * Forces the joystick callback to be executed
  */
-void FGAPIENTRY glutForceJoystickFunc( void )
+FGAPI void FGAPIENTRY glutForceJoystickFunc( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutForceJoystickFunc" );
 #if !defined(_WIN32_WCE)
@@ -747,16 +751,19 @@ void FGAPIENTRY glutForceJoystickFunc( void )
     fgJoystickPollWindow( fgStructure.CurrentWindow );
 #endif /* !defined(_WIN32_WCE) */
 }
+
 int  glutJoystickGetNumAxes( int ident )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetNumAxes" );
     return fgJoystick[ ident ]->num_axes;
 }
+
 int  glutJoystickGetNumButtons( int ident )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetNumButtons" );
     return fgJoystick[ ident ]->num_buttons;
 }
+
 int  glutJoystickNotWorking( int ident )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickNotWorking" );
@@ -768,6 +775,7 @@ float glutJoystickGetDeadBand( int ident, int axis )
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetDeadBand" );
     return fgJoystick[ ident ]->dead_band [ axis ];
 }
+
 void  glutJoystickSetDeadBand( int ident, int axis, float db )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickSetDeadBand" );
@@ -779,6 +787,7 @@ float glutJoystickGetSaturation( int ident, int axis )
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetSaturation" );
     return fgJoystick[ ident ]->saturate[ axis ];
 }
+
 void  glutJoystickSetSaturation( int ident, int axis, float st )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickSetSaturation" );
@@ -791,12 +800,14 @@ void glutJoystickSetMinRange( int ident, float *axes )
     memcpy( fgJoystick[ ident ]->min, axes,
             fgJoystick[ ident ]->num_axes * sizeof( float ) );
 }
+
 void glutJoystickSetMaxRange( int ident, float *axes )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickSetMaxRange" );
     memcpy( fgJoystick[ ident ]->max, axes,
             fgJoystick[ ident ]->num_axes * sizeof( float ) );
 }
+
 void glutJoystickSetCenter( int ident, float *axes )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickSetCenter" );
@@ -810,12 +821,14 @@ void glutJoystickGetMinRange( int ident, float *axes )
     memcpy( axes, fgJoystick[ ident ]->min,
             fgJoystick[ ident ]->num_axes * sizeof( float ) );
 }
+
 void glutJoystickGetMaxRange( int ident, float *axes )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetMaxRange" );
     memcpy( axes, fgJoystick[ ident ]->max,
             fgJoystick[ ident ]->num_axes * sizeof( float ) );
 }
+
 void glutJoystickGetCenter( int ident, float *axes )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutJoystickGetCenter" );

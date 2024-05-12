@@ -100,13 +100,13 @@ void fgPlatformCheckMenuDeactivate(HWND newFocusWnd)
 
 /* -- PLATFORM-SPECIFIC INTERFACE FUNCTION -------------------------------------------------- */
 
-int FGAPIENTRY __glutCreateMenuWithExit( void(* callback)( int ), void (__cdecl *exit_function)(int) )
+FGAPI int FGAPIENTRY __glutCreateMenuWithExit( void(* callback)( int ), void (__cdecl *exit_function)(int) )
 {
   __glutExitFunc = exit_function;
   return glutCreateMenu( callback );
 }
 
-int FGAPIENTRY __glutCreateMenuUcallWithExit(void(*callback)(int, void*), void(__cdecl *exit_function)(int), void* user_data)
+FGAPI int FGAPIENTRY __glutCreateMenuUcallWithExit(void(*callback)(int, void*), void(__cdecl *exit_function)(int), void* user_data)
 {
     __glutExitFunc = exit_function;
     return glutCreateMenuUcall(callback, user_data);

@@ -34,12 +34,12 @@
 
 /* -- INTERFACE FUNCTIONS -------------------------------------------------- */
 
-void FGAPIENTRY glutEstablishOverlay( void )             { /* Not implemented */ }
-void FGAPIENTRY glutRemoveOverlay( void )                { /* Not implemented */ }
-void FGAPIENTRY glutUseLayer( GLenum layer )             { /* Not implemented */ }
-void FGAPIENTRY glutPostOverlayRedisplay( void )         { /* Not implemented */ }
-void FGAPIENTRY glutPostWindowOverlayRedisplay( int ID ) { /* Not implemented */ }
-void FGAPIENTRY glutShowOverlay( void )                  { /* Not implemented */ }
-void FGAPIENTRY glutHideOverlay( void )                  { /* Not implemented */ }
+FGAPI void FGAPIENTRY glutEstablishOverlay( void )             { /* Not implemented */ }
+FGAPI void FGAPIENTRY glutRemoveOverlay( void )                { /* Not implemented */ }
+FGAPI void FGAPIENTRY glutUseLayer( GLenum layer )             { /* Not implemented */ }
+FGAPI void FGAPIENTRY glutPostOverlayRedisplay( void )         { /* Not implemented */ }
+FGAPI void FGAPIENTRY glutPostWindowOverlayRedisplay( int ID ) { /* Not implemented */ }
+FGAPI void FGAPIENTRY glutShowOverlay( void )                  { /* Not implemented */ }
+FGAPI void FGAPIENTRY glutHideOverlay( void )                  { /* Not implemented */ }
 
 /*** END OF FILE ***/

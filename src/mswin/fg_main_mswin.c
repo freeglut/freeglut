@@ -27,6 +27,11 @@
 
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
+#include "fg_internal_mswin.h"
+//      Modified at 2024/03/19  -  error using Digital Mars Compiler, because "initial" winuser.h is insuffisant
+//      I must added definitions and functions used by Freeglut directly in this include file.
+//      And force #include in this file. Don't test __DMC__ here, because "winuser.h" is present with all compilers.
+#include <winuser.h>
 
 extern void fghRedrawWindow ( SFG_Window *window );
 extern void fghRedrawWindowAndChildren ( SFG_Window *window );
@@ -44,8 +49,8 @@ extern void fgPlatformCheckMenuDeactivate(HWND newFocusWnd);
 #ifdef WM_TOUCH
 typedef BOOL (WINAPI *pGetTouchInputInfo)(HTOUCHINPUT,UINT,PTOUCHINPUT,int);
 typedef BOOL (WINAPI *pCloseTouchInputHandle)(HTOUCHINPUT);
-static pGetTouchInputInfo fghGetTouchInputInfo = (pGetTouchInputInfo)((size_t)0xDEADBEEF);
-static pCloseTouchInputHandle fghCloseTouchInputHandle = (pCloseTouchInputHandle)((size_t)0xDEADBEEF);
+static pGetTouchInputInfo fghGetTouchInputInfo = (pGetTouchInputInfo)0xDEADBEEF;
+static pCloseTouchInputHandle fghCloseTouchInputHandle = (pCloseTouchInputHandle)0xDEADBEEF;
 #endif
 
 #ifdef _WIN32_WCE
@@ -1487,7 +1492,7 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 #endif /* WINVER >= 0x0400 */
 
             default:
-#if _DEBUG
+#if defined(_DEBUG)
                 fgWarning( "Unknown wParam type 0x%x", wParam );
 #endif
                 break;
@@ -1507,9 +1512,9 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         unsigned int i = 0;
         TOUCHINPUT* ti = (TOUCHINPUT*)malloc( sizeof(TOUCHINPUT)*numInputs);
 
-        if (fghGetTouchInputInfo == (pGetTouchInputInfo)((size_t)0xDEADBEEF)) {
-            fghGetTouchInputInfo = (pGetTouchInputInfo)GetProcAddress(GetModuleHandleA("user32"),"GetTouchInputInfo");
-            fghCloseTouchInputHandle = (pCloseTouchInputHandle)GetProcAddress(GetModuleHandleA("user32"),"CloseTouchInputHandle");
+        if (fghGetTouchInputInfo == (pGetTouchInputInfo)0xDEADBEEF) {
+            fghGetTouchInputInfo = (pGetTouchInputInfo)GetProcAddress(GetModuleHandle("user32"),"GetTouchInputInfo");
+            fghCloseTouchInputHandle = (pCloseTouchInputHandle)GetProcAddress(GetModuleHandle("user32"),"CloseTouchInputHandle");
         }
 
         if (!fghGetTouchInputInfo) {

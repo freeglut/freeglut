@@ -1,3 +1,6 @@
+#ifndef HEADER_FD8F5E91BFF0673D
+#define HEADER_FD8F5E91BFF0673D
+
 /*
  * fg_callback_macros.h
  *
@@ -242,13 +245,13 @@ static void fgh##a##FuncCallback( int arg1val, int arg2val, int arg3val, int arg
  * And almost every time the callback setter function can be implemented with these:
  */
 #define IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT_UCALL(a,b)      \
-void FGAPIENTRY glut##a##FuncUcall( FGCB##b##UC callback, FGCBUserData userData ) \
+FGAPI void FGAPIENTRY glut##a##FuncUcall( FGCB##b##UC callback, FGCBUserData userData ) \
 {                                                                         \
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glut"#a"FuncUcall" );             \
     SET_CURRENT_WINDOW_CALLBACK( b );                                     \
 }
 #define IMPLEMENT_CALLBACK_FUNC_2NAME_GLUT_BASE(a,b)                      \
-void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
+FGAPI void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
 {                                                                         \
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glut"#a"Func" );                  \
     if( callback )                                                        \
@@ -334,3 +337,5 @@ void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
 #endif /* FREEGLUT_CALLBACK_MACROS_H */
 
 /*** END OF FILE ***/
+#endif // header guard 
+

@@ -11,7 +11,7 @@
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
-#if( !_WIN32 || _WIN32_WINNT >= 0x0501)
+#if !defined(_WIN32) || (_WIN32_WINNT >= 0x0501)
 
 /* -- PRIVATE FUNCTIONS --------------------------------------------------- */
 

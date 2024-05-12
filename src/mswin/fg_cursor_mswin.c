@@ -27,7 +27,11 @@
 
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
-
+#if __CYGWIN__
+#define _WIN32
+#include <windows.h>
+#include <winuser.h>
+#endif
 
 
 void fgPlatformSetCursor ( SFG_Window *window, int cursorID )

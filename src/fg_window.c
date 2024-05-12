@@ -177,7 +177,7 @@ void fgCloseWindow( SFG_Window* window )
 /*
  * Creates a new top-level freeglut window
  */
-int FGAPIENTRY glutCreateWindow( const char* title )
+FGAPI int FGAPIENTRY glutCreateWindow( const char* title )
 {
     /* XXX GLUT does not exit; it simply calls "glutInit" quietly if the
      * XXX application has not already done so.  The "freeglut" community
@@ -187,7 +187,7 @@ int FGAPIENTRY glutCreateWindow( const char* title )
      */
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateWindow" );
 
-    return fgCreateWindow( NULL, title, 
+    return fgCreateWindow( NULL, title,
                            fgState.Position.Use, fgState.Position.X, fgState.Position.Y,
                            fgState.Size.Use, fgState.Size.X, fgState.Size.Y,
                            GL_FALSE, GL_FALSE )->ID;
@@ -196,7 +196,7 @@ int FGAPIENTRY glutCreateWindow( const char* title )
 /*
  * This function creates a sub window.
  */
-int FGAPIENTRY glutCreateSubWindow( int parentID, int x, int y, int w, int h )
+FGAPI int FGAPIENTRY glutCreateSubWindow( int parentID, int x, int y, int w, int h )
 {
     int ret = 0;
     SFG_Window* window = NULL;
@@ -246,9 +246,9 @@ int FGAPIENTRY glutCreateSubWindow( int parentID, int x, int y, int w, int h )
         }
     }
 
-    window = fgCreateWindow( parent, "", 
-                             GL_TRUE, x, y, 
-                             GL_TRUE, w, h, 
+    window = fgCreateWindow( parent, "",
+                             GL_TRUE, x, y,
+                             GL_TRUE, w, h,
                              GL_FALSE, GL_FALSE );
     ret = window->ID;
 
@@ -258,7 +258,7 @@ int FGAPIENTRY glutCreateSubWindow( int parentID, int x, int y, int w, int h )
 /*
  * Destroys a window and all of its subwindows
  */
-void FGAPIENTRY glutDestroyWindow( int windowID )
+FGAPI void FGAPIENTRY glutDestroyWindow( int windowID )
 {
     SFG_Window* window;
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutDestroyWindow" );
@@ -274,7 +274,7 @@ void FGAPIENTRY glutDestroyWindow( int windowID )
 /*
  * This function selects the specified window as the current window
  */
-void FGAPIENTRY glutSetWindow( int ID )
+FGAPI void FGAPIENTRY glutSetWindow( int ID )
 {
     SFG_Window* window = NULL;
 
@@ -296,7 +296,7 @@ void FGAPIENTRY glutSetWindow( int ID )
 /*
  * This function returns the ID number of the current window, 0 if none exists
  */
-int FGAPIENTRY glutGetWindow( void )
+FGAPI int FGAPIENTRY glutGetWindow( void )
 {
     SFG_Window *win = fgStructure.CurrentWindow;
     /*
@@ -315,7 +315,7 @@ int FGAPIENTRY glutGetWindow( void )
 /*
  * This function makes the current window visible
  */
-void FGAPIENTRY glutShowWindow( void )
+FGAPI void FGAPIENTRY glutShowWindow( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutShowWindow" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutShowWindow" );
@@ -329,7 +329,7 @@ void FGAPIENTRY glutShowWindow( void )
 /*
  * This function hides the current window
  */
-void FGAPIENTRY glutHideWindow( void )
+FGAPI void FGAPIENTRY glutHideWindow( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutHideWindow" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutHideWindow" );
@@ -343,7 +343,7 @@ void FGAPIENTRY glutHideWindow( void )
 /*
  * Iconify the current window (top-level windows only)
  */
-void FGAPIENTRY glutIconifyWindow( void )
+FGAPI void FGAPIENTRY glutIconifyWindow( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutIconifyWindow" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutIconifyWindow" );
@@ -357,7 +357,7 @@ void FGAPIENTRY glutIconifyWindow( void )
 /*
  * Set the current window's title
  */
-void FGAPIENTRY glutSetWindowTitle( const char* title )
+FGAPI void FGAPIENTRY glutSetWindowTitle( const char* title )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetWindowTitle" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutSetWindowTitle" );
@@ -370,7 +370,7 @@ void FGAPIENTRY glutSetWindowTitle( const char* title )
 /*
  * Set the current window's iconified title
  */
-void FGAPIENTRY glutSetIconTitle( const char* title )
+FGAPI void FGAPIENTRY glutSetIconTitle( const char* title )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetIconTitle" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutSetIconTitle" );
@@ -384,7 +384,7 @@ void FGAPIENTRY glutSetIconTitle( const char* title )
 /*
  * Change the current window's size
  */
-void FGAPIENTRY glutReshapeWindow( int width, int height )
+FGAPI void FGAPIENTRY glutReshapeWindow( int width, int height )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutReshapeWindow" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutReshapeWindow" );
@@ -403,7 +403,7 @@ void FGAPIENTRY glutReshapeWindow( int width, int height )
 /*
  * Change the current window's position
  */
-void FGAPIENTRY glutPositionWindow( int x, int y )
+FGAPI void FGAPIENTRY glutPositionWindow( int x, int y )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutPositionWindow" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutPositionWindow" );
@@ -422,7 +422,7 @@ void FGAPIENTRY glutPositionWindow( int x, int y )
 /*
  * Lowers the current window (by Z order change)
  */
-void FGAPIENTRY glutPushWindow( void )
+FGAPI void FGAPIENTRY glutPushWindow( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutPushWindow" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutPushWindow" );
@@ -434,7 +434,7 @@ void FGAPIENTRY glutPushWindow( void )
 /*
  * Raises the current window (by Z order change)
  */
-void FGAPIENTRY glutPopWindow( void )
+FGAPI void FGAPIENTRY glutPopWindow( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutPopWindow" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutPopWindow" );
@@ -446,7 +446,7 @@ void FGAPIENTRY glutPopWindow( void )
 /*
  * Resize the current window so that it fits the whole screen
  */
-void FGAPIENTRY glutFullScreen( void )
+FGAPI void FGAPIENTRY glutFullScreen( void )
 {
     SFG_Window *win;
 
@@ -479,7 +479,7 @@ void FGAPIENTRY glutFullScreen( void )
 /*
  * If we are fullscreen, resize the current window back to its original size
  */
-void FGAPIENTRY glutLeaveFullScreen( void )
+FGAPI void FGAPIENTRY glutLeaveFullScreen( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutFullScreen" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutFullScreen" );
@@ -491,7 +491,7 @@ void FGAPIENTRY glutLeaveFullScreen( void )
 /*
  * Toggle the window's full screen state.
  */
-void FGAPIENTRY glutFullScreenToggle( void )
+FGAPI void FGAPIENTRY glutFullScreenToggle( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutFullScreenToggle" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutFullScreenToggle" );
@@ -502,14 +502,14 @@ void FGAPIENTRY glutFullScreenToggle( void )
 /*
  * A.Donev: Set and retrieve the window's user data
  */
-void* FGAPIENTRY glutGetWindowData( void )
+FGAPI void* FGAPIENTRY glutGetWindowData( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGetWindowData" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutGetWindowData" );
     return fgStructure.CurrentWindow->UserData;
 }
 
-void FGAPIENTRY glutSetWindowData(void* data)
+FGAPI void FGAPIENTRY glutSetWindowData(void* data)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetWindowData" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutSetWindowData" );

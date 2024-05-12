@@ -780,7 +780,7 @@ void fghCalculateMenuBoxSize( void )
 /*
  * Creates a new menu object, adding it to the freeglut structure
  */
-int FGAPIENTRY glutCreateMenuUcall( FGCBMenuUC callback, FGCBUserData userData )
+FGAPI int FGAPIENTRY glutCreateMenuUcall( FGCBMenuUC callback, FGCBUserData userData )
 {
     /* The menu object creation code resides in fg_structure.c */
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenuUcall" );
@@ -799,7 +799,7 @@ static void fghCreateMenuCallback( int menu, FGCBUserData userData )
     (*callback)( menu );
 }
 
-int FGAPIENTRY glutCreateMenu( FGCBMenu callback )
+FGAPI int FGAPIENTRY glutCreateMenu( FGCBMenu callback )
 {
     FGCBMenu* reference;
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateMenu" );
@@ -814,7 +814,7 @@ int FGAPIENTRY glutCreateMenu( FGCBMenu callback )
 /*
  * Destroys a menu object, removing all references to it
  */
-void FGAPIENTRY glutDestroyMenu( int menuID )
+FGAPI void FGAPIENTRY glutDestroyMenu( int menuID )
 {
     SFG_Menu* menu;
 
@@ -832,7 +832,7 @@ void FGAPIENTRY glutDestroyMenu( int menuID )
 /*
  * Returns the ID number of the currently active menu
  */
-int FGAPIENTRY glutGetMenu( void )
+FGAPI int FGAPIENTRY glutGetMenu( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGetMenu" );
 
@@ -845,7 +845,7 @@ int FGAPIENTRY glutGetMenu( void )
 /*
  * Sets the current menu given its menu ID
  */
-void FGAPIENTRY glutSetMenu( int menuID )
+FGAPI void FGAPIENTRY glutSetMenu( int menuID )
 {
     SFG_Menu* menu;
 
@@ -860,16 +860,16 @@ void FGAPIENTRY glutSetMenu( int menuID )
 /*
  * Adds a menu entry to the bottom of the current menu
  */
-void FGAPIENTRY glutAddMenuEntry( const char* label, int value )
+FGAPI void FGAPIENTRY glutAddMenuEntry( const char* label, int value )
 {
     SFG_MenuEntry* menuEntry;
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddMenuEntry" );
+    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
 
     freeglut_return_if_fail( fgStructure.CurrentMenu );
     if (fgState.ActiveMenus)
         fgError("Menu manipulation not allowed while menus in use.");
 
-    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
     menuEntry->Text = strdup( label );
     menuEntry->ID   = value;
 
@@ -882,12 +882,13 @@ void FGAPIENTRY glutAddMenuEntry( const char* label, int value )
 /*
  * Add a sub menu to the bottom of the current menu
  */
-void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
+FGAPI void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
 {
     SFG_MenuEntry *menuEntry;
     SFG_Menu *subMenu;
 
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddSubMenu" );
+    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
     subMenu = fgMenuByID( subMenuID );
 
     freeglut_return_if_fail( fgStructure.CurrentMenu );
@@ -896,7 +897,6 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
 
     freeglut_return_if_fail( subMenu );
 
-    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
     menuEntry->Text    = strdup( label );
     menuEntry->SubMenu = subMenu;
     menuEntry->ID      = -1;
@@ -908,7 +908,7 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
 /*
  * Changes the current menu's font
  */
-void FGAPIENTRY glutSetMenuFont( int menuID, void* fontID )
+FGAPI void FGAPIENTRY glutSetMenuFont( int menuID, void* fontID )
 {
     SFG_Font* font;
     SFG_Menu* menu;
@@ -933,7 +933,7 @@ void FGAPIENTRY glutSetMenuFont( int menuID, void* fontID )
 /*
  * Changes the specified menu item in the current menu into a menu entry
  */
-void FGAPIENTRY glutChangeToMenuEntry( int item, const char* label, int value )
+FGAPI void FGAPIENTRY glutChangeToMenuEntry( int item, const char* label, int value )
 {
     SFG_MenuEntry* menuEntry = NULL;
 
@@ -961,7 +961,7 @@ void FGAPIENTRY glutChangeToMenuEntry( int item, const char* label, int value )
 /*
  * Changes the specified menu item in the current menu into a sub-menu trigger.
  */
-void FGAPIENTRY glutChangeToSubMenu( int item, const char* label,
+FGAPI void FGAPIENTRY glutChangeToSubMenu( int item, const char* label,
                                      int subMenuID )
 {
     SFG_Menu*      subMenu;
@@ -996,7 +996,7 @@ void FGAPIENTRY glutChangeToSubMenu( int item, const char* label,
 /*
  * Removes the specified menu item from the current menu
  */
-void FGAPIENTRY glutRemoveMenuItem( int item )
+FGAPI void FGAPIENTRY glutRemoveMenuItem( int item )
 {
     SFG_MenuEntry* menuEntry;
 
@@ -1022,7 +1022,7 @@ void FGAPIENTRY glutRemoveMenuItem( int item )
 /*
  * Attaches a menu to the current window
  */
-void FGAPIENTRY glutAttachMenu( int button )
+FGAPI void FGAPIENTRY glutAttachMenu( int button )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAttachMenu" );
 
@@ -1041,7 +1041,7 @@ void FGAPIENTRY glutAttachMenu( int button )
 /*
  * Detaches a menu from the current window
  */
-void FGAPIENTRY glutDetachMenu( int button )
+FGAPI void FGAPIENTRY glutDetachMenu( int button )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutDetachMenu" );
 
@@ -1060,13 +1060,13 @@ void FGAPIENTRY glutDetachMenu( int button )
 /*
  * A.Donev: Set and retrieve the menu's user data
  */
-void* FGAPIENTRY glutGetMenuData( void )
+FGAPI void* FGAPIENTRY glutGetMenuData( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGetMenuData" );
     return fgStructure.CurrentMenu->UserData;
 }
 
-void FGAPIENTRY glutSetMenuData(void* data)
+FGAPI void FGAPIENTRY glutSetMenuData(void* data)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetMenuData" );
     fgStructure.CurrentMenu->UserData=data;

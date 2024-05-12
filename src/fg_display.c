@@ -38,7 +38,7 @@ extern void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Win
 /*
  * Marks the current window to have the redisplay performed when possible...
  */
-void FGAPIENTRY glutPostRedisplay( void )
+FGAPI void FGAPIENTRY glutPostRedisplay( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutPostRedisplay" );
     if ( ! fgStructure.CurrentWindow )
@@ -53,7 +53,7 @@ void FGAPIENTRY glutPostRedisplay( void )
 /*
  * Swaps the buffers for the current window (if any)
  */
-void FGAPIENTRY glutSwapBuffers( void )
+FGAPI void FGAPIENTRY glutSwapBuffers( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSwapBuffers" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutSwapBuffers" );
@@ -91,7 +91,7 @@ void FGAPIENTRY glutSwapBuffers( void )
 /*
  * Mark appropriate window to be displayed
  */
-void FGAPIENTRY glutPostWindowRedisplay( int windowID )
+FGAPI void FGAPIENTRY glutPostWindowRedisplay( int windowID )
 {
     SFG_Window* window;
 

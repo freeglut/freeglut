@@ -42,7 +42,7 @@ void fgPlatformCopyColormap(int win);
  *
  * XXX Wouldn't this be simpler and clearer if we used strtok()?
  */
-int FGAPIENTRY glutExtensionSupported( const char* extension )
+FGAPI int FGAPIENTRY glutExtensionSupported( const char* extension )
 {
   const char *extensions, *start;
   const size_t len = strlen( extension );
@@ -122,7 +122,7 @@ static const char* fghErrorString( GLenum error )
 /*
  * This function reports all the OpenGL errors that happened till now
  */
-void FGAPIENTRY glutReportErrors( void )
+FGAPI void FGAPIENTRY glutReportErrors( void )
 {
     GLenum error;
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutReportErrors" );
@@ -133,7 +133,7 @@ void FGAPIENTRY glutReportErrors( void )
 /*
  * Control the auto-repeat of keystrokes to the current window
  */
-void FGAPIENTRY glutIgnoreKeyRepeat( int ignore )
+FGAPI void FGAPIENTRY glutIgnoreKeyRepeat( int ignore )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutIgnoreKeyRepeat" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutIgnoreKeyRepeat" );
@@ -149,7 +149,7 @@ void FGAPIENTRY glutIgnoreKeyRepeat( int ignore )
  *    GLUT_KEY_REPEAT_ON
  *    GLUT_KEY_REPEAT_DEFAULT
  */
-void FGAPIENTRY glutSetKeyRepeat( int repeatMode )
+FGAPI void FGAPIENTRY glutSetKeyRepeat( int repeatMode )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetKeyRepeat" );
 
@@ -173,7 +173,7 @@ void FGAPIENTRY glutSetKeyRepeat( int repeatMode )
 /*
  *
  */
-void FGAPIENTRY glutSetColor(int idx, GLfloat r, GLfloat g, GLfloat b)
+FGAPI void FGAPIENTRY glutSetColor(int idx, GLfloat r, GLfloat g, GLfloat b)
 {
 	FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetColor" );
 	fgPlatformSetColor(idx, r, g, b);
@@ -182,7 +182,7 @@ void FGAPIENTRY glutSetColor(int idx, GLfloat r, GLfloat g, GLfloat b)
 /*
  *
  */
-GLfloat FGAPIENTRY glutGetColor(int idx, int component)
+FGAPI GLfloat FGAPIENTRY glutGetColor(int idx, int component)
 {
 	FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGetColor" );
 	return fgPlatformGetColor(idx, component);
@@ -191,7 +191,7 @@ GLfloat FGAPIENTRY glutGetColor(int idx, int component)
 /*
  *
  */
-void FGAPIENTRY glutCopyColormap(int window)
+FGAPI void FGAPIENTRY glutCopyColormap(int window)
 {
 	FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCopyColormap" );
 	fgPlatformCopyColormap(window);

@@ -57,7 +57,7 @@ extern SFG_Font* fghFontByID( void* font );
 /*
  * General settings assignment method
  */
-void FGAPIENTRY glutSetOption( GLenum eWhat, int value )
+FGAPI void FGAPIENTRY glutSetOption( GLenum eWhat, int value )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetOption" );
 
@@ -135,7 +135,7 @@ void FGAPIENTRY glutSetOption( GLenum eWhat, int value )
 /*
  * General settings query method
  */
-int FGAPIENTRY glutGet( GLenum eWhat )
+FGAPI int FGAPIENTRY glutGet( GLenum eWhat )
 {
     switch (eWhat)
     {
@@ -241,7 +241,7 @@ int FGAPIENTRY glutGet( GLenum eWhat )
 /*
  * Returns various device information.
  */
-int FGAPIENTRY glutDeviceGet( GLenum eWhat )
+FGAPI int FGAPIENTRY glutDeviceGet( GLenum eWhat )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutDeviceGet" );
 
@@ -300,7 +300,7 @@ int FGAPIENTRY glutDeviceGet( GLenum eWhat )
 /*
  * This should return the current state of ALT, SHIFT and CTRL keys.
  */
-int FGAPIENTRY glutGetModifiers( void )
+FGAPI int FGAPIENTRY glutGetModifiers( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGetModifiers" );
     if( fgState.Modifiers == INVALID_MODIFIERS )
@@ -315,7 +315,7 @@ int FGAPIENTRY glutGetModifiers( void )
 /*
  * Return the state of the GLUT API overlay subsystem. A misery ;-)
  */
-int FGAPIENTRY glutLayerGet( GLenum eWhat )
+FGAPI int FGAPIENTRY glutLayerGet( GLenum eWhat )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutLayerGet" );
 
@@ -361,7 +361,7 @@ int FGAPIENTRY glutLayerGet( GLenum eWhat )
     return -1;
 }
 
-int * FGAPIENTRY glutGetModeValues(GLenum eWhat, int *size)
+FGAPI int * FGAPIENTRY glutGetModeValues(GLenum eWhat, int *size)
 {
   int *array;
 

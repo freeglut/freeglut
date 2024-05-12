@@ -29,7 +29,14 @@
 #include "../fg_internal.h"
 
 #include <sys/types.h>
+/*
+ *   Added at 2024/03/23 - LCC compiler don't use "winbase.h", all is present in one file "win.h" loaded by "windows.h".
+ */
+#ifdef __LCC__
+#include <windows.h>
+#else
 #include <winbase.h>
+#endif // __LCC__
 
 struct _serialport {
    HANDLE fh;
@@ -71,10 +78,8 @@ SERIALPORT *fg_serial_open(const char *device){
     COMMTIMEOUTS timeouts;
     SERIALPORT *port;
 
-    TCHAR* tdevice = fghTstrFromStr(device);
-    fh = CreateFile(tdevice,GENERIC_READ|GENERIC_WRITE,0,NULL,
+    fh = CreateFile(device,GENERIC_READ|GENERIC_WRITE,0,NULL,
       OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-    free(tdevice);
     if (!fh) return NULL;
 
     port = malloc(sizeof(SERIALPORT));
@@ -86,7 +91,7 @@ SERIALPORT *fg_serial_open(const char *device){
     GetCommTimeouts(fh,&port->timeouts_save);
 
     dcb.DCBlength=sizeof(DCB);
-    BuildCommDCBA("96,n,8,1",&dcb);
+    BuildCommDCB("96,n,8,1",&dcb);
     SetCommState(fh,&dcb);
 
     ZeroMemory(&timeouts,sizeof(timeouts));
@@ -128,3 +133,4 @@ void fg_serial_flush ( SERIALPORT *port )
 {
     FlushFileBuffers(port->fh);
 }
+
