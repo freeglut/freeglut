@@ -124,6 +124,10 @@ void fgOgcCursorDraw()
 
     if (!fgStructure.CurrentWindow) return;
 
+    /* Don't show a cursor if none of the mouse callback functions have been
+     * registered */
+    if (!FETCH_WCB(*window, Motion) && !FETCH_WCB(*window, Mouse)) return;
+
     cursorId = fgStructure.CurrentWindow->State.Cursor;
     for (i = 0; i < MAPPING_SIZE; i++) {
         CursorMapping *mapping = &cursor_mapping[i];
