@@ -79,6 +79,11 @@ IF(NOT WIN32)
     OPTION(FREEGLUT_WAYLAND "Use Wayland (no X11)" OFF)
 ENDIF()
 
+IF(CMAKE_SYSTEM_NAME MATCHES "NintendoWii|NintendoGameCube")
+    SET(OGC ON)
+ELSE()
+    SET(OGC OFF)
+ENDIF()
 
 SET(FREEGLUT_HEADERS
     include/GL/freeglut.h
@@ -122,7 +127,7 @@ SET(FREEGLUT_SRCS
     src/fg_window.c
 )
 # TODO: OpenGL ES requires a compatible version of these files:
-IF(NOT FREEGLUT_GLES AND NOT CMAKE_SYSTEM_NAME MATCHES "NintendoWii|NintendoGameCube")
+IF(NOT FREEGLUT_GLES AND NOT OGC)
     LIST(APPEND FREEGLUT_SRCS
         src/fg_font.c
         src/fg_menu.c
@@ -197,7 +202,7 @@ ELSEIF(ANDROID OR BLACKBERRY)
         )
     ENDIF()
 
-ELSEIF(CMAKE_SYSTEM_NAME MATCHES "NintendoWii|NintendoGameCube")
+ELSEIF(OGC)
 
     LIST(APPEND FREEGLUT_SRCS
         src/ogc/fg_common_ogc.h
@@ -289,7 +294,7 @@ IF(FREEGLUT_GLES OR FREEGLUT_WAYLAND)
 ENDIF()
 
 INCLUDE(CheckIncludeFiles)
-IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND))
+IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND OR OGC))
     FIND_PACKAGE(X11 REQUIRED)
     INCLUDE_DIRECTORIES(${X11_X11_INCLUDE_PATH})
     LIST(APPEND LIBS ${X11_X11_LIB})
@@ -718,6 +723,8 @@ ELSEIF(FREEGLUT_GLES)
 ELSE()
   IF(FREEGLUT_WAYLAND)
     SET(PC_LIBS_PRIVATE "-lwayland-client -lwayland-cursor -lwayland-egl -lGL -lxkbcommon -lm")
+  ELSEIF(OGC)
+    SET(PC_LIBS_PRIVATE "-lglu -lm")
   ELSE()
     SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGL -lm")
   ENDIF()
