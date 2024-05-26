@@ -44,6 +44,7 @@ Currently supported platforms:
  - macOS with XQuartz (no native Cocoa support yet)
  - Android (NDK)
  - BlackBerry
+ - Nintendo GameCube and Wii
 
 Consult the platform-specific readme files for details on the level of support
 and build instructions.
