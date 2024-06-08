@@ -1,3 +1,17 @@
+2024-06-08  John Tsiombikas <nuclear@member.fsf.org>
+
+	freeglut 3.6 changes:
+
+	* New platforms: Nintendo Gamecube and Nintendo Wii.
+	* Minimum cmake version raised to 3.1.
+	* Make XInput an optional dependency.
+	* Fix incorrect modifier bit mapped to GLUT_ACTIVE_SUPER on X11.
+	* Add support for ARM64 MSVC targets.
+	* Fix for unicode builds on windows.
+	* Fix build on some versions of MinGW carrying an incorrect winuser.h.
+	* Fix menu-related memory leak when an error occurs.
+	* Various build improvements & fixes.
+
 2022-10-07  John Tsiombikas <nuclear@member.fsf.org>
 
 	freeglut 3.4 changes:
