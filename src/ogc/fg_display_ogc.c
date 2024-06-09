@@ -22,6 +22,7 @@
 #include "fg_common_ogc.h"
 
 #include <ogc/color.h>
+#include <opengx.h>
 
 void fgOgcDisplaySetupXfb()
 {
