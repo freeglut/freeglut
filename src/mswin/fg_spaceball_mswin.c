@@ -36,11 +36,11 @@
  * six degree of freedom navigator.
  */
 
-#if(_WIN32_WINNT >= 0x0501)
-
 #include <GL/freeglut.h>
 #include <stdlib.h>
 #include "../fg_internal.h"
+
+#if(_WIN32_WINNT >= 0x0501)
 
 enum {
     SPNAV_EVENT_ANY,
@@ -207,6 +207,44 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
             }
         }
     }
+}
+
+#else
+/* windows versions older than winxp don't have the raw HID support used by this
+ * spaceball implementation. For now just leave the functions blank to make it
+ * build without spaceball support on older versions of windows, until we can
+ * investigate a fallback route.
+ */
+
+void fgPlatformInitializeSpaceball(void)
+{
+}
+
+void fgPlatformSpaceballClose(void)
+{
+}
+
+int fgPlatformHasSpaceball(void)
+{
+    return 0;
+}
+
+int fgPlatformSpaceballNumButtons(void)
+{
+    return 0;
+}
+
+void fgPlatformSpaceballSetWindow(SFG_Window *window)
+{
+}
+
+int fgIsSpaceballWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
+{
+    return 0;
+}
+
+void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
+{
 }
 
 #endif
