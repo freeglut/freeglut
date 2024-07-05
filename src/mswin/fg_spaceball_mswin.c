@@ -42,6 +42,11 @@
 #include <stdlib.h>
 #include "../fg_internal.h"
 
+/*
+ * Spaceball requires RawInput (XP and up)
+ */
+#ifdef FREEGLUT_WIN32_USE_RAWINPUT
+
 enum {
     SPNAV_EVENT_ANY,
     SPNAV_EVENT_MOTION_TRANSLATION,
@@ -108,11 +113,6 @@ int fgPlatformSpaceballNumButtons(void)
 void fgPlatformSpaceballSetWindow(SFG_Window *window)
 {
     return;
-}
-
-int fgIsSpaceballWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
-{
-    return 0;
 }
 
 void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
@@ -207,6 +207,39 @@ void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
             }
         }
     }
+}
+
+#else
+
+/*
+ * RawInput disabled, stub functions
+ */
+void fgPlatformInitializeSpaceball( void )
+{
+}
+void fgPlatformSpaceballClose( void )
+{
+}
+void fgPlatformSpaceballSetWindow( SFG_Window *window )
+{
+}
+void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
+{
+}
+int fgPlatformHasSpaceball( void )
+{
+    return 0;
+}
+int fgPlatformSpaceballNumButtons( void )
+{
+    return 0;
+}
+
+#endif
+
+int fgIsSpaceballWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
+{
+    return 0;
 }
 
 #endif
