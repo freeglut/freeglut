@@ -74,6 +74,11 @@ ELSE()
     OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" ON)
 ENDIF()
 
+# Windows Raw Input support
+IF(WIN32)
+	OPTION(FREEGLUT_WIN32_USE_RAWINPUT "Build support for Spaceball / Raw Input devices (requires Windows XP and up)" ON)
+ENDIF()
+
 IF(NOT WIN32)
     # Wayland support
     OPTION(FREEGLUT_WAYLAND "Use Wayland (no X11)" OFF)
@@ -163,6 +168,9 @@ IF(WIN32)
         LIST(APPEND FREEGLUT_SRCS
             ${CMAKE_BINARY_DIR}/freeglutdll.def # generated below from src/freeglutdll.def.in
         )
+    ENDIF()
+    IF (FREEGLUT_WIN32_USE_RAWINPUT)
+        ADD_DEFINITIONS(-DFREEGLUT_WIN32_USE_RAWINPUT)
     ENDIF()
 
 ELSEIF(ANDROID OR BLACKBERRY)
