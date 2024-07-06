@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include "../fg_internal.h"
 
-#if(_WIN32_WINNT >= 0x0501)
+#if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0501)
 
 enum {
     SPNAV_EVENT_ANY,
@@ -66,28 +66,40 @@ struct fgRAWHID {
 };
 
 
+typedef BOOL(*RegRawInpDevFunc)(PCRAWINPUTDEVICE, UINT, UINT);
+typedef UINT(*GetRawInpDataFunc)(HRAWINPUT, UINT, LPVOID, PUINT, UINT);
+typedef UINT(*GetRawInpDevInfoFunc)(HANDLE, UINT, LPVOID, PUINT);
+
+static RegRawInpDevFunc fgRegisterRawInputDevices;
+static GetRawInpDataFunc fgGetRawInputData;
+static GetRawInpDevInfoFunc fgGetRawInputDeviceInfo;
+
+
 void fgPlatformInitializeSpaceball(void)
 {
-    HWND hwnd;
-    fg_sball_initialized = 1;
-    if (!fgStructure.CurrentWindow)
-    {
-        fg_sball_initialized = 0;
+    HMODULE dllmod;
+
+    if(!fgStructure.CurrentWindow) return;
+
+    if(!(dllmod = GetModuleHandle("user32.dll"))) {
         return;
     }
-    hwnd = fgStructure.CurrentWindow->Window.Handle;
+    fgRegisterRawInputDevices = (RegRawInpDevFunc)GetProcAddress(dllmod, "RegisterRawInputDevices");
+    fgGetRawInputData = (GetRawInpDataFunc)GetProcAddress(dllmod, "GetRawInputData");
+    fgGetRawInputDeviceInfo = (GetRawInpDevInfoFunc)GetProcAddress(dllmod, "GetRawInputDeviceInfoA");
 
-    {
-        BOOL ok;
-        UINT cbSize = sizeof(__fgSpaceball);
-        __fgSpaceball.hwndTarget = hwnd;
-        ok = RegisterRawInputDevices(&__fgSpaceball, 1, cbSize);
-
-        if (!ok){
-            __fgSpaceball.hwndTarget = NULL;
-            fg_sball_initialized = 0;
-        }
+    if(!fgRegisterRawInputDevices || !fgGetRawInputData || !fgGetRawInputDeviceInfo) {
+        return;
     }
+
+    __fgSpaceball.hwndTarget = fgStructure.CurrentWindow->Window.Handle;
+
+    if(!fgRegisterRawInputDevices(&__fgSpaceball, 1, sizeof __fgSpaceball)) {
+        __fgSpaceball.hwndTarget = NULL;
+        return;
+    }
+
+    fg_sball_initialized = 1;
 }
 
 void fgPlatformSpaceballClose(void)
@@ -115,96 +127,102 @@ int fgIsSpaceballWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+#define VID_LOGITECH    0x46d
+#define VID_3DCONN      0x256f
+
 void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-    #define LOGITECH_VENDOR_ID 0x46d
+    int i, x, y, z;
+    short *dataptr;
+    unsigned long keystate;
     HRAWINPUT hRawInput = (HRAWINPUT)lParam;
     UINT size;
     BYTE *rawInputBuffer;
     PRAWINPUT pRawInput;
-    UINT res;
     RID_DEVICE_INFO sRidDeviceInfo;
+    SFG_Window *window;
 
-    if (!fg_sball_initialized)
-    {
+    if(!fg_sball_initialized) {
         fgPlatformInitializeSpaceball();
-        if (!fg_sball_initialized)
-        {
-            return;
-        }
+        if(!fg_sball_initialized) return;
     }
 
-    res = GetRawInputData(hRawInput, RID_INPUT, NULL, &size, sizeof(RAWINPUTHEADER));
-    if (res == -1)
+    if(fgGetRawInputData(hRawInput, RID_INPUT, NULL, &size, sizeof(RAWINPUTHEADER)) == -1) {
         return;
+    }
 
-    rawInputBuffer = malloc(size * sizeof *rawInputBuffer);
+    if(!(rawInputBuffer = malloc(size * sizeof *rawInputBuffer))) {
+        return;
+    }
     pRawInput = (PRAWINPUT)rawInputBuffer;
 
-    res = GetRawInputData(hRawInput, RID_INPUT, pRawInput, &size, sizeof(RAWINPUTHEADER));
-    if (res == -1)
+    if(fgGetRawInputData(hRawInput, RID_INPUT, pRawInput, &size, sizeof(RAWINPUTHEADER)) == -1) {
+        free(rawInputBuffer);
         return;
-    if (pRawInput->header.dwType != RIM_TYPEHID)
+    }
+    if(pRawInput->header.dwType != RIM_TYPEHID) {
+        free(rawInputBuffer);
         return;
+    }
 
     sRidDeviceInfo.cbSize = sizeof(RID_DEVICE_INFO);
     size = sizeof(RID_DEVICE_INFO);
-    res = GetRawInputDeviceInfo(pRawInput->header.hDevice, RIDI_DEVICEINFO, &sRidDeviceInfo, &size);
-    if (res == -1)
+    if(fgGetRawInputDeviceInfo(pRawInput->header.hDevice, RIDI_DEVICEINFO, &sRidDeviceInfo, &size) == -1) {
+        free(rawInputBuffer);
         return;
-    {
-        SFG_Window* window = fgWindowByHandle(hwnd);
-        if ((window == NULL))
-            return;
+    }
+    if(!(window = fgWindowByHandle(hwnd))) {
+        return;
+    }
 
-        if (sRidDeviceInfo.hid.dwVendorId == LOGITECH_VENDOR_ID)
-        {
-            /* see definition of fgRAWHID at the top of this file, for an
-             * explanation of why we're doing this.
-             */
-            struct fgRAWHID *hid = (struct fgRAWHID*)&pRawInput->data.hid;
+    if(sRidDeviceInfo.hid.dwVendorId == VID_LOGITECH || sRidDeviceInfo.hid.dwVendorId == VID_3DCONN) {
+        /* see definition of fgRAWHID at the top of this file, for an
+         * explanation of why we're doing this.
+         */
+        struct fgRAWHID *hid = (struct fgRAWHID*)&pRawInput->data.hid;
 
-            /* Motion data comes in two parts: motion type and */
-            /* displacement/rotation along three axis. */
-            /* Orientation is a right handed coordinate system with */
-            /* X goes right, Y goes up and Z goes towards viewer, e.g. */
-            /* the one used in OpenGL */
-            if (hid->bRawData[0] == SPNAV_EVENT_MOTION_TRANSLATION)
-            { /* Translation vector */
-                short* pnData = (short*)(&hid->bRawData[1]);
-                short X = pnData[0];
-                short Y = -pnData[2];
-                short Z = pnData[1];
-                INVOKE_WCB(*window, SpaceMotion, (X, Y, Z));
-            }
-            else if (hid->bRawData[0] == SPNAV_EVENT_MOTION_ROTATION)
-            { /* Axis aligned rotation vector */
-                short* pnData = (short*)(&hid->bRawData[1]);
-                short rX = pnData[0];
-                short rY = -pnData[2];
-                short rZ = pnData[1];
-                INVOKE_WCB(*window, SpaceRotation, (rX, rY, rZ));
-            }
-            else if (hid->bRawData[0] == SPNAV_EVENT_BUTTON)
-            { /* State of the keys */
-                unsigned long dwKeystate = *(unsigned long*)(&hid->bRawData[1]);
-                if (FETCH_WCB(*window, SpaceButton))
-                {
-                    int i;
-                    for (i = 0; i < 32; i++)
-                    {
-                        unsigned long stateBefore = __fgSpaceKeystate&(1 << i);
-                        unsigned long stateNow = dwKeystate&(1 << i);
+        /* Motion data comes in two parts: motion type and */
+        /* displacement/rotation along three axis. */
+        /* Orientation is a right handed coordinate system with */
+        /* X goes right, Y goes up and Z goes towards viewer, e.g. */
+        /* the one used in OpenGL */
 
-                        if (stateBefore && !stateNow)
-                            INVOKE_WCB(*window, SpaceButton, (stateBefore, GLUT_UP));
-                        if (!stateBefore && stateNow)
-                            INVOKE_WCB(*window, SpaceButton, (stateNow, GLUT_DOWN));
+        switch(hid->bRawData[0]) {
+        case SPNAV_EVENT_MOTION_TRANSLATION:
+            /* Translation vector */
+            dataptr = (short*)(&hid->bRawData[1]);
+            x = dataptr[0];
+            y = -dataptr[2];
+            z = dataptr[1];
+            INVOKE_WCB(*window, SpaceMotion, (x, y, z));
+            break;
 
+        case SPNAV_EVENT_MOTION_ROTATION:
+            /* Axis aligned rotation vector */
+            dataptr = (short*)(&hid->bRawData[1]);
+            x = dataptr[0];
+            y = -dataptr[2];
+            z = dataptr[1];
+            INVOKE_WCB(*window, SpaceRotation, (x, y, z));
+
+        case SPNAV_EVENT_BUTTON:
+            /* State of the keys */
+            keystate = *(unsigned long*)(&hid->bRawData[1]);
+            if(FETCH_WCB(*window, SpaceButton)) {
+                for(i=0; i<32; i++) {
+                    unsigned long stateBefore = __fgSpaceKeystate & (1 << i);
+                    unsigned long stateNow = keystate & (1 << i);
+
+                    if(stateBefore && !stateNow) {
+                        INVOKE_WCB(*window, SpaceButton, (stateBefore, GLUT_UP));
+                    }
+                    if(!stateBefore && stateNow) {
+                        INVOKE_WCB(*window, SpaceButton, (stateNow, GLUT_DOWN));
                     }
                 }
-                __fgSpaceKeystate = dwKeystate;
             }
+            __fgSpaceKeystate = keystate;
+            break;
         }
     }
 }
