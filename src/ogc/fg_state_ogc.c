@@ -29,6 +29,8 @@ int fgPlatformGlutDeviceGet(GLenum eWhat)
 
 int fgPlatformGlutGet(GLenum eWhat)
 {
+    GLint ret = -1;
+
     switch (eWhat) {
     case GLUT_WINDOW_WIDTH:
         return fgStructure.CurrentWindow ?
@@ -36,10 +38,13 @@ int fgPlatformGlutGet(GLenum eWhat)
     case GLUT_WINDOW_HEIGHT:
         return fgStructure.CurrentWindow ?
             fgStructure.CurrentWindow->State.Height : 0;
+    case GLUT_WINDOW_STENCIL_SIZE:
+        glGetIntegerv(GL_STENCIL_BITS, &ret);
+        break;
     default:
         fgWarning("%s() : not implemented for %d", __func__, eWhat);
     }
-    return -1;
+    return ret;
 }
 
 int *fgPlatformGlutGetModeValues(GLenum eWhat, int *size)
