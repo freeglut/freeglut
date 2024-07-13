@@ -47,6 +47,10 @@ void fgOgcDisplaySetupXfb()
         fgDisplay.pDisplay.xfb[1] =
             MEM_K0_TO_K1(SYS_AllocateFramebuffer(vmode));
     }
+
+    if (fgState.DisplayMode & GLUT_STENCIL) {
+        ogx_stencil_create(OGX_STENCIL_DIRTY_Z);
+    }
 }
 
 void fgOgcDisplaySetupVideoMode()
