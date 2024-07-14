@@ -37,7 +37,7 @@ void fgPlatformOpenWindow(SFG_Window *window, const char *title,
     window->State.Xpos = 0;
     window->State.Ypos = 0;
 
-    window->State.WorkMask |= GLUT_INIT_WORK;
+    window->State.WorkMask |= GLUT_INIT_WORK | GLUT_VISIBILITY_WORK;
     window->State.Visible = GL_TRUE;
 
     /* This sets up the XFB for the chosen buffering scheme */

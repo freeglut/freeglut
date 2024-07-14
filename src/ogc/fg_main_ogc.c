@@ -268,7 +268,7 @@ void fgPlatformPosResZordWork(SFG_Window *window, unsigned int workMask)
 
 void fgPlatformVisibilityWork(SFG_Window *window)
 {
-    fgWarning("%s() : not implemented", __func__);
+    INVOKE_WCB(*window, WindowStatus, (GLUT_FULLY_RETAINED));
 }
 
 void fgPlatformSetColor(int idx, float r, float g, float b)
