@@ -206,12 +206,19 @@ fg_time_t fgPlatformSystemTime(void)
 
 void fgPlatformSleepForEvents(fg_time_t ms)
 {
-    fgWarning("%s() : sleeping for %lld ms", __func__, ms);
-
     /* FreeGlut does not offer a hook for redrawing the window in single-buffer
      * mode, so let's to it here. */
     if (!(fgState.DisplayMode & GLUT_DOUBLE)) {
         fgOgcDisplayShowEFB();
+    }
+
+    /* If the mouse is active, reduce the sleep time to a few milliseconds
+     * only, since our mouse is emulated via the Wiimote, which must be
+     * regularly polled */
+    if (ms > 10 && fgStructure.CurrentWindow &&
+        (FETCH_WCB(*fgStructure.CurrentWindow, Motion) ||
+         FETCH_WCB(*fgStructure.CurrentWindow, Mouse))) {
+        ms = 10;
     }
 
     struct timespec tv;
