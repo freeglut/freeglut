@@ -217,7 +217,7 @@
  *
  * Steve Baker suggested to make it binary compatible with GLUT:
  */
-#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(__WATCOMC__)
+#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(__WATCOMC__) || defined(__DEVKITPRO__)
 #   define  GLUT_STROKE_ROMAN               ((void *)0x0000)
 #   define  GLUT_STROKE_MONO_ROMAN          ((void *)0x0001)
 #   define  GLUT_BITMAP_9_BY_15             ((void *)0x0002)
