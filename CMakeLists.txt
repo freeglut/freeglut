@@ -127,7 +127,7 @@ SET(FREEGLUT_SRCS
     src/fg_window.c
 )
 # TODO: OpenGL ES requires a compatible version of these files:
-IF(NOT FREEGLUT_GLES AND NOT OGC)
+IF(NOT FREEGLUT_GLES)
     LIST(APPEND FREEGLUT_SRCS
         src/fg_font.c
         src/fg_menu.c
