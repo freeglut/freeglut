@@ -28,6 +28,6 @@
 
 extern void fghPlatformInitializeEGL();
 extern void fghPlatformCloseDisplayEGL();
-extern void fgPlatformDestroyContext();
+extern void fgPlatformDestroyContext ( SFG_PlatformDisplay pDisplay, SFG_WindowContextType MContext );
 
 #endif
