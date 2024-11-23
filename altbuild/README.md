@@ -4,7 +4,7 @@ This directory includes a number of simple ways to build freeglut, without
 relying on extra tools.
 
 The official build system used by freeglut is cmake, with the current minimum
-cmake version required being set to 3.0. Installing and using cmake 3.0 or later
+cmake version required being set to 3.1. Installing and using cmake 3.1 or later
 to generate build files might be difficult or inconvenient in some cases.
 Installing modern versions of cmake on very old UNIX systems might be difficult
 or impossible. And finding the exact cmake version which still supports
@@ -30,6 +30,7 @@ Before using any of these build files, first you'll need to select one of the
   - config.h.msvc6: Windows build with MS Visual C/C++ 6.0.
   - config.h.irix5: IRIX 5.x build with the SGI compiler.
   - config.h.irix6: IRIX 6.x build with the SGI compiler.
+  - config.h.sol26: Solaris 2.6 build with the SUN compiler.
 
 You can edit the `config.h` file to remove unnecessary dependencies (and their
 corresponding features). For example, some old X servers do not have the XRandR
