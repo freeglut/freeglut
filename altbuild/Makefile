@@ -43,7 +43,7 @@ liba = libglut.a
 incpath = -I. -Isrc -Iinclude -I/usr/local/include -I/usr/X11R6/include
 libpath = -L/usr/local/lib -L/usr/X11R6/lib
 
-CFLAGS = -O2 $(incpath) -DHAVE_CONFIG_H
+CFLAGS = $(opt) $(dbg) $(incpath) -DHAVE_CONFIG_H
 LDFLAGS = $(libpath)
 
 
