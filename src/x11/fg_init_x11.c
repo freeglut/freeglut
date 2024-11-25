@@ -254,6 +254,8 @@ void fgPlatformInitialize( const char* displayName )
 
       fgDisplay.pDisplay.NetWMPid = fghGetAtom("_NET_WM_PID");
       fgDisplay.pDisplay.ClientMachine = fghGetAtom("WM_CLIENT_MACHINE");
+      fgDisplay.pDisplay.NetWMName = fghGetAtom("_NET_WM_NAME");
+      fgDisplay.pDisplay.NetWMIconName = fghGetAtom("_NET_WM_ICON_NAME");
     }
 
     /* Get start time */

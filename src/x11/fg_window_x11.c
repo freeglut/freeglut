@@ -44,6 +44,9 @@
 #define HOST_NAME_MAX	255
 #endif
 
+static void set_window_title(Window win, const char *str);
+static void set_icon_title(Window win, const char *str);
+
 /* Motif window hints, only define needed ones */
 typedef struct
 {
@@ -152,7 +155,6 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 	Colormap cmap;
 	XVisualInfo * visualInfo = NULL;
 	XSetWindowAttributes wattr;
-	XTextProperty txprop;
 	XSizeHints sizeHints;
 	XWMHints wmHints;
 	XEvent eventReturnBuffer; /* return buffer required for a call */
@@ -370,11 +372,10 @@ done_retry:
 
 	wmHints.flags = StateHint;
 	wmHints.initial_state = fgState.ForceIconic ? IconicState : NormalState;
-	/* Prepare the window and iconified window names... */
-	XStringListToTextProperty((char**)&title, 1, &txprop);
+	XSetWMProperties(dpy, win, 0, 0, 0, 0, &sizeHints, &wmHints, 0);
 
-	XSetWMProperties(dpy, win, &txprop, &txprop, 0, 0, &sizeHints, &wmHints, 0);
-	XFree(txprop.value);
+	set_window_title(win, title);
+	set_icon_title(win, title);
 
 	XSetWMProtocols(dpy, win, &fgDisplay.pDisplay.DeleteWindow, 1);
 
@@ -517,46 +518,145 @@ void fgPlatformIconifyWindow( SFG_Window *window )
     fgStructure.CurrentWindow->State.Visible   = GL_FALSE;
 }
 
-/*
- * Set the current window's title
+/* glutSetWindow(Title|Icon) needs to decide when to set WM_NAME and when to set
+ * _NET_WM_NAME. WM_NAME should not get utf8 characters, but 8-bit extended
+ * ASCII might be ok, while _NET_WM_NAME should be always be utf8. So we need
+ * to distinguish between the following cases:
+ *  - string is all 7bit ASCII: goes in WM_NAME
+ *  - has 8th bits but is not valid utf8: assume ext-ASCII goes in WM_NAME
+ *  - has 8th bits somewhere and is valid utf8: goes in _NET_WM_NAME
+ * Whenever we don't set _NET_WM_NAME explicitly remove it, because otherwise
+ * it takes precedence over WM_NAME.
+ * Similarly for WM_ICON_NAME vs _NET_WM_ICON_NAME.
+ *
+ * This assumes we're building on a platform where X_HAVE_UTF8_STRING is defined
+ * Otherwise we'll just pass whatever through to XSetWMName as usual and it'll
+ * come out as gibberish if it was utf8.
+ *
+ * To make this work, the following function detects if a string has at least
+ * a single valid multi-byte utf8 character in it, and no invalid utf8 sequences
+ * in which case it returns non-zero. If no mutli-byte utf8 characters are
+ * detected, or a single invalid sequence, it returns 0
  */
-void fgPlatformGlutSetWindowTitle( const char* title )
+#ifdef X_HAVE_UTF8_STRING
+static int str_multibyte_utf8(const char *s)
 {
-    XTextProperty text;
+	int c, cont = 0, mbfound = 0;
 
-    text.value = (unsigned char *) title;
-    text.encoding = XA_STRING;
-    text.format = 8;
-    text.nitems = strlen( title );
+	while(*s) {
+		c = *(unsigned char*)s++;
+		if(!cont) {
+			/* we're looking at the first byte of a character, see if it starts
+			 * a multi-byte sequence
+			 */
+			if((c & 0xe0) == 0xc0) {
+				cont = 1;
+			} else if((c & 0xf0) == 0xe0) {
+				cont = 2;
+			} else if((c & 0xf8) == 0xf0) {
+				cont = 3;
+			}
+		} else {
+			/* we're in continuation bytes */
+			if((c & 0xc0) != 0x80) {
+				/* not a valid continuation byte, string is not valid utf8 */
+				return 0;
+			}
+			if(--cont == 0) {
+				/* we found a valid multi-byte utf8 sequence */
+				mbfound++;
+			}
+		}
+	}
+	return mbfound ? 1 : 0;
+}
 
-    XSetWMName(
-        fgDisplay.pDisplay.Display,
-        fgStructure.CurrentWindow->Window.Handle,
-        &text
-    );
+/* sets utf8 window title (_NET_WM_NAME or _NET_WM_ICON_NAME) */
+static int set_utf8_title(Window win, Atom prop, const char *str)
+{
+	Display *dpy = fgDisplay.pDisplay.Display;
+	XTextProperty text;
 
-    XFlush( fgDisplay.pDisplay.Display ); /* XXX Shouldn't need this */
+	if(Xutf8TextListToTextProperty(dpy, (char**)&str, 1, XUTF8StringStyle, &text) != Success) {
+		return -1;
+	}
+	XChangeProperty(dpy, win, prop, text.encoding, 8, PropModeReplace,
+			(unsigned char*)str, strlen(str));
+	XFree(text.value);
+	return 0;
+}
+#endif	/* X_HAVE_UTF8_STRING */
+
+/* sets WM_NAME and/or WM_ICON_NAME */
+static void set_title(Window win, Atom prop, const char *str)
+{
+	Display *dpy = fgDisplay.pDisplay.Display;
+	XTextProperty text;
+
+	text.value = (unsigned char*)str;
+	text.encoding = XA_STRING;
+	text.format = 8;
+	text.nitems = strlen(str);
+
+	if(prop == XA_WM_NAME) {
+		XSetWMName(dpy, win, &text);
+	} else if(prop == XA_WM_ICON_NAME) {
+		XSetWMIconName(dpy, win, &text);
+	}
+}
+
+static void set_window_title(Window win, const char *str)
+{
+#ifdef X_HAVE_UTF8_STRING
+	Display *dpy = fgDisplay.pDisplay.Display;
+
+	if(str_multibyte_utf8(str)) {
+		if(set_utf8_title(win, fgDisplay.pDisplay.NetWMName, str) != -1) {
+			return;	/* success */
+		}
+	}
+	/* if it's not utf8 or if set_utf8_title fails, delete _NET_WM_NAME if it
+	 * exists, and fallback to setting WM_NAME instead
+	 */
+	XDeleteProperty(dpy, win, fgDisplay.pDisplay.NetWMName);
+#endif
+
+	set_title(win, XA_WM_NAME, str);
+}
+
+static void set_icon_title(Window win, const char *str)
+{
+#ifdef X_HAVE_UTF8_STRING
+	Display *dpy = fgDisplay.pDisplay.Display;
+
+	if(str_multibyte_utf8(str)) {
+		if(set_utf8_title(win, fgDisplay.pDisplay.NetWMIconName, str) != -1) {
+			return;	/* success */
+		}
+	}
+	/* if it's not utf8 or if set_utf8_title fails, delete _NET_WM_ICON_NAME if
+	 * it exists, and fallback to setting WM_NAME instead
+	 */
+	XDeleteProperty(dpy, win, fgDisplay.pDisplay.NetWMIconName);
+#endif
+
+	set_title(win, XA_WM_ICON_NAME, str);
+}
+
+/* Set the current window's title */
+void fgPlatformGlutSetWindowTitle(const char *str)
+{
+	if(!str || !*str) return;
+	set_window_title(fgStructure.CurrentWindow->Window.Handle, str);
 }
 
 /*
  * Set the current window's iconified title
  */
-void fgPlatformGlutSetIconTitle( const char* title )
+void fgPlatformGlutSetIconTitle(const char *str)
 {
-    XTextProperty text;
-
-    text.value = (unsigned char *) title;
-    text.encoding = XA_STRING;
-    text.format = 8;
-    text.nitems = strlen( title );
-
-    XSetWMIconName(
-        fgDisplay.pDisplay.Display,
-        fgStructure.CurrentWindow->Window.Handle,
-        &text
-    );
-
-    XFlush( fgDisplay.pDisplay.Display ); /* XXX Shouldn't need this */
+	if(!str || !*str) return;
+	set_icon_title(fgStructure.CurrentWindow->Window.Handle, str);
 }
 
 /*
