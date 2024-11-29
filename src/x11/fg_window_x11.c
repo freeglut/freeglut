@@ -553,6 +553,8 @@ static int set_utf8_title(Window win, Atom prop, const char *str)
 	Display *dpy = fgDisplay.pDisplay.Display;
 	XTextProperty text;
 
+	if(!prop) return -1;
+
 	if(Xutf8TextListToTextProperty(dpy, (char**)&str, 1, XUTF8StringStyle, &text) < 0) {
 		return -1;
 	}
