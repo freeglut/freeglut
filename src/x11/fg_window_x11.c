@@ -44,8 +44,10 @@
 #define HOST_NAME_MAX	255
 #endif
 
-static void set_window_title(Window win, const char *str);
-static void set_icon_title(Window win, const char *str);
+static void set_title(Window win, Atom prop, const char *str);
+#ifdef X_HAVE_UTF8_STRING
+static int set_utf8_title(Window win, Atom prop, const char *str);
+#endif
 
 /* Motif window hints, only define needed ones */
 typedef struct
@@ -374,8 +376,12 @@ done_retry:
 	wmHints.initial_state = fgState.ForceIconic ? IconicState : NormalState;
 	XSetWMProperties(dpy, win, 0, 0, 0, 0, &sizeHints, &wmHints, 0);
 
-	set_window_title(win, title);
-	set_icon_title(win, title);
+	set_title(win, XA_WM_NAME, title);
+	set_title(win, XA_WM_ICON_NAME, title);
+#ifdef X_HAVE_UTF8_STRING
+	set_utf8_title(win, fgDisplay.pDisplay.NetWMName, title);
+	set_utf8_title(win, fgDisplay.pDisplay.NetWMIconName, title);
+#endif
 
 	XSetWMProtocols(dpy, win, &fgDisplay.pDisplay.DeleteWindow, 1);
 
@@ -518,59 +524,29 @@ void fgPlatformIconifyWindow( SFG_Window *window )
     fgStructure.CurrentWindow->State.Visible   = GL_FALSE;
 }
 
-/* glutSetWindow(Title|Icon) needs to decide when to set WM_NAME and when to set
- * _NET_WM_NAME. WM_NAME should not get utf8 characters, but 8-bit extended
- * ASCII might be ok, while _NET_WM_NAME should be always be utf8. So we need
- * to distinguish between the following cases:
- *  - string is all 7bit ASCII: goes in WM_NAME
- *  - has 8th bits but is not valid utf8: assume ext-ASCII goes in WM_NAME
- *  - has 8th bits somewhere and is valid utf8: goes in _NET_WM_NAME
- * Whenever we don't set _NET_WM_NAME explicitly remove it, because otherwise
- * it takes precedence over WM_NAME.
- * Similarly for WM_ICON_NAME vs _NET_WM_ICON_NAME.
+/* NOTE: about UTF8 in window titles or icon names.
  *
- * This assumes we're building on a platform where X_HAVE_UTF8_STRING is defined
- * Otherwise we'll just pass whatever through to XSetWMName as usual and it'll
- * come out as gibberish if it was utf8.
+ * By the letter of the ICCCM and EHWM specifications, if we wish to set a UTF8
+ * (non-ASCII) name, it should go to _NET_WM_NAME or _NET_WM_ICON_NAME tagged as
+ * UTF8_STRING type, instead of the older WM_NAME/WM_ICON_NAME properties which
+ * should be of type STRING.
  *
- * To make this work, the following function detects if a string has at least
- * a single valid multi-byte utf8 character in it, and no invalid utf8 sequences
- * in which case it returns non-zero. If no mutli-byte utf8 characters are
- * detected, or a single invalid sequence, it returns 0
+ * But in case we don't have the Xlib utf8 extensions, or in any case for the
+ * sake of compatibility with old window managers, it's best to always set
+ * WM_NAME/WM_ICON_NAME, regardless of the actual encoding. Modern EWMH-compliant
+ * window managers should ignore WM_NAME if _NET_WM_NAME is also set anyway,
+ * and older window managers can still hope to show something semi-reasonable
+ * in the title-bar (some WMs can cope with utf8 strings mislabeled as STRING in
+ * WM_NAME just fine anyway).
+ *
+ * So we'll set the old ICCCM properties unconditionally, and if we can, we'll
+ * also set the EHWM ones, and hope for the best.
+ *
+ * See git commit d3799755874dfae53540caf75003dfed68738720 for an earlier
+ * attempt to detect and set only one or the other.
  */
+
 #ifdef X_HAVE_UTF8_STRING
-static int str_multibyte_utf8(const char *s)
-{
-	int c, cont = 0, mbfound = 0;
-
-	while(*s) {
-		c = *(unsigned char*)s++;
-		if(!cont) {
-			/* we're looking at the first byte of a character, see if it starts
-			 * a multi-byte sequence
-			 */
-			if((c & 0xe0) == 0xc0) {
-				cont = 1;
-			} else if((c & 0xf0) == 0xe0) {
-				cont = 2;
-			} else if((c & 0xf8) == 0xf0) {
-				cont = 3;
-			}
-		} else {
-			/* we're in continuation bytes */
-			if((c & 0xc0) != 0x80) {
-				/* not a valid continuation byte, string is not valid utf8 */
-				return 0;
-			}
-			if(--cont == 0) {
-				/* we found a valid multi-byte utf8 sequence */
-				mbfound++;
-			}
-		}
-	}
-	return mbfound ? 1 : 0;
-}
-
 /* sets utf8 window title (_NET_WM_NAME or _NET_WM_ICON_NAME) */
 static int set_utf8_title(Window win, Atom prop, const char *str)
 {
@@ -587,7 +563,7 @@ static int set_utf8_title(Window win, Atom prop, const char *str)
 }
 #endif	/* X_HAVE_UTF8_STRING */
 
-/* sets WM_NAME and/or WM_ICON_NAME */
+/* sets WM_NAME and/or WM_ICON_NAME (type STRING) */
 static void set_title(Window win, Atom prop, const char *str)
 {
 	Display *dpy = fgDisplay.pDisplay.Display;
@@ -605,49 +581,23 @@ static void set_title(Window win, Atom prop, const char *str)
 	}
 }
 
-static void set_window_title(Window win, const char *str)
-{
-#ifdef X_HAVE_UTF8_STRING
-	Display *dpy = fgDisplay.pDisplay.Display;
-
-	if(str_multibyte_utf8(str)) {
-		if(set_utf8_title(win, fgDisplay.pDisplay.NetWMName, str) != -1) {
-			return;	/* success */
-		}
-	}
-	/* if it's not utf8 or if set_utf8_title fails, delete _NET_WM_NAME if it
-	 * exists, and fallback to setting WM_NAME instead
-	 */
-	XDeleteProperty(dpy, win, fgDisplay.pDisplay.NetWMName);
-#endif
-
-	set_title(win, XA_WM_NAME, str);
-}
-
-static void set_icon_title(Window win, const char *str)
-{
-#ifdef X_HAVE_UTF8_STRING
-	Display *dpy = fgDisplay.pDisplay.Display;
-
-	if(str_multibyte_utf8(str)) {
-		if(set_utf8_title(win, fgDisplay.pDisplay.NetWMIconName, str) != -1) {
-			return;	/* success */
-		}
-	}
-	/* if it's not utf8 or if set_utf8_title fails, delete _NET_WM_ICON_NAME if
-	 * it exists, and fallback to setting WM_NAME instead
-	 */
-	XDeleteProperty(dpy, win, fgDisplay.pDisplay.NetWMIconName);
-#endif
-
-	set_title(win, XA_WM_ICON_NAME, str);
-}
-
 /* Set the current window's title */
 void fgPlatformGlutSetWindowTitle(const char *str)
 {
+	Window win = fgStructure.CurrentWindow->Window.Handle;
 	if(!str || !*str) return;
-	set_window_title(fgStructure.CurrentWindow->Window.Handle, str);
+
+	set_title(win, XA_WM_NAME, str);
+#ifdef X_HAVE_UTF8_STRING
+	if(set_utf8_title(win, fgDisplay.pDisplay.NetWMName, str) == -1) {
+		/* if we failed to set _NET_WM_NAME because it's not a valid utf8 string
+		 * then we should remove the property in case it was set before, so that
+		 * WM_NAME will be used, otherwise _NET_WM_NAME takes precedence
+		 */
+		Display *dpy = fgDisplay.pDisplay.Display;
+		XDeleteProperty(dpy, win, fgDisplay.pDisplay.NetWMName);
+	}
+#endif
 }
 
 /*
@@ -655,8 +605,17 @@ void fgPlatformGlutSetWindowTitle(const char *str)
  */
 void fgPlatformGlutSetIconTitle(const char *str)
 {
+	Window win = fgStructure.CurrentWindow->Window.Handle;
 	if(!str || !*str) return;
-	set_icon_title(fgStructure.CurrentWindow->Window.Handle, str);
+
+	set_title(win, XA_WM_ICON_NAME, str);
+#ifdef X_HAVE_UTF8_STRING
+	if(set_utf8_title(win, fgDisplay.pDisplay.NetWMIconName, str) == -1) {
+		/* see fgPlatformGlutSetWindowTitle above */
+		Display *dpy = fgDisplay.pDisplay.Display;
+		XDeleteProperty(dpy, win, fgDisplay.pDisplay.NetWMIconName);
+	}
+#endif
 }
 
 /*
