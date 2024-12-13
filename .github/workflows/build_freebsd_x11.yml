@@ -22,7 +22,7 @@ jobs:
           make VERBOSE=1
           make DESTDIR=freeglut-freebsd install
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: freeglut-freebsd
         path: freeglut-freebsd
