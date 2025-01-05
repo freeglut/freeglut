@@ -342,18 +342,81 @@ TODO
 
 ## Differences from GLUT 3.7
 
+Since the FreeGLUT library was developed in order to update GLUT, it is natural
+that there will be some differences between the two.
+<!-- TODO: Does this mean that all function descriptions contain the info that says if they're extended functionality? -->
+Each function in the API notes any differences between the GLUT and the FreeGLUT function behaviours.
+<!---->
+The important ones are summarized here.
+
 ### glutMainLoop Behaviour
+
+One of the commonest complaints about the GLUT library was that once an application
+called `glutMainLoop`, it never got control back. There was no way for an application
+to loop in GLUT for a while, possibly as a subloop while a specific window was open,
+and then return to the calling function. A new function, `glutMainLoopEvent`, has been
+added to allow this functionality. Another function, `glutLeaveMainLoop`, has also been
+added to allow the application to tell FreeGLUT to clean up and close down.
 
 ### Action on Window Closure
 
+Another difficulty with GLUT, especially with multiple-window programs, is that
+if the user clicks on the "X" in the window header the application exits immediately.
+The application programmer can now set an option, `GLUT_ACTION_ON_WINDOW_CLOSE`,
+to specify whether execution should continue, whether GLUT should
+return control to the main program, or whether GLUT should simply exit (the default).
+
+<!--
+TODO:
+So the options are continued execution, returning control to the main program and "simply exiting".
+1 sounds like 2, and 2 sounds like 3. I feel like this could use a rewording.
+-->
+
 ### Fullscreen windows
+
+Functions to leave fullscreen window mode (`glutLeaveFullScreen`)
+or to toggle between fullscreen and normal window mode (`glutFullScreenToggle`)
+have been added.
 
 ### Changes to Callbacks
 
+Several new callbacks have been added and several callbacks which were specific to Silicon Graphics
+hardware have not been implemented. Most or all of the new callbacks are listed in the GLUT Version 4
+"glut.h" header file but did not make it into the documentation. The new callbacks consist of
+regular and special key release callbacks, a joystick callback, a menu state callback
+(with one argument, distinct from the menu status callback which has three arguments),
+a window status callback (also with one argument), and a window position callback.
+Unsupported callbacks are the two Tablet callbacks. If the user has a need for an unsupported callback
+he should contact the FreeGLUT development team.
+
 ### String Rendering
+
+New functions have been added to render full character strings (including carriage returns),
+rather than rendering one character at a time. More functions return the widths of character strings
+and the font heights, in pixels for bitmapped fonts and in OpenGL units for the stroke fonts.
 
 ### Geometry Rendering
 
+Two functions have been added to render a wireframe and a solid rhombic dodecahedron.
+
+Furthermore, solid and wireframe versions of the original teacup and teaspoon that accompanied the famous Newell teapot.
+
+As these geometry functions are often used for teaching purposes,
+`glutSetOption(GLUT_GEOMETRY_VISUALIZE_NORMALS, true/false)` can now be used to
+visualize the normal vectors for each vertex.
+
+Lastly, to support drawing these objects with shaders,
+three functions have been added with which users can provide the addresses of the
+<!-- TODO: What are these vertex attributes? -->
+Coordinate, Normal and Texture Coordinate vertex attribs:
+<!---->
+`glutSetVertexAttribCoord3`, `glutSetVertexAttribNormal`, and `glutSetVertexAttribTexCoord2`.
+Texture coordinates are only generated for the teaset.
+
 ### Extension Function Queries
 
+`glutGetProcAddress` is a wrapper for the `glXGetProcAddressARB` and `wglGetProcAddress` functions.
+
 # Initialization Functions
+
+TODO
