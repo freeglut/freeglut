@@ -12,8 +12,17 @@ Alphabetic sort for each function?
 
 	- [Design Philosophy](#design-philosophy)
 	- [Conventions](#conventions)
+		- [Window placement and size](#window-placement-and-size)
+		- [User-data callbacks](#user-data-callbacks)
 	- [Terminology](#terminology)
-	- [Differences from GLUT 3.7](#differences-from-glut-3-7)
+	- [Differences from GLUT 3.7](#differences-from-glut-37)
+		- [glutMainLoop Behaviour](#glutmainloop-behaviour)
+		- [Action on Window Closure](#action-on-window-closure)
+		- [Fullscreen windows](#fullscreen-windows)
+		- [Changes to Callbacks](#changes-to-callbacks)
+		- [String Rendering](#string-rendering)
+		- [Geometry Rendering](#geometry-rendering)
+		- [Extension Function Queries](#extension-function-queries)
 
 3. [Initialization Functions](#initialization-functions)
 
@@ -279,9 +288,57 @@ FreeGLUT, and their compatibility with GLUT, are made explicit.
 
 ### Window placement and size
 
+There is considerable confusion about the "right thing to do" concerning window size and position.
+GLUT itself is not consistent between Windows and UNIX/X11; since platform independence
+is a virtue for FreeGLUT, we decided to break with GLUT's behaviour. Under UNIX/X11,
+it is apparently not possible to get the window border sizes in order to subtract them off
+the window's initial position until some time after the window has been created.
+Therefore we decided on the following behavior, both under Windows and under UNIX/X11:
+
+- When you create a window with position (x,y) and size (w,h), the upper left hand corner of the
+  outside of the window (the non-client area) is at (x,y) and the size of the drawable (client)
+  area is (w,h). The coordinates taken by `glutInitPosition` and `glutPositionWindow`, as well as the
+  coordinates provided by FreeGLUT when it calls the `glutPositionFunc` callback, specify the
+  top-left of the non-client area of the window. By default only positive-signed coordinates are
+  supported. If `GLUT_ALLOW_NEGATIVE_WINDOW_POSITION` is enabled, then negative coordinates are
+  supported. An exception for `glutPositionWindow` exists as it's always supported negative window coordinates.
+
+- When you query the size and position of the window using glutGet, FreeGLUT will return
+  the size of the drawable area, the (w,h), that you specified when you created the window
+  and the coordinates of the upper left hand corner of the drawable (client) area which is
+  NOT the (x,y) position of the window you specified when you created it.
+
 ### User-data callbacks
 
+GLUT was created as a tool to help teach OpenGL programming. To simplify development,
+callbacks were used for handling display, input, and other events. But at the time it was developed,
+the purpose, or for some other unknown reason, the callbacks lacked any user-provided data argument.
+This has caused considerable difficulties for any significantly advanced usage of GLUT, and now FreeGLUT.
+This has prevented any attempt to wrap FreeGLUT in a C++ wrapper, make per-window,
+per-callback data structure, and potentially made it undesirable to modern C developers
+who tend to be well versed in "don't use globals". To combat these complaints and issues,
+many callbacks (with some deprecated callbacks excluded) support user-data callbacks
+provided through additional functions provided in FreeGLUT.
+All callbacks that support user-data callbacks are marked as such.
+
+The general rule to follow is to take the FreeGLUT callback function and append "Ucall"
+to the end of the function, add an additional `void*` argument to the end of the argument list
+of both the FreeGLUT function and the callback function.
+This will pass the user-data to the callback when it's invoked.
+
+Examples include:
+
+```c
+void glutPositionFunc ( void (* func)( int x, int y ) );
+void glutPositionFuncUcall ( void (* func)( int x, int y, void* user_data ), void* user_data );
+
+void glutKeyboardUpFunc ( void (* func)( unsigned char key, int x, int y ) );
+void glutKeyboardUpFuncUcall ( void (* func)( unsigned char key, int x, int y, void* user_data ), void* user_data );
+```
+
 ## Terminology
+
+TODO
 
 ## Differences from GLUT 3.7
 
