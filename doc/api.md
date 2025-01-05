@@ -1,9 +1,3 @@
-
-<!--
-TODO:
-Alphabetic sort for each function?
--->
-
 # Table of Contents
 
 1. [Introduction](#introduction)
@@ -248,9 +242,9 @@ This document focuses on the following goals:
 - Provide additional information and trivia
 
 Keep in mind that any and all functions in the [Table of Contents](#table-of-contents)
-that contain "[fg]" are extended functionality that is not part of FreeGLUT.
+that contain "[fg]" are extended functionality that is not part of GLUT.
 This will, of course, be mentioned in the API reference for each function,
-because who reads introductions! :D
+because who reads introductions!
 
 # Background
 
@@ -344,14 +338,12 @@ TODO
 
 Since the FreeGLUT library was developed in order to update GLUT, it is natural
 that there will be some differences between the two.
-<!-- TODO: Does this mean that all function descriptions contain the info that says if they're extended functionality? -->
 Each function in the API notes any differences between the GLUT and the FreeGLUT function behaviours.
-<!---->
 The important ones are summarized here.
 
 ### glutMainLoop Behaviour
 
-One of the commonest complaints about the GLUT library was that once an application
+One of the most common complaints about the GLUT library was that once an application
 called `glutMainLoop`, it never got control back. There was no way for an application
 to loop in GLUT for a while, possibly as a subloop while a specific window was open,
 and then return to the calling function. A new function, `glutMainLoopEvent`, has been
@@ -406,10 +398,8 @@ As these geometry functions are often used for teaching purposes,
 visualize the normal vectors for each vertex.
 
 Lastly, to support drawing these objects with shaders,
-three functions have been added with which users can provide the addresses of the
-<!-- TODO: What are these vertex attributes? -->
-Coordinate, Normal and Texture Coordinate vertex attribs:
-<!---->
+three functions have been added with which users can provide the positions of the
+Coordinate, Normal and Texture vertex positions:
 `glutSetVertexAttribCoord3`, `glutSetVertexAttribNormal`, and `glutSetVertexAttribTexCoord2`.
 Texture coordinates are only generated for the teaset.
 
