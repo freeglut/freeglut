@@ -398,8 +398,8 @@ As these geometry functions are often used for teaching purposes,
 visualize the normal vectors for each vertex.
 
 Lastly, to support drawing these objects with shaders,
-three functions have been added with which users can provide the positions of the
-Coordinate, Normal and Texture vertex positions:
+three functions have been added with which users can
+provide the locations of the vertex position, normal, and texture coordinates attributes:
 `glutSetVertexAttribCoord3`, `glutSetVertexAttribNormal`, and `glutSetVertexAttribTexCoord2`.
 Texture coordinates are only generated for the teaset.
 
