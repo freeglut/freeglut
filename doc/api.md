@@ -355,14 +355,8 @@ added to allow the application to tell FreeGLUT to clean up and close down.
 Another difficulty with GLUT, especially with multiple-window programs, is that
 if the user clicks on the "X" in the window header the application exits immediately.
 The application programmer can now set an option, `GLUT_ACTION_ON_WINDOW_CLOSE`,
-to specify whether execution should continue, whether GLUT should
-return control to the main program, or whether GLUT should simply exit (the default).
-
-<!--
-TODO:
-So the options are continued execution, returning control to the main program and "simply exiting".
-1 sounds like 2, and 2 sounds like 3. I feel like this could use a rewording.
--->
+to specify whether `glutMainLoop` should continue execution, whether FreeGLUT should
+return control to the main program, or whether FreeGLUT should simply exit (the default).
 
 ### Fullscreen windows
 
