@@ -20,205 +20,205 @@
 
 3. [Initialization Functions](#initialization-functions)
 
-	- [glutInit]()
-	- [glutInitWindowPosition]()
-	- [glutInitWindowSize]()
-	- [glutInitDisplayMode]()
-	- [glutInitDisplayString]()
-	- [glutInitErrorFunc [fg]]()
-	- [glutInitWarningFunc [fg]]()
+	- [glutInit](#glutinit)
+	- [glutInitWindowPosition](#glutinitwindowposition)
+	- [glutInitWindowSize](#glutinitwindowsize)
+	- [glutInitDisplayMode](#glutinitdisplaymode)
+	- [glutInitDisplayString](#glutinitdisplaystring)
+	- [glutInitErrorFunc [fg]](#glutiniterrorfunc)
+	- [glutInitWarningFunc [fg]](#glutinitwarningfunc)
 
-4. [Event Processing Functions]()
+4. [Event Processing Functions](#event-processing-functions)
 
-	- [glutMainLoop]()
-	- [glutMainLoopEvent [fg]]()
-	- [glutLeaveMainLoop [fg]]()
+	- [glutMainLoop](#glutmainloop)
+	- [glutMainLoopEvent [fg]](#glutmainloopevent)
+	- [glutLeaveMainLoop [fg]](#glutleavemainloop)
 
-5. [Window Functions]()
+5. [Window Functions](#window-functions)
 
-	- [glutCreateWindow]()
-	- [glutCreateSubwindow]()
-	- [glutDestroyWindow]()
-	- [glutSetWindow]()
-	- [glutGetWindow]()
-	- [glutSetWindowTitle]()
-	- [glutSetIconTitle]()
-	- [glutReshapeWindow]()
-	- [glutPositionWindow]()
-	- [glutShowWindow]()
-	- [glutHideWindow]()
-	- [glutIconifyWindow]()
-	- [glutPushWindow]()
-	- [glutPopWindow]()
-	- [glutFullScreen]()
-	- [glutLeaveFullScreen [fg]]()
-	- [glutFullScreenToggle [fg]]()
+	- [glutCreateWindow](#glutcreatewindow)
+	- [glutCreateSubwindow](#glutcreatesubwindow)
+	- [glutDestroyWindow](#glutdestroywindow)
+	- [glutSetWindow](#glutsetwindow)
+	- [glutGetWindow](#glutgetwindow)
+	- [glutSetWindowTitle](#glutsetwindowtitle)
+	- [glutSetIconTitle](#glutseticontitle)
+	- [glutReshapeWindow](#glutreshapewindow)
+	- [glutPositionWindow](#glutpositionwindow)
+	- [glutShowWindow](#glutshowwindow)
+	- [glutHideWindow](#gluthidewindow)
+	- [glutIconifyWindow](#gluticonifywindow)
+	- [glutPushWindow](#glutpushwindow)
+	- [glutPopWindow](#glutpopwindow)
+	- [glutFullScreen](#glutfullscreen)
+	- [glutLeaveFullScreen [fg]](#glutleavefullscreen)
+	- [glutFullScreenToggle [fg]](#glutfullscreentoggle)
 
-6. [Display Functions]()
+6. [Display Functions](#display-functions)
 
-	- [glutPostRedisplay]()
-	- [glutPostWindowRedisplay]()
-	- [glutSwapBuffers]()
+	- [glutPostRedisplay](#glutpostredisplay)
+	- [glutPostWindowRedisplay](#glutpostwindowredisplay)
+	- [glutSwapBuffers](#glutswapbuffers)
 
-7. [Mouse Cursor Functions]()
+7. [Mouse Cursor Functions](#mouse-cursor-functions)
 
-	- [glutSetCursor]()
-	- [glutWarpPointer]()
+	- [glutSetCursor](#glutsetcursor)
+	- [glutWarpPointer](#glutwarppointer)
 
-8. [Overlay Functions]()
+8. [Overlay Functions](#overlay-functions)
 
-	- [glutEstablishOverlay]()
-	- [glutRemoveOverlay]()
-	- [glutUseLayer]()
-	- [glutPostOverlayRedisplay]()
-	- [glutPostWindowOverlayRedisplay]()
-	- [glutShowOverlay]()
-	- [glutHideOverlay]()
+	- [glutEstablishOverlay](#glutestablishoverlay)
+	- [glutRemoveOverlay](#glutremoveoverlay)
+	- [glutUseLayer](#glutuselayer)
+	- [glutPostOverlayRedisplay](#glutpostoverlayredisplay)
+	- [glutPostWindowOverlayRedisplay](#glutpostwindowoverlayredisplay)
+	- [glutShowOverlay](#glutshowoverlay)
+	- [glutHideOverlay](#gluthideoverlay)
 
-9. [Menu Functions]()
+9. [Menu Functions](#menu-functions)
 
-	- [glutCreateMenu]()
-	- [glutDestroyMenu]()
-	- [glutGetMenu]()
-	- [glutSetMenu]()
-	- [glutAddMenuEntry]()
-	- [glutAddSubMenu]()
-	- [glutChangeToMenuEntry]()
-	- [glutChangeToSubMenu]()
-	- [glutSetMenuFont [fg]]()
-	- [glutRemoveMenuItem]()
-	- [glutAttachMenu]()
-	- [glutDetachMenu]()
-	- [glutMenuDestroyFunc [fg]]()
+	- [glutCreateMenu](#glutcreatemenu)
+	- [glutDestroyMenu](#glutdestroymenu)
+	- [glutGetMenu](#glutgetmenu)
+	- [glutSetMenu](#glutsetmenu)
+	- [glutAddMenuEntry](#glutaddmenuentry)
+	- [glutAddSubMenu](#glutaddsubmenu)
+	- [glutChangeToMenuEntry](#glutchangetomenuentry)
+	- [glutChangeToSubMenu](#glutchangetosubmenu)
+	- [glutSetMenuFont [fg]](#glutsetmenufont)
+	- [glutRemoveMenuItem](#glutremovemenuitem)
+	- [glutAttachMenu](#glutattachmenu)
+	- [glutDetachMenu](#glutdetachmenu)
+	- [glutMenuDestroyFunc [fg]](#glutmenudestroyfunc)
 
-10. [Global Callback Registration Functions]()
+10. [Global Callback Registration Functions](#global-callback-registration-functions)
 
-	- [glutTimerFunc]()
-	- [glutIdleFunc]()
-	- [glutMenuStatusFunc]()
-	- [glutMenuStateFunc]()
+	- [glutTimerFunc](#gluttimerfunc)
+	- [glutIdleFunc](#glutidlefunc)
+	- [glutMenuStatusFunc](#glutmenustatusfunc)
+	- [glutMenuStateFunc](#glutmenustatefunc)
 
-11. [Window-Specific Callback Registration Functions]()
+11. [Window-Specific Callback Registration Functions](#global-callback-registration-functions)
 
-	- [glutDisplayFunc]()
-	- [glutOverlayDisplayFunc]()
-	- [glutReshapeFunc]()
-	- [glutPositionFunc [fg]]()
-	- [glutCloseFunc [fg]]()
-	- [glutKeyboardFunc]()
-	- [glutSpecialFunc]()
-	- [glutKeyboardUpFunc]()
-	- [glutSpecialUpFunc]()
-	- [glutMotionFunc]()
-	- [glutPassiveMotionFunc]()
-	- [glutMouseFunc]()
-	- [glutMouseWheelFunc [fg]]()
-	- [glutEntryFunc]()
-	- [glutJoystickFunc]()
-	- [glutSpaceballMotionFunc]()
-	- [glutSpaceballRotateFunc]()
-	- [glutSpaceballButtonFunc]()
-	- [glutButtonBoxFunc]()
-	- [glutDialsFunc]()
-	- [glutTabletMotionFunc]()
-	- [glutTabletButtonFunc]()
-	- [glutVisibilityFunc]()
-	- [glutWindowStatusFunc]()
+	- [glutDisplayFunc](#glutdisplayfunc)
+	- [glutOverlayDisplayFunc](#glutoverlaydisplayfunc)
+	- [glutReshapeFunc](#glutreshapefunc)
+	- [glutPositionFunc [fg]](#glutpositionfunc)
+	- [glutCloseFunc [fg]](#glutclosefunc)
+	- [glutKeyboardFunc](#glutkeyboardfunc)
+	- [glutSpecialFunc](#glutspecialfunc)
+	- [glutKeyboardUpFunc](#glutkeyboardupfunc)
+	- [glutSpecialUpFunc](#glutspecialupfunc)
+	- [glutMotionFunc](#glutmotionfunc)
+	- [glutPassiveMotionFunc](#glutpassivemotionfunc)
+	- [glutMouseFunc](#glutmousefunc)
+	- [glutMouseWheelFunc [fg]](#glutmousewheelfunc)
+	- [glutEntryFunc](#glutentryfunc)
+	- [glutJoystickFunc](#glutjoystickfunc)
+	- [glutSpaceballMotionFunc](#glutspaceballmotionfunc)
+	- [glutSpaceballRotateFunc](#glutspaceballrotatefunc)
+	- [glutSpaceballButtonFunc](#glutspaceballbuttonfunc)
+	- [glutButtonBoxFunc](#glutbuttonboxfunc)
+	- [glutDialsFunc](#glutdialsfunc)
+	- [glutTabletMotionFunc](#gluttabletmotionfunc)
+	- [glutTabletButtonFunc](#gluttabletbuttonfunc)
+	- [glutVisibilityFunc](#glutvisibilityfunc)
+	- [glutWindowStatusFunc](#glutwindowstatusfunc)
 
-12. [State Setting and Retrieval Functions]()
+12. [State Setting and Retrieval Functions](#state-setting-and-retrieval-functions)
 
-	- [glutSetOption [fg]]()
-	- [glutGet]()
-	- [glutDeviceGet]()
-	- [glutGetModifiers]()
-	- [glutLayerGet]()
-	- [glutExtensionSupported]()
-	- [glutGetProcAddress [fg]]()
+	- [glutSetOption [fg]](#glutsetoption)
+	- [glutGet](#glutget)
+	- [glutDeviceGet](#glutdeviceget)
+	- [glutGetModifiers](#glutgetmodifiers)
+	- [glutLayerGet](#glutlayerget)
+	- [glutExtensionSupported](#glutextensionsupported)
+	- [glutGetProcAddress [fg]](#glutgetprocaddress)
 
-13. [Font Rendering Functions]()
+13. [Font Rendering Functions](font-rendering-functions)
 
-	- [glutBitmapCharacter]()
-	- [glutBitmapString [fg]]()
-	- [glutBitmapWidth]()
-	- [glutBitmapLength]()
-	- [glutBitmapHeight [fg]]()
-	- [glutStrokeCharacter]()
-	- [glutStrokeString [fg]]()
-	- [glutStrokeWidth]()
-	- [glutStrokeWidthf]()
-	- [glutStrokeLength]()
-	- [glutStrokeLengthf]()
-	- [glutStrokeHeight [fg]]()
+	- [glutBitmapCharacter](#glutbitmapcharacter)
+	- [glutBitmapString [fg]](#glutbitmapstring)
+	- [glutBitmapWidth](#glutbitmapwidth)
+	- [glutBitmapLength](#glutbitmaplength)
+	- [glutBitmapHeight [fg]](#glutbitmapheight)
+	- [glutStrokeCharacter](#glutstrokecharacter)
+	- [glutStrokeString [fg]](#glutstrokestring)
+	- [glutStrokeWidth](#glutstrokewidth)
+	- [glutStrokeWidthf](#glutstrokewidthf)
+	- [glutStrokeLength](#glutstrokelength)
+	- [glutStrokeLengthf](#glutstrokelengthf)
+	- [glutStrokeHeight [fg]](#glutstrokeheight)
 
-14. [Geometric Object Rendering Functions]()
+14. [Geometric Object Rendering Functions](#geometric-object-rendering-functions)
 
-	- [glutWireSphere]()
-	- [glutSolidSphere]()
-	- [glutWireTorus]()
-	- [glutSolidTorus]()
-	- [glutWireCone]()
-	- [glutSolidCone]()
-	- [glutWireCube]()
-	- [glutSolidCube]()
-	- [glutWireTetrahedron]()
-	- [glutSolidTetrahedron]()
-	- [glutWireOctahedron]()
-	- [glutSolidOctahedron]()
-	- [glutWireDodecahedron]()
-	- [glutSolidDodecahedron]()
-	- [glutWireIcosahedron]()
-	- [glutSolidIcosahedron]()
-	- [glutWireRhombicDodecahedron [fg]]()
-	- [glutSolidRhombicDodecahedron [fg]]()
-	- [glutWireTeapot]()
-	- [glutSolidTeapot]()
-	- [glutWireTeacup [fg]]()
-	- [glutSolidTeacup [fg]]()
-	- [glutWireTeaspoon [fg]]()
-	- [glutSolidTeaspoon [fg]]()
-	- [glutSetVertexAttribCoord3 [fg]]()
-	- [glutSetVertexAttribNormal [fg]]()
-	- [glutSetVertexAttribTexCoord2 [fg]]()
+	- [glutWireSphere](#glutwiresphere)
+	- [glutSolidSphere](#glutsolidsphere)
+	- [glutWireTorus](#glutwiretorus)
+	- [glutSolidTorus](#glutsolidtorus)
+	- [glutWireCone](#glutwirecone)
+	- [glutSolidCone](#glutsolidcone)
+	- [glutWireCube](#glutwirecube)
+	- [glutSolidCube](#glutsolidcube)
+	- [glutWireTetrahedron](#glutwiretetrahedron)
+	- [glutSolidTetrahedron](#glutsolidtetrahedron)
+	- [glutWireOctahedron](#glutwireoctahedron)
+	- [glutSolidOctahedron](#glutsolidoctahedron)
+	- [glutWireDodecahedron](#glutwiredodecahedron)
+	- [glutSolidDodecahedron](#glutsoliddodecahedron)
+	- [glutWireIcosahedron](#glutwireicosahedron)
+	- [glutSolidIcosahedron](#glutsolidicosahedron)
+	- [glutWireRhombicDodecahedron [fg]](#glutwirerhombicdodecahedron)
+	- [glutSolidRhombicDodecahedron [fg]](#glutsolidrhombicdodecahedron)
+	- [glutWireTeapot](#glutwireteapot)
+	- [glutSolidTeapot](#glutsolidteapot)
+	- [glutWireTeacup [fg]](#glutwireteacup)
+	- [glutSolidTeacup [fg]](#glutsolidteacup)
+	- [glutWireTeaspoon [fg]](#glutwireteaspoon)
+	- [glutSolidTeaspoon [fg]](#glutsolidteaspoon)
+	- [glutSetVertexAttribCoord3 [fg]](#glutsetvertexattribcoord3)
+	- [glutSetVertexAttribNormal [fg]](#glutsetvertexattribnormal)
+	- [glutSetVertexAttribTexCoord2 [fg]](#glutsetvertexattribtexcoord2)
 
-15. [Game Mode Functions]()
+15. [Game Mode Functions](#game-mode-functions)
 
-	- [glutGameModeString]()
-	- [glutEnterGameMode]()
-	- [glutLeaveGameMode]()
-	- [glutGameModeGet]()
+	- [glutGameModeString](#glutgamemodestring)
+	- [glutEnterGameMode](#glutentergamemode)
+	- [glutLeaveGameMode](#glutleavegamemode)
+	- [glutGameModeGet](#glutgamemodeget)
 
-16. [Video Resize Functions]()
+16. [Video Resize Functions](#video-resize-functions)
 
-	- [glutVideoResizeGet]()
-	- [glutSetupVideoResizing]()
-	- [glutStopVideoResizing]()
-	- [glutVideoResize]()
-	- [glutVideoPan]()
+	- [glutVideoResizeGet](#glutvideoresizeget)
+	- [glutSetupVideoResizing](#glutsetupvideoresizing)
+	- [glutStopVideoResizing](#glutstopvideoresizing)
+	- [glutVideoResize](#glutvideoresize)
+	- [glutVideoPan](#glutvideopan)
 
-17. [Color Map Functions]()
+17. [Color Map Functions](#color-map-functions)
 
-	- [glutSetColor]()
-	- [glutGetColor]()
-	- [glutCopyColormap]()
+	- [glutSetColor](#glutsetcolor)
+	- [glutGetColor](#glutgetcolor)
+	- [glutCopyColormap](#glutcopycolormap)
 
-18. [MultiTouch Functions]()
+18. [MultiTouch Functions](#multitouch-functions)
 
-	- [glutMultiEntryFunc [fg]]()
-	- [glutMultiButtonFunc [fg]]()
-	- [glutMultiMotionFunc [fg]]()
-	- [glutMultiPassiveFunc [fg]]()
+	- [glutMultiEntryFunc [fg]](#glutmultientryfunc)
+	- [glutMultiButtonFunc [fg]](#glutmultibuttonfunc)
+	- [glutMultiMotionFunc [fg]](#glutmultimotionfunc)
+	- [glutMultiPassiveFunc [fg]](#glutmultipassivefunc)
 
-19. [Mobile functions]()
+19. [Mobile functions](#mobile-functions)
 
-	- [glutInitContextFunc [fg]]()
-	- [glutAppStatusFunc [fg]]()
+	- [glutInitContextFunc [fg]](#glutinitcontextfunc)
+	- [glutAppStatusFunc [fg]](#glutappstatusfunc)
 
-20. [Miscellaneous Functions]()
+20. [Miscellaneous Functions](#miscellaneous-functions)
 
-	- [glutSetKeyRepeat]()
-	- [glutIgnoreKeyRepeat]()
-	- [glutForceJoystickFunc]()
-	- [glutReportErrors]()
+	- [glutSetKeyRepeat](#glutsetkeyrepeat)
+	- [glutIgnoreKeyRepeat](#glutignorekeyrepeat)
+	- [glutForceJoystickFunc](#glutforcejoystickfunc)
+	- [glutReportErrors](#glutreporterrors)
 
 21. [Usage Notes]()
 
@@ -403,4 +403,363 @@ Texture coordinates are only generated for the teaset.
 
 # Initialization Functions
 
-TODO
+## glutInit
+
+## glutInitWindowPosition
+
+## glutInitWindowSize
+
+## glutInitDisplayMode
+
+## glutInitDisplayString
+
+## glutInitErrorFunc
+
+## glutInitWarningFunc
+
+
+
+# Event Processing Functions
+
+## glutMainLoop
+
+## glutMainLoopEvent
+
+## glutLeaveMainLoop
+
+
+
+# Window Functions
+
+## glutCreateWindow
+
+## glutCreateSubwindow
+
+## glutDestroyWindow
+
+## glutSetWindow
+
+## glutGetWindow
+
+## glutSetWindowTitle
+
+## glutSetIconTitle
+
+## glutReshapeWindow
+
+## glutPositionWindow
+
+## glutShowWindow
+
+## glutHideWindow
+
+## glutIconifyWindow
+
+## glutPushWindow
+
+## glutPopWindow
+
+## glutFullScreen
+
+## glutLeaveFullScreen
+
+## glutFullScreenToggle
+
+
+
+# Display Functions
+
+## glutPostRedisplay
+
+## glutPostWindowRedisplay
+
+## glutSwapBuffers
+
+
+
+# Mouse Cursor Functions
+
+## glutSetCursor
+
+## glutWarpPointer
+
+
+
+# Overlay Functions
+
+## glutEstablishOverlay
+
+## glutRemoveOverlay
+
+## glutUseLayer
+
+## glutPostOverlayRedisplay
+
+## glutPostWindowOverlayRedisplay
+
+## glutShowOverlay
+
+## glutHideOverlay
+
+
+
+# Menu Functions
+
+## glutCreateMenu
+
+## glutDestroyMenu
+
+## glutGetMenu
+
+## glutSetMenu
+
+## glutAddMenuEntry
+
+## glutAddSubMenu
+
+## glutChangeToMenuEntry
+
+## glutChangeToSubMenu
+
+## glutSetMenuFont
+
+## glutRemoveMenuItem
+
+## glutAttachMenu
+
+## glutDetachMenu
+
+## glutMenuDestroyFunc
+
+
+
+# Global Callback Registration Functions
+
+## glutTimerFunc
+
+## glutIdleFunc
+
+## glutMenuStatusFunc
+
+## glutMenuStateFunc
+
+
+
+# Window-Specific Callback Registration Functions
+
+## glutDisplayFunc
+
+## glutOverlayDisplayFunc
+
+## glutReshapeFunc
+
+## glutPositionFunc
+
+## glutCloseFunc
+
+## glutKeyboardFunc
+
+## glutSpecialFunc
+
+## glutKeyboardUpFunc
+
+## glutSpecialUpFunc
+
+## glutMotionFunc
+
+## glutPassiveMotionFunc
+
+## glutMouseFunc
+
+## glutMouseWheelFunc
+
+## glutEntryFunc
+
+## glutJoystickFunc
+
+## glutSpaceballMotionFunc
+
+## glutSpaceballRotateFunc
+
+## glutSpaceballButtonFunc
+
+## glutButtonBoxFunc
+
+## glutDialsFunc
+
+## glutTabletMotionFunc
+
+## glutTabletButtonFunc
+
+## glutVisibilityFunc
+
+## glutWindowStatusFunc
+
+# State Setting and Retrieval Functions
+
+## glutSetOption
+
+## glutGet
+
+## glutDeviceGet
+
+## glutGetModifiers
+
+## glutLayerGet
+
+## glutExtensionSupported
+
+## glutGetProcAddress
+
+
+
+# Font Rendering Functions
+
+## glutBitmapCharacter
+
+## glutBitmapString
+
+## glutBitmapWidth
+
+## glutBitmapLength
+
+## glutBitmapHeight
+
+## glutStrokeCharacter
+
+## glutStrokeString
+
+## glutStrokeWidth
+
+## glutStrokeWidthf
+
+## glutStrokeLength
+
+## glutStrokeLengthf
+
+## glutStrokeHeight
+
+
+# Geometric Object Rendering Functions
+
+## glutWireSphere
+
+## glutSolidSphere
+
+## glutWireTorus
+
+## glutSolidTorus
+
+## glutWireCone
+
+## glutSolidCone
+
+## glutWireCube
+
+## glutSolidCube
+
+## glutWireTetrahedron
+
+## glutSolidTetrahedron
+
+## glutWireOctahedron
+
+## glutSolidOctahedron
+
+## glutWireDodecahedron
+
+## glutSolidDodecahedron
+
+## glutWireIcosahedron
+
+## glutSolidIcosahedron
+
+## glutWireRhombicDodecahedron
+
+## glutSolidRhombicDodecahedron
+
+## glutWireTeapot
+
+## glutSolidTeapot
+
+## glutWireTeacup
+
+## glutSolidTeacup
+
+## glutWireTeaspoon
+
+## glutSolidTeaspoon
+
+## glutSetVertexAttribCoord3
+
+## glutSetVertexAttribNormal
+
+## glutSetVertexAttribTexCoord2
+
+
+
+# Game Mode Functions
+
+## glutGameModeString
+
+## glutEnterGameMode
+
+## glutLeaveGameMode
+
+## glutGameModeGet
+
+
+
+# Video Resize Functions
+
+## glutVideoResizeGet
+
+## glutSetupVideoResizing
+
+## glutStopVideoResizing
+
+## glutVideoResize
+
+## glutVideoPan
+
+
+
+# Color Map Functions
+
+## glutSetColor
+
+## glutGetColor
+
+## glutCopyColormap
+
+
+
+# MultiTouch Functions
+
+## glutMultiEntryFunc
+
+## glutMultiButtonFunc
+
+## glutMultiMotionFunc
+
+## glutMultiPassiveFunc
+
+
+
+# Mobile functions
+
+## glutInitContextFunc
+
+## glutAppStatusFunc
+
+
+
+# Miscellaneous Functions
+
+## glutSetKeyRepeat
+
+## glutIgnoreKeyRepeat
+
+## glutForceJoystickFunc
+
+## glutReportErrors
