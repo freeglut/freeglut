@@ -103,12 +103,12 @@ typedef char ourGLchar;
 typedef void (APIENTRY *PFNGLGENVERTEXARRAYSPROC) (GLsizei n, GLuint *arrays);
 typedef void (APIENTRY *PFNGLBINDVERTEXARRAYPROC) (GLuint array);
 #endif
-#ifndef GL_VERSION_1_5
+#if !defined(GL_VERSION_1_5) || defined(__APPLE__)
 typedef void (APIENTRY *PFNGLGENBUFFERSPROC) (GLsizei n, GLuint *buffers);
 typedef void (APIENTRY *PFNGLBINDBUFFERPROC) (GLenum target, GLuint buffer);
 typedef void (APIENTRY *PFNGLBUFFERDATAPROC) (GLenum target, ourGLsizeiptr size, const GLvoid *data, GLenum usage);
 #endif
-#ifndef GL_VERSION_2_0
+#if !defined(GL_VERSION_2_0) || defined(__APPLE__)
 typedef GLuint (APIENTRY *PFNGLCREATESHADERPROC) (GLenum type);
 typedef void (APIENTRY *PFNGLSHADERSOURCEPROC) (GLuint shader, GLsizei count, const ourGLchar **string, const GLint *length);
 typedef void (APIENTRY *PFNGLCOMPILESHADERPROC) (GLuint shader);
@@ -151,8 +151,13 @@ PFNGLUNIFORMMATRIX4FVPROC gl_UniformMatrix4fv;
 
 void initExtensionEntries(void)
 {
+#ifdef __APPLE__
+   gl_GenVertexArrays = (PFNGLGENVERTEXARRAYSPROC) glutGetProcAddress ("glGenVertexArraysAPPLE");
+   gl_BindVertexArray = (PFNGLBINDVERTEXARRAYPROC) glutGetProcAddress ("glBindVertexArrayAPPLE");
+#else
    gl_GenVertexArrays = (PFNGLGENVERTEXARRAYSPROC) glutGetProcAddress ("glGenVertexArrays");
    gl_BindVertexArray = (PFNGLBINDVERTEXARRAYPROC) glutGetProcAddress ("glBindVertexArray");
+#endif
    if (!gl_GenVertexArrays || !gl_BindVertexArray)
    {
        fprintf (stderr, "glGenVertexArrays or glBindVertexArray not found");
