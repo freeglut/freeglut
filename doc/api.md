@@ -224,7 +224,7 @@
 
 	- [Implementation Notes](#implementation-notes)
 	- [GLUT State](#glut-state)
-	- ["freeglut.h" Header File](#freeglut-h-header-file)
+	- ["freeglut.h" Header File](#freegluth-header-file)
 	- [References](#references)
 	- [Index](#index)
 
@@ -768,9 +768,31 @@ Texture coordinates are only generated for the teaset.
 
 # Usage Notes
 
+The following environment variables are recognized by FreeGLUT:
+
+- `DISPLAY` - Specifies a display name
+- `GLUT_FPS` - Specifies a time interval (in milliseconds) for reporting framerate messages to `stderr`.
+               For example, if `GLUT_FPS` is set to 5000, every 5 seconds a message will be printed to
+			   `stderr` showing the current frame rate. The frame rate is measured by counting the number
+			   of times `glutSwapBuffers()` is called over the time interval.
+
+Furthermore, on Windows, there is a resource file identifier `GLUT_ICON` that you can specify for your
+executable file. It specifies the icon that goes in the upper left-hand corner of the FreeGLUT windows.
+Your application's resource file should contain the line:
+```c
+GLUT_ICON ICON DISCARDABLE "icon.ico"
+```
+where `icon.ico` is the filename of your icon.
+
+The "One" demo includes such an icon as an example.
+
 ## Implementation Notes
 
+TODO
+
 ## GLUT State
+
+TODO
 
 ## "freeglut.h" Header File
 
@@ -784,76 +806,76 @@ Texture coordinates are only generated for the teaset.
 
 Currently, functions which aren't placed in any category are the following:
 
-- glutExit
+- `glutExit`
 
-- glutWMCloseFunc
+- `glutWMCloseFunc`
 
-- glutGetModeValues
-- glutGetWindowData
-- glutSetWindowData
+- `glutGetModeValues`
+- `glutGetWindowData`
+- `glutSetWindowData`
 
-- glutGetMenuData
-- glutSetMenuData
+- `glutGetMenuData`
+- `glutSetMenuData`
 
-- glutWireSierpinskiSponge
-- glutSolidSierpinskiSponge
+- `glutWireSierpinskiSponge`
+- `glutSolidSierpinskiSponge`
 
-- glutWireCylinder
-- glutSolidCylinder
+- `glutWireCylinder`
+- `glutSolidCylinder`
 
-- glutJoystickGetNumAxes
-- glutJoystickGetNumButtons
-- glutJoystickNotWorking
-- glutJoystickGetDeadBand
-- glutJoystickSetDeadBand
-- glutJoystickGetSaturation
-- glutJoystickSetSaturation
-- glutJoystickSetMinRange
-- glutJoystickSetMaxRange
-- glutJoystickSetCenter
-- glutJoystickGetMinRange
-- glutJoystickGetMaxRange
-- glutJoystickGetCenter
+- `glutJoystickGetNumAxes`
+- `glutJoystickGetNumButtons`
+- `glutJoystickNotWorking`
+- `glutJoystickGetDeadBand`
+- `glutJoystickSetDeadBand`
+- `glutJoystickGetSaturation`
+- `glutJoystickSetSaturation`
+- `glutJoystickSetMinRange`
+- `glutJoystickSetMaxRange`
+- `glutJoystickSetCenter`
+- `glutJoystickGetMinRange`
+- `glutJoystickGetMaxRange`
+- `glutJoystickGetCenter`
 
-- glutInitContextVersion
-- glutInitContextFlags
-- glutInitContextProfile
+- `glutInitContextVersion`
+- `glutInitContextFlags`
+- `glutInitContextProfile`
 
-- glutCreateMenuUcall
-- glutTimerFuncUcall
-- glutIdleFuncUcall
-- glutKeyboardFuncUcall
-- glutSpecialFuncUcall
-- glutReshapeFuncUcall
-- glutVisibilityFuncUcall
-- glutDisplayFuncUcall
-- glutMouseFuncUcall
-- glutMotionFuncUcall
-- glutPassiveMotionFuncUcall
-- glutEntryFuncUcall
-- glutKeyboardUpFuncUcall
-- glutSpecialUpFuncUcall
-- glutJoystickFuncUcall
-- glutMenuStatusFuncUcall
-- glutOverlayDisplayFuncUcall
-- glutWindowStatusFuncUcall
-- glutSpaceballMotionFuncUcall
-- glutSpaceballRotateFuncUcall
-- glutSpaceballButtonFuncUcall
-- glutButtonBoxFuncUcall
-- glutDialsFuncUcall
-- glutTabletMotionFuncUcall
-- glutTabletButtonFuncUcall
-- glutMouseWheelFuncUcall
-- glutPositionFuncUcall
-- glutCloseFuncUcall
-- glutWMCloseFuncUcall
-- glutMenuDestroyFuncUcall
-- glutMultiEntryFuncUcall
-- glutMultiButtonFuncUcall
-- glutMultiMotionFuncUcall
-- glutMultiPassiveFuncUcall
-- glutInitErrorFuncUcall
-- glutInitWarningFuncUcall
-- glutInitContextFuncUcall
-- glutAppStatusFuncUcall
+- `glutCreateMenuUcall`
+- `glutTimerFuncUcall`
+- `glutIdleFuncUcall`
+- `glutKeyboardFuncUcall`
+- `glutSpecialFuncUcall`
+- `glutReshapeFuncUcall`
+- `glutVisibilityFuncUcall`
+- `glutDisplayFuncUcall`
+- `glutMouseFuncUcall`
+- `glutMotionFuncUcall`
+- `glutPassiveMotionFuncUcall`
+- `glutEntryFuncUcall`
+- `glutKeyboardUpFuncUcall`
+- `glutSpecialUpFuncUcall`
+- `glutJoystickFuncUcall`
+- `glutMenuStatusFuncUcall`
+- `glutOverlayDisplayFuncUcall`
+- `glutWindowStatusFuncUcall`
+- `glutSpaceballMotionFuncUcall`
+- `glutSpaceballRotateFuncUcall`
+- `glutSpaceballButtonFuncUcall`
+- `glutButtonBoxFuncUcall`
+- `glutDialsFuncUcall`
+- `glutTabletMotionFuncUcall`
+- `glutTabletButtonFuncUcall`
+- `glutMouseWheelFuncUcall`
+- `glutPositionFuncUcall`
+- `glutCloseFuncUcall`
+- `glutWMCloseFuncUcall`
+- `glutMenuDestroyFuncUcall`
+- `glutMultiEntryFuncUcall`
+- `glutMultiButtonFuncUcall`
+- `glutMultiMotionFuncUcall`
+- `glutMultiPassiveFuncUcall`
+- `glutInitErrorFuncUcall`
+- `glutInitWarningFuncUcall`
+- `glutInitContextFuncUcall`
+- `glutAppStatusFuncUcall`
