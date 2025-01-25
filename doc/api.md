@@ -220,15 +220,15 @@
 	- [glutForceJoystickFunc](#glutforcejoystickfunc)
 	- [glutReportErrors](#glutreporterrors)
 
-21. [Usage Notes]()
+21. [Usage Notes](#usage-notes)
 
-	- [Implementation Notes]()
-	- [GLUT State]()
-	- ["freeglut.h" Header File]()
-	- [References]()
-	- [Index]()
+	- [Implementation Notes](#implementation-notes)
+	- [GLUT State](#glut-state)
+	- ["freeglut.h" Header File](#freeglut-h-header-file)
+	- [References](#references)
+	- [Index](#index)
 
-22. [Unsorted Functions]()
+22. [Unsorted Functions](#unsorted-functions)
 
 ---
 
@@ -763,3 +763,97 @@ Texture coordinates are only generated for the teaset.
 ## glutForceJoystickFunc
 
 ## glutReportErrors
+
+
+
+# Usage Notes
+
+## Implementation Notes
+
+## GLUT State
+
+## "freeglut.h" Header File
+
+## References
+
+## Index
+
+
+
+# Unsorted Functions
+
+Currently, functions which aren't placed in any category are the following:
+
+- glutExit
+
+- glutWMCloseFunc
+
+- glutGetModeValues
+- glutGetWindowData
+- glutSetWindowData
+
+- glutGetMenuData
+- glutSetMenuData
+
+- glutWireSierpinskiSponge
+- glutSolidSierpinskiSponge
+
+- glutWireCylinder
+- glutSolidCylinder
+
+- glutJoystickGetNumAxes
+- glutJoystickGetNumButtons
+- glutJoystickNotWorking
+- glutJoystickGetDeadBand
+- glutJoystickSetDeadBand
+- glutJoystickGetSaturation
+- glutJoystickSetSaturation
+- glutJoystickSetMinRange
+- glutJoystickSetMaxRange
+- glutJoystickSetCenter
+- glutJoystickGetMinRange
+- glutJoystickGetMaxRange
+- glutJoystickGetCenter
+
+- glutInitContextVersion
+- glutInitContextFlags
+- glutInitContextProfile
+
+- glutCreateMenuUcall
+- glutTimerFuncUcall
+- glutIdleFuncUcall
+- glutKeyboardFuncUcall
+- glutSpecialFuncUcall
+- glutReshapeFuncUcall
+- glutVisibilityFuncUcall
+- glutDisplayFuncUcall
+- glutMouseFuncUcall
+- glutMotionFuncUcall
+- glutPassiveMotionFuncUcall
+- glutEntryFuncUcall
+- glutKeyboardUpFuncUcall
+- glutSpecialUpFuncUcall
+- glutJoystickFuncUcall
+- glutMenuStatusFuncUcall
+- glutOverlayDisplayFuncUcall
+- glutWindowStatusFuncUcall
+- glutSpaceballMotionFuncUcall
+- glutSpaceballRotateFuncUcall
+- glutSpaceballButtonFuncUcall
+- glutButtonBoxFuncUcall
+- glutDialsFuncUcall
+- glutTabletMotionFuncUcall
+- glutTabletButtonFuncUcall
+- glutMouseWheelFuncUcall
+- glutPositionFuncUcall
+- glutCloseFuncUcall
+- glutWMCloseFuncUcall
+- glutMenuDestroyFuncUcall
+- glutMultiEntryFuncUcall
+- glutMultiButtonFuncUcall
+- glutMultiMotionFuncUcall
+- glutMultiPassiveFuncUcall
+- glutInitErrorFuncUcall
+- glutInitWarningFuncUcall
+- glutInitContextFuncUcall
+- glutAppStatusFuncUcall
