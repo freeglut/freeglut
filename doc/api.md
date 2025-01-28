@@ -796,11 +796,41 @@ TODO
 
 ## "freeglut.h" Header File
 
+Application programmers who are porting their GLUT programs to FreeGLUT may continue to include `<GL/glut.h>`
+in their programs. Programs which use the FreeGLUT-specific extensions to GLUT should include `<GL/freeglut.h>`.
+One possible arrangement is as follows:
+
+```c
+#ifdef FREEGLUT
+#include <GL/freeglut.h>
+#else
+#include <GL/glut.h>
+#endif
+```
+
+It was initially planned to define `FREEGLUT_VERSION_2_0`, `FREEGLUT_VERSION_2_1`, `FREEGLUT_VERSION_2_2`, etc.,
+but this was only done for `FREEGLUT_VERSION_2_0`.
+**This constant still exist in current FreeGLUT releases but is deprecated.**
+
+The FreeGLUT version can be queried at runtime by calling `glutGet(GLUT_VERSION)`.
+The result will be `X*10000 + Y*100 + Z` where `X` is the major version, `Y` is the minor version and `Z` is the patch level.
+
+This may be used as follows:
+
+```c
+if (glutGet(GLUT_VERSION) < 20001) {
+    printf("Sorry, you need FreeGLUT version 2.0.1 or later to run this program.\n");
+    exit(1);
+}
+```
+
 ## References
+
+TODO
 
 ## Index
 
-
+TODO
 
 # Unsorted Functions
 
