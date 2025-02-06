@@ -289,18 +289,18 @@ it is apparently not possible to get the window border sizes in order to subtrac
 the window's initial position until some time after the window has been created.
 Therefore we decided on the following behavior, both under Windows and under UNIX/X11:
 
-- When you create a window with position (x,y) and size (w,h), the upper left hand corner of the
-  outside of the window (the non-client area) is at (x,y) and the size of the drawable (client)
-  area is (w,h). The coordinates taken by `glutInitPosition` and `glutPositionWindow`, as well as the
+- When you create a window with position `(x,y)` and size `(w,h)`, the upper left hand corner of the
+  outside of the window (the non-client area) is at `(x,y)` and the size of the drawable (client)
+  area is `(w,h)`. The coordinates taken by `glutInitPosition` and `glutPositionWindow`, as well as the
   coordinates provided by FreeGLUT when it calls the `glutPositionFunc` callback, specify the
   top-left of the non-client area of the window. By default only positive-signed coordinates are
   supported. If `GLUT_ALLOW_NEGATIVE_WINDOW_POSITION` is enabled, then negative coordinates are
   supported. An exception for `glutPositionWindow` exists as it's always supported negative window coordinates.
 
 - When you query the size and position of the window using glutGet, FreeGLUT will return
-  the size of the drawable area, the (w,h), that you specified when you created the window
+  the size of the drawable area, the `(w,h)`, that you specified when you created the window
   and the coordinates of the upper left hand corner of the drawable (client) area which is
-  NOT the (x,y) position of the window you specified when you created it.
+  NOT the `(x,y)` position of the window you specified when you created it.
 
 ### User-data callbacks
 
