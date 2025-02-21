@@ -40,7 +40,7 @@
  * XXX: If so, remove the first set of defined()'s below.
  */
 #if !defined(TARGET_HOST_POSIX_X11) && !defined(TARGET_HOST_MS_WINDOWS) && !defined(TARGET_HOST_MAC_OSX) && !defined(TARGET_HOST_SOLARIS) && \
-    !defined(TARGET_HOST_ANDROID) && !defined(TARGET_HOST_BLACKBERRY) && !defined(TARGET_HOST_POSIX_WAYLAND)
+    !defined(TARGET_HOST_ANDROID) && !defined(TARGET_HOST_BLACKBERRY) && !defined(TARGET_HOST_POSIX_WAYLAND) && !defined(TARGET_HOST_MACOS_COCOA)
 #if defined(_MSC_VER) || defined(__WATCOMC__) || defined(__MINGW32__) \
     || defined(_WIN32) || defined(_WIN32_WCE) \
     || ( defined(__CYGWIN__) && defined(X_DISPLAY_MISSING) )
@@ -59,7 +59,7 @@
 #      define  TARGET_HOST_POSIX_X11  1
 #   endif
 
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) && !defined(TARGET_HOST_MACOS_COCOA)
 /* This is a placeholder until we get native OSX support ironed out -- JFF 11/18/09 */
 #   define  TARGET_HOST_POSIX_X11  1
 /* #   define  TARGET_HOST_MAC_OSX    1 */
@@ -108,6 +108,10 @@
 
 #ifndef  TARGET_HOST_OGC
 #   define  TARGET_HOST_OGC            0
+#endif
+
+#ifndef  TARGET_HOST_MACOS_COCOA
+#   define  TARGET_HOST_MACOS_COCOA    0
 #endif
 
 /* -- FIXED CONFIGURATION LIMITS ------------------------------------------- */
@@ -219,6 +223,9 @@
 #endif
 #if TARGET_HOST_OGC
 #include "ogc/fg_internal_ogc.h"
+#endif
+#if TARGET_HOST_MACOS_COCOA
+#include "cocoa/fg_internal_cocoa.h"
 #endif
 
 

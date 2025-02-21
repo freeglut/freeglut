@@ -84,6 +84,13 @@ IF(NOT WIN32)
     OPTION(FREEGLUT_WAYLAND "Use Wayland (no X11)" OFF)
 ENDIF()
 
+OPTION(FREEGLUT_COCOA "Build support for Cocoa" OFF)
+
+# Eventually default to ON when Cocoa is fully supported
+# IF(APPLE)
+#     OPTION(FREEGLUT_COCOA "Build support for Cocoa" ON)
+# ENDIF()
+
 IF(CMAKE_SYSTEM_NAME MATCHES "NintendoWii|NintendoGameCube")
     SET(OGC ON)
 ELSE()
@@ -236,6 +243,25 @@ ELSEIF(OGC)
     # Only used in fg_window.c, to declare support for double buffering
     ADD_DEFINITIONS(-DEGL_VERSION_1_0)
 
+ELSEIF(FREEGLUT_COCOA)
+    LIST(APPEND FREEGLUT_SRCS
+        src/cocoa/fg_cmap_cocoa.m
+        src/cocoa/fg_cursor_cocoa.m
+        src/cocoa/fg_display_cocoa.m
+        src/cocoa/fg_glut_definitions_cocoa.m
+        src/cocoa/fg_ext_cocoa.m
+        src/cocoa/fg_gamemode_cocoa.m
+        src/cocoa/fg_init_cocoa.m
+        src/cocoa/fg_internal_cocoa.h
+        src/cocoa/fg_input_devices_cocoa.m
+        src/cocoa/fg_joystick_cocoa.m
+        src/cocoa/fg_main_cocoa.m
+        src/cocoa/fg_spaceball_cocoa.m
+        src/cocoa/fg_state_cocoa.m
+        src/cocoa/fg_structure_cocoa.m
+        src/cocoa/fg_window_cocoa.m
+    )
+
 ELSE()
     # UNIX (Wayland)
     IF(FREEGLUT_WAYLAND)
@@ -311,7 +337,7 @@ ENDIF()
 
 INCLUDE(CheckIncludeFiles)
 
-IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND OR OGC))
+IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND OR OGC OR FREEGLUT_COCOA))
     FIND_PACKAGE(X11 REQUIRED)
     INCLUDE_DIRECTORIES(${X11_X11_INCLUDE_PATH})
     LIST(APPEND LIBS ${X11_X11_LIB})
@@ -369,7 +395,7 @@ IF(FREEGLUT_GLES)
 ELSE()
     # On OS X, we need to link against the X11 OpenGL libraries, NOT the Cocoa OpenGL libraries.
     # To do that, you need to manually find two of the libraries before calling FindOpenGL
-    if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" AND NOT FREEGLUT_COCOA)
       # get path where X11 libs are
       get_filename_component(X11_LIB_PATH ${X11_Xi_LIB} DIRECTORY)
 
@@ -458,6 +484,15 @@ IF(WIN32)
         ADD_DEFINITIONS(-DWINVER=0x0500)
     ENDIF()
 
+ENDIF()
+
+IF(FREEGLUT_COCOA)
+    FIND_PACKAGE(OpenGL REQUIRED)
+    INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+    FIND_LIBRARY(COCOA_FRAMEWORK Cocoa)
+    FIND_LIBRARY(IOKIT_FRAMEWORK IOKit)
+    FIND_LIBRARY(COREVIDEO_FRAMEWORK CoreVideo)
+    LIST(APPEND LIBS ${COCOA_FRAMEWORK} ${OPENGL_FRAMEWORK} ${IOKIT_FRAMEWORK} ${COREVIDEO_FRAMEWORK})
 ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -594,6 +629,10 @@ ELSE()
         IF(FREEGLUT_REPLACE_GLUT)
             SET(LIBNAME glut)
         ENDIF()
+    ENDIF()
+
+    IF(FREEGLUT_COCOA)
+        ADD_DEFINITIONS(-DTARGET_HOST_MACOS_COCOA=1)
     ENDIF()
 
     IF(FREEGLUT_BUILD_SHARED_LIBS)
