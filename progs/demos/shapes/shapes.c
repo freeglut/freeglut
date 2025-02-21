@@ -94,7 +94,7 @@ typedef char ourGLchar;
 #define APIENTRY
 #endif
 
-#if (!GL_VERSION_2_0 || __APPLE__)
+#if !defined(GL_VERSION_2_0) || defined(__APPLE__)
 typedef GLuint (APIENTRY *PFNGLCREATESHADERPROC) (GLenum type);
 typedef void (APIENTRY *PFNGLSHADERSOURCEPROC) (GLuint shader, GLsizei count, const ourGLchar **string, const GLint *length);
 typedef void (APIENTRY *PFNGLCOMPILESHADERPROC) (GLuint shader);
