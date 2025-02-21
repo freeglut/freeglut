@@ -17,7 +17,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
+#ifndef  FREEGLUT_INTERNAL_COCOA_H
+#define  FREEGLUT_INTERNAL_COCOA_H
 
 #include <unistd.h>
 
@@ -74,3 +75,5 @@ typedef struct CocoaWindowState      SFG_PlatformWindowState;
 typedef struct CocoaPlatformDisplay  SFG_PlatformDisplay;
 typedef struct CocoaPlatformContext  SFG_PlatformContext;
 typedef struct CocoaPlatformJoystick SFG_PlatformJoystick;
+
+#endif /* FREEGLUT_INTERNAL_COCOA_H */
