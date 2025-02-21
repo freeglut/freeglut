@@ -74,6 +74,11 @@ ELSE()
     OPTION(FREEGLUT_REPLACE_GLUT "Be a replacement for GLUT" ON)
 ENDIF()
 
+# determine link glut or freeglut in freeglut_std.h
+IF(FREEGLUT_REPLACE_GLUT)
+    ADD_DEFINITIONS(-DFREEGLUT_REPLACE_GLUT)
+ENDIF()
+
 IF(NOT WIN32)
     # Wayland support
     OPTION(FREEGLUT_WAYLAND "Use Wayland (no X11)" OFF)
@@ -538,7 +543,7 @@ IF(WIN32)
     IF(FREEGLUT_BUILD_STATIC_LIBS)
         TARGET_COMPILE_DEFINITIONS(freeglut_static PUBLIC FREEGLUT_STATIC)
         IF(FREEGLUT_REPLACE_GLUT)
-            SET_TARGET_PROPERTIES(freeglut_static PROPERTIES OUTPUT_NAME ${LIBNAME})
+            SET_TARGET_PROPERTIES(freeglut_static PROPERTIES OUTPUT_NAME ${LIBNAME}_static)
         ENDIF()
         # need to set machine:x64 for linker, at least for VC10, and
         # doesn't hurt for older compilers:
