@@ -1,5 +1,9 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.12 FATAL_ERROR)
 PROJECT(freeglut LANGUAGES C)
+
+#######################
+# CMake Setup
+#######################
 
 if (POLICY CMP0072)
     # This policy sets libOpenGL.so (GLVND) as the default GL library to link
@@ -11,8 +15,13 @@ if (POLICY CMP0072)
     cmake_policy(SET CMP0072 NEW)
 endif()
 
-# for multiarch LIBDIR support (requires cmake>=2.8.8)
-INCLUDE(GNUInstallDirs)
+if(POLICY CMP0075)
+    # CMP0075 policy controls how CMAKE_REQUIRED_LIBRARIES is handled.
+    # OLD: Ignores CMAKE_REQUIRED_LIBRARIES values
+    # NEW: Validates CMAKE_REQUIRED_LIBRARIES values
+    # Setting to NEW avoids warnings in CMake 3.12 and newer
+    cmake_policy(SET CMP0075 NEW)
+endif()
 
 # NOTE: On Windows and Cygwin, the dll's are placed in the
 # CMAKE_RUNTIME_OUTPUT_DIRECTORY, while their corresponding import
@@ -52,6 +61,10 @@ OPTION(FREEGLUT_PRINT_ERRORS "Lib prints errors to stderr" ON)
 OPTION(FREEGLUT_PRINT_WARNINGS "Lib prints warnings to stderr" ON)
 #MARK_AS_ADVANCED(FREEGLUT_PRINT_WARNINGS)
 
+#######################
+# PLATFORM DETECTION
+#######################
+
 # option to also copy .pdb files to install directory when executing
 # INSTALL target
 IF(MSVC)
@@ -84,6 +97,13 @@ IF(CMAKE_SYSTEM_NAME MATCHES "NintendoWii|NintendoGameCube")
 ELSE()
     SET(OGC OFF)
 ENDIF()
+
+#######################
+# SOURCE SELECTION
+#######################
+
+# for multiarch LIBDIR support (requires cmake>=2.8.8)
+INCLUDE(GNUInstallDirs)
 
 SET(FREEGLUT_HEADERS
     include/GL/freeglut.h
@@ -261,7 +281,7 @@ ELSE()
             src/x11/fg_structure_x11.c
             src/x11/fg_window_x11.c
             src/x11/fg_xinput_x11.c
-	    src/x11/fg_cmap_x11.c
+            src/x11/fg_cmap_x11.c
         )
         IF(NOT(FREEGLUT_GLES))
             LIST(APPEND FREEGLUT_SRCS
@@ -293,7 +313,12 @@ IF(FREEGLUT_GLES OR FREEGLUT_WAYLAND)
     )
 ENDIF()
 
+#######################
+# DEPENDENCIES
+#######################
+
 INCLUDE(CheckIncludeFiles)
+
 IF(UNIX AND NOT(ANDROID OR BLACKBERRY OR FREEGLUT_WAYLAND OR OGC))
     FIND_PACKAGE(X11 REQUIRED)
     INCLUDE_DIRECTORIES(${X11_X11_INCLUDE_PATH})
@@ -516,6 +541,12 @@ IF(WIN32)
     ENDIF()
 ENDIF()
 
+# ######################
+# BUILD OPTIONS
+# ######################
+
+SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+
 IF(FREEGLUT_BUILD_SHARED_LIBS)
     ADD_LIBRARY(freeglut SHARED ${FREEGLUT_SRCS})
 ENDIF()
@@ -635,12 +666,13 @@ IF(FREEGLUT_BUILD_STATIC_LIBS)
 ENDIF()
 INSTALL(FILES ${FREEGLUT_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GL COMPONENT Devel)
 
-
+########################
+# DEMOS
+########################
 
 # Optionally build demos, on by default.
 option( FREEGLUT_BUILD_DEMOS "Build FreeGLUT demos." ON )
 
-set(DEMO_LIBS ${LIBS})
 if (FREEGLUT_BUILD_DEMOS)
     if (OPENGL_GLU_FOUND)
         list(APPEND DEMO_LIBS ${OPENGL_glu_LIBRARY})
@@ -648,11 +680,6 @@ if (FREEGLUT_BUILD_DEMOS)
         message(FATAL_ERROR "Failed to find the GLU library which is required to build the demos.")
     endif()
 endif()
-
-# lib m for math, not needed on windows
-IF (NOT WIN32)
-    LIST(APPEND DEMO_LIBS m)
-ENDIF()
 
 MACRO(ADD_DEMO name)
     IF( FREEGLUT_BUILD_DEMOS )
@@ -700,7 +727,9 @@ ADD_DEMO(keyboard        progs/demos/keyboard/keyboard.c)
 ADD_DEMO(indexed_color   progs/demos/indexed_color/idxcol.c)
 ADD_DEMO(3dview          progs/demos/3dview/3dview.c)
 
-
+#######################
+# INSTALLATION
+#######################
 
 # pkg-config support, to install at $(libdir)/pkgconfig
 # Define static build dependencies
