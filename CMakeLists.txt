@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.12 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)
 PROJECT(freeglut LANGUAGES C)
 
 #######################
@@ -13,14 +13,6 @@ if (POLICY CMP0072)
     # See discussion about it in pull request:
     # https://github.com/freeglut/freeglut/pull/147
     cmake_policy(SET CMP0072 NEW)
-endif()
-
-if(POLICY CMP0075)
-    # CMP0075 policy controls how CMAKE_REQUIRED_LIBRARIES is handled.
-    # OLD: Ignores CMAKE_REQUIRED_LIBRARIES values
-    # NEW: Validates CMAKE_REQUIRED_LIBRARIES values
-    # Setting to NEW avoids warnings in CMake 3.12 and newer
-    cmake_policy(SET CMP0075 NEW)
 endif()
 
 # NOTE: On Windows and Cygwin, the dll's are placed in the
@@ -544,8 +536,6 @@ ENDIF()
 # ######################
 # BUILD OPTIONS
 # ######################
-
-SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
 IF(FREEGLUT_BUILD_SHARED_LIBS)
     ADD_LIBRARY(freeglut SHARED ${FREEGLUT_SRCS})
