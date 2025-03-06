@@ -20,16 +20,9 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
-GLUTproc fgPlatformGetGLUTProcAddress( const char* procName )
+void fgPlatformCreateWindow( SFG_Window *window )
 {
-    TODO_IMPL;
-
-    return NULL;
-}
-
-SFG_Proc fgPlatformGetProcAddress( const char* procName )
-{
-    TODO_IMPL;
-
-    return NULL;
+    window->Window.pContext.PixelFormat = NULL;
+    window->State.pWState.OldWidth      = -1;
+    window->State.pWState.OldHeight     = -1;
 }
