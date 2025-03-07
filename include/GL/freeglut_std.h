@@ -141,8 +141,12 @@
 #   ifndef GL_SILENCE_DEPRECATION
 #       define GL_SILENCE_DEPRECATION
 #   endif
-#   include <OpenGL/gl.h>
-#   include <OpenGL/glu.h>
+/* don't include compatibility OpenGL headers if we have included OpenGL 3 headers */
+#   ifndef __gl3_h_
+#       include <OpenGL/gl.h>
+        /* GLU on MacOS is only supported with compatibility OpenGL headers */
+#       include <OpenGL/glu.h>
+#   endif
 #else
 #   include <GL/gl.h>
 #   include <GL/glu.h>
