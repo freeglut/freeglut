@@ -26,5 +26,5 @@
  */
 void fgPlatformRegisterDialDevice( const char *dial_device )
 {
-    TODO_IMPL;
+    NO_IMPL;
 }
