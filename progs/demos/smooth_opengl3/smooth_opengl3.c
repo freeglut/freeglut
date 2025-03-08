@@ -42,6 +42,11 @@
  *
  */
 
+#ifdef __APPLE__
+#define FREEGLUT_NO_GL_INCLUDE
+#include <OpenGL/gl3.h>
+#endif
+
 #include <GL/freeglut.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -103,12 +108,12 @@ typedef char ourGLchar;
 typedef void (APIENTRY *PFNGLGENVERTEXARRAYSPROC) (GLsizei n, GLuint *arrays);
 typedef void (APIENTRY *PFNGLBINDVERTEXARRAYPROC) (GLuint array);
 #endif
-#if !defined(GL_VERSION_1_5) || defined(__APPLE__)
+#if !defined(GL_VERSION_1_5)
 typedef void (APIENTRY *PFNGLGENBUFFERSPROC) (GLsizei n, GLuint *buffers);
 typedef void (APIENTRY *PFNGLBINDBUFFERPROC) (GLenum target, GLuint buffer);
 typedef void (APIENTRY *PFNGLBUFFERDATAPROC) (GLenum target, ourGLsizeiptr size, const GLvoid *data, GLenum usage);
 #endif
-#if !defined(GL_VERSION_2_0) || defined(__APPLE__)
+#if !defined(GL_VERSION_2_0)
 typedef GLuint (APIENTRY *PFNGLCREATESHADERPROC) (GLenum type);
 typedef void (APIENTRY *PFNGLSHADERSOURCEPROC) (GLuint shader, GLsizei count, const ourGLchar **string, const GLint *length);
 typedef void (APIENTRY *PFNGLCOMPILESHADERPROC) (GLuint shader);
@@ -151,13 +156,9 @@ PFNGLUNIFORMMATRIX4FVPROC gl_UniformMatrix4fv;
 
 void initExtensionEntries(void)
 {
-#ifdef __APPLE__
-   gl_GenVertexArrays = (PFNGLGENVERTEXARRAYSPROC) glutGetProcAddress ("glGenVertexArraysAPPLE");
-   gl_BindVertexArray = (PFNGLBINDVERTEXARRAYPROC) glutGetProcAddress ("glBindVertexArrayAPPLE");
-#else
    gl_GenVertexArrays = (PFNGLGENVERTEXARRAYSPROC) glutGetProcAddress ("glGenVertexArrays");
    gl_BindVertexArray = (PFNGLBINDVERTEXARRAYPROC) glutGetProcAddress ("glBindVertexArray");
-#endif
+
    if (!gl_GenVertexArrays || !gl_BindVertexArray)
    {
        fprintf (stderr, "glGenVertexArrays or glBindVertexArray not found");
@@ -235,7 +236,7 @@ void initBuffer(void)
 }
 
 const ourGLchar *vertexShaderSource[] = {
-   "#version 140\n",
+   "#version 150\n",
    "uniform mat4 fg_ProjectionMatrix;\n",
    "in vec4 fg_Color;\n",
    "in vec4 fg_Vertex;\n",
@@ -248,7 +249,7 @@ const ourGLchar *vertexShaderSource[] = {
 };
 
 const ourGLchar *fragmentShaderSource[] = {
-   "#version 140\n",
+   "#version 150\n",
    "smooth in vec4 fg_SmoothColor;\n",
    "out vec4 fg_FragColor;\n",
    "void main(void)\n",
@@ -449,8 +450,9 @@ int main(int argc, char** argv)
    glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
    /* add command line argument "classic" for a pre-3.x context */
    if ((argc != 2) || (strcmp (argv[1], "classic") != 0)) {
-      glutInitContextVersion (3, 1);
+      glutInitContextVersion (3, 2);
       glutInitContextFlags (GLUT_FORWARD_COMPATIBLE | GLUT_DEBUG);
+      glutInitContextProfile(GLUT_CORE_PROFILE);
    }
    glutInitWindowSize (500, 500); 
    glutInitWindowPosition (100, 100);
