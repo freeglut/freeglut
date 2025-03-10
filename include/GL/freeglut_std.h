@@ -127,8 +127,22 @@
 #define  FREEGLUT_VERSION_2_0 1
 
 /*
- * Always include OpenGL and GLU headers
+ * Include OpenGL and GLU headers unless explicitly excluded (FREEGLUT_NO_GL_INCLUDE).
+ *
+ * On some platforms, such as macOS, OpenGL headers are split:
+ *   - <OpenGL/gl.h> for the compatibility profile (OpenGL 2.1 and earlier).
+ *   - <OpenGL/gl3.h> for the core profile (OpenGL 3.2+).
+ *
+ *  For example to use the core profile on macOS, you can do:
+ *
+ *    #ifdef __APPLE__
+ *    #define FREEGLUT_NO_GL_INCLUDE
+ *    #include <OpenGL/gl3.h>
+ *    #endif
+ *
+ *    #include <GL/freeglut.h>
  */
+#ifndef FREEGLUT_NO_GL_INCLUDE
 /* Note: FREEGLUT_GLES is only used to cleanly bootstrap headers
    inclusion here; use GLES constants directly
    (e.g. GL_ES_VERSION_2_0) for all other needs */
@@ -147,6 +161,7 @@
 #   include <GL/gl.h>
 #   include <GL/glu.h>
 #endif
+#endif /* !defined(FREEGLUT_NO_GL_INCLUDE) */
 
 /*
  * GLUT API macro definitions -- the special key codes:

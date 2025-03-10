@@ -20,7 +20,15 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
+#import <Cocoa/Cocoa.h>
+
 void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window *CurrentWindow )
 {
-    TODO_IMPL;
+    PART_IMPL;
+    // Release the OpenGL context
+    NSOpenGLContext *context = (NSOpenGLContext *)CurrentWindow->Window.Context;
+    [context makeCurrentContext];
+    [context flushBuffer];
+
+    // TODO: Emulate VSync using CVDisplayLink
 }

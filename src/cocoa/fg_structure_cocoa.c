@@ -20,7 +20,9 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
-void fgPlatformCreateWindow(SFG_Window* window)
+void fgPlatformCreateWindow( SFG_Window *window )
 {
-    TODO_IMPL;
+    window->Window.pContext.PixelFormat = NULL;
+    window->State.pWState.OldWidth      = -1;
+    window->State.pWState.OldHeight     = -1;
 }
