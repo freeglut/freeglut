@@ -19,21 +19,37 @@
 
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
+#include <dlfcn.h>
 
-int fgPlatformGlutDeviceGet( GLenum eWhat )
+GLUTproc fgPlatformGetGLUTProcAddress( const char *procName )
 {
-    TODO_IMPL;
-    return 0;
-}
+    /* optimization: quick initial check */
+    if ( strncmp( procName, "glut", 4 ) != 0 )
+        return NULL;
 
-int fgPlatformGlutGet( GLenum eWhat )
-{
-    TODO_IMPL;
-    return 0;
-}
+#define CHECK_NAME( x )                \
+    if ( strcmp( procName, #x ) == 0 ) \
+        return (GLUTproc)x;
+    CHECK_NAME( glutJoystickFunc );
+    CHECK_NAME( glutForceJoystickFunc );
+    CHECK_NAME( glutGameModeString );
+    CHECK_NAME( glutEnterGameMode );
+    CHECK_NAME( glutLeaveGameMode );
+    CHECK_NAME( glutGameModeGet );
+#undef CHECK_NAME
 
-int* fgPlatformGlutGetModeValues( GLenum eWhat, int* size )
-{
-    TODO_IMPL;
     return NULL;
+}
+
+SFG_Proc fgPlatformGetProcAddress( const char *procName )
+{
+    static void *glHandle = NULL;
+
+    if ( glHandle == NULL ) {
+        glHandle = dlopen( "/System/Library/Frameworks/OpenGL.framework/OpenGL", RTLD_LAZY | RTLD_GLOBAL );
+        if ( glHandle == NULL ) {
+            fgError( "Failed to dlopen OpenGL framework" );
+        }
+    }
+    return (SFG_Proc)dlsym( glHandle, procName );
 }

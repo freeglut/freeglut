@@ -20,45 +20,69 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
+#include <Cocoa/Cocoa.h>
+
+void fgPlatformSetWindow( SFG_Window *window );
+
 fg_time_t fgPlatformSystemTime( void )
 {
-    TODO_IMPL;
-    return 0;
+    uint64_t now_ns = clock_gettime_nsec_np( CLOCK_REALTIME );
+    return (fg_time_t)( now_ns / 1000000LL ); // Return time in milliseconds
 }
 
 /*
  * Does the magic required to relinquish the CPU until something interesting
  * happens.
  */
-
 void fgPlatformSleepForEvents( fg_time_t msec )
 {
-    TODO_IMPL;
-}
-
-/*
- * Returns GLUT modifier mask for the state field of an X11 event.
- */
-int fgPlatformGetModifiers( int state )
-{
-    TODO_IMPL;
-    return 0;
+    // Implement sleep functionality according to msec
+    @autoreleasepool {
+        NSTimeInterval timeout_sec = ( msec == INT_MAX ) ? 1.0 : ( msec / 1000.0 );
+        NSEvent       *event       = [NSApp nextEventMatchingMask:NSEventMaskAny
+                                            untilDate:[NSDate dateWithTimeIntervalSinceNow:timeout_sec]
+                                               inMode:NSDefaultRunLoopMode
+                                              dequeue:YES];
+        if ( event ) {
+            [NSApp sendEvent:event];
+        }
+    }
 }
 
 void fgPlatformProcessSingleEvent( void )
 {
-    TODO_IMPL;
+    @autoreleasepool {
+        // Process all pending Cocoa events
+        while ( true ) {
+            NSEvent *event = [NSApp nextEventMatchingMask:NSEventMaskAny
+                                                untilDate:[NSDate distantPast] // Return immediately
+                                                   inMode:NSDefaultRunLoopMode
+                                                  dequeue:YES];
+            if ( !event )
+                break; // Exit when no more events are pending
+
+            [NSApp sendEvent:event];
+        }
+
+        // Set the current window’s OpenGL context after event processing
+        if ( fgStructure.CurrentWindow ) {
+            fgPlatformSetWindow( fgStructure.CurrentWindow );
+        }
+    }
 }
 
 void fgPlatformMainLoopPreliminaryWork( void )
 {
-    TODO_IMPL;
+    [NSApp finishLaunching];               // Completes the app launch process
+    [NSApp activateIgnoringOtherApps:YES]; // Bring app to the front
 }
 
 /* deal with work list items */
 void fgPlatformInitWork( SFG_Window *window )
 {
-    TODO_IMPL;
+    PART_IMPL;
+    // NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
+    // Placeholder for initialization tasks
 }
 
 void fgPlatformPosResZordWork( SFG_Window *window, unsigned int workMask )

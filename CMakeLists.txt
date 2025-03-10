@@ -245,21 +245,23 @@ ELSEIF(OGC)
 
 ELSEIF(FREEGLUT_COCOA)
     LIST(APPEND FREEGLUT_SRCS
+        # objc files
         src/cocoa/fg_cmap_cocoa.m
         src/cocoa/fg_cursor_cocoa.m
         src/cocoa/fg_display_cocoa.m
-        src/cocoa/fg_glut_definitions_cocoa.m
-        src/cocoa/fg_ext_cocoa.m
         src/cocoa/fg_gamemode_cocoa.m
         src/cocoa/fg_init_cocoa.m
         src/cocoa/fg_internal_cocoa.h
-        src/cocoa/fg_input_devices_cocoa.m
         src/cocoa/fg_joystick_cocoa.m
         src/cocoa/fg_main_cocoa.m
         src/cocoa/fg_spaceball_cocoa.m
         src/cocoa/fg_state_cocoa.m
-        src/cocoa/fg_structure_cocoa.m
         src/cocoa/fg_window_cocoa.m
+        # c files
+        src/cocoa/fg_ext_cocoa.c
+        src/cocoa/fg_glut_definitions_cocoa.c
+        src/cocoa/fg_input_devices_cocoa.c
+        src/cocoa/fg_structure_cocoa.c
     )
 
 ELSE()
@@ -489,10 +491,12 @@ ENDIF()
 IF(FREEGLUT_COCOA)
     FIND_PACKAGE(OpenGL REQUIRED)
     INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+    FIND_LIBRARY(OPENGL_FRAMEWORK OpenGL)
     FIND_LIBRARY(COCOA_FRAMEWORK Cocoa)
     FIND_LIBRARY(IOKIT_FRAMEWORK IOKit)
     FIND_LIBRARY(COREVIDEO_FRAMEWORK CoreVideo)
     LIST(APPEND LIBS ${COCOA_FRAMEWORK} ${OPENGL_FRAMEWORK} ${IOKIT_FRAMEWORK} ${COREVIDEO_FRAMEWORK})
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations")
 ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
