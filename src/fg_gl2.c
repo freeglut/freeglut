@@ -59,7 +59,7 @@ void FGAPIENTRY glutSetVertexAttribTexCoord2(GLint attrib) {
 #define LOADFUNC(ptr, type, name)	\
 	do { if(!(ptr = (type)glutGetProcAddress(name))) return; } while(0)
 
-void fgInitGL2() {
+void fgInitGL2( void ) {
 #ifdef GL_ES_VERSION_2_0
     fgState.HasOpenGL20 = (fgState.MajorVersion >= 2);
 #else

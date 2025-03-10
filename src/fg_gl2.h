@@ -77,6 +77,6 @@ extern FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
 
 #    endif
 
-extern void fgInitGL2();
+extern void fgInitGL2( void );
 
 #endif
