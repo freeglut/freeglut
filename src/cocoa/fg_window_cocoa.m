@@ -648,8 +648,8 @@ void fgPlatformOpenWindow( SFG_Window *window,
     //
     PART_IMPL;
 
-    DBG( @"OpenGL Version: %s", glGetString( GL_VERSION ) );
-    DBG( @"Window: %dx%d\tFramebuffer: %dx%d",
+    DBG( "OpenGL Version: %s", glGetString( GL_VERSION ) );
+    DBG( "Window: %dx%d\tFramebuffer: %dx%d",
         w,
         h,
         window->State.pWState.FrameBufferWidth,

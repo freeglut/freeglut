@@ -63,7 +63,7 @@ void fgPlatformInitialize( const char *displayName )
     // Initialize input devices (joysticks, etc.)
     fgInitialiseInputDevices( );
 
-    DBG( @"Screen size: %dx%d, Screen size in mm: %dx%d\n",
+    DBG( "Screen size: %dx%d, Screen size in mm: %dx%d",
         fgDisplay.ScreenWidth,
         fgDisplay.ScreenHeight,
         fgDisplay.ScreenWidthMM,

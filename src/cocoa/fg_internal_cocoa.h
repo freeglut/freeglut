@@ -32,19 +32,22 @@
 #endif
 
 #ifdef DEBUG_LOG
-#define DBG( ... ) printf( __VA_ARGS__ )
+#define DBG fgWarning
 #else
-#define DBG( ... )
+/* C89 doesn't support variadic macros */
+static void FGUNUSED DBG( const char *fmt, ... )
+{
+}
 #endif
 
 #ifdef UNIMPLEMENTED_WARNING
-#define PRINT_ONCE( ... )             \
-    do {                              \
-        static int once;              \
-        if ( !once ) {                \
-            fgWarning( __VA_ARGS__ ); \
-            once = 1;                 \
-        }                             \
+#define PRINT_ONCE( fmt, args )     \
+    do {                            \
+        static int once;            \
+        if ( !once ) {              \
+            fgWarning( fmt, args ); \
+            once = 1;               \
+        }                           \
     } while ( 0 )
 #define TODO_IMPL PRINT_ONCE( "%s not implemented yet in Cocoa", __func__ )
 #define PART_IMPL PRINT_ONCE( "%s partially implemented in Cocoa", __func__ )
@@ -71,20 +74,20 @@ struct CocoaPlatformDisplay {
 /* Platform-specific window context */
 struct CocoaPlatformContext {
     void *CocoaContext; /* OpenGL context - NSOpenGLContext* */
-    void *PixelFormat; /* Pixel format - NSOpenGLPixelFormat* */
+    void *PixelFormat;  /* Pixel format - NSOpenGLPixelFormat* */
 };
 
 /* Platform window state info */
 struct CocoaWindowState {
-    int OldWidth;          
-    int OldHeight;         
-    int FrameBufferWidth;  
-    int FrameBufferHeight; 
+    int OldWidth;
+    int OldHeight;
+    int FrameBufferWidth;
+    int FrameBufferHeight;
 };
 
 #define _JS_MAX_AXES 16
 struct CocoaPlatformJoystick {
-    char fd; 
+    char fd;
 };
 
 /*
