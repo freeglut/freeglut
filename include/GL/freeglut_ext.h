@@ -214,7 +214,7 @@ FGAPI void    FGAPIENTRY glutSolidTeaspoon( double size );
 /*
  * Extension functions, see fg_ext.c
  */
-typedef void (*GLUTproc)( void );
+typedef void (*GLUTproc)();
 FGAPI GLUTproc FGAPIENTRY glutGetProcAddress( const char *procName );
 
 /*
