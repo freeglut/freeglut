@@ -20,7 +20,7 @@
 #ifndef FREEGLUT_INTERNAL_COCOA_H
 #define FREEGLUT_INTERNAL_COCOA_H
 
-// #define DEBUG_LOG
+/* Add '#define DEBUG_LOG' for debug logging */
 #define UNIMPLEMENTED_WARNING
 
 #include <unistd.h>
@@ -32,7 +32,7 @@
 #endif
 
 #ifdef DEBUG_LOG
-#define DBG( ... ) NSLog( __VA_ARGS__ )
+#define DBG( ... ) printf( __VA_ARGS__ )
 #else
 #define DBG( ... )
 #endif
@@ -65,13 +65,13 @@
 
 /* Platform-specific display structure */
 struct CocoaPlatformDisplay {
-    void *DisplayLink; /* Core Video Display Link for vsync */ // CVDisplayLinkRef
+    void *DisplayLink; /* Core Video Display Link for vsync - CVDisplayLinkRef */
 };
 
 /* Platform-specific window context */
 struct CocoaPlatformContext {
-    void *CocoaContext; /* OpenGL context */ // NSOpenGLContext*
-    void *PixelFormat; /* Pixel format */    // NSOpenGLPixelFormat*
+    void *CocoaContext; /* OpenGL context - NSOpenGLContext* */
+    void *PixelFormat; /* Pixel format - NSOpenGLPixelFormat* */
 };
 
 /* Platform window state info */
@@ -91,9 +91,9 @@ struct CocoaPlatformJoystick {
  * Make "freeglut" window handle and context types so that we don't need so
  * much conditionally-compiled code later in the library.
  */
-typedef void                        *SFG_WindowHandleType;   // NSWindow*
-typedef void                        *SFG_WindowContextType;  // NSOpenGLContext*
-typedef void                        *SFG_WindowColormapType; // CGColorSpaceRef
+typedef void                        *SFG_WindowHandleType;   /* NSWindow* */
+typedef void                        *SFG_WindowContextType;  /* NSOpenGLContext* */
+typedef void                        *SFG_WindowColormapType; /* CGColorSpaceRef */
 typedef struct CocoaWindowState      SFG_PlatformWindowState;
 typedef struct CocoaPlatformDisplay  SFG_PlatformDisplay;
 typedef struct CocoaPlatformContext  SFG_PlatformContext;
