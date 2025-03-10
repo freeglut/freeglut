@@ -44,12 +44,12 @@ GLUTproc fgPlatformGetGLUTProcAddress( const char *procName )
 SFG_Proc fgPlatformGetProcAddress( const char *procName )
 {
     static void *glHandle = NULL;
+
     if ( glHandle == NULL ) {
         glHandle = dlopen( "/System/Library/Frameworks/OpenGL.framework/OpenGL", RTLD_LAZY | RTLD_GLOBAL );
         if ( glHandle == NULL ) {
             fgError( "Failed to dlopen OpenGL framework" );
         }
     }
-    void *addr = dlsym( glHandle, procName );
-    return (SFG_Proc)addr;
+    return (SFG_Proc)dlsym( glHandle, procName );
 }
