@@ -30,7 +30,7 @@
 /*
  * A call to this function should initialize all the display stuff...
  */
-void fghPlatformInitializeEGL()
+void fghPlatformInitializeEGL( void )
 {
   /* CreateDisplay */
   /* Using EGL_DEFAULT_DISPLAY, or a specific native display */
@@ -59,7 +59,7 @@ void fghPlatformInitializeEGL()
   /* fgDisplay.ScreenHeightMM = ...; */
 }
 
-void fghPlatformCloseDisplayEGL()
+void fghPlatformCloseDisplayEGL( void )
 {
   if (fgDisplay.pDisplay.egl.Display != EGL_NO_DISPLAY) {
     eglTerminate(fgDisplay.pDisplay.egl.Display);

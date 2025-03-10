@@ -26,8 +26,8 @@
 #ifndef __FG_INIT_EGL_H__
 #define __FG_INIT_EGL_H__
 
-extern void fghPlatformInitializeEGL();
-extern void fghPlatformCloseDisplayEGL();
+extern void fghPlatformInitializeEGL( void );
+extern void fghPlatformCloseDisplayEGL( void );
 extern void fgPlatformDestroyContext ( SFG_PlatformDisplay pDisplay, SFG_WindowContextType MContext );
 
 #endif

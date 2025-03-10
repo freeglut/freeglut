@@ -573,7 +573,7 @@ struct tagSFG_WindowState   /* as per notes above, sizes always refer to the cli
  * defined in freeglut_ext.h, but if we include that header in this file
  * a bunch of other stuff (font-related) blows up!
  */
-typedef void (*SFG_Proc)();
+typedef void (*SFG_Proc)( void );
 
 
 /*
@@ -1079,7 +1079,7 @@ void        fgOpenWindow( SFG_Window* window, const char* title,
                           GLboolean gameMode, GLboolean isSubWindow );
 void        fgCloseWindow( SFG_Window* window );
 void        fgAddToWindowDestroyList ( SFG_Window* window );
-void        fgCloseWindows ();
+void        fgCloseWindows ( void );
 void        fgDestroyWindow( SFG_Window* window );
 
 /* Menu creation and destruction. Defined in fg_structure.c */
@@ -1149,7 +1149,7 @@ SFG_Menu* fgMenuByID( int menuID );
  * Returns active menu, if any. Assumption: only one menu active throughout application at any one time.
  * This is easier than fgWindowByXXX as all menus are placed in one doubly linked list...
  */
-SFG_Menu* fgGetActiveMenu( );
+SFG_Menu* fgGetActiveMenu( void );
 
 /*
  * The menu activation and deactivation the code. This is the meat

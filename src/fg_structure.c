@@ -192,7 +192,7 @@ void fgAddToWindowDestroyList( SFG_Window* window )
 /*
  * Function to close down all the windows in the "WindowsToDestroy" list
  */
-void fgCloseWindows( )
+void fgCloseWindows( void )
 {
     while( fgStructure.WindowsToDestroy.First )
     {
@@ -598,7 +598,7 @@ static void fghcbGetActiveMenu( SFG_Menu *menu,
  * This is false when a submenu is also open.
  * This is easier than fgWindowByXXX as all menus are placed in one doubly linked list...
  */
-SFG_Menu* fgGetActiveMenu( )
+SFG_Menu* fgGetActiveMenu( void )
 {
     SFG_Enumerator enumerator;
 
