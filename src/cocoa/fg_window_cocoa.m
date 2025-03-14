@@ -26,8 +26,18 @@
 void fghOnReshapeNotify( SFG_Window *window, int width, int height, GLboolean forceNotify );
 void fghOnPositionNotify( SFG_Window *window, int x, int y, GLboolean forceNotify );
 
+/* CVDisplayLink callback function */
+CVReturn fgDisplayLinkCallback( CVDisplayLinkRef displayLink,
+    const CVTimeStamp                           *now,
+    const CVTimeStamp                           *outputTime,
+    CVOptionFlags                                flagsIn,
+    CVOptionFlags                               *flagsOut,
+    void                                        *displayLinkContext );
+
 enum { FG_MOUSE_WHEEL_Y = 0, FG_MOUSE_WHEEL_X = 1 };
 static const double fgWheelThreshold = 1.0; // Threshold for mouse wheel events. TODO: decide on a suitable value
+
+BOOL shouldQuit = NO;
 
 /*****************************************************************
  * Window Delegate                                               *
@@ -42,6 +52,7 @@ static const double fgWheelThreshold = 1.0; // Threshold for mouse wheel events.
 - (BOOL)windowShouldClose:(NSWindow *)sender
 {
     glutDestroyWindow( self.fgWindow->ID ); // Freeglut’s window cleanup
+    shouldQuit = YES;
     return YES;
 }
 
@@ -644,9 +655,18 @@ void fgPlatformOpenWindow( SFG_Window *window,
     window->State.pWState.FrameBufferHeight = (int)backingBounds.size.height;
 
     //
-    // 9. TODO: Setup CVLinkDisplay for VSync
+    // 9. Setup CVLinkDisplay for VSync
     //
-    PART_IMPL;
+
+    // Create and configure CVDisplayLink
+#ifdef USE_CVDISPLAYLINK
+    if ( fgState.DisplayMode & GLUT_DOUBLE ) {
+        CVDisplayLinkCreateWithActiveCGDisplays( (CVDisplayLinkRef *)&fgDisplay.pDisplay.DisplayLink );
+        CVDisplayLinkSetOutputCallback(
+            fgDisplay.pDisplay.DisplayLink, &fgDisplayLinkCallback, (__bridge void *)openGLView );
+        CVDisplayLinkStart( fgDisplay.pDisplay.DisplayLink );
+    }
+#endif
 
     DBG( "OpenGL Version: %s", glGetString( GL_VERSION ) );
     DBG( "Window: %dx%d\tFramebuffer: %dx%d",
