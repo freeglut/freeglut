@@ -23,6 +23,9 @@
 /* Add '#define DEBUG_LOG' for debug logging */
 #define UNIMPLEMENTED_WARNING
 
+/* Use CVDisplayLink for display synchronization */
+#define USE_CVDISPLAYLINK
+
 #include <unistd.h>
 
 #if defined( __GNUC__ ) && !defined( FGUNUSED )
