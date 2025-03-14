@@ -3,7 +3,7 @@
 .\"
 .TH glutRemoveLayer 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutRemoveOverlay - removes the overlay (if one exists) from the current window. 
+glutRemoveOverlay - removes the overlay (if one exists) from the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -14,12 +14,12 @@ glutRemoveOverlay removes the overlay (if one exists). It is safe
 to call glutRemoveOverlay even if no overlay is currently
 established--it does nothing in this case. Implicitly, the window's
 layer in use changes to the normal plane immediately once the
-overlay is removed. 
+overlay is removed.
 
 If the program intends to re-establish the overlay later, it is typically
 faster and less resource intensive to use glutHideOverlay and
 glutShowOverlay to simply change the display status of the
-overlay. 
+overlay.
 .SH SEE ALSO
 glutEstablishOverlay, glutDestroyWindow
 .SH AUTHOR

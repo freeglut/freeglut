@@ -3,7 +3,7 @@
 .\"
 .TH glutShowWindow 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutShowWindow, glutHideWindow, glutIconifyWindow - change the display status of the current window. 
+glutShowWindow, glutHideWindow, glutIconifyWindow - change the display status of the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -21,7 +21,7 @@ place immediately. Instead the requests are saved for execution upon
 return to the GLUT event loop. Subsequent show, hide, or iconification
 requests on a window replace the previously saved request for that
 window. The effect of hiding, showing, or iconifying top-level windows
-is subject to the window system's policy for displaying windows. 
+is subject to the window system's policy for displaying windows.
 .SH SEE ALSO
 glutPopWindow, glutPushWindow
 .SH AUTHOR

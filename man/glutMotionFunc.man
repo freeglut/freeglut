@@ -4,7 +4,7 @@
 .TH glutMotionFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutMotionFunc, glutPassiveMotionFunc - set the motion and
-passive motion callbacks respectively for the current window. 
+passive motion callbacks respectively for the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -13,21 +13,21 @@ void glutPassiveMotionFunc(void (*func)(int x, int y));
 .fi
 .SH ARGUMENTS
 .IP \fIfunc\fP 1i
-The new motion or passive motion callback function. 
+The new motion or passive motion callback function.
 .SH DESCRIPTION
 glutMotionFunc and glutPassiveMotionFunc set the motion and
 passive motion callback respectively for the current window. The motion
 callback for a window is called when the mouse moves within the window
 while one or more mouse buttons are pressed. The passive motion callback
 for a window is called when the mouse moves within the window while
-no mouse buttons are pressed. 
+no mouse buttons are pressed.
 
 The x and y callback parameters indicate the mouse location in window
-relative coordinates. 
+relative coordinates.
 
 Passing NULL to glutMotionFunc or glutPassiveMotionFunc
 disables the generation of the mouse or passive motion callback
-respectively. 
+respectively.
 .SH SEE ALSO
 glutMouseFunc, glutSpaceballMotionFunc, glutTabletMotionFunc
 .SH AUTHOR

@@ -32,7 +32,7 @@ rendering optimization such as page flipping for fullscreen buffer swaps.
 
 The value returned by glutEnterGameMode is a unique small integer identifier for the fullscreen window.
 The range of allocated identifiers starts at one. This window identifier
-can be used when calling glutSetWindow. 
+can be used when calling glutSetWindow.
 
 After leaving game mode, the GLUT functionality disabled in game mode is
 available again.  The game mode window (and its OpenGL rendering state) is
@@ -51,7 +51,7 @@ the previous game mode window (including any OpenGL rendering state) and
 create a new game mode window with a new OpenGL rendering context.
 Also if glutEnterGameMode is called when already in game mode and if the game mode
 string has changed and describes a possible screen display format, the new
-screen display format takes effect.  A reshape callback is generated if the 
+screen display format takes effect.  A reshape callback is generated if the
 game mode window changes size due to a screen display format change.
 
 Re-entering game mode provides a mechanism for changing the screen display

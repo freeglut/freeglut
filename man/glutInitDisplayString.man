@@ -3,7 +3,7 @@
 .\"
 .TH glutInitDisplayString 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutInitDisplayString - sets the initial display mode via a string. 
+glutInitDisplayString - sets the initial display mode via a string.
 .SH SYNTAX
 .nf
 .LP
@@ -15,7 +15,7 @@ Display mode description string, see below.
 .SH DESCRIPTION
 The initial display mode description string is used when creating top-level windows,
 subwindows, and overlays to determine the OpenGL display mode for
-the to-be-created window or overlay. 
+the to-be-created window or overlay.
 
 The string is a list of zero or more capability descriptions separated by
 spaces and tabs.  Each capability description is a capability name that
@@ -71,7 +71,7 @@ a a compartor and numeric value).
 .LP
 The valid capability names are:
 .TP 8
-.B alpha 
+.B alpha
 Alpha color buffer precision in bits.
 Default is ">=1".
 .TP 8
@@ -82,7 +82,7 @@ Default is ">=1" for red, green, blue, and alpha capabilities.
 .B acc
 Red, green, and green accumulation buffer precision in bits and zero
 bits of alpha accumulation buffer precision.
-Default is ">=1" for red, green, and blue capabilities, and 
+Default is ">=1" for red, green, and blue capabilities, and
 "~0" for the alpha capability.
 .TP 8
 .B auxbufs
@@ -154,7 +154,7 @@ and "=1" for the RGBA color model capability.
 .B rgb
 Number of bits of red, green, and blue in the RGBA color buffer and
 zero bits of alpha color buffer precision.
-Default is ">=1" for the red, green, and blue capabilities, and "~0" for 
+Default is ">=1" for the red, green, and blue capabilities, and "~0" for
 alpha capability, and "=1" for the RGBA color model capability.
 .TP 8
 .B samples

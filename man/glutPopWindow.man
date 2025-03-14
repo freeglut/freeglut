@@ -3,7 +3,7 @@
 .\"
 .TH glutPopWindow 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutPopWindow, glutPushWindow - change the stacking order of the current window relative to its siblings. 
+glutPopWindow, glutPushWindow - change the stacking order of the current window relative to its siblings.
 .SH SYNTAX
 .nf
 .LP
@@ -17,7 +17,7 @@ does not take place immediately. Instead the push or pop is saved for
 execution upon return to the GLUT event loop. Subsequent push or pop
 requests on a window replace the previously saved request for that
 window. The effect of pushing and popping top-level windows is subject
-to the window system's policy for restacking windows. 
+to the window system's policy for restacking windows.
 .SH SEE ALSO
 glutShowWindow, glutIconifyWindow, glutHideWindow
 .SH AUTHOR

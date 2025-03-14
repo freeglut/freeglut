@@ -3,7 +3,7 @@
 .\"
 .TH glutSetWindowTitle 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutSetWindowTitle, glutSetIconTitle - change the window or icon title respectively of the current top-level window. 
+glutSetWindowTitle, glutSetIconTitle - change the window or icon title respectively of the current top-level window.
 .SH SYNTAX
 .nf
 .LP
@@ -13,7 +13,7 @@ void glutSetIconTitle(char *name);
 .SH ARGUMENTS
 .IP \fIname\fP 1i
 ASCII character string for the window or icon name to be set for
-the window. 
+the window.
 .SH DESCRIPTION
 These routines should be called only when the current window is a
 top-level window. Upon creation of a top-level window, the window
@@ -23,7 +23,7 @@ glutSetIconTitle can change the window and icon names
 respectively of top-level windows. Each call requests the window
 system change the title appropriately. Requests are not buffered or
 coalesced. The policy by which the window and icon name are displayed
-is window system dependent. 
+is window system dependent.
 .SH SEE ALSO
 glutCreateWindow, glutIconifyWindow
 .SH AUTHOR

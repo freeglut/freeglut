@@ -17,9 +17,9 @@ Y offset relative to the current window's origin (upper left).
 .SH DESCRIPTION
 glutWarpPointer warps the window system's pointer to a new location
 relative to the origin of the current window.  The new location will
-be offset 
+be offset
 .I x
-pixels on the X axis and 
+pixels on the X axis and
 .I y
 pixels on the Y axis.
 These parameters may be negative.  The warp is done immediately.

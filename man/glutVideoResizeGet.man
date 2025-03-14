@@ -3,7 +3,7 @@
 .\"
 .TH glutVideoResizeGet 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutVideoResizeGet - retrieves GLUT video resize information represented by integers. 
+glutVideoResizeGet - retrieves GLUT video resize information represented by integers.
 .SH SYNTAX
 .nf
 .LP
@@ -13,7 +13,7 @@ int glutVideoResizeGet(GLenum param);
 .IP \fIparam\fP 1i
 Name of video resize information to retrieve.
 .TP 8
-.B GLUT_VIDEO_RESIZE_POSSIBLE 
+.B GLUT_VIDEO_RESIZE_POSSIBLE
 Non-zero if video resizing is supported by the underlying system; zero
 if not supported.  If this is zero, the other video resize GLUT calls
 do nothing when called.  See the Implementation Notes sections below.

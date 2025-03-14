@@ -3,7 +3,7 @@
 .\"
 .TH glutDeviceGet 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutDeviceGet - retrieves GLUT device information represented by integers. 
+glutDeviceGet - retrieves GLUT device information represented by integers.
 .SH SYNTAX
 .nf
 .LP
@@ -13,42 +13,42 @@ int glutDeviceGet(GLenum info);
 .IP \fIinfo\fP 1i
 Name of device information to retrieve.
 .TP 8
-.B GLUT_HAS_KEYBOARD 
+.B GLUT_HAS_KEYBOARD
 Non-zero if a keyboard is available; zero if not available. For most
 GLUT implementations, a keyboard can be assumed.
 .TP 8
 .B GLUT_HAS_MOUSE
 Non-zero if a mouse is available; zero if not available. For most GLUT
-implementations, a keyboard can be assumed. 
+implementations, a keyboard can be assumed.
 .TP 8
 .B GLUT_HAS_SPACEBALL
-Non-zero if a Spaceball is available; zero if not available. 
+Non-zero if a Spaceball is available; zero if not available.
 .TP 8
-.B GLUT_HAS_DIAL_AND_BUTTON_BOX 
-Non-zero if a dial & button box is available; zero if not available. 
+.B GLUT_HAS_DIAL_AND_BUTTON_BOX
+Non-zero if a dial & button box is available; zero if not available.
 .TP 8
-.B GLUT_HAS_TABLET 
-Non-zero if a tablet is available; zero if not available. 
+.B GLUT_HAS_TABLET
+Non-zero if a tablet is available; zero if not available.
 .TP 8
-.B GLUT_NUM_MOUSE_BUTTONS 
+.B GLUT_NUM_MOUSE_BUTTONS
 Number of buttons supported by the mouse. If no mouse is supported, zero is
-returned. 
+returned.
 .TP 8
-.B GLUT_NUM_SPACEBALL_BUTTONS 
+.B GLUT_NUM_SPACEBALL_BUTTONS
 Number of buttons supported by the Spaceball. If no Spaceball is supported, zero is
-returned. 
+returned.
 .TP 8
-.B GLUT_NUM_BUTTON_BOX_BUTTONS 
+.B GLUT_NUM_BUTTON_BOX_BUTTONS
 Number of buttons supported by the dial & button box device. If no dials & button
-box device is supported, zero is returned. 
+box device is supported, zero is returned.
 .TP 8
-.B GLUT_NUM_DIALS 
+.B GLUT_NUM_DIALS
 Number of dials supported by the dial & button box device. If no dials & button
-box device is supported, zero is returned. 
+box device is supported, zero is returned.
 .TP 8
-.B GLUT_NUM_TABLET_BUTTONS 
+.B GLUT_NUM_TABLET_BUTTONS
 Number of buttons supported by the tablet. If no tablet is supported, zero is
-returned. 
+returned.
 .TP 8
 .B GLUT_DEVICE_IGNORE_KEY_REPEAT
 Returns true if the current window's auto repeated keys are ignored.

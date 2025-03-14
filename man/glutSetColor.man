@@ -4,7 +4,7 @@
 .TH glutSetColor 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutSetColor - sets the color of a colormap entry in the layer of use
-for the current window. 
+for the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -13,13 +13,13 @@ void glutSetColor(int cell,
 .fi
 .SH ARGUMENTS
 .IP \fIcell\fP 1i
-Color cell index (starting at zero). 
+Color cell index (starting at zero).
 .IP \fIred\fP 1i
-Red intensity (clamped between 0.0 and 1.0 inclusive). 
+Red intensity (clamped between 0.0 and 1.0 inclusive).
 .IP \fIgreen\fP 1i
 Green intensity (clamped between 0.0 and 1.0 inclusive).
 .IP \fIblue\fP 1i
-Blue intensity (clamped between 0.0 and 1.0 inclusive). 
+Blue intensity (clamped between 0.0 and 1.0 inclusive).
 .SH DESCRIPTION
 Sets the cell color index colormap entry of the current window's
 logical colormap for the layer in use with the color specified by red,
@@ -28,7 +28,7 @@ color index window.  cell should be zero or greater and less than the
 total number of colormap entries for the window.  If the layer in use's
 colormap was copied by reference, a glutSetColor call will force the
 duplication of the colormap.  Do not attempt to set the color of an
-overlay's transparent index. 
+overlay's transparent index.
 .SH SEE ALSO
 glutGetColor, glutCopyColormap, glutInitDisplayMode
 .SH AUTHOR

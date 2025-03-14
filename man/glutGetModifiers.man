@@ -4,7 +4,7 @@
 .TH glutGetModifiers 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutGetModifiers - returns the modifier key state when certain
-callbacks were generated. 
+callbacks were generated.
 .SH SYNTAX
 .nf
 .LP
@@ -17,18 +17,18 @@ This routine may only be called while a keyboard, special, or mouse
 callback is being handled. The window system is permitted to intercept
 window system defined modifier key strokes or mouse buttons, in
 which case, no GLUT callback will be generated. This interception
-will be independent of use of glutGetModifiers. 
+will be independent of use of glutGetModifiers.
 
 The bitmask components of the returned integer value are:
 .TP 8
-.B GLUT_ACTIVE_SHIFT 
-Set if the Shift modifier or Caps Lock is active. 
+.B GLUT_ACTIVE_SHIFT
+Set if the Shift modifier or Caps Lock is active.
 .TP 8
-.B GLUT_ACTIVE_CTRL 
-Set if the Ctrl modifier is active. 
+.B GLUT_ACTIVE_CTRL
+Set if the Ctrl modifier is active.
 .TP 8
-.B GLUT_ACTIVE_ALT 
-Set if the Alt modifier is active. 
+.B GLUT_ACTIVE_ALT
+Set if the Alt modifier is active.
 .SH SEE ALSO
 glutSpecialFunc, glutKeyboardFunc, glutMouseFunc
 .SH AUTHOR

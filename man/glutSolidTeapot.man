@@ -3,7 +3,7 @@
 .\"
 .TH glutSolidTeapot 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutSolidTeapot, glutWireTeapot - render a solid or wireframe teapot respectively. 
+glutSolidTeapot, glutWireTeapot - render a solid or wireframe teapot respectively.
 .SH SYNTAX
 .nf
 .LP
@@ -12,11 +12,11 @@ void glutWireTeapot(GLdouble size);
 .fi
 .SH ARGUMENTS
 .IP \fIsize\fP 1i
-Relative size of the teapot. 
+Relative size of the teapot.
 .SH DESCRIPTION
 glutSolidTeapot and glutWireTeapot render a solid or wireframe
 teapot respectively. Both surface normals and texture coordinates for the
-teapot are generated. The teapot is generated with OpenGL evaluators. 
+teapot are generated. The teapot is generated with OpenGL evaluators.
 .SH BUGS
 The teapot is greatly over-tesselated; it renders way too slow.
 

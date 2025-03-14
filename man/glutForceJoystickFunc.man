@@ -15,7 +15,7 @@ called, reporting the latest joystick state.
 
 The joystick callback is called either due to polling of the joystick
 at the uniform timer interval set by glutJoystickFunc's
-pollInterval (specified in milliseconds) or 
+pollInterval (specified in milliseconds) or
 in response to calling glutForceJoystickFunc.  If the pollInterval is
 non-positive, no joystick polling is performed and the GLUT application
 must frequently (usually from an idle callback) call glutForceJoystickFunc.

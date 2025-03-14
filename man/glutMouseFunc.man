@@ -3,7 +3,7 @@
 .\"
 .TH glutMouseFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutMouseFunc - sets the mouse callback for the current window. 
+glutMouseFunc - sets the mouse callback for the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -12,7 +12,7 @@ void glutMouseFunc(void (*func)(int button, int state,
 .fi
 .SH ARGUMENTS
 .IP \fIfunc\fP 1i
-The new mouse callback function. 
+The new mouse callback function.
 .SH DESCRIPTION
 glutMouseFunc sets the mouse callback for the current window. When a
 user presses and releases mouse buttons in the window, each press and
@@ -31,14 +31,14 @@ assume a GLUT_UP callback for the same button will be generated
 mouse button is released even if the mouse has moved outside the window.
 
 If a menu is attached to a button for a window, mouse callbacks will not
-be generated for that button. 
+be generated for that button.
 
 During a mouse callback, glutGetModifiers may be called to
 determine the state of modifier keys when the mouse event generating the
-callback occurred. 
+callback occurred.
 
 Passing NULL to glutMouseFunc disables the generation of mouse
-callbacks. 
+callbacks.
 .SH SEE ALSO
 glutKeyboardFunc, glutMotionFunc, glutSpaceballButtonFunc, glutButtonBoxFunc, glutTabletButtonFunc, glutGetModifiers
 .SH AUTHOR
