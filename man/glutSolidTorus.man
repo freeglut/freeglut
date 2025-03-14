@@ -4,7 +4,7 @@
 .TH glutSolidTorus 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutSolidTorus, glutWireTorus - render a solid or wireframe
-torus (doughnut) respectively. 
+torus (doughnut) respectively.
 .SH SYNTAX
 .nf
 .LP
@@ -17,17 +17,17 @@ void glutWireTorus(GLdouble innerRadius,
 .fi
 .SH ARGUMENTS
 .IP \fIinnerRadius\fP 1i
-Inner radius of the torus. 
+Inner radius of the torus.
 .IP \fIouterRadius\fP 1i
-Outer radius of the torus. 
+Outer radius of the torus.
 .IP \fInsides\fP 1i
-Number of sides for each radial section. 
+Number of sides for each radial section.
 .IP \fIrings\fP 1i
-Number of radial divisions for the torus. 
+Number of radial divisions for the torus.
 .SH DESCRIPTION
 glutSolidTorus and glutWireTorus render a solid or wireframe
 torus (doughnut) respectively centered at the modeling coordinates origin
-whose axis is aligned with the Z axis. 
+whose axis is aligned with the Z axis.
 .SH SEE ALSO
 glutSolidSphere, glutSolidCube, glutSolidCone, glutSolidDodecahedron,
 glutSolidOctahedron, glutSolidTetrahedron, glutSolidIcosahedron,

@@ -4,7 +4,7 @@
 .TH glutCopyColormap 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutCopyColormap - copies the logical colormap for the layer in use
-from a specified window to the current window. 
+from a specified window to the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -12,7 +12,7 @@ void glutCopyColormap(int win);
 .fi
 .SH ARGUMENTS
 .IP \fIwin\fP 1i
-The identifier of the window to copy the logical colormap from. 
+The identifier of the window to copy the logical colormap from.
 .SH DESCRIPTION
 glutCopyColormap copies (lazily if possible to promote sharing) the
 logical colormap from a specified window to the current window's layer
@@ -22,7 +22,7 @@ colormap has been copied, avoid setting cells in the colormap with
 glutSetColor since that will force an actual copy of the colormap if it
 was previously copied by reference. glutCopyColormap should only
 be called when both the current window and the win window are color
-index windows. 
+index windows.
 .SH EXAMPLE
 Here is an example of how to create two color index GLUT windows with
 their colormaps loaded identically and so that the windows are

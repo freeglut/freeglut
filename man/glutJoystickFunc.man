@@ -3,7 +3,7 @@
 .\"
 .TH glutJoystickFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutJoystickFunc - sets the joystick callback for the current window. 
+glutJoystickFunc - sets the joystick callback for the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -12,14 +12,14 @@ void glutJoystickFunc(void (*func)(unsigned int buttonMask,
 .fi
 .SH ARGUMENTS
 .IP \fIfunc\fP 1i
-The new joystick callback function. 
+The new joystick callback function.
 .IP \fIpollInterval\fP 1i
 Joystick polling interval in milliseconds.
 .SH DESCRIPTION
-glutJoystickFunc sets the joystick callback for the current window. 
+glutJoystickFunc sets the joystick callback for the current window.
 
 The joystick callback is called either due to polling of the joystick
-at the uniform timer interval specified by pollInterval (in milliseconds) or 
+at the uniform timer interval specified by pollInterval (in milliseconds) or
 in response to calling glutForceJoystickFunc.  If the pollInterval is
 non-positive, no joystick polling is performed and the GLUT application
 must frequently (usually from an idle callback) call glutForceJoystickFunc.

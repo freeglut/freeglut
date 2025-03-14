@@ -3,7 +3,7 @@
 .\"
 .TH glutInitDisplayMode 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutInitDisplayMode - sets the initial display mode. 
+glutInitDisplayMode - sets the initial display mode.
 .SH SYNTAX
 .nf
 .LP
@@ -16,45 +16,45 @@ See values below:
 .TP 8
 .B GLUT_RGBA
 Bit mask to select an RGBA mode window. This is the default if
-neither GLUT_RGBA nor GLUT_INDEX are specified. 
+neither GLUT_RGBA nor GLUT_INDEX are specified.
 .TP 8
 .B GLUT_RGB
-An alias for GLUT_RGBA. 
+An alias for GLUT_RGBA.
 .TP 8
 .B GLUT_INDEX
 Bit mask to select a color index mode window. This overrides
-GLUT_RGBA if it is also specified. 
+GLUT_RGBA if it is also specified.
 .TP 8
 .B GLUT_SINGLE
 Bit mask to select a single buffered window. This is the default if
-neither GLUT_DOUBLE or GLUT_SINGLE are specified. 
+neither GLUT_DOUBLE or GLUT_SINGLE are specified.
 .TP 8
 .B GLUT_DOUBLE
 Bit mask to select a double buffered window. This overrides
-GLUT_SINGLE if it is also specified. 
+GLUT_SINGLE if it is also specified.
 .TP 8
 .B GLUT_ACCUM
-Bit mask to request a window with an accumulation buffer. 
+Bit mask to request a window with an accumulation buffer.
 .TP 8
 .B GLUT_ALPHA
 Bit mask to request a window with an alpha component to the color
-buffer(s). 
+buffer(s).
 .TP 8
 .B GLUT_DEPTH
-Bit mask to request a window with a depth buffer. 
+Bit mask to request a window with a depth buffer.
 .TP 8
 .B GLUT_STENCIL
-Bit mask to request a window with a stencil buffer. 
+Bit mask to request a window with a stencil buffer.
 .TP 8
 .B GLUT_MULTISAMPLE
 Bit mask to request a window with multisampling support. If
 multisampling is not available, a non-multisampling window will
 automatically be chosen. Note: both the OpenGL client-side and
 server-side implementations must support the
-GLX_SAMPLE_SGIS extension for multisampling to be available. 
+GLX_SAMPLE_SGIS extension for multisampling to be available.
 .TP 8
 .B GLUT_STEREO
-Bit mask to select a stereo window. 
+Bit mask to select a stereo window.
 .TP 8
 .B GLUT_LUMINANCE
 Bit mask to select a window with a ``luminance'' color model.
@@ -66,16 +66,16 @@ glutGet(GLUT_WINDOW_COLORMAP_SIZE)-1 and looked up in
 a per-window color map to determine the color of pixels within
 the window. The initial colormap of GLUT_LUMINANCE windows
 is initialized to be a linear gray ramp, but can be modified with
-GLUT's colormap routines. 
+GLUT's colormap routines.
 .SH DESCRIPTION
 The initial display mode is used when creating top-level windows,
 subwindows, and overlays to determine the OpenGL display mode for
-the to-be-created window or overlay. 
+the to-be-created window or overlay.
 
 Note that GLUT_RGBA selects the RGBA color model, but it does not
 request any bits of alpha (sometimes called an alpha buffer or destination
 alpha) be allocated. To request alpha, specify GLUT_ALPHA. The same
-applies to GLUT_LUMINANCE. 
+applies to GLUT_LUMINANCE.
 
 Note that some bits "request" a capability and other bits "select"
 a capability.  A requestable capability may be assigned to the created
@@ -86,7 +86,7 @@ is not specified.
 The glutInitDisplayString routine provides a more powerful way to
 select frame buffer capabilities for GLUT windows.
 .SH GLUT_LUMINANCE IMPLEMENTATION NOTES
-GLUT_LUMINANCE is not supported on most OpenGL platforms. 
+GLUT_LUMINANCE is not supported on most OpenGL platforms.
 .SH SEE ALSO
 glutInit, glutCreateWindow, glutInitDisplayString
 .SH AUTHOR

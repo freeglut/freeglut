@@ -4,7 +4,7 @@
 .TH glutTimerFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutTimerFunc - registers a timer callback to be triggered in a
-specified number of milliseconds. 
+specified number of milliseconds.
 .SH SYNTAX
 .nf
 .LP
@@ -23,14 +23,14 @@ glutTimerFunc registers the timer callback func to be triggered in at
 least msecs milliseconds. The value parameter to the timer callback
 will be the value of the value parameter to glutTimerFunc. Multiple
 timer callbacks at same or differing times may be registered
-simultaneously. 
+simultaneously.
 
 The number of milliseconds is a lower bound on the time before the
 callback is generated. GLUT attempts to deliver the timer callback as
-soon as possible after the expiration of the callback's time interval. 
+soon as possible after the expiration of the callback's time interval.
 
 There is no support for canceling a registered callback. Instead, ignore a
-callback based on its value parameter when it is triggered. 
+callback based on its value parameter when it is triggered.
 .SH SEE ALSO
 glutIdleFunc
 .SH AUTHOR

@@ -3,7 +3,7 @@
 .\"
 .TH glutSolidSphere 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutSolidSphere, glutWireSphere - render a solid or wireframe sphere respectively. 
+glutSolidSphere, glutWireSphere - render a solid or wireframe sphere respectively.
 .SH SYNTAX
 .nf
 .LP
@@ -14,15 +14,15 @@ void glutWireSphere(GLdouble radius,
 .fi
 .SH ARGUMENTS
 .IP \fIradius\fP 1i
-The radius of the sphere. 
+The radius of the sphere.
 .IP \fIslices\fP 1i
-The number of subdivisions around the Z axis (similar to lines of longitude). 
+The number of subdivisions around the Z axis (similar to lines of longitude).
 .IP \fIstacks\fP 1i
-The number of subdivisions along the Z axis (similar to lines of latitude). 
+The number of subdivisions along the Z axis (similar to lines of latitude).
 .SH DESCRIPTION
 Renders a sphere centered at the modeling coordinates origin of the
 specified radius. The sphere is subdivided around the Z axis into slices
-and along the Z axis into stacks. 
+and along the Z axis into stacks.
 .SH SEE ALSO
 glutSolidCube, glutSolidCone, glutSolidTorus, glutSolidDodecahedron,
 glutSolidOctahedron, glutSolidTetrahedron, glutSolidIcosahedron,

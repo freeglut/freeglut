@@ -13,13 +13,13 @@ int glutSetKeyRepeat(int repeatMode);
 .IP \fIrepeatMode\fP 1i
 Mode for setting key repeat to.
 .TP 8
-.B GLUT_KEY_REPEAT_OFF 
+.B GLUT_KEY_REPEAT_OFF
 Disable key repeat for the window system on a global basis if possible.
 .TP 8
-.B GLUT_KEY_REPEAT_ON 
+.B GLUT_KEY_REPEAT_ON
 Enable key repeat for the window system on a global basis if possible.
 .TP 8
-.B GLUT_KEY_REPEAT_DEFAULT 
+.B GLUT_KEY_REPEAT_DEFAULT
 Reset the key repeat mode for the window system to its default state
 if possible.
 .SH DESCRIPTION

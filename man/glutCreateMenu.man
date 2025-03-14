@@ -3,7 +3,7 @@
 .\"
 .TH glutCreateMenu 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutCreateMenu - creates a new pop-up menu. 
+glutCreateMenu - creates a new pop-up menu.
 .SH SYNTAX
 .nf
 .LP
@@ -14,18 +14,18 @@ int glutCreateMenu(void (*func)(int value));
 The callback function for the menu that is called when a menu
 entry from the menu is selected. The value passed to the
 callback is determined by the value for the selected menu
-entry. 
+entry.
 .SH DESCRIPTION
 glutCreateMenu creates a new pop-up menu and returns a unique
 small integer identifier. The range of allocated identifiers starts at
 one. The menu identifier range is separate from the window
 identifier range. Implicitly, the current menu is set to the newly
 created menu. This menu identifier can be used when calling
-glutSetMenu. 
+glutSetMenu.
 
 When the menu callback is called because a menu entry is selected
 for the menu, the current menu will be implicitly set to the menu
-with the selected entry before the callback is made. 
+with the selected entry before the callback is made.
 .SH EXAMPLE
 Here is a quick example of how to create a GLUT popup menu with
 two submenus and attach it to the right button of the current window:
@@ -54,7 +54,7 @@ If available, GLUT for X will take advantage of overlay planes for
 implementing pop-up menus. The use of overlay planes can
 eliminate display callbacks when pop-up menus are deactivated. The
 SERVER_OVERLAY_VISUALS convention is used to determine
-if overlay visuals are available. 
+if overlay visuals are available.
 .SH SEE ALSO
 glutCreateWindow, glutDestroyMenu, glutSetMenu, glutAttachMenu
 .SH AUTHOR

@@ -3,7 +3,7 @@
 .\"
 .TH glutRemoveMenuItem 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutRemoveMenuItem - remove the specified menu item. 
+glutRemoveMenuItem - remove the specified menu item.
 .SH SYNTAX
 .nf
 .LP
@@ -11,12 +11,12 @@ void glutRemoveMenuItem(int entry);
 .fi
 .SH ARGUMENTS
 .IP \fIentry\fP 1i
-Index into the menu items of the current menu (1 is the topmost menu item). 
+Index into the menu items of the current menu (1 is the topmost menu item).
 .SH DESCRIPTION
 glutRemoveMenuItem remove the entry menu item regardless of
 whether it is a menu entry or sub-menu trigger. entry must be between 1
 and glutGet(GLUT_MENU_NUM_ITEMS) inclusive. Menu items below
-the removed menu item are renumbered. 
+the removed menu item are renumbered.
 .SH SEE ALSO
 glutAddMenuEntry, glutAddSubMenu, glutChangeToMenuEntry, glutChangeToSubMenu
 .SH AUTHOR

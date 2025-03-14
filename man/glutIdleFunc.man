@@ -3,7 +3,7 @@
 .\"
 .TH glutIdleFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutIdleFunc - sets the global idle callback. 
+glutIdleFunc - sets the global idle callback.
 .SH SYNTAX
 .nf
 .LP
@@ -20,12 +20,12 @@ enabled, the idle callback is continuously called when events are not
 being received. The callback routine has no parameters. The current
 window and current menu will not be changed before the idle callback.
 Programs with multiple windows and/or menus should explicitly set the
-current window and/or current menu and not rely on its current setting. 
+current window and/or current menu and not rely on its current setting.
 
 The amount of computation and rendering done in an idle callback
 should be minimized to avoid affecting the program's interactive
 response. In general, not more than a single frame of rendering should be
-done in an idle callback. 
+done in an idle callback.
 
 Passing NULL to glutIdleFunc disables the generation of the idle
 callback.
@@ -33,7 +33,7 @@ callback.
 A typical idle callback to animate a window might look like:
 .nf
 .LP
-  void 
+  void
   idle(void)
   {
     time += 0.05;

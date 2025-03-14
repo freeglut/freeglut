@@ -3,7 +3,7 @@
 .\"
 .TH glutSwapBuffers 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutSwapBuffers - swaps the buffers of the current window if double buffered. 
+glutSwapBuffers - swaps the buffers of the current window if double buffered.
 .SH SYNTAX
 .nf
 .LP
@@ -20,10 +20,10 @@ the monitor, rather than immediately after glutSwapBuffers is called.
 An implicit glFlush is done by glutSwapBuffers before it returns.
 Subsequent OpenGL commands can be issued immediately after calling
 glutSwapBuffers, but are not executed until the buffer exchange is
-completed. 
+completed.
 
 If the layer in use is not double buffered, glutSwapBuffers has no
-effect. 
+effect.
 .SH SEE ALSO
 glutPostRedisplay, glutDisplayFunc
 .SH AUTHOR

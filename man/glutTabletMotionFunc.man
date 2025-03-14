@@ -3,7 +3,7 @@
 .\"
 .TH glutTabletMotionFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutTabletMotionFunc - sets the special keyboard callback for the current window. 
+glutTabletMotionFunc - sets the special keyboard callback for the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -11,7 +11,7 @@ void glutTabletMotionFunc(void (*func)(int x, int y));
 .fi
 .SH ARGUMENTS
 .IP \fIfunc\fP 1i
-The new entry callback function. 
+The new entry callback function.
 .SH DESCRIPTION
 glutTabletMotionFunc sets the tablet motion callback for the
 current window. The tablet motion callback for a window is called when
@@ -19,15 +19,15 @@ the window has tablet input focus (normally, when the mouse is in the
 window) and the user generates tablet motion. The x and y callback
 parameters indicate the absolute position of the tablet ``puck'' on the
 tablet. The callback parameters are normalized to be within the range of
-0 to 2000 inclusive. 
+0 to 2000 inclusive.
 
 Registering a tablet motion callback when a tablet device is not available
 is ineffectual and not an error. In this case, no tablet motion callbacks
-will be generated. 
+will be generated.
 
 Passing NULL to glutTabletMotionFunc disables the generation of
 tablet motion callbacks. When a new window is created, no tablet motion
-callback is initially registered. 
+callback is initially registered.
 .SH SEE ALSO
 glutTabletButtonFunc, glutDeviceGet, glutMotionFunc, glutSpaceballMotionFunc
 .SH AUTHOR

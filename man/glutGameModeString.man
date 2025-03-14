@@ -71,19 +71,19 @@ auxillary color buffers where you would rather not over allocate.
 .LP
 The valid capability names are:
 .TP 8
-.B bpp 
+.B bpp
 Bits per pixel for the frame buffer.
 .TP 8
-.B height 
+.B height
 Height of the screen in pixels.
 .TP 8
-.B hertz 
+.B hertz
 Video refresh rate of the screen in hertz.
 .TP 8
-.B num 
+.B num
 Number of the window system depenedent display mode configuration.
 .TP 8
-.B width 
+.B width
 Width of the screen in pixels.
 .LP
 An additional compact screen resolution description format is supported.

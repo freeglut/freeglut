@@ -4,7 +4,7 @@
 .TH glutSolidOctahedron 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutSolidOctahedron, glutWireOctahedron - render a solid
-or wireframe octahedron (8-sided regular solid) respectively. 
+or wireframe octahedron (8-sided regular solid) respectively.
 .SH SYNTAX
 .nf
 .LP
@@ -14,7 +14,7 @@ void glutWireOctahedron(void);
 .SH DESCRIPTION
 glutSolidOctahedron and glutWireOctahedron render a solid or
 wireframe octahedron respectively centered at the modeling coordinates
-origin with a radius of 1.0. 
+origin with a radius of 1.0.
 .SH SEE ALSO
 glutSolidSphere, glutSolidCube, glutSolidCone, glutSolidTorus, glutSolidDodecahedron,
 glutSolidTetrahedron, glutSolidIcosahedron,

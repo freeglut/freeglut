@@ -3,7 +3,7 @@
 .\"
 .TH glutStrokeCharacter 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutStrokeCharacter - renders a stroke character using OpenGL. 
+glutStrokeCharacter - renders a stroke character using OpenGL.
 .SH SYNTAX
 .nf
 .LP
@@ -11,33 +11,33 @@ void glutStrokeCharacter(void *font, int character);
 .fi
 .SH ARGUMENTS
 .IP \fIfont\fP 1i
-Stroke font to use. 
+Stroke font to use.
 .IP \fIcharacter\fP 1i
-Character to render (not confined to 8 bits). 
+Character to render (not confined to 8 bits).
 .SH DESCRIPTION
 Without using any display lists, glutStrokeCharacter renders the
-character in the named stroke font. The available fonts are: 
+character in the named stroke font. The available fonts are:
 .TP 8
-.B GLUT_STROKE_ROMAN 
+.B GLUT_STROKE_ROMAN
 A proportionally spaced Roman Simplex font for ASCII characters
 32 through 127. The maximum top character in the font is 119.05
-units; the bottom descends 33.33 units. 
+units; the bottom descends 33.33 units.
 .TP 8
-.B GLUT_STROKE_MONO_ROMAN 
+.B GLUT_STROKE_MONO_ROMAN
 A mono-spaced spaced Roman Simplex font (same characters as
 GLUT_STROKE_ROMAN) for ASCII characters 32 through 127. The
 maximum top character in the font is 119.05 units; the bottom
-descends 33.33 units. Each character is 104.76 units wide. 
+descends 33.33 units. Each character is 104.76 units wide.
 .LP
 Rendering a nonexistent character has no effect. A glTranslatef is
 used to translate the current model view matrix to advance the width of
-the character. 
+the character.
 .SH EXAMPLE
 Here is a routine that shows how to render a string of ASCII text
 with glutStrokeCharacter:
 .nf
 .LP
-  void 
+  void
   output(GLfloat x, GLfloat y, char *text)
   {
     char *p;

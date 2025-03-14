@@ -11,7 +11,7 @@ void glutShowOverlay(void);
 void glutHideOverlay(void);
 .fi
 .SH DESCRIPTION
-glutShowOverlay shows the overlay of the current window;  
+glutShowOverlay shows the overlay of the current window; 
 glutHideOverlay hides the overlay. The effect of showing or
 hiding an overlay takes place immediately. Note that
 glutShowOverlay will not actually display the overlay unless the
@@ -19,7 +19,7 @@ window is also shown (and even a shown window may be obscured
 by other windows, thereby obscuring the overlay). It is typically
 faster and less resource intensive to use these routines to control the
 display status of an overlay as opposed to removing and
-re-establishing the overlay. 
+re-establishing the overlay.
 .SH SEE ALSO
 glutEstablishOverlay, glutShowWindow
 .SH AUTHOR

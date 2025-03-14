@@ -3,7 +3,7 @@
 .\"
 .TH glutButtonBoxFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutButtonBoxFunc - sets the dial & button box button callback for the current window. 
+glutButtonBoxFunc - sets the dial & button box button callback for the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -11,7 +11,7 @@ void glutButtonBoxFunc(void (*func)(int button, int state));
 .fi
 .SH ARGUMENTS
 .IP \fIfunc\fP 1i
-The new button box callback function. 
+The new button box callback function.
 .SH DESCRIPTION
 glutButtonBoxFunc sets the dial & button box button callback for the
 current window. The dial & button box button callback for a window is
@@ -22,15 +22,15 @@ box button presses. The button parameter will be the button number
 be determined with
 glutDeviceGet(GLUT_NUM_BUTTON_BOX_BUTTONS). The state is
 either GLUT_UP or GLUT_DOWN indicating whether the callback was due
-to a release or press respectively. 
+to a release or press respectively.
 
 Registering a dial & button box button callback when a dial & button
 box device is not available is ineffectual and not an error. In this case, no
-dial & button box button callbacks will be generated. 
+dial & button box button callbacks will be generated.
 
 Passing NULL to glutButtonBoxFunc disables the generation of dial &
 button box button callbacks. When a new window is created, no dial &
-button box button callback is initially registered. 
+button box button callback is initially registered.
 .SH SEE ALSO
 glutDialsFunc, glutDeviceGet, glutSpaceballButtonFunc, glutTabletButtonFunc
 .SH AUTHOR

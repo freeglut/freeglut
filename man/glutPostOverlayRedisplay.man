@@ -22,21 +22,21 @@ before the next display callback opportunity (or overlay display
 callback opportunity if one is registered) generate only a single
 redisplay. glutPostOverlayRedisplay may be called within a
 window's display or overlay display callback to re-mark that
-window for redisplay. 
+window for redisplay.
 
 Logically, overlay damage notification for a window is treated as a
 glutPostOverlayRedisplay on the damaged window. Unlike
 damage reported by the window system,
 glutPostOverlayRedisplay will not set to true the overlay's
 damaged status (returned by
-glutLayerGet(GLUT_OVERLAY_DAMAGED). 
+glutLayerGet(GLUT_OVERLAY_DAMAGED).
 
 If the window you want to post an overlay redisplay on is not already current
 (and you do not require it to be immediately made current), using
 glutPostWindowOverlayRedisplay is more efficient that calling glutSetWindow to
 the desired window and then calling glutPostOverlayRedisplay.
 .SH EXAMPLE
-If you are doing an interactive effect like rubberbanding in the 
+If you are doing an interactive effect like rubberbanding in the
 overlay, it is a good idea to structure your rendering to minimize
 flicker (most overlays are single-buffered).  Only clear the
 overlay if you know that the window has been damaged.  Otherwise,

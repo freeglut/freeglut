@@ -3,7 +3,7 @@
 .\"
 .TH glutGameModeGet 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutGameModeGet - retrieves GLUT game mode information represented by integers. 
+glutGameModeGet - retrieves GLUT game mode information represented by integers.
 .SH SYNTAX
 .nf
 .LP
@@ -13,7 +13,7 @@ int glutGameModeGet(GLenum info);
 .IP \fIinfo\fP 1i
 Name of game mode information to retrieve.
 .TP 8
-.B GLUT_GAME_MODE_ACTIVE 
+.B GLUT_GAME_MODE_ACTIVE
 Non-zero if GLUT's game mode is active; zero if not active.
 Game mode is not active initially.  Game mode becomes active when
 glutEnterGameMode is called.  Game mode becomes inactive when
@@ -31,20 +31,20 @@ Width in pixels of the screen when game mode is activated.
 .B GLUT_GAME_MODE_HEIGHT
 Height in pixels of the screen when game mode is activated.
 .TP 8
-.B GLUT_GAME_MODE_PIXEL_DEPTH 
+.B GLUT_GAME_MODE_PIXEL_DEPTH
 Pixel depth of the screen when game mode is activiated.
 .TP 8
-.B GLUT_GAME_MODE_REFRESH_RATE 
+.B GLUT_GAME_MODE_REFRESH_RATE
 Screen refresh rate in cyles per second (hertz) when game mode is activated.
 Zero is returned if the refresh rate is unknown or cannot be queried.
 .TP 8
-.B GLUT_GAME_MODE_DISPLAY_CHANGED 
+.B GLUT_GAME_MODE_DISPLAY_CHANGED
 Non-zero if entering game mode actually changed the display settings.
 If the game mode string is not possible or the display mode could not be
 changed for any other reason, zero is returned.
 .SH DESCRIPTION
 glutGameModeGet retrieves GLUT game mode information represented by integers. The info
-parameter determines what type of game mode information to return. Requesting game mode 
+parameter determines what type of game mode information to return. Requesting game mode
 information for an invalid GLUT game mode information name returns negative one.
 .SH SEE ALSO
 glutGet, glutDeviceGet, glutLayerGet, glutGameModeString, glutEnterGameMode, glutLeaveGameMode

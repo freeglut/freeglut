@@ -3,7 +3,7 @@
 .\"
 .TH glutKeyboardUpFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutKeyboardUpFunc - sets the keyboard up (key release) callback for the current window. 
+glutKeyboardUpFunc - sets the keyboard up (key release) callback for the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -12,7 +12,7 @@ void glutKeyboardUpFunc(void (*func)(unsigned char key,
 .fi
 .SH ARGUMENTS
 .IP \fIfunc\fP 1i
-The new keyboard up callback function. 
+The new keyboard up callback function.
 .SH DESCRIPTION
 glutKeyboardFunc sets the keyboard up (key release) callback for the current window.
 When a user types into the window, each key release matching an ASCII
@@ -23,11 +23,11 @@ ASCII data. The x and y callback parameters indicate the mouse location
 in window relative coordinates when the key was pressed. When a new
 window is created, no keyboard callback is initially registered, and ASCII
 key strokes in the window are ignored. Passing NULL to
-glutKeyboardFunc disables the generation of keyboard callbacks. 
+glutKeyboardFunc disables the generation of keyboard callbacks.
 
 During a keyboard up callback, glutGetModifiers may be called to
 determine the state of modifier keys when the keystroke generating the
-callback occurred. 
+callback occurred.
 
 To avoid the reporting of key release/press pairs due to auto
 repeat, use glutIgnoreKeyRepeat to ignore auto repeated keystrokes.

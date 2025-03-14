@@ -3,7 +3,7 @@
 .\"
 .TH glutAddSubMenu 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutAddSubMenu - adds a sub-menu trigger to the bottom of the current menu. 
+glutAddSubMenu - adds a sub-menu trigger to the bottom of the current menu.
 .SH SYNTAX
 .nf
 .LP
@@ -12,15 +12,15 @@ void glutAddSubMenu(char *name, int menu);
 .SH ARGUMENTS
 .IP \fIname\fP 1i
 ASCII character string to display in the menu item from which
-to cascade the sub-menu. 
+to cascade the sub-menu.
 .IP \fImenu\fP 1i
-Identifier of the menu to cascade from this sub-menu menu item. 
+Identifier of the menu to cascade from this sub-menu menu item.
 .SH DESCRIPTION
 glutAddSubMenu adds a sub-menu trigger to the bottom of the
 current menu. The string name will be displayed for the newly added
 sub-menu trigger. If the sub-menu trigger is entered, the sub-menu
 numbered menu will be cascaded, allowing sub-menu menu items to
-be selected. 
+be selected.
 .SH SEE ALSO
 glutAddMenuEntry, glutChangeToSubMenu, glutRemoveItem
 .SH AUTHOR

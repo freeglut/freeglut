@@ -4,7 +4,7 @@
 .TH glutSolidIcosahedron 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutSolidIcosahedron, glutWireIcosahedron - render a
-solid or wireframe icosahedron (20-sided regular solid) respectively. 
+solid or wireframe icosahedron (20-sided regular solid) respectively.
 .SH SYNTAX
 .nf
 .LP
@@ -14,7 +14,7 @@ void glutWireIcosahedron(void);
 .SH DESCRIPTION
 glutSolidIcosahedron and glutWireIcosahedron render a solid
 or wireframe icosahedron respectively. The icosahedron is centered at the
-modeling coordinates origin and has a radius of 1.0. 
+modeling coordinates origin and has a radius of 1.0.
 .SH SEE ALSO
 glutSolidSphere, glutSolidCube, glutSolidCone, glutSolidTorus, glutSolidDodecahedron,
 glutSolidOctahedron, glutSolidTetrahedron,

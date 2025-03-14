@@ -3,7 +3,7 @@
 .\"
 .TH glutCreateSubWindow 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
-glutCreateSubWindow - creates a subwindow. 
+glutCreateSubWindow - creates a subwindow.
 .SH SYNTAX
 .nf
 .LP
@@ -12,35 +12,35 @@ int glutCreateSubWindow(int win,
 .fi
 .SH ARGUMENTS
 .IP \fIwin\fP 1i
-Identifier of the subwindow's parent window. 
+Identifier of the subwindow's parent window.
 .IP \fIx\fP 1i
-Window X location in pixels relative to parent window's origin. 
+Window X location in pixels relative to parent window's origin.
 .IP \fIy\fP 1i
-Window Y location in pixels relative to parent window's origin. 
+Window Y location in pixels relative to parent window's origin.
 .IP \fIwidth\fP 1i
-Width in pixels. 
+Width in pixels.
 .IP \fIheight\fP 1i
-Height in pixels. 
+Height in pixels.
 .SH DESCRIPTION
 glutCreateSubWindow creates a subwindow of the window identified
 by win of size width and height at location x and y within the current
 window. Implicitly, the current window is set to the newly created
-subwindow. 
+subwindow.
 
 Each created window has a unique associated OpenGL context. State
 changes to a window's associated OpenGL context can be done
-immediately after the window is created. 
+immediately after the window is created.
 
 The display state of a window is initially for the window to be shown.
 But the window's display state is not actually acted upon until
 glutMainLoop is entered. This means until glutMainLoop is called,
 rendering to a created window is ineffective. Subwindows can not be
-iconified. 
+iconified.
 
-Subwindows can be nested arbitrarily deep. 
+Subwindows can be nested arbitrarily deep.
 
 The value returned is a unique small integer identifier for the window.
-The range of allocated identifiers starts at one. 
+The range of allocated identifiers starts at one.
 .SH SEE ALSO
 glutCreateWindow, glutDestroyWindow
 .SH AUTHOR
