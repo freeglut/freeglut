@@ -1,27 +1,26 @@
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 #include <time.h>
 
 #include <GL/freeglut.h>
 
 #define ARR_LEN( arr ) ( sizeof( arr ) / sizeof( arr[0] ) )
 
-static uint64_t last_switch;
-static uint32_t frames;
-static char     buf[1024] = "VSync test:\n"
-                            "===========\n"
-                            "In a correctly synchronized double-buffered environment:\n"
-                            " - The screen should completely fill with blocks\n"
-                            " - The two buffers will each contain half the blocks (in a checkerboard pattern)\n"
-                            " - Colors will appear to flash rapidly as the buffers alternate\n"
-                            " - Frame rate should match the monitor's refresh rate\n"
-                            "\n"
-                            "In environments with improper vsync you'll observe:\n"
-                            " - Missing blocks\n"
-                            " - Only one of the two buffers may be visible\n"
-                            " - Inconsistent rendering across the screen\n "
-                            "\n";
+static unsigned long last_switch;
+static unsigned      frames;
+static char          buf[1024] = "VSync test:\n"
+                                 "===========\n"
+                                 "In a correctly synchronized double-buffered environment:\n"
+                                 " - The screen should completely fill with blocks\n"
+                                 " - The two buffers will each contain half the blocks (in a checkerboard pattern)\n"
+                                 " - Colors will appear to flash rapidly as the buffers alternate\n"
+                                 " - Frame rate should match the monitor's refresh rate\n"
+                                 "\n"
+                                 "In environments with improper vsync you'll observe:\n"
+                                 " - Missing blocks\n"
+                                 " - Only one of the two buffers may be visible\n"
+                                 " - Inconsistent rendering across the screen\n "
+                                 "\n";
 
 static char *msg = NULL;
 
@@ -35,7 +34,7 @@ static float colours[][3] = {
 
 enum { ROWS = 16, COLS = ROWS, BLOCKS_PER_SCREEN = ( ROWS * COLS ) };
 
-static uint64_t get_time_ns( )
+static unsigned long get_time_ns( )
 {
 #ifdef CLOCK_MONOTONIC
     struct timespec now;
@@ -45,13 +44,15 @@ static uint64_t get_time_ns( )
     struct timeval now;
     gettimeofday( &now, NULL );
     return now.tv_usec * 1000 + now.tv_sec * 1e9;
+#else
+    return 0;
 #endif
 }
 
 static void draw_block( void )
 {
-    uint32_t row = ( frames / COLS ) % ROWS;
-    uint32_t col = frames % COLS;
+    GLint row = ( frames / COLS ) % ROWS;
+    GLint col = frames % COLS;
 
     if ( ( col + row ) & 1 )
         glColor3fv( &colours[idx][0] );
@@ -64,8 +65,8 @@ static void draw_block( void )
 /* Update the block colors when we reach the end of a screen */
 static void updateColours( void )
 {
-    uint64_t now;
-    float    dur_ms, avg_ms;
+    unsigned long now;
+    float         dur_ms, avg_ms;
 
     if ( frames % BLOCKS_PER_SCREEN == 0 ) {
         idx = ( idx + 2 ) % ARR_LEN( colours ); /* switch to next color pair */
