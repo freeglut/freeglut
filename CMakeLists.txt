@@ -842,7 +842,7 @@ INSTALL(
 )
 
 # Install GLUT man pages on Unix-like systems
-IF(UNIX AND FREEGLUT_BUILD_MAN_PAGES)
+IF(UNIX AND FREEGLUT_INSTALL_MAN_PAGES)
     MESSAGE(STATUS "Including GLUT man pages by Mark Kilgard with permission")
 
     FILE(GLOB MAN_PAGES "${CMAKE_SOURCE_DIR}/man/*.man")
