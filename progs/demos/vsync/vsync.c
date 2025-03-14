@@ -83,8 +83,8 @@ static void updateColours( void )
 
 static void display( void )
 {
-    last_switch = last_switch ?: get_time_ns( );
-    msg         = msg ?: buf + strlen( buf );
+    last_switch = last_switch ? last_switch : get_time_ns( );
+    msg         = msg ? msg : buf + strlen( buf );
 
     glColor3f( 1.0f, 1.0f, 1.0f );
     glRasterPos2i( 0, ROWS - 1 );
