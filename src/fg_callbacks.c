@@ -192,7 +192,7 @@ IMPLEMENT_GLUT_CALLBACK_FUNC_ARG2(Reshape)
  * as a translation step from the windowStatus func. When the user sets the
  * windowStatus func, any visibility func is overwritten.
  * DEVELOPER NOTE: in the library, only invoke the window status func, this
- * gets automatically translated to the visibility func if thats what the
+ * gets automatically translated to the visibility func if that's what the
  * user has set.
  * window status is kind of anemic on win32 as there are no window messages
  * to notify us that the window is covered by other windows or not.

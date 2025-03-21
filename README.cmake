@@ -78,10 +78,10 @@ How to build freeglut on UNIX
 
 Breakdown of CMake configuration options
 ----------------------------------------
-CMAKE_BUILD_TYPE            [Empty, Debug, Release] Can be overriden by
+CMAKE_BUILD_TYPE            [Empty, Debug, Release] Can be overridden by
                             passing it as a make variable during build.
-CMAKE_INSTALL_PREFIX	    Installation prefix (e.g. /usr/local on UNIX)
-FREEGLUT_BUILD_DEMOS	    [ON, OFF] Controls whether the demos are
+CMAKE_INSTALL_PREFIX        Installation prefix (e.g. /usr/local on UNIX)
+FREEGLUT_BUILD_DEMOS        [ON, OFF] Controls whether the demos are
                             built or not.
 FREEGLUT_BUILD_SHARED_LIBS  [ON, OFF] Build freeglut as a shared library
 FREEGLUT_BUILD_STATIC_LIBS  [ON, OFF] Build freeglut as a static library

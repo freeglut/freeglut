@@ -438,8 +438,8 @@ struct tagSFG_Display
 
     int             ScreenWidth;        /* The screen's width in pixels      */
     int             ScreenHeight;       /* The screen's height in pixels     */
-    int             ScreenWidthMM;      /* The screen's width in milimeters  */
-    int             ScreenHeightMM;     /* The screen's height in milimeters */
+    int             ScreenWidthMM;      /* The screen's width in millimeters  */
+    int             ScreenHeightMM;     /* The screen's height in millimeters */
 };
 
 

@@ -34,7 +34,7 @@
  * A note: We do not use the GLuint data type for vertex index arrays
  * in this code as Open GL ES1 only supports GLushort. This affects the
  * cylindrical objects only (Torus, Sphere, Cylinder and Cone) and limits
- * their number of vertices to 65535 (2^16-1). Thats about 256*256
+ * their number of vertices to 65535 (2^16-1). That's about 256*256
  * subdivisions, which is sufficient for just about any usage case, so
  * I am not going to worry about it for now.
  * One could do compile time detection of the gluint type through CMake,
@@ -87,12 +87,12 @@ static void fghDrawNormalVisualization20(GLint attribute_v_coord);
  *     parameter in glDrawArrays to go from face to face.
  *
  * Non-polyhedra:
- *   - We have implemented the sphere, cylinder, cone and torus.
+ *   - We have implemented the sphere, cylinder, cone, and torus.
  *   - All shapes are characterized by two parameters: the number of
  *     subdivisions along two axes used to construct the shape's vertices
  *     (e.g. stacks and slices for the sphere).
  *     As different subdivisions are most suitable for different shapes,
- *     and are thus also named differently, I wont provide general comments
+ *     and are thus also named differently, I won't provide general comments
  *     on them here.
  *   - Solids are drawn using glDrawArrays and GL_TRIANGLE_STRIP. Each
  *     strip covers one revolution around one of the two subdivision axes
@@ -816,7 +816,7 @@ static void fghGenerateGeometry(int numFaces, int numEdgePerFace, GLfloat *verti
 /* -- stuff that can be cached -- */
 /* Cache of input to glDrawArrays or glDrawElements
  * In general, we build arrays with all vertices or normals.
- * We cant compress this and use glDrawElements as all combinations of
+ * We can't compress this and use glDrawElements as all combinations of
  * vertices and normals are unique.
  */
 #define DECLARE_SHAPE_CACHE(name,nameICaps,nameCaps)\
@@ -1324,7 +1324,7 @@ static void fghGenerateSphere(GLfloat radius, GLint slices, GLint stacks, GLfloa
     *nVert = slices*(stacks-1)+2;
     if ((*nVert) > 65535)
         /*
-         * limit of glushort, thats 256*256 subdivisions, should be enough in practice. See note above
+         * limit of glushort, that's 256*256 subdivisions, should be enough in practice. See note above
          */
         fgWarning("fghGenerateSphere: too many slices or stacks requested, indices will wrap");
 
@@ -1419,7 +1419,7 @@ void fghGenerateCone(
 
     if ((*nVert) > 65535)
         /*
-         * limit of glushort, thats 256*256 subdivisions, should be enough in practice. See note above
+         * limit of glushort, that's 256*256 subdivisions, should be enough in practice. See note above
          */
         fgWarning("fghGenerateCone: too many slices or stacks requested, indices will wrap");
 
@@ -1504,7 +1504,7 @@ void fghGenerateCylinder(
 
     if ((*nVert) > 65535)
         /*
-         * limit of glushort, thats 256*256 subdivisions, should be enough in practice. See note above
+         * limit of glushort, that's 256*256 subdivisions, should be enough in practice. See note above
          */
         fgWarning("fghGenerateCylinder: too many slices or stacks requested, indices will wrap");
 
@@ -1606,7 +1606,7 @@ void fghGenerateTorus(
 
     if ((*nVert) > 65535)
         /*
-         * limit of glushort, thats 256*256 subdivisions, should be enough in practice. See note above
+         * limit of glushort, that's 256*256 subdivisions, should be enough in practice. See note above
          */
         fgWarning("fghGenerateTorus: too many slices or stacks requested, indices will wrap");
 

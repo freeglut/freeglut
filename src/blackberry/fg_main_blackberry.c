@@ -640,7 +640,7 @@ void fgPlatformProcessSingleEvent ( void )
                 break;
 
             /* Orientation is a bunch of handshakes.
-               - First the app get's asked if it wants to rotate (NAVIGATOR_ORIENTATION_CHECK)
+               - First the app gets asked if it wants to rotate (NAVIGATOR_ORIENTATION_CHECK)
                - If the app wants to rotate, then it will be told what size it will be after rotate (NAVIGATOR_ORIENTATION_SIZE).
                - Once the OS confirms that it's ready to rotate, it tells the app to handle rotation (NAVIGATOR_ORIENTATION).
                - Once rotation is complete, the OS tells the app it's done (NAVIGATOR_ORIENTATION_DONE) */

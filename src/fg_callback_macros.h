@@ -59,15 +59,15 @@
  * This took a while to figure out, so be sure try to understand what is happening so that you can ensure that whatever you
  * change won't break other areas.
  *
- * If you are just adding a new callback/changing it's argument count, just go to the bottom of the file.
+ * If you are just adding a new callback/changing its argument count, just go to the bottom of the file.
  *
  * This whole file exists purely for the sake of preventing the need to implement additional parsing logic for each callback
  * to pass user arguments. Of course, the necessity to support older compilers means that, as seen in the line above, there
  * is still a requirement to add/modify code to handle callbacks. If freeglut ever requires newer compilers (at minimum, ones
  * that support C99 or higher), code can very slowly be removed from this file. Even better would be if the C standard eventually
  * supports something similar to what GCC has implemented or offers an alternative. Another option is if C++ would be "allowed" by
- * project maintaners, as then templates can be used and function overloading. Ironically, the template would probably look worse
- * then the GCC macro, so maybe it's good to stay as is.
+ * project maintainers, as then templates can be used and function overloading. Ironically, the template would probably look worse
+ * than the GCC macro, so maybe it's good to stay as is.
  *
  * Onto the different "versions" of macros:
  *
@@ -79,7 +79,7 @@
  *
  * The last macro set is for the poor individual who has to use a compiler that doesn't support C99 by default, or may not support
  * it at all. Stuff like MSVC6... It works by having a specific-count macro that "extracts" each argument to have them reused without
- * the parathesis.
+ * the parenthesis.
  *
  * There is a 3rd macro set that only worked on GCC/Clang, and thus was removed (last seen in revision e9676fc of the GIT mirror.
  * Not sure at this time what the SVN number is.) as it's a non-standard functionality.
