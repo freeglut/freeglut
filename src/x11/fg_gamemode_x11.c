@@ -524,7 +524,7 @@ void fgPlatformEnterGameMode( void )
      * We also need to wait here until XGrabPointer() returns GrabSuccess,
      * otherwise the new window is not viewable yet and if the next function
      * (XSetInputFocus) is called with a not yet viewable window, it will exit
-     * the application which we have to aviod, so wait until it's viewable:
+     * the application which we have to avoid, so wait until it's viewable:
      */
     while( GrabSuccess != XGrabPointer(
                fgDisplay.pDisplay.Display, fgStructure.GameModeWindow->Window.Handle,
@@ -572,7 +572,7 @@ void fgPlatformEnterGameMode( void )
 
 			/*
 			 * Final window repositioning: It could be avoided using an undecorated
-			 * window using override_redirect, but this * would possily require
+			 * window using override_redirect, but this * would possibly require
 			 * more changes and investigation.
 			 */
 

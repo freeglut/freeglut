@@ -903,7 +903,7 @@ LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         {
             /* User resize-dragging the window, call reshape callback and
              * force redisplay so display keeps running during dragging.
-             * Screen still wont update when not moving the cursor though...
+             * Screen still won't update when not moving the cursor though...
              */
             RECT rect;
             /* PRECT prect = (PRECT) lParam;

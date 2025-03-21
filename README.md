@@ -97,5 +97,5 @@ FreeGLUT mailing lists:
   You need to subscribe before posting to any of our mailing lists. Make sure
   to avoid selecting "daily digest mode" if you intend to post, so that you can
   reply properly to specific messages. Also, please do not top-post, and try to
-  send properly formated emails (text, hard-wrapped at 72 columns, no binary or
-  large attachements).
+  send properly formatted emails (text, hard-wrapped at 72 columns, no binary or
+  large attachments).

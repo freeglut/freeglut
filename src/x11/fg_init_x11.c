@@ -78,7 +78,7 @@ static int fghGetWindowProperty(Window window,
 			      data);
 
   FREEGLUT_INTERNAL_ERROR_EXIT(status == Success,
-			       "XGetWindowProperty failled",
+			       "XGetWindowProperty failed",
 			       "fghGetWindowProperty");
 
   if (type_returned != type)
