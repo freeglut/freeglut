@@ -576,7 +576,7 @@ static int fgPlatformGetModifiers (void)
             ( GetKeyState( VK_RCONTROL ) < 0 )) ? GLUT_ACTIVE_CTRL  : 0 ) |
         ( ( ( GetKeyState( VK_LMENU    ) < 0 ) ||
             ( GetKeyState( VK_RMENU    ) < 0 )) ? GLUT_ACTIVE_ALT   : 0 ) |
-		( ( ( GetKeyState( VK_LWIN     ) < 0 ) ||
+        ( ( ( GetKeyState( VK_LWIN     ) < 0 ) ||
             ( GetKeyState( VK_RWIN     ) < 0 )) ? GLUT_ACTIVE_SUPER : 0 );
 }
 
@@ -633,8 +633,8 @@ static LRESULT fghWindowProcKeyPress(SFG_Window *window, UINT uMsg, GLboolean ke
         FG_KEY( VK_RIGHT,  GLUT_KEY_RIGHT     );
         FG_KEY( VK_DOWN,   GLUT_KEY_DOWN      );
         FG_KEY( VK_INSERT, GLUT_KEY_INSERT    );
-		FG_KEY( VK_LWIN,   GLUT_KEY_SUPER_L   );
-		FG_KEY( VK_RWIN,   GLUT_KEY_SUPER_R   );
+        FG_KEY( VK_LWIN,   GLUT_KEY_SUPER_L   );
+        FG_KEY( VK_RWIN,   GLUT_KEY_SUPER_R   );
 
     /* handle control, alt and shift. For GLUT, we want to distinguish between left and right presses.
      * The VK_L* & VK_R* left and right Alt, Ctrl and Shift virtual keys are however only used as parameters to GetAsyncKeyState() and GetKeyState()

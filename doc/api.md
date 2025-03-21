@@ -773,8 +773,8 @@ The following environment variables are recognized by FreeGLUT:
 - `DISPLAY` - Specifies a display name
 - `GLUT_FPS` - Specifies a time interval (in milliseconds) for reporting framerate messages to `stderr`.
                For example, if `GLUT_FPS` is set to 5000, every 5 seconds a message will be printed to
-			   `stderr` showing the current frame rate. The frame rate is measured by counting the number
-			   of times `glutSwapBuffers()` is called over the time interval.
+               `stderr` showing the current frame rate. The frame rate is measured by counting the number
+               of times `glutSwapBuffers()` is called over the time interval.
 
 Furthermore, on Windows, there is a resource file identifier `GLUT_ICON` that you can specify for your
 executable file. It specifies the icon that goes in the upper left-hand corner of the FreeGLUT windows.

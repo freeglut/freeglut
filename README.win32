@@ -22,15 +22,15 @@ you will need to copy various files to various locations.
       MSVC library directory.  This usually has a path similar to:
               "%ProgramFiles%\Microsoft SDKs\Windows\v7.0A\Lib" - x86 32 bits LIB's
               "%ProgramFiles(x86)%\Microsoft SDKs\Windows\v7.0A\Lib" - x64 32 bits LIB's
-			  "%ProgramFiles(x86)%\Microsoft SDKs\Windows\v7.0A\Lib\x64" - x64 64 bits LIB's
+              "%ProgramFiles(x86)%\Microsoft SDKs\Windows\v7.0A\Lib\x64" - x64 64 bits LIB's
       Note that there is no "GL" subdirectory here.  This directory should
       already have the files "opengl32.lib", "glu32.lib", and "glaux.lib".
     - If you are using the DLL version of "freeglut", the file "freeglut.dll"
       needs to be copied from the Debug or the Release directory into the
       DLL directory.  This usually has a path similar to
               "%SystemRoot%\System32\" - x86 32 bits DLL's
-			  "%SystemRoot%\SysWOW64\" - x64 32 bits DLL's
-			  "%SystemRoot%\System32\" - x64 64 bits DLL's
+              "%SystemRoot%\SysWOW64\" - x64 32 bits DLL's
+              "%SystemRoot%\System32\" - x64 64 bits DLL's
       and will probably already have the files "opengl32.dll" and "glu32.dll".
 
 
@@ -46,14 +46,14 @@ you will need to copy various files to various locations.
 
     - The header files "freeglut.h", "freeglut_ext.h", "freeglut_std.h", and
       "glut.h" (distributed in the directory "freeglut\freeglut\include\GL")
-	  need to be copied to a "GL" directory under the Open Watcom 32-bit
-	  Windows include directory.  This usually has a path similar to
-			  "C:\WATCOM\h\nt\GL"
+      need to be copied to a "GL" directory under the Open Watcom 32-bit
+      Windows include directory.  This usually has a path similar to
+              "C:\WATCOM\h\nt\GL"
     - The library file "freeglut.lib" or "freeglut_static.lib" (from the
       corresponding debug or release directory) needs to be copied into the
-	  Open Watcom 32-bit Windows library directory.  This usually has a path
-	  similar to
-			  "C:\WATCOM\lib386\nt"
+      Open Watcom 32-bit Windows library directory.  This usually has a path
+      similar to
+              "C:\WATCOM\lib386\nt"
     - If you are using the DLL version of "freeglut", the file "freeglut.dll"
       needs to be copied from the Debug or the Release directory into the
       DLL directory.  This usually has a path similar to

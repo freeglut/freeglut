@@ -132,8 +132,8 @@
 /*
  * Flags for glutInitContextProfile, see fg_init.c
  */
-#define GLUT_CORE_PROFILE                   0x0001
-#define	GLUT_COMPATIBILITY_PROFILE          0x0002
+#define  GLUT_CORE_PROFILE                   0x0001
+#define  GLUT_COMPATIBILITY_PROFILE          0x0002
 
 /*
 * GLUT API Extension macro definitions -- Spaceball button definitions

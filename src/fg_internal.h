@@ -464,7 +464,7 @@ struct tagSFG_Context
     SFG_WindowHandleType Handle;     /* The window's handle                 */
     SFG_WindowContextType Context;   /* The window's OpenGL/WGL context     */
     SFG_WindowColormapType cmap;     /* The window's colormap/palette */
-	int cmap_size;                   /* colormap number of entries */
+    int cmap_size;                   /* colormap number of entries */
 
     SFG_PlatformContext pContext;    /* The window's FBConfig (X11) or device context (Windows) */
 

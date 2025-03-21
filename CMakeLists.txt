@@ -37,9 +37,9 @@ set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 CONFIGURE_FILE(src/fg_version.h.in src/fg_version.h)
 
 # shared lib version numbers (XXX: change before release)
-set(SO_MAJOR 3)		# increment on backwards incompatible API/ABI changes
-set(SO_MINOR 12)	# increment on backwards compatible API additions
-set(SO_REV 1)		# increment if only internal changes happened between releases
+set(SO_MAJOR 3)     # increment on backwards incompatible API/ABI changes
+set(SO_MINOR 12)    # increment on backwards compatible API additions
+set(SO_REV 1)       # increment if only internal changes happened between releases
 
 # FREEGLUT_BUILD_SHARED_LIBS is already a standard CMake variable, but we need to
 # re-declare it here so it will show up in the GUI.
@@ -173,7 +173,7 @@ IF(WIN32)
         src/mswin/fg_state_mswin.c
         src/mswin/fg_structure_mswin.c
         src/mswin/fg_window_mswin.c
-	src/mswin/fg_cmap_mswin.c
+        src/mswin/fg_cmap_mswin.c
         ${CMAKE_BINARY_DIR}/freeglut.rc # generated below from freeglut.rc.in
     )
     IF (MSVC AND NOT CMAKE_CL_64)
@@ -527,20 +527,20 @@ INCLUDE(CheckFunctionExists)
 INCLUDE(CheckTypeSize)
 INCLUDE(CheckCCompilerFlag)
 CHECK_INCLUDE_FILES(sys/types.h HAVE_SYS_TYPES_H)
-CHECK_INCLUDE_FILES(unistd.h 	HAVE_UNISTD_H)
-CHECK_INCLUDE_FILES(sys/time.h 	HAVE_SYS_TIME_H)
-CHECK_INCLUDE_FILES(stdbool.h 	HAVE_STDBOOL_H)
+CHECK_INCLUDE_FILES(unistd.h    HAVE_UNISTD_H)
+CHECK_INCLUDE_FILES(sys/time.h  HAVE_SYS_TIME_H)
+CHECK_INCLUDE_FILES(stdbool.h   HAVE_STDBOOL_H)
 CHECK_INCLUDE_FILES(sys/param.h HAVE_SYS_PARAM_H)
 CHECK_INCLUDE_FILES(sys/ioctl.h HAVE_SYS_IOCTL_H)
-CHECK_INCLUDE_FILES(fcntl.h 	HAVE_FCNTL_H)
-CHECK_INCLUDE_FILES(usbhid.h 	HAVE_USBHID_H)
+CHECK_INCLUDE_FILES(fcntl.h     HAVE_FCNTL_H)
+CHECK_INCLUDE_FILES(usbhid.h    HAVE_USBHID_H)
 CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
 CHECK_FUNCTION_EXISTS(XParseGeometry   HAVE_XPARSEGEOMETRY)
 IF (NOT HAVE_XPARSEGEOMETRY)
-   LIST(APPEND FREEGLUT_SRCS
+    LIST(APPEND FREEGLUT_SRCS
         src/util/xparsegeometry_repl.c
         src/util/xparsegeometry_repl.h)
-   SET(NEED_XPARSEGEOMETRY_IMPL TRUE)
+    SET(NEED_XPARSEGEOMETRY_IMPL TRUE)
 ENDIF()
 # decide on suitable type for internal time keeping, 64-bit if possible
 CHECK_INCLUDE_FILES(stdint.h    HAVE_STDINT_H)
@@ -677,24 +677,24 @@ ENDIF()
 
 IF(FREEGLUT_BUILD_SHARED_LIBS)
     INSTALL(TARGETS freeglut EXPORT FreeGLUTTargets
-	    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
     IF(INSTALL_PDB)
-	    INSTALL(FILES $<TARGET_PDB_FILE:freeglut>
-		    DESTINATION ${CMAKE_INSTALL_BINDIR}
-		    CONFIGURATIONS Debug RelWithDebInfo
-		    COMPONENT Devel)
+        INSTALL(FILES $<TARGET_PDB_FILE:freeglut>
+            DESTINATION ${CMAKE_INSTALL_BINDIR}
+            CONFIGURATIONS Debug RelWithDebInfo
+            COMPONENT Devel)
     ENDIF()
 ENDIF()
 IF(FREEGLUT_BUILD_STATIC_LIBS)
     INSTALL(TARGETS freeglut_static EXPORT FreeGLUTTargets
-	    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 ENDIF()
 INSTALL(FILES ${FREEGLUT_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GL COMPONENT Devel)
@@ -803,7 +803,7 @@ IF(FREEGLUT_BUILD_STATIC_LIBS)
 ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.pc.in ${CMAKE_BINARY_DIR}/freeglut.pc @ONLY)
 if(NOT FREEGLUT_INSTALL_PKGCONFIGDIR)
-	SET(FREEGLUT_INSTALL_PKGCONFIGDIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+  SET(FREEGLUT_INSTALL_PKGCONFIGDIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()
 INSTALL(FILES ${CMAKE_BINARY_DIR}/freeglut.pc DESTINATION ${FREEGLUT_INSTALL_PKGCONFIGDIR} RENAME ${PC_FILENAME} COMPONENT Devel)
 # TODO: change the library and .pc name when building for GLES,
@@ -826,7 +826,7 @@ CONFIGURE_FILE(FreeGLUTConfig.cmake.in
     @ONLY
 )
 if(NOT FREEGLUT_INSTALL_CMAKECONFIGDIR)
-	SET(FREEGLUT_INSTALL_CMAKECONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/FreeGLUT)
+    SET(FREEGLUT_INSTALL_CMAKECONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/FreeGLUT)
 endif()
 INSTALL(EXPORT FreeGLUTTargets
     FILE FreeGLUTTargets.cmake

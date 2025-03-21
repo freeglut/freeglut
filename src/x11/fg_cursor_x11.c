@@ -61,7 +61,7 @@ struct tag_cursorCacheEntry {
     unsigned int cursorShape;    /* an XC_foo value */
     Cursor cachedCursor;         /* None if the corresponding cursor has
                                     not been created yet */
-	Display *dpy;	/* display used to allocate this cursor */
+    Display *dpy;                /* display used to allocate this cursor */
 };
 
 /*

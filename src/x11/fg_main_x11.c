@@ -541,7 +541,7 @@ static void fghPrintEvent( XEvent *event )
         int i;
         switch(e->format) {
         case 8:
-			for(i=0; i<20; i++, p+=3) {
+            for(i=0; i<20; i++, p+=3) {
                 sprintf(p, " %02x", e->data.b[i]);
             }
             break;

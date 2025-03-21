@@ -18,18 +18,18 @@
 #define FREEGLUT_PRINT_ERRORS
 
 /* all of these should be available on relatively modern UNIX systems */
-#define HAVE_SYS_TYPES_H	/* sys/types.h */
-#define HAVE_UNISTD_H		/* unistd.h */
-#define HAVE_SYS_TIME_H		/* sys/time.h */
-#define HAVE_SYS_PARAM_H	/* sys/param.h */
-#define HAVE_SYS_IOCTL_H	/* sys/ioctl.h */
-#define HAVE_FCNTL_H		/* fcntl.h */
-#define HAVE_ERRNO_H		/* errno.h */
-#define HAVE_GETTIMEOFDAY	/* gettimeofday() */
-#define HAVE_VFPRINTF		/* vfprintf() */
-#define HAVE_STDINT_H		/* stdint.h - might not be available, undef if not found */
-#define HAVE_INTTYPES_H		/* inttypes.h */
-#define HAVE_ULONG_LONG		/* unsigned long long */
+#define HAVE_SYS_TYPES_H    /* sys/types.h */
+#define HAVE_UNISTD_H       /* unistd.h */
+#define HAVE_SYS_TIME_H     /* sys/time.h */
+#define HAVE_SYS_PARAM_H    /* sys/param.h */
+#define HAVE_SYS_IOCTL_H    /* sys/ioctl.h */
+#define HAVE_FCNTL_H        /* fcntl.h */
+#define HAVE_ERRNO_H        /* errno.h */
+#define HAVE_GETTIMEOFDAY   /* gettimeofday() */
+#define HAVE_VFPRINTF       /* vfprintf() */
+#define HAVE_STDINT_H       /* stdint.h - might not be available, undef if not found */
+#define HAVE_INTTYPES_H     /* inttypes.h */
+#define HAVE_ULONG_LONG     /* unsigned long long */
 
 /* don't need, XParseGeometry is in libX11 */
 #undef NEED_XPARSEGEOMETRY_IMPL
