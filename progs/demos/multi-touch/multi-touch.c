@@ -30,7 +30,6 @@
 #include <string.h>
 
 #include <GL/freeglut.h>
-#include <GL/gl.h>
 
 #define NUM_DEVICES 16
 #define NUM_CURSORS 64
