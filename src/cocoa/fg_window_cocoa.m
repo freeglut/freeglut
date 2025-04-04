@@ -438,17 +438,25 @@ BOOL shouldQuit = NO;
 {
     [super reshape];
 
-    // TODO: move all these window guards to a separate method or delegate
     if ( !self.fgWindow ) {
         fgError( "Freeglut window not set for %s", __func__ );
     }
 
-    NSWindow *window = self.fgWindow->Window.Handle;
-    NSRect    frame  = [window contentRectForFrameRect:[window frame]];
+    NSWindow *window        = self.fgWindow->Window.Handle;
+    NSRect    frame         = [window contentRectForFrameRect:[window frame]];
+    NSRect    backingBounds = [self convertRectToBacking:[self bounds]];
+
+    /* Update the window size */
+    SFG_PlatformWindowState *pWState = &self.fgWindow->State.pWState;
+    pWState->FrameBufferWidth        = (int)backingBounds.size.width;
+    pWState->FrameBufferHeight       = (int)backingBounds.size.height;
 
     /* Update state and call callback, if there was a change */
     fghOnPositionNotify( self.fgWindow, frame.origin.x, frame.origin.y, GL_FALSE );
-    fghOnReshapeNotify( self.fgWindow, frame.size.width, frame.size.height, GL_FALSE );
+    fghOnReshapeNotify( self.fgWindow, pWState->FrameBufferWidth, pWState->FrameBufferHeight, GL_FALSE );
+
+    // TODO: Resizing the window with accumulation buffers does not work correctly, may need to get creative and
+    // reinitialize the openGL context
 }
 
 @end
@@ -519,9 +527,15 @@ void fgPlatformOpenWindow( SFG_Window *window,
     // 0. Sanity Checks
     //
 
+    if ( fgState.ContextFlags & GLUT_DEBUG ) {
+        fgWarning( "WARNING - Debug context requested, but not supported on macOS, ignoring" );
+        fgState.ContextFlags &= ~GLUT_DEBUG;
+    }
+
     if ( !isValidOpenGLContext(
              fgState.MajorVersion, fgState.MinorVersion, fgState.ContextFlags, fgState.ContextProfile ) ) {
-        fgError( "MacOS only supports Compatibility OpenGL 2.1 and below OR OpenGL Core Profile 3.2 through 4.1" );
+        fgError(
+            "ERROR - MacOS only supports Compatibility OpenGL 2.1 and below OR OpenGL Core Profile 3.2 through 4.1" );
     }
 
     //
@@ -530,6 +544,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
 
     NSOpenGLPixelFormatAttribute attrs[32];
     int                          attrIndex = 0;
+    attrs[attrIndex++]                     = NSOpenGLPFAAccelerated; // choose hardware acceleration
     attrs[attrIndex++]                     = NSOpenGLPFAColorSize;
     attrs[attrIndex++]                     = 24; // 8 bits per RGB channel
     attrs[attrIndex++]                     = NSOpenGLPFAAlphaSize;
@@ -552,14 +567,18 @@ void fgPlatformOpenWindow( SFG_Window *window,
         attrs[attrIndex++] = NSOpenGLPFAAccumSize;
         attrs[attrIndex++] = 32;
     }
+    if ( fgState.DisplayMode & GLUT_AUX ) {
+        // TODO make this configurable when glutInitDisplayString implementation is complete eg ~32
+        attrs[attrIndex++] = NSOpenGLPFAAuxBuffers;
+        attrs[attrIndex++] = 2;
+    }
     if ( fgState.DisplayMode & GLUT_MULTISAMPLE ) {
-        attrs[attrIndex++] = NSOpenGLPFAMultisample;
-        attrs[attrIndex++] = 1;
+        attrs[attrIndex++] = NSOpenGLPFAMultisample; // boolean
         attrs[attrIndex++] = NSOpenGLPFASampleBuffers;
         attrs[attrIndex++] = 1;
         // TODO make this configurable when glutInitDisplayString implementation is complete eg samples = 4
         attrs[attrIndex++] = NSOpenGLPFASamples;
-        attrs[attrIndex++] = 16;
+        attrs[attrIndex++] = 4;
     }
     // profile selection
     attrs[attrIndex++] = NSOpenGLPFAOpenGLProfile;
@@ -591,6 +610,15 @@ void fgPlatformOpenWindow( SFG_Window *window,
         fgError( "Failed to create fgOpenGLView" );
     }
     openGLView.fgWindow = window; // Link to the FreeGLUT window structure
+
+    // TODO: Make this configurable, and handle transitions between high DPI and low DPI displays
+    // FIXME: High DPI support is not fully implemented yet
+    // Things to verify:
+    //  - mouse coordinates are correct
+    //  - window size is correct
+    //  - OpenGL viewport is correct
+    //  - OpenGL framebuffer size is correct
+    [openGLView setWantsBestResolutionOpenGLSurface:NO];
 
     //
     // 3. Create NSWindow and set fgOpenGLView as content view
