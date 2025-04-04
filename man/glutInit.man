@@ -1,6 +1,8 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1996.
 .\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
 .TH glutInit 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutInit - initialize the GLUT library.

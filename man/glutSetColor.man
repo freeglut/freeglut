@@ -1,6 +1,8 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1996.
 .\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
 .TH glutSetColor 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutSetColor - sets the color of a colormap entry in the layer of use

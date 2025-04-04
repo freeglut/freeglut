@@ -1,6 +1,8 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1998.
 .\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
 .TH glutIgnoreKeyRepeat 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutIgnoreKeyRepeat - determines if auto repeat keystrokes are reported to the current window

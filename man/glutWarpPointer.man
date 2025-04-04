@@ -1,6 +1,8 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1997.
 .\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
 .TH glutWarpPointer 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutWarpPointer warps the pointer's location.

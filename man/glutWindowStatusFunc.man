@@ -1,6 +1,8 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1999.
 .\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
 .TH glutWindowStatusFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutWindowStatusFunc - sets the window status callback for the current window.
