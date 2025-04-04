@@ -670,6 +670,12 @@ void fgPlatformOpenWindow( SFG_Window *window,
             fgDisplay.pDisplay.DisplayLink, &fgDisplayLinkCallback, (__bridge void *)openGLView );
         CVDisplayLinkStart( fgDisplay.pDisplay.DisplayLink );
     }
+#else
+    // As of macOS 15, VSync is not functional, so CVDisplayLink is the recommended way to handle VSync
+
+    // Set the swap interval parameter
+    GLint swapInterval = 1; // 1 for VSync, 0 for no VSync
+    [glContext setValues:&swapInterval forParameter:NSOpenGLContextParameterSwapInterval];
 #endif
 
     DBG( "OpenGL Version: %s", glGetString( GL_VERSION ) );
