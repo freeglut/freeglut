@@ -581,7 +581,11 @@ void fgPlatformOpenWindow( SFG_Window *window,
     // 2. Create fgOpenGLView with the pixel format
     //
 
-    NSRect        frame = NSMakeRect( positionUse ? x : 0, positionUse ? y : 0, sizeUse ? w : 300, sizeUse ? h : 300 );
+    // Flip y coordinate for OpenGL
+    y = positionUse ? fgDisplay.ScreenHeight - y - h : fgDisplay.ScreenHeight - h;
+    x = positionUse ? x : 0;
+
+    NSRect        frame      = NSMakeRect( x, y, sizeUse ? w : 300, sizeUse ? h : 300 );
     fgOpenGLView *openGLView = [[fgOpenGLView alloc] initWithFrame:frame pixelFormat:pixelFormat];
     if ( !openGLView ) {
         fgError( "Failed to create fgOpenGLView" );
