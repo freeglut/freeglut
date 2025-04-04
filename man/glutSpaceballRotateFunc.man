@@ -1,6 +1,8 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1996.
 .\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
 .TH glutSpaceballRotateFunc 3GLUT "3.8" "GLUT" "GLUT"
 .SH NAME
 glutSpaceballRotateFunc - sets the Spaceball rotation callback for the current
