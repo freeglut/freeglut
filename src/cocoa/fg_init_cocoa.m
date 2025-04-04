@@ -37,7 +37,7 @@ void fgPlatformInitialize( const char *displayName )
 
     // Get the main screen properties
     NSScreen *mainScreen   = [NSScreen mainScreen];
-    NSRect    screenFrame  = [mainScreen frame];
+    NSRect    screenFrame  = [mainScreen visibleFrame]; // visibleFrame excludes the menu bar and dock
     fgDisplay.ScreenWidth  = screenFrame.size.width;
     fgDisplay.ScreenHeight = screenFrame.size.height;
 
