@@ -80,6 +80,17 @@ BOOL shouldQuit = NO;
 
 @implementation fgOpenGLView
 
+/* Mac uses non-standard key codes, so we need to map them to GLUT key codes */
++ (uint16_t)convertFromMac:(uint16_t)key
+{
+    switch ( key ) {
+    case 0x7F:       // Delete
+        return 0x08; // Backspace
+    default:
+        return (uint16_t)key;
+    }
+}
+
 + (char)mapKeyToSpecial:(uint16_t)key
 {
     switch ( key ) {
@@ -388,9 +399,10 @@ BOOL shouldQuit = NO;
         return; // Ignore events with no characters
     }
 
-    unichar key       = [[event charactersIgnoringModifiers] characterAtIndex:0];
-    char    convKey   = [fgOpenGLView mapKeyToSpecial:key];
-    BOOL    isSpecial = ( convKey != key );
+    unichar key    = [[event charactersIgnoringModifiers] characterAtIndex:0];
+    key            = [fgOpenGLView convertFromMac:key];
+    char convKey   = [fgOpenGLView mapKeyToSpecial:key];
+    BOOL isSpecial = ( convKey != key );
 
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:YES];
 
@@ -412,9 +424,10 @@ BOOL shouldQuit = NO;
         return; // Ignore events with no characters
     }
 
-    uint16_t key       = [[event charactersIgnoringModifiers] characterAtIndex:0];
-    char     convKey   = [fgOpenGLView mapKeyToSpecial:key];
-    BOOL     isSpecial = ( convKey != key );
+    uint16_t key   = [[event charactersIgnoringModifiers] characterAtIndex:0];
+    key            = [fgOpenGLView convertFromMac:key];
+    char convKey   = [fgOpenGLView mapKeyToSpecial:key];
+    BOOL isSpecial = ( convKey != key );
 
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:YES];
 
