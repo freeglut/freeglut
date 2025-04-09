@@ -301,13 +301,11 @@ BOOL shouldQuit = NO;
     // TODO: Decide on a suitable threshold for scrolling events
     // Macos sends a lot of small delta values, so we need to filter them if we want to match the
     // behavior of other platforms
-    if ( fabs( bufferedY ) > fgWheelThreshold ) {
-        int direction = ( bufferedY > 0 ) ? GLUT_UP : GLUT_DOWN;
+    bufferedY += deltaY;
+    while ( fabs( bufferedY ) > fgWheelThreshold ) {
+        int direction = ( bufferedY > 0 ) ? 1 : -1;
         INVOKE_WCB( *self.fgWindow, MouseWheel, ( FG_MOUSE_WHEEL_Y, direction, mouseLoc.x, mouseLoc.y ) );
-        bufferedY = 0.0;
-    }
-    else {
-        bufferedY += deltaY;
+        bufferedY -= direction * fgWheelThreshold;
     }
 }
 
