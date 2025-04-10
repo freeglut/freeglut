@@ -1,11 +1,11 @@
 .\"
-.\" Copyright (c) Mark J. Kilgard, 1996, 1998, 1999.
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutVideoResizeGet 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutVideoResizeGet 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
 .SH NAME
-glutVideoResizeGet - retrieves GLUT video resize information represented by integers.
+glutVideoResizeGet - retrieves video resizing parameters.
 .SH SYNTAX
 .nf
 .LP
@@ -13,39 +13,73 @@ int glutVideoResizeGet(GLenum param);
 .fi
 .SH ARGUMENTS
 .IP \fIparam\fP 1i
-Name of video resize information to retrieve.
+The parameter to retrieve. Valid values are:
 .TP 8
 .B GLUT_VIDEO_RESIZE_POSSIBLE
-Non-zero if video resizing is supported by the underlying system; zero
-if not supported.  If this is zero, the other video resize GLUT calls
-do nothing when called.  See the Implementation Notes sections below.
+Returns 1 if video resizing is supported, 0 otherwise.
 .TP 8
 .B GLUT_VIDEO_RESIZE_IN_USE
+Returns 1 if video resizing is currently in use, 0 otherwise.
 .TP 8
 .B GLUT_VIDEO_RESIZE_X_DELTA
+Returns the X delta for the video resize viewport.
 .TP 8
 .B GLUT_VIDEO_RESIZE_Y_DELTA
+Returns the Y delta for the video resize viewport.
 .TP 8
 .B GLUT_VIDEO_RESIZE_WIDTH_DELTA
+Returns the width delta for the video resize viewport.
 .TP 8
 .B GLUT_VIDEO_RESIZE_HEIGHT_DELTA
+Returns the height delta for the video resize viewport.
 .TP 8
 .B GLUT_VIDEO_RESIZE_X
+Returns the X position of the video resize viewport.
 .TP 8
 .B GLUT_VIDEO_RESIZE_Y
+Returns the Y position of the video resize viewport.
 .TP 8
 .B GLUT_VIDEO_RESIZE_WIDTH
+Returns the width of the video resize viewport.
 .TP 8
 .B GLUT_VIDEO_RESIZE_HEIGHT
+Returns the height of the video resize viewport.
 .SH DESCRIPTION
-glutVideoResizeGet retrieves GLUT video resizing information represented by integers. The param
-parameter determines what type of video resize information to return.
-.SH X IMPLEMENTATION NOTES
-The current implementation uses the SGIX_video_resize GLX extension.
-This extension is currently supported on SGI's InfiniteReality-based systems.
-.SH WIN32 IMPLEMENTATION NOTES
-The current implementation never reports that video resizing is possible.
+glutVideoResizeGet retrieves parameters and status information about video resizing. Video resizing allows interactive resizing of windows with continuous feedback, which is particularly useful for complex scenes.
+
+The function returns various parameters depending on the param argument, including whether video resizing is supported, whether it is currently active, and dimensions of the video resize viewport.
+
+This function is useful for applications that need to adjust their behavior based on video resizing support or to obtain the current viewport dimensions during resizing.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Check if video resizing is supported */
+if (glutVideoResizeGet(GLUT_VIDEO_RESIZE_POSSIBLE)) {
+    printf("Video resizing is supported\\n");
+
+    /* Set up video resizing */
+    glutSetupVideoResizing();
+
+    /* Check if it's now active */
+    if (glutVideoResizeGet(GLUT_VIDEO_RESIZE_IN_USE)) {
+        printf("Video resizing is now active\\n");
+
+        /* Get viewport dimensions */
+        int x = glutVideoResizeGet(GLUT_VIDEO_RESIZE_X);
+        int y = glutVideoResizeGet(GLUT_VIDEO_RESIZE_Y);
+        int width = glutVideoResizeGet(GLUT_VIDEO_RESIZE_WIDTH);
+        int height = glutVideoResizeGet(GLUT_VIDEO_RESIZE_HEIGHT);
+
+        printf("Resize viewport: %d, %d, %d, %d\\n", x, y, width, height);
+    }
+} else {
+    printf("Video resizing is not supported\\n");
+}
+.fi
+
 .SH SEE ALSO
-glutGet, glutSetupVideoResizing, glutStopVideoResizing, glutVideoResize, glutVideoPan
+glutSetupVideoResizing, glutStopVideoResizing
 .SH AUTHOR
-Mark J. Kilgard (mjk@nvidia.com)
+FreeGLUT contributors

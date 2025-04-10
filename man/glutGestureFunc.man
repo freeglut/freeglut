@@ -1,0 +1,90 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutGestureFunc 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutGestureFunc, glutRotateFunc, glutPinchFunc - set gesture recognition callbacks for the current window.
+.SH SYNTAX
+.nf
+.LP
+void glutGestureFunc(void (*callback)(int gesture, int count, float x, float y, float dist, float angle));
+void glutRotateFunc(void (*callback)(float angle, float dx, float dy));
+void glutPinchFunc(void (*callback)(float scale, float delta));
+.fi
+.SH ARGUMENTS
+.IP \fIcallback\fP 1i
+The callback function to be called when the respective gesture is recognized.
+.IP \fIgesture\fP 1i
+Type of gesture detected.
+.IP \fIcount\fP 1i
+Number of touch points involved in the gesture.
+.IP \fIx\fP 1i
+X position of the gesture center.
+.IP \fIy\fP 1i
+Y position of the gesture center.
+.IP \fIdist\fP 1i
+Distance parameter for the gesture.
+.IP \fIangle\fP 1i
+Angle parameter for the gesture (in degrees).
+.IP \fIscale\fP 1i
+Scale factor for pinch gestures.
+.IP \fIdelta\fP 1i
+Change in scale since last pinch event.
+.IP \fIdx\fP 1i
+X component of the rotation center displacement.
+.IP \fIdy\fP 1i
+Y component of the rotation center displacement.
+.SH DESCRIPTION
+These functions provide gesture recognition support in FreeGLUT applications, translating multitouch input into higher-level gestures.
+
+glutGestureFunc sets a general gesture callback that can capture different types of gestures. The gesture parameter identifies the type of gesture recognized, which may include swipes, taps, and other platform-dependent gestures.
+
+glutRotateFunc sets a specialized callback for rotation gestures (typically performed with two fingers moving in a circular motion). The angle parameter indicates the rotation amount in degrees, and dx/dy provide information about movement of the rotation center.
+
+glutPinchFunc sets a specialized callback for pinch gestures (typically performed with two fingers moving toward or away from each other). The scale parameter represents the current scale factor, and delta indicates the change in scale since the last pinch event.
+
+Support for specific gestures depends on the underlying platform and hardware. Not all platforms support all gesture types.
+
+If any callback parameter is NULL, the corresponding gesture callback is disabled.
+
+These functions are FreeGLUT extensions and are not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+void pinchHandler(float scale, float delta)
+{
+    /* Adjust zoom level based on pinch gesture */
+    zoomLevel *= delta;
+
+    /* Clamp to reasonable limits */
+    if (zoomLevel < 0.1f) zoomLevel = 0.1f;
+    if (zoomLevel > 10.0f) zoomLevel = 10.0f;
+
+    printf("Pinch: scale=%.2f, delta=%.2f, zoom now %.2f\\n", 
+           scale, delta, zoomLevel);
+
+    glutPostRedisplay();
+}
+
+void rotateHandler(float angle, float dx, float dy)
+{
+    /* Adjust rotation based on gesture */
+    modelRotation += angle;
+
+    printf("Rotate: angle=%.2f degrees, center moved (%.2f, %.2f)\\n", 
+           angle, dx, dy);
+
+    glutPostRedisplay();
+}
+
+/* In initialization code */
+glutPinchFunc(pinchHandler);
+glutRotateFunc(rotateHandler);
+.fi
+
+.SH SEE ALSO
+glutMultiEntryFunc, glutMultiButtonFunc, glutMultiMotionFunc, glutMultiPassiveFunc
+.SH AUTHOR
+FreeGLUT contributors

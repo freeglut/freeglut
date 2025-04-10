@@ -1,0 +1,61 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutGetModeValues 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutGetModeValues - retrieves supported capabilities for a given display mode parameter.
+.SH SYNTAX
+.nf
+.LP
+int glutGetModeValues(GLenum mode, int *values);
+.fi
+.SH ARGUMENTS
+.IP \fImode\fP 1i
+The display mode parameter to query. Valid values include GLUT_AUX, GLUT_MULTISAMPLE, GLUT_DEPTH_SIZE, etc.
+.IP \fIvalues\fP 1i
+Pointer to an array where the supported values will be stored. If NULL, the function only returns the number of available values.
+.SH DESCRIPTION
+glutGetModeValues allows applications to query what values are available for specific display mode parameters. This is useful for determining what capabilities are supported by the OpenGL implementation and the hardware before creating a window.
+
+For a given display mode parameter, the function returns an array of supported values. For example, for GLUT_MULTISAMPLE, it might return the available multisampling levels (e.g., 2, 4, 8, 16).
+
+The function returns the number of values available for the specified mode parameter. If values is not NULL, the function will fill the array with the supported values. If values is NULL, the function only returns the count, which is useful for allocating an appropriately sized array.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Get available multisampling levels */
+int *samplingLevels;
+int numLevels = glutGetModeValues(GLUT_MULTISAMPLE, NULL);
+
+if (numLevels > 0) {
+    /* Allocate array for values */
+    samplingLevels = (int*)malloc(numLevels * sizeof(int));
+
+    /* Get the actual values */
+    glutGetModeValues(GLUT_MULTISAMPLE, samplingLevels);
+
+    /* Find highest supported sampling value */
+    int highestSampling = 0;
+    for (int i = 0; i < numLevels; i++) {
+        if (samplingLevels[i] > highestSampling)
+            highestSampling = samplingLevels[i];
+    }
+
+    /* Use highest multisampling level */
+    if (highestSampling > 0) {
+        glutSetOption(GLUT_MULTISAMPLE, highestSampling);
+        printf("Using %dx multisampling\\n", highestSampling);
+    }
+
+    free(samplingLevels);
+}
+.fi
+
+.SH SEE ALSO
+glutInitDisplayMode, glutSetOption, glutInitDisplayString, glutGet
+.SH AUTHOR
+FreeGLUT contributors

@@ -1,0 +1,58 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutAppStatusFunc 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutAppStatusFunc - sets the application-wide status callback.
+.SH SYNTAX
+.nf
+.LP
+void glutAppStatusFunc(void (*func)(int status, int x, int y));
+.fi
+.SH ARGUMENTS
+.IP \fIfunc\fP 1i
+The new application status callback function.
+.SH DESCRIPTION
+glutAppStatusFunc sets the application-wide status callback. This callback is triggered when the application's status changes, such as when the application becomes active or inactive.
+
+The status parameter can have the following values:
+.TP 8
+.B GLUT_APPSTATUS_PAUSE
+The application is paused (e.g., window minimized or application in background).
+.TP 8
+.B GLUT_APPSTATUS_RESUME
+The application has resumed from a paused state.
+
+The x and y parameters provide additional information about the status change, but their meaning may vary between platforms.
+
+This callback is particularly useful for applications that need to suspend resource-intensive operations when the application is not visible or is running in the background.
+
+If the callback parameter is NULL, the application status callback is disabled.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+void appStatus(int status, int x, int y)
+{
+    if (status == GLUT_APPSTATUS_PAUSE) {
+        /* Application is paused, reduce resource usage */
+        stopSimulation();
+        reduceUpdateRate();
+    } else if (status == GLUT_APPSTATUS_RESUME) {
+        /* Application is active again, resume normal operation */
+        startSimulation();
+        restoreUpdateRate();
+    }
+}
+
+/* In initialization code */
+glutAppStatusFunc(appStatus);
+.fi
+
+.SH SEE ALSO
+glutVisibilityFunc, glutWindowStatusFunc
+.SH AUTHOR
+FreeGLUT contributors

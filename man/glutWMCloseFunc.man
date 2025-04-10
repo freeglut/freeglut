@@ -1,0 +1,27 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutWMCloseFunc 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutWMCloseFunc - deprecated; use glutCloseFunc instead
+.SH SYNTAX
+.nf
+.LP
+void glutWMCloseFunc(void (*callback)(void));
+.fi
+.SH ARGUMENTS
+.IP \fIcallback\fP 1i
+The window close callback function.
+.SH DESCRIPTION
+glutWMCloseFunc is a deprecated function that is included for backward compatibility only. New code should use glutCloseFunc instead, which provides the same functionality.
+
+This function sets the window manager close callback for the current window. The window close callback is triggered when the user requests that the current window be closed via the window manager close button or a similar mechanism.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH SEE ALSO
+glutCloseFunc
+.SH AUTHOR
+FreeGLUT contributors

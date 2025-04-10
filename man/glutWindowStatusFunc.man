@@ -1,58 +1,83 @@
 .\"
-.\" Copyright (c) Mark J. Kilgard, 1999.
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutWindowStatusFunc 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutWindowStatusFunc 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
 .SH NAME
 glutWindowStatusFunc - sets the window status callback for the current window.
 .SH SYNTAX
 .nf
 .LP
-void glutWindowStatusFunc(void (*func)(int state));
+void glutWindowStatusFunc(void (*callback)(int state));
 .fi
 .SH ARGUMENTS
-.IP \fIfunc\fP 1i
+.IP \fIcallback\fP 1i
 The new window status callback function.
 .SH DESCRIPTION
-glutWindowStatusFunc sets the window status callback for the current
-window. The window status callback for a window is called when the window
-status (visibility)
-of a window changes.  The state callback parameter is one of
-GLUT_HIDDEN, GLUT_FULLY_RETAINED, GLUT_PARTIALLY_RETAINED, or GLUT_FULLY_COVERED
-depending on the current
-window status of the window.
-GLUT_HIDDEN means that the window is either not shown (often meaning
-that the window is iconified).
-GLUT_FULLY_RETAINED means that the window is fully retained (no pixels belonging
-to the window are covered by other windows).
-GLUT_PARTIALLY_RETAINED means that the window is partially retained (some but not
-all pixels belonging to the window are covered by other windows).
-GLUT_FULLY_COVERED means the window is shown but no part
-of the window is visible, i.e., until the window's status changes, all
-further rendering to the window is discarded.
+glutWindowStatusFunc sets the window status callback for the current window. The window status callback is triggered when the window's status changes, such as when it is minimized, restored, or maximized.
 
-GLUT considers a window visible if any pixel of the window is visible or
-any pixel of any descendant window is visible on the screen.
+The callback function receives a state parameter that indicates the new status of the window. Possible values for state are:
+.TP 8
+.B GLUT_HIDDEN
+The window is hidden (minimized or iconified).
+.TP 8
+.B GLUT_FULLY_RETAINED
+The window is fully retained (restored or normal state).
+.TP 8
+.B GLUT_PARTIALLY_RETAINED
+The window is partially retained.
+.TP 8
+.B GLUT_FULLY_COVERED
+The window is fully covered by other windows.
 
-GLUT applications are encouraged to disable rendering and/or animation
-when windows have a status of either GLUT_HIDDEN or GLUT_FULLY_COVERED.
+This function is useful for applications that need to respond to changes in window visibility or state, such as pausing rendering or animations when minimized, or adjusting resource usage based on window state.
 
-Passing NULL to glutWindowStatusFunc disables the generation of the
-window status callback.
+If the callback parameter is NULL, the window status callback is disabled.
 
-If the window status callback for a window is disabled and later re-enabled, the
-window status of the window is undefined; any change in window
-window status will be reported, that is if you disable a window status callback and
-re-enable the callback, you are guaranteed the next window status change will
-be reported.
+This function is a FreeGLUT extension and is not available in the original GLUT library.
 
-Setting the window status callback for a window disables the visibility
-callback set for the window (and vice versa).  The visibility callback
-is set with glutVisibilityFunc.  glutVisibilityFunc is deprecated in
-favor of the more informative glutWindowStatusFunc.
+.SH EXAMPLE
+.nf
+void windowStatusCallback(int state)
+{
+    switch (state) {
+    case GLUT_HIDDEN:
+        /* Window is minimized */
+        printf("Window minimized\\n");
+        pauseAnimation = true;
+        break;
+
+    case GLUT_FULLY_RETAINED:
+        /* Window is restored to normal or maximized */
+        printf("Window restored or maximized\\n");
+        pauseAnimation = false;
+        break;
+
+    case GLUT_PARTIALLY_RETAINED:
+        /* Window is partially visible */
+        printf("Window partially visible\\n");
+        break;
+
+    case GLUT_FULLY_COVERED:
+        /* Window is completely covered by other windows */
+        printf("Window fully covered\\n");
+        break;
+    }
+
+    /* Adjust rendering or resource usage based on window state */
+    if (pauseAnimation) {
+        glutIdleFunc(NULL);  /* Disable animation when minimized */
+    } else {
+        glutIdleFunc(animate);  /* Re-enable animation when restored */
+    }
+}
+
+/* In initialization code */
+glutWindowStatusFunc(windowStatusCallback);
+.fi
 
 .SH SEE ALSO
-glutCreateWindow, glutPopWindow, glutVisibilityFunc
+glutVisibilityFunc, glutShowWindow, glutHideWindow, glutIconifyWindow
 .SH AUTHOR
-Mark J. Kilgard (mjk@nvidia.com)
+FreeGLUT contributors

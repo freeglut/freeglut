@@ -1,0 +1,77 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutGetTouchEvent 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutGetTouchEvent - retrieves information about touch events.
+.SH SYNTAX
+.nf
+.LP
+int glutGetTouchEvent(int mode, int index, int *x, int *y, double *pressure);
+.fi
+.SH ARGUMENTS
+.IP \fImode\fP 1i
+The type of information to retrieve. Valid values are:
+.TP 8
+.B GLUT_TOUCH_COUNT
+Returns the number of active touch points. Ignores index, x, y, and pressure.
+.TP 8
+.B GLUT_TOUCH_POINT_COORDS
+Retrieves the coordinates and pressure of a specific touch point.
+.IP \fIindex\fP 1i
+The index of the touch point to query (0 to count-1). Only used with GLUT_TOUCH_POINT_COORDS.
+.IP \fIx\fP 1i
+Pointer to an integer that will receive the X coordinate. Only used with GLUT_TOUCH_POINT_COORDS.
+.IP \fIy\fP 1i
+Pointer to an integer that will receive the Y coordinate. Only used with GLUT_TOUCH_POINT_COORDS.
+.IP \fIpressure\fP 1i
+Pointer to a double that will receive the pressure value (0.0 to 1.0). Only used with GLUT_TOUCH_POINT_COORDS.
+.SH DESCRIPTION
+glutGetTouchEvent provides access to information about current touch events on touch-enabled devices. This allows applications to retrieve the number of active touch points and the position and pressure of each touch point.
+
+When mode is GLUT_TOUCH_COUNT, the function returns the number of active touch points and ignores the index, x, y, and pressure parameters.
+
+When mode is GLUT_TOUCH_POINT_COORDS, the function retrieves the coordinates and pressure of the touch point specified by index. The coordinates are stored in the variables pointed to by x and y, and the pressure is stored in the variable pointed to by pressure. The function returns 1 if successful, or 0 if the specified index is out of range.
+
+This function is particularly useful for applications that need to process multi-touch input outside the callback-based framework provided by glutMultiButtonFunc and related functions.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Draw circles at all active touch points */
+void drawTouchPoints(void)
+{
+    int count = glutGetTouchEvent(GLUT_TOUCH_COUNT, 0, NULL, NULL, NULL);
+
+    for (int i = 0; i < count; i++) {
+        int x, y;
+        double pressure;
+
+        /* Get the position and pressure of this touch point */
+        if (glutGetTouchEvent(GLUT_TOUCH_POINT_COORDS, i, &x, &y, &pressure)) {
+            /* Use pressure to determine circle size (1-10 pixel radius) */
+            float radius = 1.0f + 9.0f * (float)pressure;
+
+            /* Draw a circle at this touch point */
+            glBegin(GL_TRIANGLE_FAN);
+            glColor4f(1.0f, 0.0f, 0.0f, 0.7f);  /* Semi-transparent red */
+            glVertex2f(x, y);  /* Center point */
+
+            for (int angle = 0; angle <= 360; angle += 10) {
+                float rad = angle * 3.14159f / 180.0f;
+                glVertex2f(x + sin(rad) * radius, y + cos(rad) * radius);
+            }
+
+            glEnd();
+        }
+    }
+}
+.fi
+
+.SH SEE ALSO
+glutMultiEntryFunc, glutMultiButtonFunc, glutMultiMotionFunc, glutMultiPassiveFunc
+.SH AUTHOR
+FreeGLUT contributors

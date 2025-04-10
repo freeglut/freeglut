@@ -1,0 +1,35 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutJoystickSetSaturation 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutJoystickSetSaturation - sets the joystick saturation.
+.SH SYNTAX
+.nf
+.LP
+void glutJoystickSetSaturation(int joystick, float saturation_x, float saturation_y, float saturation_z);
+.fi
+.SH ARGUMENTS
+.IP \fIjoystick\fP 1i
+The joystick number, starting at 0.
+.IP \fIsaturation_x\fP 1i
+Saturation threshold for the X axis.
+.IP \fIsaturation_y\fP 1i
+Saturation threshold for the Y axis.
+.IP \fIsaturation_z\fP 1i
+Saturation threshold for the Z axis.
+.SH DESCRIPTION
+glutJoystickSetSaturation sets the saturation threshold for the specified joystick. The saturation threshold is a value at which the joystick axis is considered to be at its maximum extent. Values beyond this threshold are clamped to 1.0 or -1.0, depending on the direction.
+
+Saturation values are specified for the X, Y, and Z axes as floating-point values. Values are usually in the range of 0.0 (maximum saturation, where any movement saturates the output) to 1.0 (no saturation).
+
+This function allows applications to calibrate joysticks that do not reach the full expected range values due to physical limitations or differences in hardware.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH SEE ALSO
+glutJoystickFunc, glutForceJoystickFunc, glutJoystickSetDeadBand
+.SH AUTHOR
+FreeGLUT contributors

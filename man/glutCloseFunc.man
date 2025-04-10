@@ -1,0 +1,33 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutCloseFunc 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutCloseFunc - sets the window close callback for the current window.
+.SH SYNTAX
+.nf
+.LP
+void glutCloseFunc(void (*callback)(void));
+.fi
+.SH ARGUMENTS
+.IP \fIcallback\fP 1i
+The new window close callback function.
+.SH DESCRIPTION
+glutCloseFunc sets the window close callback for the current window. The window close callback is triggered when the user requests that the current window be closed. In response to the window close callback, the application can choose to close the window using glutDestroyWindow or ignore the request. If not ignoring the request, the callback should either exit via exit(3) or return to allow the callback to return to the main loop, where the application can call glutDestroyWindow as well.
+
+If the callback function destroys the window, it should NOT return to the main loop afterwards, since the window referred to in the callback will no longer exist. If a window close callback is not registered, the default behavior is to call exit(0) when a window close request is received.
+
+Before destroying a window with the glutDestroyWindow call, the application should take care to make sure it is not within an OpenGL rendering callback for the window being destroyed. Do not try to destroy a window within a display callback or reshape callback for that same window.
+
+Setting the window close callback affects the behavior set with glutSetOption's GLUT_ACTION_ON_WINDOW_CLOSE option. When a close callback is set, the option value is effectively ignored.
+
+If the callback parameter is NULL, the window close callback is disabled, and the behavior reverts to the global setting from GLUT_ACTION_ON_WINDOW_CLOSE.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH SEE ALSO
+glutDestroyWindow, glutSetOption
+.SH AUTHOR
+FreeGLUT contributors
