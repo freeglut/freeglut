@@ -1,5 +1,6 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1996.
+.\" Modifications Copyright (c) The FreeGLUT contributors.
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
@@ -51,11 +52,11 @@ Number of bits of green stored the current layer of current window's color buffe
 Zero if the current layer of the current window is color index.
 .TP 8
 .B GLUT_WINDOW_BLUE_SIZE
-Number of bits of blue stored the current layer of current window's color buffer.
+Number of bits of blue stored in the current layer of current window's color buffer.
 Zero if the current layer of the current window is color index.
 .TP 8
 .B GLUT_WINDOW_ALPHA_SIZE
-Number of bits of alpha stored the current layer of current window's color buffer.
+Number of bits of alpha stored in the current layer of current window's color buffer.
 Zero if the current layer of the current window is color index.
 .TP 8
 .B GLUT_WINDOW_ACCUM_RED_SIZE
@@ -102,6 +103,23 @@ One if the current layer of the current window is stereo, zero otherwise.
 .B GLUT_WINDOW_CURSOR
 Current cursor for the current window.
 .TP 8
+.B GLUT_WINDOW_FORMAT_ID
+The window system dependent format ID for the current layer of the
+current window.  On X11 GLUT implementations, this is the X visual ID.
+On Win32 GLUT implementations, this is the Win32 Pixel Format
+Descriptor number.  This value is returned for debugging, benchmarking,
+and testing ease.
+.TP 8
+.B GLUT_WINDOW_BORDER_WIDTH
+Width of the window's border in pixels.
+.TP 8
+.B GLUT_WINDOW_BORDER_HEIGHT
+Height of non-client area above window in pixels, including both border and
+caption (if any).
+.TP 8
+.B GLUT_ALLOW_NEGATIVE_WINDOW_POSITION
+One if negative window positions are enabled, zero otherwise.
+.TP 8
 .B GLUT_SCREEN_WIDTH
 Width of the screen in pixels. Zero indicates the width is unknown
 or not available.
@@ -143,12 +161,16 @@ The height value of the initial window size.
 Number of milliseconds since glutInit called (or first call to
 glutGet(GLUT_ELAPSED_TIME)).
 .TP 8
-.B GLUT_WINDOW_FORMAT_ID
-The window system dependent format ID for the current layer of the
-current window.  On X11 GLUT implementations, this is the X visual ID.
-On Win32 GLUT implementations, this is the Win32 Pixel Format
-Descriptor number.  This value is returned for debugging, benchmarking,
-and testing ease.
+.B GLUT_FULL_SCREEN
+One if the window is currently in fullscreen mode, zero otherwise.
+.TP 8
+.B GLUT_INIT_STATE
+One if GLUT has been initialized through a call to glutInit, zero otherwise.
+.TP 8
+.B GLUT_VERSION
+Return value will be X*10000+Y*100+Z where X is the major version, Y is the
+minor version and Z is the patch level. This query is only supported in freeglut
+(version 2.0.0 or later).
 .SH DESCRIPTION
 glutGet retrieves simple GLUT state represented by integers. The
 state parameter determines what type of state to return.  Where appropriate, window
@@ -161,3 +183,5 @@ state for an invalid GLUT state name returns negative one.
 glutDeviceGet, glutLayerGet, glutGetColor, glutGetWindow, glutGetMenu, glutGetModifiers, glutExtensionSupported
 .SH AUTHOR
 Mark J. Kilgard (mjk@nvidia.com)
+.SH ADDITIONAL CONTRIBUTIONS
+FreeGLUT contributors
