@@ -552,6 +552,8 @@ void fgPlatformOpenWindow( SFG_Window *window,
     //
     // 1. Define pixel format attributes based on fgState.DisplayMode
     //
+    // TODO: Move this to a separate function to support fgPlatformGlutGet(GLUT_DISPLAY_MODE_POSSIBLE)
+    //
 
     NSOpenGLPixelFormatAttribute attrs[32];
     int                          attrIndex = 0;
