@@ -1,6 +1,6 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1996.
-.\" Modifications Copyright (c) The FreeGLUT contributors.
+.\" Copyright (c) The freeglut contributors.
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
@@ -184,4 +184,4 @@ glutDeviceGet, glutLayerGet, glutGetColor, glutGetWindow, glutGetMenu, glutGetMo
 .SH AUTHOR
 Mark J. Kilgard (mjk@nvidia.com)
 .SH ADDITIONAL CONTRIBUTIONS
-FreeGLUT contributors
+freeglut contributors
