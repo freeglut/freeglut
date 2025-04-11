@@ -1,0 +1,60 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutBitmapLength 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutBitmapLength, glutStrokeLength - calculate the length of a string in a given font.
+.SH SYNTAX
+.nf
+.LP
+int glutBitmapLength(void *font, const unsigned char *string);
+GLfloat glutStrokeLength(void *font, const unsigned char *string);
+.fi
+.SH ARGUMENTS
+.IP \fIfont\fP 1i
+The GLUT font identifier, one of GLUT_BITMAP_* or GLUT_STROKE_* constants.
+.IP \fIstring\fP 1i
+The null-terminated string to measure.
+.SH DESCRIPTION
+glutBitmapLength returns the width in pixels of the specified string if rendered with the specified bitmap font. It is equivalent to the sum of the widths of each character in the string, which could also be calculated by calling glutBitmapWidth repeatedly for each character.
+
+glutStrokeLength returns the width in modeling units of the specified string if rendered with the specified stroke font. It is equivalent to the sum of the widths of each character in the string, which could also be calculated by calling glutStrokeWidth repeatedly for each character.
+
+These functions are useful for calculating text positioning, especially for centering or right-aligning text.
+
+These functions are FreeGLUT extensions and are not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Center a string horizontally on the screen */
+void renderCenteredText(float y, void *font, const char *text)
+{
+    int textWidth = glutBitmapLength(font, (const unsigned char*)text);
+    int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+    float x = (windowWidth - textWidth) / 2.0f;
+
+    glRasterPos2f(x, y);
+    glutBitmapString(font, (const unsigned char*)text);
+}
+
+/* Center a stroke font string */
+void renderCenteredStrokeText(float y, float scale, void *font, const char *text)
+{
+    float textWidth = glutStrokeLength(font, (const unsigned char*)text) * scale;
+    int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+    float x = (windowWidth - textWidth) / 2.0f;
+
+    glPushMatrix();
+    glTranslatef(x, y, 0);
+    glScalef(scale, scale, scale);
+    glutStrokeString(font, (const unsigned char*)text);
+    glPopMatrix();
+}
+.fi
+
+.SH SEE ALSO
+glutBitmapCharacter, glutBitmapWidth, glutBitmapString, glutBitmapHeight, glutStrokeCharacter, glutStrokeWidth, glutStrokeString, glutStrokeHeight
+.SH AUTHOR
+FreeGLUT contributors

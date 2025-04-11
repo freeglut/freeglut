@@ -1,0 +1,47 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutLeaveMainLoop 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutLeaveMainLoop - causes the GLUT program to exit the main loop.
+.SH SYNTAX
+.nf
+.LP
+void glutLeaveMainLoop(void);
+.fi
+.SH DESCRIPTION
+glutLeaveMainLoop causes the GLUT program to exit the main loop on the next iteration. This function allows a program to exit from glutMainLoop and continue execution after the call to glutMainLoop.
+
+When called, the function marks an exit from glutMainLoop which will occur during the next iteration of the main loop. This means that any code after the point of call to glutLeaveMainLoop will still be executed in the current main loop iteration, including display callbacks. The actual return from glutMainLoop will happen once all such code has been executed.
+
+To use this function effectively, the glutSetOption function should be called with the GLUT_ACTION_ON_WINDOW_CLOSE parameter set to GLUT_ACTION_GLUTMAINLOOP_RETURNS. Otherwise, the default behavior will cause the application to exit completely when a window is closed, rather than returning from glutMainLoop.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library, where glutMainLoop never returns.
+
+.SH EXAMPLE
+.nf
+/* Configure FreeGLUT so glutMainLoop returns instead of exiting */
+glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, 
+              GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+
+/* Set up windows and callbacks */
+glutInit(&argc, argv);
+glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+glutInitWindowSize(640, 480);
+glutCreateWindow("GLUT Application");
+glutDisplayFunc(display);
+
+/* Enter the main loop */
+glutMainLoop();
+
+/* Execution continues here after glutLeaveMainLoop is called */
+printf("Returned from main loop\\n");
+cleanup();
+.fi
+
+.SH SEE ALSO
+glutMainLoop, glutMainLoopEvent, glutSetOption
+.SH AUTHOR
+FreeGLUT contributors

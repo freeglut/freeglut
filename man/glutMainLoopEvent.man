@@ -1,0 +1,35 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutMainLoopEvent 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutMainLoopEvent - processes a single iteration of the event loop.
+.SH SYNTAX
+.nf
+.LP
+void glutMainLoopEvent(void);
+.fi
+.SH DESCRIPTION
+glutMainLoopEvent processes a single iteration of the event loop. It processes all pending events, callbacks, and window refreshing before returning. This gives the application more control over event processing instead of permanently surrendering control to glutMainLoop.
+
+The FreeGLUT event loop processes window system events, calls the display callback for windows that need to be redrawn, calls idle callbacks, etc. glutMainLoopEvent processes the next iteration of the event loop, then returns control to the application.
+
+This function is useful for applications that need to periodically call glutMainLoopEvent to have events processed but also need to maintain their own event loop or perform other operations in the main thread.
+
+Applications can simulate glutMainLoop by calling glutMainLoopEvent in a loop:
+
+.nf
+while (!done)
+{
+    glutMainLoopEvent();
+}
+.fi
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH SEE ALSO
+glutMainLoop, glutLeaveMainLoop
+.SH AUTHOR
+FreeGLUT contributors

@@ -1,0 +1,60 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutInitContextFunc 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutInitContextFunc, glutInitWindowFunc - set callbacks that will be run before/after context and window creation.
+.SH SYNTAX
+.nf
+.LP
+void glutInitContextFunc(void (*callback)(void));
+void glutInitWindowFunc(void (*callback)(void));
+.fi
+.SH ARGUMENTS
+.IP \fIcallback\fP 1i
+The callback function to be called before context creation or after window creation.
+.SH DESCRIPTION
+These functions allow setting callbacks that are called during window/context creation. They provide hooks to execute custom code at key points during window initialization.
+
+glutInitContextFunc sets a callback that is executed just before each OpenGL context is created. This allows applications to set context attributes or perform other actions before the context is created.
+
+glutInitWindowFunc sets a callback that is executed immediately after each window is created. This allows applications to perform window-specific setup after creation but before the window is shown.
+
+These functions are particularly useful for advanced OpenGL applications that need fine-grained control over the window and rendering context creation process.
+
+These functions are FreeGLUT extensions and are not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Context initialization callback */
+void contextInit(void)
+{
+    /* Set up context parameters before context creation */
+    printf("About to create OpenGL context\\n");
+
+    /* Example: On Windows, you could set pixel format parameters here */
+}
+
+/* Window initialization callback */
+void windowInit(void)
+{
+    /* Set up window parameters after window creation */
+    printf("Window created, ID: %d\\n", glutGetWindow());
+
+    /* Set window-specific data or state */
+    WindowState *state = malloc(sizeof(WindowState));
+    state->initialized = 1;
+    glutSetWindowData(state);
+}
+
+/* In initialization code */
+glutInitContextFunc(contextInit);
+glutInitWindowFunc(windowInit);
+.fi
+
+.SH SEE ALSO
+glutCreateWindow, glutSetWindow, glutSetWindowData
+.SH AUTHOR
+FreeGLUT contributors

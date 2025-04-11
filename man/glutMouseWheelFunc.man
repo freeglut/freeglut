@@ -1,0 +1,48 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutMouseWheelFunc 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutMouseWheelFunc - sets the mouse wheel callback for the current window.
+.SH SYNTAX
+.nf
+.LP
+void glutMouseWheelFunc(void (*func)(int wheel, int direction, int x, int y));
+.fi
+.SH ARGUMENTS
+.IP \fIfunc\fP 1i
+The new mouse wheel callback function.
+.SH DESCRIPTION
+glutMouseWheelFunc sets the mouse wheel callback for the current window. The mouse wheel callback is triggered when the user uses the mouse wheel. The wheel number is in the first parameter (typically 0, but mice with multiple wheels could generate other values). The direction is either 1 (scroll up/away from user) or -1 (scroll down/toward user). The callback is also passed the mouse's current (x,y) coordinates.
+
+This is useful for implementing zooming, scrolling, or other operations that are naturally mapped to the mouse wheel.
+
+If the callback parameter is NULL, the mouse wheel callback is disabled.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+void mouseWheel(int wheel, int direction, int x, int y)
+{
+    if (direction > 0) {
+        /* Zoom in */
+        zoom *= 1.1;
+    } else {
+        /* Zoom out */
+        zoom /= 1.1;
+    }
+
+    glutPostRedisplay();
+}
+
+/* In initialization code */
+glutMouseWheelFunc(mouseWheel);
+.fi
+
+.SH SEE ALSO
+glutMouseFunc, glutMotionFunc, glutPassiveMotionFunc
+.SH AUTHOR
+FreeGLUT contributors

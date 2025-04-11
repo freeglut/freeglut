@@ -1,49 +1,53 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1996.
+.\" Modifications Copyright (c) FreeGLUT contributors, 2000-2025.
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutCopyColormap 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutCopyColormap 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
 .SH NAME
-glutCopyColormap - copies the logical colormap for the layer in use
-from a specified window to the current window.
+glutCopyColormap - copies the color map from the current window to the specified window.
 .SH SYNTAX
 .nf
 .LP
-void glutCopyColormap(int win);
+void glutCopyColormap(int window);
 .fi
 .SH ARGUMENTS
-.IP \fIwin\fP 1i
-The identifier of the window to copy the logical colormap from.
+.IP \fIwindow\fP 1i
+The identifier of the window to copy the color map to.
 .SH DESCRIPTION
-glutCopyColormap copies (lazily if possible to promote sharing) the
-logical colormap from a specified window to the current window's layer
-in use. The copy will be from the normal plane to the normal plane; or
-from the overlay to the overlay (never across different layers). Once a
-colormap has been copied, avoid setting cells in the colormap with
-glutSetColor since that will force an actual copy of the colormap if it
-was previously copied by reference. glutCopyColormap should only
-be called when both the current window and the win window are color
-index windows.
-.SH EXAMPLE
-Here is an example of how to create two color index GLUT windows with
-their colormaps loaded identically and so that the windows are
-likely to share the same colormap:
-.nf
-.LP
-  int win1, win2;
+glutCopyColormap copies the color map entries from the current window to the specified window. Both windows should be color index windows. If not, an error occurs.
 
-  glutInitDisplayMode(GLUT_INDEX);
-  win1 = glutCreateWindow("first color index win");
-  glutSetColor(0, 0.0, 0.0, 0.0);  /* black */
-  glutSetColor(1, 0.5, 0.5, 0.5);  /* gray */
-  glutSetColor(2, 1.0, 1.0, 1.0);  /* black */
-  glutSetColor(3, 1.0, 0.0, 0.0);  /* red */
-  win2 = glutCreateWindow("second color index win");
-  glutCopyColormap(win1);
+This function is useful for ensuring consistent colors between multiple windows in color index mode, especially when one window has been configured with a specific color palette.
+
+Note that color index mode is increasingly uncommon in modern OpenGL applications, which typically use RGBA mode. This function primarily exists for legacy applications and compatibility.
+
+.SH EXAMPLE
+.nf
+/* Create a main window with a custom color palette */
+int mainWindow = glutCreateWindow("Main Window");
+glutSetWindow(mainWindow);
+
+/* Set up the color palette for the main window */
+glutSetColor(0, 0.0, 0.0, 0.0);      /* Black */
+glutSetColor(1, 1.0, 0.0, 0.0);      /* Red */
+glutSetColor(2, 0.0, 1.0, 0.0);      /* Green */
+glutSetColor(3, 0.0, 0.0, 1.0);      /* Blue */
+/* ... set more colors ... */
+
+/* Create a secondary window */
+int secondWindow = glutCreateWindow("Second Window");
+
+/* Copy the color map from the main window to the secondary window */
+glutSetWindow(mainWindow);
+glutCopyColormap(secondWindow);
+
+/* Now both windows have the same color map */
 .fi
-.LP
+
 .SH SEE ALSO
-glutSetColor, glutGetColor, glutCreateWindow
+glutSetColor, glutGetColor, glutSetWindow
 .SH AUTHOR
 Mark J. Kilgard (mjk@nvidia.com)
+.SH ADDITIONAL CONTRIBUTIONS
+FreeGLUT contributors

@@ -1,0 +1,39 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutSetupVideoResizing 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutSetupVideoResizing, glutStopVideoResizing - start and stop video resizing mode.
+.SH SYNTAX
+.nf
+.LP
+void glutSetupVideoResizing(void);
+void glutStopVideoResizing(void);
+.fi
+.SH DESCRIPTION
+glutSetupVideoResizing starts video resizing for the current window. Video resizing allows dynamic window resizing at interactive rates. When video resizing is enabled, the window can be continuously redrawn as it is resized, providing visual feedback during the resize operation.
+
+glutStopVideoResizing stops video resizing for the current window. This should be called when video resizing is no longer needed, to conserve system resources.
+
+These functions are useful for applications that need to provide smooth visual feedback during window resize operations, particularly for complex scenes that might otherwise only update after the resize operation completes.
+
+The exact behavior of video resizing may vary depending on the platform and window system. On some platforms, these functions might have no effect if the window system does not support continuous redrawing during resize.
+
+These functions are FreeGLUT extensions and are not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Enable video resizing after window creation */
+glutCreateWindow("Video Resize Example");
+glutSetupVideoResizing();
+
+/* When application is shutting down */
+glutStopVideoResizing();
+.fi
+
+.SH SEE ALSO
+glutReshapeFunc, glutVideoResizeGet
+.SH AUTHOR
+FreeGLUT contributors

@@ -1,0 +1,29 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutMenuStateFunc 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutMenuStateFunc - sets the menu state callback.
+.SH SYNTAX
+.nf
+.LP
+void glutMenuStateFunc(void (*func)(int state));
+.fi
+.SH ARGUMENTS
+.IP \fIfunc\fP 1i
+The new menu state callback function.
+.SH DESCRIPTION
+glutMenuStateFunc sets the global menu state callback so a GLUT program can be notified when a menu is entered (state is set to GLUT_MENU_IN_USE) or when a menu is left (state is set to GLUT_MENU_NOT_IN_USE).
+
+This function provides a simpler alternative to the glutMenuStatusFunc callback, which additionally provides information about the specific menu and menu item the user is interacting with.
+
+If the callback parameter is NULL, the menu state callback is disabled.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH SEE ALSO
+glutMenuStatusFunc, glutCreateMenu, glutAddMenuEntry
+.SH AUTHOR
+FreeGLUT contributors

@@ -1,56 +1,53 @@
 .\"
-.\" Copyright (c) Mark J. Kilgard, 1998, 2000.
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutSetKeyRepeat 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutSetKeyRepeat 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
 .SH NAME
-glutSetKeyRepeat - sets the key repeat mode
+glutSetKeyRepeat - sets the global key repeat mode.
 .SH SYNTAX
 .nf
 .LP
-int glutSetKeyRepeat(int repeatMode);
+void glutSetKeyRepeat(int repeatMode);
 .fi
 .SH ARGUMENTS
 .IP \fIrepeatMode\fP 1i
-Mode for setting key repeat to.
+The key repeat mode. Valid values are:
 .TP 8
 .B GLUT_KEY_REPEAT_OFF
-Disable key repeat for the window system on a global basis if possible.
+Disable key repeat for GLUT keyboard callbacks.
 .TP 8
 .B GLUT_KEY_REPEAT_ON
-Enable key repeat for the window system on a global basis if possible.
+Enable key repeat for GLUT keyboard callbacks.
 .TP 8
 .B GLUT_KEY_REPEAT_DEFAULT
-Reset the key repeat mode for the window system to its default state
-if possible.
+Use the default key repeat behavior of the window system.
 .SH DESCRIPTION
-glutSetKeyRepeat sets the key repeat mode for the window system on a
-global basis if possible.  If supported by the window system, the key
-repeat can either be enabled, disabled, or set to the window system's
-default key repeat state.
-.SH GLUT IMPLEMENTATION NOTES FOR X11
-X11 sends KeyPress events repeatedly when the window system's global auto
-repeat is enabled.  glutIgnoreKeyRepeat can prevent these auto repeated
-keystrokes from being reported as keyboard or special callbacks, but there
-is still some minimal overhead by the X server to continually stream
-KeyPress events to the GLUT application.  The glutSetKeyRepeat routine
-can be used to actually disable the global sending of auto repeated
-KeyPress events.  Note that glutSetKeyRepeat affects the global window
-system auto repeat state so other applications will not auto repeat if
-you disable auto repeat globally through glutSetKeyRepeat.
+glutSetKeyRepeat sets the global key repeat mode for GLUT keyboard callbacks. When key repeat is enabled, holding down a key will generate multiple callback invocations. When disabled, only key presses (not repeats) generate callbacks.
 
-GLUT applications using the X11 GLUT implemenation should disable key repeat
-with glutSetKeyRepeat to disable key repeats most efficiently.
+This function affects how keyboard events are handled by glutKeyboardFunc, glutSpecialFunc, and their respective release callbacks, glutKeyboardUpFunc and glutSpecialUpFunc.
 
-GLUT applications that change the key repeat state with glutSetKeyRepeat
-are responsible for explicitly restoring the default key repeat state on exit.
-.SH GLUT IMPLEMENTATION NOTES FOR WIN32
-The Win32 implementation of glutSetKeyRepeat does nothing.  The
-glutIgnoreKeyRepeat routine can be used in the Win32 GLUT implementation
-to ignore repeated keys on a per-window basis without changing the global
-window system key repeat.
+By default, key repeat is enabled (GLUT_KEY_REPEAT_ON). Disabling key repeat can be useful for applications where multiple rapid callbacks from holding a key are not desirable, such as in certain games or UI interactions.
+
+Note that this function sets the global key repeat mode, affecting all windows in the application.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Disable key repeat for more precise keyboard control in games */
+glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+
+/* Key handlers will now only be called once per key press */
+glutKeyboardFunc(keyboardHandler);
+glutSpecialFunc(specialHandler);
+
+/* Later, restore default behavior if needed */
+glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
+.fi
+
 .SH SEE ALSO
-glutIgnoreKeyRepeat, glutKeyboardFunc, glutSpecialFunc, glutKeyboardUpFunc, glutSpecialUpFunc, glutDeviceGet
+glutKeyboardFunc, glutSpecialFunc, glutKeyboardUpFunc, glutSpecialUpFunc, glutIgnoreKeyRepeat
 .SH AUTHOR
-Mark J. Kilgard (mjk@nvidia.com)
+FreeGLUT contributors

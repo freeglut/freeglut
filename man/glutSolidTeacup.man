@@ -1,0 +1,30 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutSolidTeacup 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutSolidTeacup, glutWireTeacup - render a solid or wireframe teacup respectively
+.SH SYNTAX
+.nf
+.LP
+void glutSolidTeacup(GLdouble size);
+void glutWireTeacup(GLdouble size);
+.fi
+.SH ARGUMENTS
+.IP \fIsize\fP 1i
+Relative size of the teacup.
+.SH DESCRIPTION
+glutSolidTeacup and glutWireTeacup render a solid or wireframe teacup respectively. The teacup is rendered centered at the modeling coordinates origin with a size specified by the size parameter.
+
+The teacup model is part of the "Utah teapot" set, which includes a teapot, teacup, and teaspoon. These are commonly used 3D models in computer graphics, originally created by Martin Newell in 1975.
+
+These functions are FreeGLUT extensions and are not available in the original GLUT library, which only provided the teapot.
+
+Texture coordinates are generated for the teacup, making it usable with textured rendering. If GLUT_GEOMETRY_VISUALIZE_NORMALS has been set to true using glutSetOption, the normal vectors for each vertex will also be visualized.
+
+.SH SEE ALSO
+glutSolidTeapot, glutSolidTeaspoon, glutSolidSphere, glutSolidCube, glutSolidCone, glutSolidTorus, glutSolidDodecahedron, glutSolidOctahedron, glutSolidTetrahedron, glutSolidIcosahedron, glutSolidRhombicDodecahedron, glutWireTeapot, glutWireTeaspoon, glutSetOption, glutSetVertexAttribCoord3, glutSetVertexAttribNormal, glutSetVertexAttribTexCoord2
+.SH AUTHOR
+FreeGLUT contributors

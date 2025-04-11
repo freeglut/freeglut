@@ -1,0 +1,27 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutSolidRhombicDodecahedron 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutSolidRhombicDodecahedron, glutWireRhombicDodecahedron - render a solid or wireframe rhombic dodecahedron respectively
+.SH SYNTAX
+.nf
+.LP
+void glutSolidRhombicDodecahedron(void);
+void glutWireRhombicDodecahedron(void);
+.fi
+.SH DESCRIPTION
+glutSolidRhombicDodecahedron and glutWireRhombicDodecahedron render a solid or wireframe rhombic dodecahedron respectively, centered at the modeling coordinates origin with a size of roughly 1.0.
+
+A rhombic dodecahedron is a polyhedron with 12 congruent rhombic faces. It has 14 vertices and 24 edges, and is a Catalan solid dual to the cuboctahedron.
+
+These functions are FreeGLUT extensions and are not available in the original GLUT library.
+
+If GLUT_GEOMETRY_VISUALIZE_NORMALS has been set to true using glutSetOption, the normal vectors for each vertex will also be visualized.
+
+.SH SEE ALSO
+glutSolidSphere, glutSolidCube, glutSolidCone, glutSolidTorus, glutSolidDodecahedron, glutSolidOctahedron, glutSolidTetrahedron, glutSolidIcosahedron, glutSolidTeapot, glutSolidTeacup, glutSolidTeaspoon, glutWireSphere, glutWireCube, glutWireCone, glutWireTorus, glutWireDodecahedron, glutWireOctahedron, glutWireTetrahedron, glutWireIcosahedron, glutWireTeapot, glutWireTeacup, glutWireTeaspoon, glutSetOption, glutSetVertexAttribCoord3, glutSetVertexAttribNormal, glutSetVertexAttribTexCoord2
+.SH AUTHOR
+FreeGLUT contributors

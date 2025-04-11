@@ -1,0 +1,51 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutFullScreenToggle 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutFullScreenToggle - toggles the current window between fullscreen and windowed mode.
+.SH SYNTAX
+.nf
+.LP
+void glutFullScreenToggle(void);
+.fi
+.SH DESCRIPTION
+glutFullScreenToggle toggles the current window between fullscreen and windowed mode. If the window is currently in windowed mode, it will be switched to fullscreen mode. If the window is already in fullscreen mode, it will be switched back to windowed mode and restored to its previous size and position.
+
+This function provides a simple way to implement a common fullscreen toggle feature in applications, without having to track the current state or manually restore window sizes.
+
+The window must be currently shown (not hidden) and must be in the current layer (see glutUseLayer).
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Toggle fullscreen mode when the F11 key is pressed */
+void keyboard(unsigned char key, int x, int y)
+{
+    switch (key) {
+    case 27:  /* Escape key */
+        exit(0);
+        break;
+
+    case 'f':
+    case 'F':
+        /* Toggle fullscreen mode */
+        glutFullScreenToggle();
+        break;
+
+    default:
+        break;
+    }
+}
+
+/* In initialization code */
+glutKeyboardFunc(keyboard);
+.fi
+
+.SH SEE ALSO
+glutFullScreen, glutLeaveFullScreen, glutPositionWindow, glutReshapeWindow
+.SH AUTHOR
+FreeGLUT contributors

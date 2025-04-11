@@ -1,0 +1,52 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutCreateMenuWindow 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutCreateMenuWindow - creates a menu-only window.
+.SH SYNTAX
+.nf
+.LP
+int glutCreateMenuWindow(const char *title);
+.fi
+.SH ARGUMENTS
+.IP \fItitle\fP 1i
+ASCII character string for the window's title.
+.SH DESCRIPTION
+glutCreateMenuWindow creates a menu-only window that does not have an OpenGL rendering context associated with it. This type of window is designed specifically for hosting GLUT menus and UI elements without the overhead of an OpenGL context.
+
+Menu windows are particularly useful for applications that need dedicated UI windows separate from their rendering windows. They are more efficient than regular GLUT windows when used solely for UI purposes, as they don't allocate OpenGL resources.
+
+The function returns a unique small integer identifier for the new window. This identifier can be used when calling glutSetWindow to make the menu window the current window.
+
+Menu windows support most of the same callbacks as regular windows, including mouse, keyboard, and display callbacks. However, OpenGL rendering functions cannot be used with menu windows.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Create a regular rendering window */
+int mainWindow = glutCreateWindow("Main Window");
+
+/* Create a menu-only window for UI controls */
+int uiWindow = glutCreateMenuWindow("UI Controls");
+
+/* Set up UI callbacks for the menu window */
+glutSetWindow(uiWindow);
+glutDisplayFunc(drawUI);
+glutMouseFunc(handleUIClick);
+glutKeyboardFunc(handleUIKeyboard);
+
+/* Create menus and attach them to the menu window */
+int menu = glutCreateMenu(processMenuSelection);
+glutAddMenuEntry("Option 1", 1);
+glutAddMenuEntry("Option 2", 2);
+glutAttachMenu(GLUT_RIGHT_BUTTON);
+.fi
+
+.SH SEE ALSO
+glutCreateWindow, glutCreateSubWindow, glutSetWindow, glutDestroyWindow
+.SH AUTHOR
+FreeGLUT contributors

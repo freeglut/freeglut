@@ -1,0 +1,70 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutWindowData 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutSetWindowData, glutGetWindowData - set or get per-window user data pointer.
+.SH SYNTAX
+.nf
+.LP
+void glutSetWindowData(void *data);
+void* glutGetWindowData(void);
+.fi
+.SH ARGUMENTS
+.IP \fIdata\fP 1i
+Pointer to arbitrary user data to be associated with the current window.
+.SH DESCRIPTION
+glutSetWindowData associates a pointer to arbitrary user data with the current window. This is useful for storing window-specific application state that needs to be accessed within callbacks.
+
+glutGetWindowData retrieves the pointer to user data that was previously associated with the current window. If no data has been set for the current window, NULL is returned.
+
+These functions provide a convenient way to associate application-specific data with a window without using global variables or custom management structures. The window-specific data can be accessed in any callback by first calling glutGetWindow to determine the current window and then glutGetWindowData to retrieve the associated data.
+
+.SH EXAMPLE
+.nf
+typedef struct {
+    float zoom;
+    int wireframe;
+    /* other window-specific state */
+} WindowState;
+
+void display(void)
+{
+    /* Get the state information for this window */
+    WindowState *state = (WindowState*)glutGetWindowData();
+
+    /* Use the window-specific state in rendering */
+    if (state) {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-state->zoom, state->zoom, -state->zoom, state->zoom, -1, 1);
+        /* ... */
+    }
+
+    /* Draw the scene */
+}
+
+void createWindow(const char* title)
+{
+    int winID = glutCreateWindow(title);
+
+    /* Allocate and initialize window-specific data */
+    WindowState *state = malloc(sizeof(WindowState));
+    state->zoom = 1.0f;
+    state->wireframe = 0;
+
+    /* Associate the data with the window */
+    glutSetWindowData(state);
+
+    /* Set up callbacks */
+    glutDisplayFunc(display);
+    /* ... */
+}
+.fi
+
+.SH SEE ALSO
+glutSetWindow, glutGetWindow, glutSetMenuData, glutGetMenuData
+.SH AUTHOR
+FreeGLUT contributors

@@ -1,0 +1,62 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutGetProcAddress 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutGetProcAddress - retrieves the address of an OpenGL or OpenGL extension function.
+.SH SYNTAX
+.nf
+.LP
+void *glutGetProcAddress(const char *procName);
+.fi
+.SH ARGUMENTS
+.IP \fIprocName\fP 1i
+The name of the OpenGL function to retrieve.
+.SH DESCRIPTION
+glutGetProcAddress retrieves the address of an OpenGL or OpenGL extension function. This function is essential for accessing modern OpenGL functions and extensions that may not be available through standard linking.
+
+Modern OpenGL applications often need to use functions that are part of extensions or newer versions of OpenGL than what might be linked at compile time. This function provides a platform-independent way to access these functions at runtime.
+
+The function returns a pointer to the requested function if it is available, or NULL if the function is not available. The returned pointer should be cast to the appropriate function pointer type before use.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Define function pointer types */
+typedef void (*PFNGLGENVERTEXARRAYSPROC)(GLsizei n, GLuint *arrays);
+typedef void (*PFNGLBINDVERTEXARRAYPROC)(GLuint array);
+
+/* Function pointers */
+PFNGLGENVERTEXARRAYSPROC glGenVertexArrays = NULL;
+PFNGLBINDVERTEXARRAYPROC glBindVertexArray = NULL;
+
+/* Initialize extension functions */
+void initExtensions(void)
+{
+    /* Get function pointers for VAO functions */
+    glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)
+                         glutGetProcAddress("glGenVertexArrays");
+    glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)
+                         glutGetProcAddress("glBindVertexArray");
+
+    /* Check if the functions are available */
+    if (!glGenVertexArrays || !glBindVertexArray) {
+        fprintf(stderr, "Error: VAO functions not available\n");
+        exit(1);
+    }
+
+    /* Now the functions can be used */
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    /* ... */
+}
+.fi
+
+.SH SEE ALSO
+glutInitContextVersion, glutInitContextProfile, glutInitContextFlags
+.SH AUTHOR
+FreeGLUT contributors

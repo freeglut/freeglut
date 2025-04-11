@@ -1,0 +1,68 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutInitContextVersion 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutInitContextVersion, glutInitContextFlags, glutInitContextProfile - specify OpenGL context version and profile for newly created windows.
+.SH SYNTAX
+.nf
+.LP
+void glutInitContextVersion(int majorVersion, int minorVersion);
+void glutInitContextFlags(int flags);
+void glutInitContextProfile(int profile);
+.fi
+.SH ARGUMENTS
+.IP \fImajorVersion\fP 1i
+Major version number of the OpenGL context.
+.IP \fIminorVersion\fP 1i
+Minor version number of the OpenGL context.
+.IP \fIflags\fP 1i
+Flags affecting the context creation.
+.IP \fIprofile\fP 1i
+The OpenGL profile to use.
+.SH DESCRIPTION
+These functions allow applications to request specific versions and profiles of OpenGL when creating a rendering context. They are typically called before glutCreateWindow to affect the context creation for all subsequent windows.
+
+glutInitContextVersion specifies the OpenGL version to request. For example, to request OpenGL 3.3, call glutInitContextVersion(3, 3). Note that the actual context created may be different depending on the OpenGL drivers available on the system. The application should check the actually created context version using appropriate OpenGL calls.
+
+glutInitContextFlags specifies additional flags for context creation. Valid values include:
+.TP 8
+.B GLUT_DEBUG
+Request a debug context.
+.TP 8
+.B GLUT_FORWARD_COMPATIBLE
+Request a forward-compatible context. This removes features marked as deprecated for the requested OpenGL version.
+
+glutInitContextProfile specifies which OpenGL profile to use. Valid values include:
+.TP 8
+.B GLUT_CORE_PROFILE
+Request a core profile OpenGL context. This excludes deprecated functionality.
+.TP 8
+.B GLUT_COMPATIBILITY_PROFILE
+Request a compatibility profile OpenGL context. This includes all functionality, including deprecated features.
+
+These functions are essential for applications that need to target specific OpenGL versions, particularly for using modern OpenGL features (OpenGL 3.0 and above) or ensuring compatibility with older specifications.
+
+These functions are FreeGLUT extensions and are not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Request OpenGL 3.3 core profile */
+glutInitContextVersion(3, 3);
+glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
+glutInitContextProfile(GLUT_CORE_PROFILE);
+
+/* Initialize display mode and create window */
+glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+glutCreateWindow("Modern OpenGL Example");
+
+/* After window creation, verify the context version */
+printf("OpenGL Version: %s\\n", glGetString(GL_VERSION));
+.fi
+
+.SH SEE ALSO
+glutCreateWindow, glutGet, glutInitDisplayMode
+.SH AUTHOR
+FreeGLUT contributors

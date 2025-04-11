@@ -1,0 +1,64 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutBitmapHeight 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutBitmapHeight, glutStrokeHeight - retrieve height of a bitmap or stroke font.
+.SH SYNTAX
+.nf
+.LP
+int glutBitmapHeight(void *font);
+GLfloat glutStrokeHeight(void *font);
+.fi
+.SH ARGUMENTS
+.IP \fIfont\fP 1i
+The GLUT font identifier, one of GLUT_BITMAP_* or GLUT_STROKE_* constants.
+.SH DESCRIPTION
+glutBitmapHeight returns the height in pixels of the specified bitmap font. This height is the distance from the top of a typical character to the bottom, including descenders if any.
+
+glutStrokeHeight returns the height in modeling units of the specified stroke font. This height is the typical distance from the top of a character to the baseline, not including descenders.
+
+These functions are useful for calculating line spacing and text positioning in applications that need to render multiple lines of text.
+
+These functions are FreeGLUT extensions and are not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+void renderMultilineText(const char *text, float x, float y, void *font)
+{
+    float lineHeight = glutBitmapHeight(font);
+    const char *p;
+    float currentY = y;
+
+    /* Create a copy of the text we can modify */
+    char *textCopy = strdup(text);
+    char *line = textCopy;
+
+    /* Split on newlines and render each line */
+    while (line) {
+        char *next = strchr(line, '\\n');
+        if (next) *next = '\\0';
+
+        /* Render this line */
+        glRasterPos2f(x, currentY);
+        for (p = line; *p; p++) {
+            glutBitmapCharacter(font, *p);
+        }
+
+        /* Move to next line */
+        currentY -= lineHeight;
+
+        if (!next) break;
+        line = next + 1;
+    }
+
+    free(textCopy);
+}
+.fi
+
+.SH SEE ALSO
+glutBitmapCharacter, glutBitmapWidth, glutBitmapLength, glutStrokeCharacter, glutStrokeWidth, glutStrokeLength
+.SH AUTHOR
+FreeGLUT contributors

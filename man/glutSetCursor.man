@@ -1,11 +1,12 @@
 .\"
 .\" Copyright (c) Mark J. Kilgard, 1996.
+.\" Modifications Copyright (c) FreeGLUT contributors, 2000-2025.
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutSetCursor 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutSetCursor 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
 .SH NAME
-glutSetCursor - changes the cursor image of the current window.
+glutSetCursor - sets the cursor image for the current window.
 .SH SYNTAX
 .nf
 .LP
@@ -13,89 +14,86 @@ void glutSetCursor(int cursor);
 .fi
 .SH ARGUMENTS
 .IP \fIcursor\fP 1i
-Name of cursor image to change to.  Possible values follow:
+Name of cursor image to use for the cursor within the current window.
+.SH DESCRIPTION
+glutSetCursor sets the cursor image for the current window. Each window
+has a unique cursor image. 
 .TP 8
 .B GLUT_CURSOR_RIGHT_ARROW
-Arrow pointing up and to the right.
+Arrow pointing right.
 .TP 8
 .B GLUT_CURSOR_LEFT_ARROW
-Arrow pointing up and to the left.
+Arrow pointing left.
 .TP 8
 .B GLUT_CURSOR_INFO
-Pointing hand.
+Information.
 .TP 8
 .B GLUT_CURSOR_DESTROY
-Skull & cross bones.
+Destroy.
 .TP 8
 .B GLUT_CURSOR_HELP
-Question mark.
+Help.
 .TP 8
 .B GLUT_CURSOR_CYCLE
-Arrows rotating in a circle.
+Cycle.
 .TP 8
 .B GLUT_CURSOR_SPRAY
-Spray can.
+Spray.
 .TP 8
 .B GLUT_CURSOR_WAIT
-Wrist watch.
+Wait.
 .TP 8
 .B GLUT_CURSOR_TEXT
-Insertion point cursor for text.
+Text.
 .TP 8
 .B GLUT_CURSOR_CROSSHAIR
-Simple cross-hair.
+Crosshair.
 .TP 8
 .B GLUT_CURSOR_UP_DOWN
-Bi-directional pointing up & down.
+Up and down arrows.
 .TP 8
 .B GLUT_CURSOR_LEFT_RIGHT
-Bi-directional pointing left & right.
+Left and right arrows.
 .TP 8
 .B GLUT_CURSOR_TOP_SIDE
-Arrow pointing to top side.
+Top side.
 .TP 8
 .B GLUT_CURSOR_BOTTOM_SIDE
-Arrow pointing to bottom side.
+Bottom side.
 .TP 8
 .B GLUT_CURSOR_LEFT_SIDE
-Arrow pointing to left side.
+Left side.
 .TP 8
 .B GLUT_CURSOR_RIGHT_SIDE
-Arrow pointing to right side.
+Right side.
 .TP 8
 .B GLUT_CURSOR_TOP_LEFT_CORNER
-Arrow pointing to top-left corner.
+Top left corner.
 .TP 8
 .B GLUT_CURSOR_TOP_RIGHT_CORNER
-Arrow pointing to top-right corner.
+Top right corner.
 .TP 8
 .B GLUT_CURSOR_BOTTOM_RIGHT_CORNER
-Arrow pointing to bottom-left corner.
+Bottom right corner.
 .TP 8
 .B GLUT_CURSOR_BOTTOM_LEFT_CORNER
-Arrow pointing to bottom-right corner.
+Bottom left corner.
 .TP 8
 .B GLUT_CURSOR_FULL_CROSSHAIR
-Full-screen cross-hair cursor (if possible, otherwise
-GLUT_CURSOR_CROSSHAIR).
+Full crosshair.
 .TP 8
 .B GLUT_CURSOR_NONE
-Invisible cursor.
+No cursor.
 .TP 8
 .B GLUT_CURSOR_INHERIT
-Use parent's cursor.
-.SH DESCRIPTION
-glutSetCursor changes the cursor image of the current window.
-Each call requests the window system change the cursor appropriately.
-The cursor image when a window is created is
-GLUT_CURSOR_INHERIT. The exact cursor images used are
-implementation dependent. The intent is for the image to convey the
-meaning of the cursor name. For a top-level window,
-GLUT_CURSOR_INHERIT uses the default window system cursor.
-.SH X IMPLEMENTATION NOTES
-GLUT for X uses SGI's _SGI_CROSSHAIR_CURSOR convention to
-access a full-screen cross-hair cursor if possible.
+Inherit cursor from parent window. Only effective for subwindows.
+
+The exact cursor images used are implementation dependent. The intent
+is for the cursor images to be recognizable standard cursor images
+for the window system.
 .SH SEE ALSO
-glutCreateWindow, glutCreateSubWindow
+glutWarpPointer
 .SH AUTHOR
 Mark J. Kilgard (mjk@nvidia.com)
+.SH ADDITIONAL CONTRIBUTIONS
+FreeGLUT contributors

@@ -1,11 +1,11 @@
 .\"
-.\" Copyright (c) Mark J. Kilgard, 1997.
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutWarpPointer 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutWarpPointer 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
 .SH NAME
-glutWarpPointer warps the pointer's location.
+glutWarpPointer - repositions the mouse pointer to the given window coordinates.
 .SH SYNTAX
 .nf
 .LP
@@ -13,29 +13,61 @@ void glutWarpPointer(int x, int y);
 .fi
 .SH ARGUMENTS
 .IP \fIx\fP 1i
-X offset relative to the current window's origin (upper left).
+New X position for mouse pointer in window coordinates.
 .IP \fIy\fP 1i
-Y offset relative to the current window's origin (upper left).
+New Y position for mouse pointer in window coordinates.
 .SH DESCRIPTION
-glutWarpPointer warps the window system's pointer to a new location
-relative to the origin of the current window.  The new location will
-be offset
-.I x
-pixels on the X axis and
-.I y
-pixels on the Y axis.
-These parameters may be negative.  The warp is done immediately.
+glutWarpPointer repositions the mouse pointer to the given window coordinates. The coordinates are relative to the origin of the current window, with the origin at the upper left corner of the window.
 
-If the pointer would be warped outside the screen's frame buffer
-region, the location will be clamped to the nearest screen edge.  The
-window system is allowed to further constrain the pointer's location in
-window system dependent ways.
+This function can be useful for setting an initial cursor position, implementing camera control schemes that require resetting the cursor to a central position, or for other situations where programmatic control of the cursor position is needed.
 
-The following is good advice that applies to glutWarpPointer:
-``There is seldom any reason for calling this function. The pointer
-should normally be left to the user.'' (from Xlib's
-XWarpPointer man page.)
+Note that the actual behavior may be platform-dependent. Some platforms or window systems might impose restrictions on cursor warping for security reasons.
+
+.SH EXAMPLE
+.nf
+/* Center the cursor in the current window */
+void centerCursor(void)
+{
+    int width = glutGet(GLUT_WINDOW_WIDTH);
+    int height = glutGet(GLUT_WINDOW_HEIGHT);
+    glutWarpPointer(width / 2, height / 2);
+}
+
+/* Use in a mouse rotation handler to provide continuous rotation */
+void mouseMotion(int x, int y)
+{
+    static int lastX = 0, lastY = 0;
+    static int firstCall = 1;
+
+    if (firstCall) {
+        lastX = x;
+        lastY = y;
+        firstCall = 0;
+        return;
+    }
+
+    /* Calculate rotation based on mouse movement */
+    int deltaX = x - lastX;
+    int deltaY = y - lastY;
+
+    /* Apply rotation to the model */
+    yRotation += deltaX * 0.5;
+    xRotation += deltaY * 0.5;
+
+    /* Reset cursor to center to allow continuous rotation */
+    int width = glutGet(GLUT_WINDOW_WIDTH);
+    int height = glutGet(GLUT_WINDOW_HEIGHT);
+    if (x != width/2 || y != height/2) {
+        lastX = width/2;
+        lastY = height/2;
+        glutWarpPointer(lastX, lastY);
+    }
+
+    glutPostRedisplay();
+}
+.fi
+
 .SH SEE ALSO
-glutMouseFunc, glutMotionFunc
+glutSetCursor, glutMotionFunc, glutPassiveMotionFunc, glutMouseFunc
 .SH AUTHOR
-Mark J. Kilgard (mjk@nvidia.com)
+FreeGLUT contributors

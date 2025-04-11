@@ -1,0 +1,26 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutLeaveFullScreen 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutLeaveFullScreen - exits fullscreen mode for the current window.
+.SH SYNTAX
+.nf
+.LP
+void glutLeaveFullScreen(void);
+.fi
+.SH DESCRIPTION
+glutLeaveFullScreen exits fullscreen mode for the current window, restoring the window to its previous size and position. If the current window is not in fullscreen mode, this function has no effect.
+
+This function provides a direct way to exit fullscreen mode without having to toggle it (as with glutFullScreenToggle) when the current state is known.
+
+The window must be currently shown (not hidden) and must be in the current layer (see glutUseLayer).
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH SEE ALSO
+glutFullScreen, glutFullScreenToggle, glutPositionWindow, glutReshapeWindow, glutShowWindow
+.SH AUTHOR
+FreeGLUT contributors

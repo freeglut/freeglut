@@ -1,0 +1,105 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutSetOption 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutSetOption - sets a FreeGLUT library option.
+.SH SYNTAX
+.nf
+.LP
+void glutSetOption(GLenum option, int value);
+.fi
+.SH ARGUMENTS
+.IP \fIoption\fP 1i
+The option to set. Valid values include:
+.TP 8
+.B GLUT_ACTION_ON_WINDOW_CLOSE
+What to do when user closes a window.
+.TP 8
+.B GLUT_WINDOW_CURSOR
+The cursor to use for newly created windows.
+.TP 8
+.B GLUT_SKIP_STALE_MOTION_EVENTS
+Whether to skip stale motion events (mouse motion coalescing).
+.TP 8
+.B GLUT_MULTISAMPLE
+The number of samples for multisampling.
+.TP 8
+.B GLUT_RENDERING_CONTEXT
+Type of rendering context to create.
+.TP 8
+.B GLUT_GEOMETRY_VISUALIZE_NORMALS
+Whether to visualize normals when rendering geometry objects.
+.TP 8
+.B GLUT_RENDERING_CONTEXT_VERSION_MAJOR
+Major version number for OpenGL context.
+.TP 8
+.B GLUT_RENDERING_CONTEXT_VERSION_MINOR
+Minor version number for OpenGL context.
+.IP \fIvalue\fP 1i
+The value to set for the specified option. Valid values depend on the option.
+.SH DESCRIPTION
+glutSetOption sets a global option affecting the behavior of the FreeGLUT library. This function provides a way to customize various aspects of FreeGLUT's behavior that weren't configurable in the original GLUT library.
+
+For GLUT_ACTION_ON_WINDOW_CLOSE, valid values are:
+.TP 8
+.B GLUT_ACTION_EXIT
+Exit the program when a window is closed (default).
+.TP 8
+.B GLUT_ACTION_GLUTMAINLOOP_RETURNS
+Return from glutMainLoop when the last window is closed.
+.TP 8
+.B GLUT_ACTION_CONTINUE_EXECUTION
+Continue execution after the window is closed.
+
+For GLUT_WINDOW_CURSOR, valid values are any of the cursor types defined for glutSetCursor.
+
+For GLUT_SKIP_STALE_MOTION_EVENTS, a non-zero value enables motion event skipping, which can improve performance.
+
+For GLUT_MULTISAMPLE, the value specifies the number of samples to use for multisampling.
+
+For GLUT_RENDERING_CONTEXT, valid values include:
+.TP 8
+.B GLUT_USE_CURRENT_CONTEXT
+Use the current OpenGL context.
+.TP 8
+.B GLUT_FORCE_INDIRECT_CONTEXT
+Force indirect rendering context.
+.TP 8
+.B GLUT_TRY_DIRECT_CONTEXT
+Try direct rendering context, fall back to indirect.
+.TP 8
+.B GLUT_FORCE_DIRECT_CONTEXT
+Force direct rendering context, fail if not available.
+
+For GLUT_GEOMETRY_VISUALIZE_NORMALS, a non-zero value enables visualization of normals when rendering geometric primitives.
+
+GLUT_RENDERING_CONTEXT_VERSION_MAJOR and GLUT_RENDERING_CONTEXT_VERSION_MINOR set the OpenGL context version. This is an alternative to using glutInitContextVersion.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+/* Configure FreeGLUT to return from glutMainLoop when all windows are closed */
+glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+
+/* Enable 4x multisampling for antialiasing */
+glutSetOption(GLUT_MULTISAMPLE, 4);
+
+/* Use direct rendering context if available */
+glutSetOption(GLUT_RENDERING_CONTEXT, GLUT_TRY_DIRECT_CONTEXT);
+
+/* Enable visualization of normals for geometric primitives */
+glutSetOption(GLUT_GEOMETRY_VISUALIZE_NORMALS, 1);
+
+/* Set OpenGL context version to 3.3 (alternative to glutInitContextVersion) */
+glutSetOption(GLUT_RENDERING_CONTEXT_VERSION_MAJOR, 3);
+glutSetOption(GLUT_RENDERING_CONTEXT_VERSION_MINOR, 3);
+.fi
+
+.SH SEE ALSO
+glutInitDisplayMode, glutInitContextVersion, glutInitContextProfile, glutInitContextFlags, glutSetCursor, glutLeaveMainLoop
+.SH AUTHOR
+FreeGLUT contributors

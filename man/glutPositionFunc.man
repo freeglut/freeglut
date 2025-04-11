@@ -1,0 +1,47 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutPositionFunc 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutPositionFunc - sets the window position change callback for the current window.
+.SH SYNTAX
+.nf
+.LP
+void glutPositionFunc(void (*callback)(int x, int y));
+.fi
+.SH ARGUMENTS
+.IP \fIcallback\fP 1i
+The new window position callback function.
+.SH DESCRIPTION
+glutPositionFunc sets the window position change callback for the current window. The window position callback is triggered when the window changes position on the screen.
+
+The callback function receives the new (x, y) position of the window's upper-left corner, in screen coordinates.
+
+This function is useful for applications that need to track window movement, synchronize with other windows, or adjust rendering based on screen position.
+
+If the callback parameter is NULL, the window position callback is disabled.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+void positionCallback(int x, int y)
+{
+    /* Handle window position change */
+    printf("Window moved to position (%d, %d)\\n", x, y);
+
+    /* You might want to adjust rendering based on position */
+    /* For example, an application showing multiple views might 
+       update which view is shown based on screen position */
+}
+
+/* In initialization code */
+glutPositionFunc(positionCallback);
+.fi
+
+.SH SEE ALSO
+glutPositionWindow, glutReshapeFunc, glutWindowStatusFunc
+.SH AUTHOR
+FreeGLUT contributors

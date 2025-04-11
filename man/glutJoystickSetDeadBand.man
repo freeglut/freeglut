@@ -1,0 +1,35 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutJoystickSetDeadBand 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutJoystickSetDeadBand - sets the joystick deadband.
+.SH SYNTAX
+.nf
+.LP
+void glutJoystickSetDeadBand(int joystick, float deadband_x, float deadband_y, float deadband_z);
+.fi
+.SH ARGUMENTS
+.IP \fIjoystick\fP 1i
+The joystick number, starting at 0.
+.IP \fIdeadband_x\fP 1i
+Deadband for the X axis.
+.IP \fIdeadband_y\fP 1i
+Deadband for the Y axis.
+.IP \fIdeadband_z\fP 1i
+Deadband for the Z axis.
+.SH DESCRIPTION
+glutJoystickSetDeadBand sets the deadband for the specified joystick. The deadband is a region around the center position of the joystick where small movements are ignored. This is useful to prevent unintended movement caused by imprecise joystick centering.
+
+Deadband values are specified for the X, Y, and Z axes as floating-point values. Values are usually in the range of 0.0 (no deadband) to 1.0 (maximum deadband, where any movement is ignored).
+
+The actual behavior may vary depending on the joystick hardware and underlying platform-specific implementation.
+
+This function is a FreeGLUT extension and is not available in the original GLUT library.
+
+.SH SEE ALSO
+glutJoystickFunc, glutForceJoystickFunc, glutJoystickSetSaturation
+.SH AUTHOR
+FreeGLUT contributors
