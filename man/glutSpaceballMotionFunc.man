@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutSpaceballMotionFunc 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutSpaceballMotionFunc 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutSpaceballMotionFunc - sets the Spaceball motion callback for the current window.
 .SH SYNTAX

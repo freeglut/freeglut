@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutSolidTetrahedron 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutSolidTetrahedron 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutSolidTetrahedron, glutWireTetrahedron - render a
 solid or wireframe tetrahedron (4-sided regular solid) respectively.

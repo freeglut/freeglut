@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutSetCursor 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutSetCursor 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutSetCursor - changes the cursor image of the current window.
 .SH SYNTAX

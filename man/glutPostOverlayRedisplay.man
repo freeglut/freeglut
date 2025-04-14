@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutPostOverlayRedisplay 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutPostOverlayRedisplay 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutPostOverlayRedisplay, glutPostWindowOverlayRedisplay - marks the
 overlay of the current or specified window as needing to be

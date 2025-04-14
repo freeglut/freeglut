@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutSolidCone 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutSolidCone 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutSolidCone, glutWireCone - render a solid or wireframe cone respectively.
 .SH SYNTAX

@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutDialsFunc 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutDialsFunc 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutDialsFunc - sets the dial & button box dials callback for the current window.
 .SH SYNTAX

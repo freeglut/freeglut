@@ -36,24 +36,44 @@ if [ -z "$FREEGLUT_DIR" ]; then
 fi
 
 for file in "${FREEGLUT_DIR}"/man/*.man; do
-    if grep -q "Permission is hereby granted\|See the file \"man/LICENSE\" for" "$file"; then
-        echo "Skipping $file (already has license)"
-        continue
-    fi
-
     echo "Updating $file..."
     temp_file=$(mktemp)
 
-    awk "
-    /Copyright \(c\) Mark J. Kilgard/ {
-        print \$0;
-        $LICENSE_REFERENCE
-        next;
-    }
-    { print \$0; }
-    " "$file" > "$temp_file"
+    # Update the license if needed
+    if grep -q "Permission is hereby granted\|See the file \"man/LICENSE\" for" "$file"; then
+        echo "  License already exists, skipping license update"
+        cp "$file" "$temp_file"
+    else
+        echo "  Adding license reference"
+        awk "
+        /Copyright \(c\) Mark J. Kilgard/ {
+            print \$0;
+            $LICENSE_REFERENCE
+            next;
+        }
+        { print \$0; }
+        " "$file" > "$temp_file"
+    fi
 
-    mv "$temp_file" "$file"
+    # Create a second temp file for the header update
+    temp_file2=$(mktemp)
+
+    # Update the man page header (.TH) line
+    echo "  Updating header date to April 2025"
+    awk '
+    /^\.TH/ {
+        # Extract the command name and keep it
+        command = $2
+        # Replace with updated format (command, section, date, source, manual)
+        print ".TH", command, "3", "\"April 2025\"", "\"freeglut\"", "\"freeglut\"" 
+        next
+    }
+    { print $0 }
+    ' "$temp_file" > "$temp_file2"
+
+    # Move the final result back to the original file
+    mv "$temp_file2" "$file"
+    rm "$temp_file"
 done
 
-echo "License update complete!"
+echo "Man page update complete!"

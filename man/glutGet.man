@@ -4,7 +4,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutGet 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutGet 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutGet - retrieves simple GLUT state represented by integers.
 .SH SYNTAX

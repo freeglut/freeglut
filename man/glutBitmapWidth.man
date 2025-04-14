@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutBitmapWidth 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutBitmapWidth 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutBitmapWidth - returns the width of a bitmap character.
 .br
