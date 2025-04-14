@@ -1,0 +1,77 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutMultiEntry 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutMultiEntryFunc, glutMultiButtonFunc, glutMultiMotionFunc, glutMultiPassiveFunc - set multitouch callbacks for the current window.
+.SH SYNTAX
+.nf
+.LP
+void glutMultiEntryFunc(void (*callback)(int device, int state));
+void glutMultiButtonFunc(void (*callback)(int device, int button, int state, float x, float y));
+void glutMultiMotionFunc(void (*callback)(int device, float x, float y));
+void glutMultiPassiveFunc(void (*callback)(int device, float x, float y));
+.fi
+.SH ARGUMENTS
+.IP \fIcallback\fP 1i
+The callback function to be called when the respective multitouch event occurs.
+.IP \fIdevice\fP 1i
+Identifies the multitouch device generating the event.
+.IP \fIbutton\fP 1i
+For glutMultiButtonFunc, indicates which button was pressed or released.
+.IP \fIstate\fP 1i
+Indicates the state change (GLUT_DOWN, GLUT_UP for button callbacks, or GLUT_ENTERED, GLUT_LEFT for entry callbacks).
+.IP \fIx\fP 1i
+X position of the touch point.
+.IP \fIy\fP 1i
+Y position of the touch point.
+.SH DESCRIPTION
+These functions provide multitouch support in FreeGLUT applications. They allow tracking of multiple simultaneous touch inputs, which is common on touchscreens, trackpads, and other modern input devices.
+
+glutMultiEntryFunc sets a callback that is triggered when a touch device enters or leaves the window.
+
+glutMultiButtonFunc sets a callback that is triggered when a touch device makes or breaks contact with the touch surface.
+
+glutMultiMotionFunc sets a callback that is triggered when a touch point that is currently in contact with the surface (pressed down) moves.
+
+glutMultiPassiveFunc sets a callback that is triggered when a touch device moves over the surface without making contact (hovering, if supported by the device).
+
+The device parameter is an identifier for the touch point. This allows tracking multiple simultaneous touches as each one will have a unique device ID for the duration of the touch interaction. The range of IDs and the number of simultaneous touches supported depends on the hardware and platform.
+
+If any callback parameter is NULL, the corresponding multitouch callback is disabled.
+
+These functions are FreeGLUT extensions and are not available in the original GLUT library.
+
+.SH EXAMPLE
+.nf
+void multiButton(int device, int button, int state, float x, float y)
+{
+    if (state == GLUT_DOWN) {
+        printf("Touch %d started at (%.2f, %.2f)\\n", device, x, y);
+    } else {
+        printf("Touch %d ended at (%.2f, %.2f)\\n", device, x, y);
+    }
+}
+
+void multiMotion(int device, float x, float y)
+{
+    printf("Touch %d moved to (%.2f, %.2f)\\n", device, x, y);
+
+    /* Update touch point position */
+    touchPoints[device].x = x;
+    touchPoints[device].y = y;
+
+    glutPostRedisplay();
+}
+
+/* In initialization code */
+glutMultiButtonFunc(multiButton);
+glutMultiMotionFunc(multiMotion);
+.fi
+
+.SH SEE ALSO
+glutMouseFunc, glutMotionFunc, glutPassiveMotionFunc, glutEntryFunc
+.SH AUTHOR
+FreeGLUT contributors

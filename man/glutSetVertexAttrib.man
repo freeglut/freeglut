@@ -1,0 +1,53 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutSetVertexAttrib 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutSetVertexAttribCoord3, glutSetVertexAttribNormal, glutSetVertexAttribTexCoord2 - set the vertex attribute indices for geometry rendering with shaders.
+.SH SYNTAX
+.nf
+.LP
+void glutSetVertexAttribCoord3(GLint attrib);
+void glutSetVertexAttribNormal(GLint attrib);
+void glutSetVertexAttribTexCoord2(GLint attrib);
+.fi
+.SH ARGUMENTS
+.IP \fIattrib\fP 1i
+The index (address) of the vertex attribute in the shader program.
+.SH DESCRIPTION
+These functions allow FreeGLUT's built-in geometry rendering functions to be used with modern OpenGL shader programs (OpenGL 2.0 and later). When using shaders, vertex data must be uploaded to vertex attributes in the shader program rather than using the fixed-function pipeline.
+
+glutSetVertexAttribCoord3 sets the vertex attribute index for vertex coordinates (vec3).
+
+glutSetVertexAttribNormal sets the vertex attribute index for normal vectors (vec3).
+
+glutSetVertexAttribTexCoord2 sets the vertex attribute index for texture coordinates (vec2).
+
+After calling these functions, subsequent calls to FreeGLUT's geometric rendering functions (glutSolidTeapot, glutSolidSphere, etc.) will upload vertex data to the specified attribute locations in the currently active shader program.
+
+Note that texture coordinates are only generated for the teapot, teacup, and teaspoon geometry functions.
+
+.SH EXAMPLE
+.nf
+/* In your shader code */
+attribute vec3 position;
+attribute vec3 normal;
+attribute vec2 texCoord;
+
+/* In your C/C++ code */
+GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+GLint normAttrib = glGetAttribLocation(shaderProgram, "normal");
+GLint texAttrib = glGetAttribLocation(shaderProgram, "texCoord");
+
+glutSetVertexAttribCoord3(posAttrib);
+glutSetVertexAttribNormal(normAttrib);
+glutSetVertexAttribTexCoord2(texAttrib);
+
+glutSolidTeapot(1.0);
+.fi
+.SH SEE ALSO
+glutSolidTeapot, glutSolidTeacup, glutSolidTeaspoon, glutSolidSphere, glutSolidCube, glutSolidTorus, glutSolidCone, glutSolidDodecahedron, glutSolidOctahedron, glutSolidTetrahedron, glutSolidIcosahedron, glutSolidRhombicDodecahedron
+.SH AUTHOR
+FreeGLUT contributors

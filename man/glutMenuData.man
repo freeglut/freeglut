@@ -1,0 +1,73 @@
+.\"
+.\" Copyright (c) FreeGLUT contributors, 2000-2025.
+.\"
+.\" See the file "man/LICENSE" for information on usage and redistribution
+.\"
+.TH glutMenuData 3GLUT "3.8" "FreeGLUT" "FreeGLUT"
+.SH NAME
+glutSetMenuData, glutGetMenuData - set or get per-menu user data pointer.
+.SH SYNTAX
+.nf
+.LP
+void glutSetMenuData(void *data);
+void* glutGetMenuData(void);
+.fi
+.SH ARGUMENTS
+.IP \fIdata\fP 1i
+Pointer to arbitrary user data to be associated with the current menu.
+.SH DESCRIPTION
+glutSetMenuData associates a pointer to arbitrary user data with the current menu. This is useful for storing menu-specific application state that needs to be accessed within callbacks.
+
+glutGetMenuData retrieves the pointer to user data that was previously associated with the current menu. If no data has been set for the current menu, NULL is returned.
+
+These functions provide a convenient way to associate application-specific data with a menu without using global variables or custom management structures. The menu-specific data can be accessed in any callback by first calling glutGetMenu to determine the current menu and then glutGetMenuData to retrieve the associated data.
+
+This is particularly useful for complex menu systems where each menu might need different behavior or context information.
+
+.SH EXAMPLE
+.nf
+typedef struct {
+    int category;
+    const char *title;
+    /* other menu-specific state */
+} MenuState;
+
+void menuCallback(int value)
+{
+    /* Get the state information for this menu */
+    MenuState *state = (MenuState*)glutGetMenuData();
+
+    if (state) {
+        printf("Selected item %d from menu '%s' (category %d)\\n", 
+               value, state->title, state->category);
+    }
+
+    /* Handle the menu selection */
+    /* ... */
+}
+
+int createMenu(const char* title, int category)
+{
+    int menuId = glutCreateMenu(menuCallback);
+
+    /* Add menu items */
+    glutAddMenuEntry("Item 1", 1);
+    glutAddMenuEntry("Item 2", 2);
+    glutAddMenuEntry("Item 3", 3);
+
+    /* Allocate and initialize menu-specific data */
+    MenuState *state = malloc(sizeof(MenuState));
+    state->category = category;
+    state->title = strdup(title);
+
+    /* Associate the data with the menu */
+    glutSetMenuData(state);
+
+    return menuId;
+}
+.fi
+
+.SH SEE ALSO
+glutSetMenu, glutGetMenu, glutCreateMenu, glutSetWindowData, glutGetWindowData
+.SH AUTHOR
+FreeGLUT contributors
