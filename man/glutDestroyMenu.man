@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutDestroyMenu 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutDestroyMenu 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutDestroyMenu - destroys the specified menu.
 .SH SYNTAX

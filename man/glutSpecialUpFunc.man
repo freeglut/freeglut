@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutSpecialUpFunc 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutSpecialUpFunc 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutSpecialUpFunc - sets the special keyboard up (key release) callback for the current window.
 .SH SYNTAX

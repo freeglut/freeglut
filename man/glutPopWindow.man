@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutPopWindow 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutPopWindow 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutPopWindow, glutPushWindow - change the stacking order of the current window relative to its siblings.
 .SH SYNTAX

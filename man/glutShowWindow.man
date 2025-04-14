@@ -3,7 +3,7 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutShowWindow 3GLUT "3.8" "GLUT" "GLUT"
+.TH glutShowWindow 3 "April 2025" "freeglut" "freeglut"
 .SH NAME
 glutShowWindow, glutHideWindow, glutIconifyWindow - change the display status of the current window.
 .SH SYNTAX
