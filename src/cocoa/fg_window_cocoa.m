@@ -80,18 +80,28 @@ BOOL shouldQuit = NO;
 
 @implementation fgOpenGLView
 
-/* Mac uses non-standard key codes, so we need to map them to GLUT key codes */
-+ (uint16_t)convertFromMac:(uint16_t)key
+/*
+ * Standardizes key codes across platforms by mapping macOS-specific key codes
+ * to universal key codes.  This normalization must occur before conversion to special keys to ensure
+ * special keys are handled correctly.
+ */
++ (uint16_t)standardizeKeyCode:(uint16_t)key
 {
     switch ( key ) {
-    case 0x7F:       // Delete
-        return 0x08; // Backspace
+    case 0x7F:       // macOS Delete key (forward delete)
+        return 0x08; // Maps to universal Backspace key code
     default:
         return (uint16_t)key;
     }
 }
 
-+ (char)mapKeyToSpecial:(uint16_t)key
+/*
+ * Handles the conversion of various non-character keys including:
+ * - Arrow keys (up, down, left, right)
+ * - Function keys (F1-F12)
+ * - Navigation keys (Home, End, Page Up/Down, Insert, Delete)
+ */
++ (char)convertFunctionKeyToGlutSpecial:(uint16_t)key
 {
     switch ( key ) {
     case NSUpArrowFunctionKey:
@@ -101,8 +111,8 @@ BOOL shouldQuit = NO;
     case NSLeftArrowFunctionKey:
         return GLUT_KEY_LEFT;
     case NSRightArrowFunctionKey:
-
         return GLUT_KEY_RIGHT;
+
     case NSF1FunctionKey:
         return GLUT_KEY_F1;
     case NSF2FunctionKey:
@@ -139,12 +149,23 @@ BOOL shouldQuit = NO;
     case NSInsertFunctionKey:
     case NSInsertCharFunctionKey:
         return GLUT_KEY_INSERT;
-
     case NSDeleteFunctionKey:
     case NSDeleteCharFunctionKey:
         return GLUT_KEY_DELETE;
+    }
+    return (char)key;
+}
 
-    // undocumented key codes
+/*
+ * Converts macOS modifier key codes to their corresponding GLUT special key constants.
+ *
+ * Note: Modifer key codes overlap standard key codes, so this conversion only applies to
+ * modifier keys.
+ */
++ (char)convertModifierToGlutSpecial:(uint16_t)modifierKey
+{
+    switch ( modifierKey ) {
+    // macOS hardware key codes for modifier keys
     case 0x38: // Left Shift
         return GLUT_KEY_SHIFT_L;
     case 0x3C: // Right Shift
@@ -162,8 +183,7 @@ BOOL shouldQuit = NO;
     case 0x36: // Right Command
         return GLUT_KEY_SUPER_R;
     }
-
-    return (char)key;
+    return (char)modifierKey;
 }
 
 - (BOOL)acceptsFirstResponder
@@ -356,7 +376,7 @@ BOOL shouldQuit = NO;
 
     // now lets notify any special key press callbacks
     int  state      = -1;
-    char specialKey = [fgOpenGLView mapKeyToSpecial:keyCode];
+    char specialKey = [fgOpenGLView convertModifierToGlutSpecial:keyCode];
 
     switch ( specialKey ) {
     case GLUT_KEY_SHIFT_L:
@@ -400,8 +420,8 @@ BOOL shouldQuit = NO;
     }
 
     unichar key    = [[event charactersIgnoringModifiers] characterAtIndex:0];
-    key            = [fgOpenGLView convertFromMac:key];
-    char convKey   = [fgOpenGLView mapKeyToSpecial:key];
+    key            = [fgOpenGLView standardizeKeyCode:key];
+    char convKey   = [fgOpenGLView convertFunctionKeyToGlutSpecial:key];
     BOOL isSpecial = ( convKey != key );
 
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:YES];
@@ -425,8 +445,8 @@ BOOL shouldQuit = NO;
     }
 
     uint16_t key   = [[event charactersIgnoringModifiers] characterAtIndex:0];
-    key            = [fgOpenGLView convertFromMac:key];
-    char convKey   = [fgOpenGLView mapKeyToSpecial:key];
+    key            = [fgOpenGLView standardizeKeyCode:key];
+    char convKey   = [fgOpenGLView convertFunctionKeyToGlutSpecial:key];
     BOOL isSpecial = ( convKey != key );
 
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:YES];
