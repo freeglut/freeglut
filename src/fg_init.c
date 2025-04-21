@@ -323,6 +323,86 @@ void fgDeinitialize( void )
     fgState.Initialised = GL_FALSE;
 }
 
+/* -- HELPER FUNCTIONS -------------------------------------------------- */
+
+typedef enum {
+  NONE, EQ, NEQ, LTE, GTE, GT, LT, MIN, INVALID
+} Comparison;
+
+typedef struct _Criterion {
+  Comparison comparison;
+  int value;
+} Criterion;
+
+/* Parse a display string token and return a Criterion struct.
+ * Based on the original GLUT implementation:
+ * https://github.com/markkilgard/glut/blob/master/lib/glut/glut_dstr.c
+ */
+Criterion parseCriteria(char *word)
+{
+    Criterion c = { NONE, 0 };
+    char     *cstr, *vstr = NULL, *response;
+
+    cstr = strpbrk( word, "=><!~" );
+
+    if ( cstr ) {
+        if ( strlen( cstr ) < 2 ) {
+            c.comparison = INVALID;
+            return c;
+        }
+
+        switch ( cstr[0] ) {
+        case '=':
+            c.comparison = EQ;
+            vstr         = &cstr[1];
+            break;
+        case '~':
+            c.comparison = MIN;
+            vstr         = &cstr[1];
+            break;
+        case '>':
+            if ( cstr[1] == '=' ) {
+                c.comparison = GTE;
+                vstr         = &cstr[2];
+            }
+            else {
+                c.comparison = GT;
+                vstr         = &cstr[1];
+            }
+            break;
+        case '<':
+            if ( cstr[1] == '=' ) {
+                c.comparison = LTE;
+                vstr         = &cstr[2];
+            }
+            else {
+                c.comparison = LT;
+                vstr         = &cstr[1];
+            }
+            break;
+        case '!':
+            if ( cstr[1] == '=' ) {
+                c.comparison = NEQ;
+                vstr         = &cstr[2];
+            }
+            else {
+                c.comparison = INVALID;
+            }
+            break;
+        }
+
+        if ( vstr ) {
+            c.value = (int)strtol( vstr, &response, 0 );
+            if ( response == vstr ) {
+                /* Not a valid number. */
+                c.comparison = INVALID;
+                c.value = 0;
+            }
+        }
+    }
+
+    return c;
+}
 
 /* -- INTERFACE FUNCTIONS -------------------------------------------------- */
 #if defined(NEED_XPARSEGEOMETRY_IMPL) || defined(TARGET_HOST_MS_WINDOWS)
@@ -450,6 +530,7 @@ static char* Tokens[] =
 
 void FGAPIENTRY glutInitDisplayString( const char* displayMode )
 {
+    Criterion criteria ;
     int glut_state_flag = 0 ;
     /*
      * Unpack a lot of options from a character string.  The options are
@@ -564,7 +645,21 @@ void FGAPIENTRY glutInitDisplayString( const char* displayMode )
         case 18 :  /* "samples":  Indicates the number of multisamples to use
                       based on GLX's SGIS_multisample extension (for
                       antialiasing) */
-            glut_state_flag |= GLUT_MULTISAMPLE ; /*Somebody fix this for me!*/
+            {
+                glut_state_flag |= GLUT_MULTISAMPLE;
+                criteria = parseCriteria(token);
+                switch (criteria.comparison) {
+                case EQ:
+                    fgState.SampleNumber = criteria.value;
+                    break;
+                case NONE:
+                    fgState.SampleNumber = 4;
+                    break;
+                default:
+                    fgWarning("WARNING - Only '=' is supported for samples:  %s", token);
+                    break;
+                }
+            }
             break ;
 
         case 19 :  /* "slow":  Boolean indicating if the frame buffer
@@ -630,7 +725,21 @@ void FGAPIENTRY glutInitDisplayString( const char* displayMode )
             break ;
 
         case 36 :  /* "auxbufs":  some number of aux buffers */
-            glut_state_flag |= GLUT_AUX;
+            {
+                glut_state_flag |= GLUT_AUX;
+                criteria = parseCriteria(token);
+                switch (criteria.comparison) {
+                case EQ:
+                    fgState.AuxiliaryBufferNumber = criteria.value;
+                    break;
+                case NONE:
+                    fgState.AuxiliaryBufferNumber = 1;
+                    break;
+                default:
+                    fgWarning("WARNING - Only '=' is supported for auxbufs:  %s", token);
+                    break;
+                }
+            }
             break ;
 
         case 37 :  /* Unrecognized */
