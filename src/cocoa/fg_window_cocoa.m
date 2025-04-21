@@ -601,17 +601,15 @@ void fgPlatformOpenWindow( SFG_Window *window,
         attrs[attrIndex++] = 32;
     }
     if ( fgState.DisplayMode & GLUT_AUX ) {
-        // TODO make this configurable when glutInitDisplayString implementation is complete eg ~32
         attrs[attrIndex++] = NSOpenGLPFAAuxBuffers;
-        attrs[attrIndex++] = 2;
+        attrs[attrIndex++] = fghNumberOfAuxBuffersRequested( );
     }
     if ( fgState.DisplayMode & GLUT_MULTISAMPLE ) {
         attrs[attrIndex++] = NSOpenGLPFAMultisample; // boolean
         attrs[attrIndex++] = NSOpenGLPFASampleBuffers;
         attrs[attrIndex++] = 1;
-        // TODO make this configurable when glutInitDisplayString implementation is complete eg samples = 4
         attrs[attrIndex++] = NSOpenGLPFASamples;
-        attrs[attrIndex++] = 4;
+        attrs[attrIndex++] = fgState.SampleNumber;
     }
     // profile selection
     attrs[attrIndex++] = NSOpenGLPFAOpenGLProfile;
