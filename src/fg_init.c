@@ -524,7 +524,7 @@ static char* Tokens[] =
     "xstaticgray", "xgrayscale", "xstaticcolor", "xpseudocolor",
     "xtruecolor", "xdirectcolor",
     "xstaticgrey", "xgreyscale", "xstaticcolour", "xpseudocolour",
-    "xtruecolour", "xdirectcolour", "borderless", "auxbufs"
+    "xtruecolour", "xdirectcolour", "borderless", "aux", "auxbufs"
 };
 #define NUM_TOKENS             (sizeof(Tokens) / sizeof(*Tokens))
 
@@ -724,7 +724,8 @@ void FGAPIENTRY glutInitDisplayString( const char* displayMode )
             glut_state_flag |= GLUT_BORDERLESS;
             break ;
 
-        case 36 :  /* "auxbufs":  some number of aux buffers */
+        case 36 :  /* "aux"  OR  */
+        case 37 :  /* "auxbufs":  some number of aux buffers */
             {
                 glut_state_flag |= GLUT_AUX;
                 criteria = parseCriteria(token);
@@ -742,7 +743,7 @@ void FGAPIENTRY glutInitDisplayString( const char* displayMode )
             }
             break ;
 
-        case 37 :  /* Unrecognized */
+        case 38 :  /* Unrecognized */
             fgWarning ( "WARNING - Display string token not recognized:  %s",
                         token );
             break ;
