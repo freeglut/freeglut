@@ -444,7 +444,7 @@ static char* Tokens[] =
     "xstaticgray", "xgrayscale", "xstaticcolor", "xpseudocolor",
     "xtruecolor", "xdirectcolor",
     "xstaticgrey", "xgreyscale", "xstaticcolour", "xpseudocolour",
-    "xtruecolour", "xdirectcolour", "borderless", "aux"
+    "xtruecolour", "xdirectcolour", "borderless", "auxbufs"
 };
 #define NUM_TOKENS             (sizeof(Tokens) / sizeof(*Tokens))
 
@@ -487,6 +487,7 @@ void FGAPIENTRY glutInitDisplayString( const char* displayMode )
 
         case 1 :  /* "acca":  Red, green, blue, and alpha accumulation buffer
                      precision in bits */
+            glut_state_flag |= GLUT_ACCUM ;  /* Somebody fix this for me! */
             break ;
 
         case 2 :  /* "acc":  Red, green, and blue accumulation buffer precision
@@ -628,7 +629,7 @@ void FGAPIENTRY glutInitDisplayString( const char* displayMode )
             glut_state_flag |= GLUT_BORDERLESS;
             break ;
 
-        case 36 :  /* "aux":  some number of aux buffers */
+        case 36 :  /* "auxbufs":  some number of aux buffers */
             glut_state_flag |= GLUT_AUX;
             break ;
 
