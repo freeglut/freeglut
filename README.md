@@ -7,6 +7,7 @@ freeglut
 ![Windows (MSVC 6.0) build status](https://github.com/freeglut/freeglut/actions/workflows/build_win_msvc6.yml/badge.svg)
 ![Windows (MinGW) build status](https://github.com/freeglut/freeglut/actions/workflows/build_win_mingw.yml/badge.svg)
 ![MacOS X (X11) build status](https://github.com/freeglut/freeglut/actions/workflows/build_macosx_x11.yml/badge.svg)
+![MacOS X (Cocoa) build status](https://github.com/freeglut/freeglut/actions/workflows/build_macosx_cocoa.yml/badge.svg)
 
 OVERVIEW
 --------
