@@ -43,6 +43,9 @@ int fgPlatformGlutDeviceGet( GLenum eWhat )
 
 int fgPlatformGlutGet( GLenum eWhat )
 {
+    if ( !fgStructure.CurrentWindow )
+        return 0;
+
     NSWindow *win = (NSWindow *)fgStructure.CurrentWindow->Window.Handle;
 
     switch ( eWhat ) {

@@ -24,6 +24,17 @@
 
 void fgPlatformSetWindow( SFG_Window *window );
 
+extern void fghOnReshapeNotify( SFG_Window *window, int width, int height, GLboolean forceNotify );
+extern void fghOnPositionNotify( SFG_Window *window, int x, int y, GLboolean forceNotify );
+extern void fgPlatformFullScreenToggle( SFG_Window *win );
+extern void fgPlatformPositionWindow( SFG_Window *window, int x, int y );
+extern void fgPlatformReshapeWindow( SFG_Window *window, int width, int height );
+extern void fgPlatformPushWindow( SFG_Window *window );
+extern void fgPlatformPopWindow( SFG_Window *window );
+extern void fgPlatformHideWindow( SFG_Window *window );
+extern void fgPlatformIconifyWindow( SFG_Window *window );
+extern void fgPlatformShowWindow( SFG_Window *window );
+
 fg_time_t fgPlatformSystemTime( void )
 {
     uint64_t now_ns = clock_gettime_nsec_np( CLOCK_REALTIME );
@@ -87,7 +98,18 @@ void fgPlatformInitWork( SFG_Window *window )
 
 void fgPlatformPosResZordWork( SFG_Window *window, unsigned int workMask )
 {
-    TODO_IMPL;
+    if ( workMask & GLUT_FULL_SCREEN_WORK )
+        fgPlatformFullScreenToggle( window );
+    if ( workMask & GLUT_POSITION_WORK )
+        fgPlatformPositionWindow( window, window->State.DesiredXpos, window->State.DesiredYpos );
+    if ( workMask & GLUT_SIZE_WORK )
+        fgPlatformReshapeWindow( window, window->State.DesiredWidth, window->State.DesiredHeight );
+    if ( workMask & GLUT_ZORDER_WORK ) {
+        if ( window->State.DesiredZOrder < 0 )
+            fgPlatformPushWindow( window );
+        else
+            fgPlatformPopWindow( window );
+    }
 }
 
 void fgPlatformVisibilityWork( SFG_Window *window )
