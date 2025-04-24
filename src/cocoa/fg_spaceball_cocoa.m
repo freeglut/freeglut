@@ -22,27 +22,27 @@
 
 void fgPlatformInitializeSpaceball( void )
 {
-    TODO_IMPL;
+    NO_IMPL;
 }
 
 void fgPlatformSpaceballClose( void )
 {
-    TODO_IMPL;
+    NO_IMPL;
 }
 
 int fgPlatformHasSpaceball( void )
 {
-    TODO_IMPL;
+    NO_IMPL;
     return 0;
 }
 
 int fgPlatformSpaceballNumButtons( void )
 {
-    TODO_IMPL;
+    NO_IMPL;
     return 0;
 }
 
 void fgPlatformSpaceballSetWindow( SFG_Window *window )
 {
-    TODO_IMPL;
+    NO_IMPL;
 }
