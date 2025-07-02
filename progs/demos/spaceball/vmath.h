@@ -1,10 +1,11 @@
 #ifndef VMATH_H_
 #define VMATH_H_
 
-#if defined(WIN32)
-#define INLINE
-#else
+#if (__STDC_VERSION__ >= 199901) || defined(__GNUC__) || \
+		(defined(_MSC_VER) && _MSC_VER >= 1800)
 #define INLINE  inline
+#else
+#define INLINE	__inline
 #endif
 
 
