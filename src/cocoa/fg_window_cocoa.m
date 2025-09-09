@@ -628,7 +628,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
     window->Window.pContext.PixelFormat = pixelFormat;
 
     //
-    // 2. Create fgOpenGLView with the pixel format
+    // 2. Create fgOpenGLView without a pixel format (the pixel format is used later in step 5)
     //
 
     // Flip y coordinate for OpenGL
@@ -636,7 +636,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
     x = positionUse ? x : 0;
 
     NSRect        frame      = NSMakeRect( x, y, sizeUse ? w : 300, sizeUse ? h : 300 );
-    fgOpenGLView *openGLView = [[fgOpenGLView alloc] initWithFrame:frame pixelFormat:pixelFormat];
+    fgOpenGLView *openGLView = [[fgOpenGLView alloc] initWithFrame:frame];
     if ( !openGLView ) {
         fgError( "Failed to create fgOpenGLView" );
     }
@@ -680,13 +680,14 @@ void fgPlatformOpenWindow( SFG_Window *window,
     [nsWindow setDelegate:delegate];
 
     //
-    // 5. Retrieve the NSOpenGLContext from the fgOpenGLView
+    // 5. Create NSOpenGLContext, and associate it with the view
     //
 
-    NSOpenGLContext *glContext = [openGLView openGLContext];
+    NSOpenGLContext *glContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
     if ( !glContext ) {
-        fgError( "Failed to retrieve NSOpenGLContext from fgOpenGLView" );
+        fgError( "Failed to create NSOpenGLContext" );
     }
+    [glContext setView:openGLView];
     window->Window.Context = glContext;
 
     //
