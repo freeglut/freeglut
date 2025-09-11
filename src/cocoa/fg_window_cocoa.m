@@ -473,6 +473,9 @@ BOOL shouldQuit = NO;
         fgError( "Freeglut window not set for %s", __func__ );
     }
 
+    /* Sync the context with the new drawable size. */
+    [(NSOpenGLContext *)self.fgWindow->Window.Context update];
+
     NSWindow *window        = self.fgWindow->Window.Handle;
     NSRect    frame         = [window contentRectForFrameRect:[window frame]];
     NSRect    backingBounds = [self convertRectToBacking:[self bounds]];
