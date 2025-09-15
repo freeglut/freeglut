@@ -485,12 +485,21 @@ BOOL shouldQuit = NO;
     pWState->FrameBufferWidth        = (int)backingBounds.size.width;
     pWState->FrameBufferHeight       = (int)backingBounds.size.height;
 
+    /*
+     * Workaround for a macOS OpenGL driver quirk where the accumulation buffer is not automatically
+     * resized in sync with the window. The glClear must be performed here, before the application's
+     * reshape callback is invoked, to prevent rendering from being clipped to the old buffer
+     * dimensions.  The exact reason why this is required is still remains largely a mystery, but
+     * would love to understand it better.
+     */
+    GLint accBits = 0;
+    glGetIntegerv( GL_ACCUM_RED_BITS, &accBits );
+    if ( accBits > 0 )
+        glClear( GL_ACCUM_BUFFER_BIT );
+
     /* Update state and call callback, if there was a change */
     fghOnPositionNotify( self.fgWindow, frame.origin.x, frame.origin.y, GL_FALSE );
     fghOnReshapeNotify( self.fgWindow, pWState->FrameBufferWidth, pWState->FrameBufferHeight, GL_FALSE );
-
-    // TODO: Resizing the window with accumulation buffers does not work correctly, may need to get creative and
-    // reinitialize the openGL context
 }
 
 @end
@@ -638,8 +647,22 @@ void fgPlatformOpenWindow( SFG_Window *window,
     y = positionUse ? fgDisplay.ScreenHeight - y - h : fgDisplay.ScreenHeight - h;
     x = positionUse ? x : 0;
 
-    NSRect        frame      = NSMakeRect( x, y, sizeUse ? w : 300, sizeUse ? h : 300 );
-    fgOpenGLView *openGLView = [[fgOpenGLView alloc] initWithFrame:frame];
+    //
+    // HACK: The OpenGL accumulation buffer on macOS does not resize with the window. To ensure it's
+    // large enough for any potential size, we initialize the OpenGL context with a fullscreen view.
+    // The window is then immediately resized to the user's requested dimensions after the context
+    // is created. This has minor memory overhead but no performance impact since scissor tests
+    // prevent rendering outside the viewport.
+    //
+    // The user configured frame is set after the OpenGL context is created and made current.
+    //
+    // Note: This is invisible to the user (no flicker) and is applied unconditionally for
+    // simplicity.
+    //
+    NSRect fullscreenFrame = [NSScreen mainScreen].frame;
+    NSRect frame           = NSMakeRect( x, y, sizeUse ? w : 300, sizeUse ? h : 300 );
+
+    fgOpenGLView *openGLView = [[fgOpenGLView alloc] initWithFrame:fullscreenFrame];
     if ( !openGLView ) {
         fgError( "Failed to create fgOpenGLView" );
     }
@@ -663,7 +686,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
     if ( window->IsMenu || gameMode || ( fgState.DisplayMode & GLUT_BORDERLESS ) ) {
         style = NSWindowStyleMaskBorderless;
     }
-    NSWindow *nsWindow = [[NSWindow alloc] initWithContentRect:frame
+    NSWindow *nsWindow = [[NSWindow alloc] initWithContentRect:fullscreenFrame
                                                      styleMask:style
                                                        backing:NSBackingStoreBuffered
                                                          defer:NO];
@@ -692,6 +715,10 @@ void fgPlatformOpenWindow( SFG_Window *window,
     }
     [glContext setView:openGLView];
     window->Window.Context = glContext;
+
+    // Now that the fullscreen context is created, resize the window to the requested frame.
+    // This triggers the reshape callback, which sets the correct viewport
+    [nsWindow setContentSize:frame.size];
 
     //
     // 6. Make the context current for OpenGL rendering
