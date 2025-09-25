@@ -43,10 +43,17 @@ int fgPlatformGlutDeviceGet( GLenum eWhat )
 
 int fgPlatformGlutGet( GLenum eWhat )
 {
+    if ( !fgStructure.CurrentWindow )
+        return 0;
+
     NSWindow *win = (NSWindow *)fgStructure.CurrentWindow->Window.Handle;
 
     switch ( eWhat ) {
 
+    /*
+     * Note: Returns the content area position, not the window frame position.
+     * This differs from the original GLUT behavior. See docs/api.md#conventions
+     */
     case GLUT_WINDOW_X:
     case GLUT_WINDOW_Y: {
         NSRect frame   = [win frame];
