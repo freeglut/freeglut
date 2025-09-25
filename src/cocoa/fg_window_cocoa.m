@@ -809,7 +809,13 @@ void fgPlatformCloseWindow( SFG_Window *window )
  */
 void fgPlatformShowWindow( SFG_Window *window )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
+
+    if ( [nsWindow isMiniaturized] ) {
+        [nsWindow deminiaturize:nil];
+    }
+    [nsWindow makeKeyAndOrderFront:nil];
+    window->State.Visible = GL_TRUE;
 }
 
 /*
@@ -817,7 +823,9 @@ void fgPlatformShowWindow( SFG_Window *window )
  */
 void fgPlatformHideWindow( SFG_Window *window )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
+    [nsWindow orderOut:nil];
+    window->State.Visible = GL_FALSE;
 }
 
 /*
@@ -825,7 +833,9 @@ void fgPlatformHideWindow( SFG_Window *window )
  */
 void fgPlatformIconifyWindow( SFG_Window *window )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
+    [nsWindow miniaturize:nil];
+    window->State.Visible = GL_FALSE;
 }
 
 /*
@@ -833,7 +843,8 @@ void fgPlatformIconifyWindow( SFG_Window *window )
  */
 void fgPlatformGlutSetWindowTitle( const char *str )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)fgStructure.CurrentWindow->Window.Handle;
+    [nsWindow setTitle:[NSString stringWithUTF8String:str]];
 }
 
 /*
@@ -841,7 +852,10 @@ void fgPlatformGlutSetWindowTitle( const char *str )
  */
 void fgPlatformGlutSetIconTitle( const char *str )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)fgStructure.CurrentWindow->Window.Handle;
+
+    // you cannot set the icon title on macOS, but you can set the miniwindow title
+    [nsWindow setMiniwindowTitle:[NSString stringWithUTF8String:str]];
 }
 
 /*
