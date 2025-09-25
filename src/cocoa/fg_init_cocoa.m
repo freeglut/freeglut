@@ -35,14 +35,14 @@ void fgPlatformInitialize( const char *displayName )
     [NSApplication sharedApplication]; // This creates the singleton instance of NSApplication (NSApp)
     [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
 
-    // Get the main screen properties
-    NSScreen *mainScreen   = [NSScreen mainScreen];
-    NSRect    screenFrame  = [mainScreen visibleFrame]; // visibleFrame excludes the menu bar and dock
-    fgDisplay.ScreenWidth  = screenFrame.size.width;
-    fgDisplay.ScreenHeight = screenFrame.size.height;
+    // Get the primary screen properties
+    NSScreen *primaryScreen = [[NSScreen screens] objectAtIndex:0];
+    NSRect    screenFrame   = [primaryScreen visibleFrame]; // visibleFrame excludes the menu bar and dock
+    fgDisplay.ScreenWidth   = screenFrame.size.width;
+    fgDisplay.ScreenHeight  = screenFrame.size.height;
 
     // Calculate screen size in millimeters
-    NSNumber         *screenNumber  = mainScreen.deviceDescription[@"NSScreenNumber"];
+    NSNumber         *screenNumber  = primaryScreen.deviceDescription[@"NSScreenNumber"];
     CGDirectDisplayID displayID     = [screenNumber unsignedIntValue];
     CGSize            displaySizeMM = CGDisplayScreenSize( displayID );
     fgDisplay.ScreenWidthMM         = displaySizeMM.width;
