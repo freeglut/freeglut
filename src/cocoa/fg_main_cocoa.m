@@ -32,6 +32,10 @@ extern void fgPlatformReshapeWindow( SFG_Window *window, int width, int height )
 extern void fgPlatformPushWindow( SFG_Window *window );
 extern void fgPlatformPopWindow( SFG_Window *window );
 
+extern void fgPlatformHideWindow( SFG_Window *window );
+extern void fgPlatformIconifyWindow( SFG_Window *window );
+extern void fgPlatformShowWindow( SFG_Window *window );
+
 fg_time_t fgPlatformSystemTime( void )
 {
     uint64_t now_ns = clock_gettime_nsec_np( CLOCK_REALTIME );
@@ -85,12 +89,10 @@ void fgPlatformMainLoopPreliminaryWork( void )
     [NSApp activateIgnoringOtherApps:YES]; // Bring app to the front
 }
 
-/* deal with work list items */
+/* Upon initial window creation, do any platform-specific work required for the window */
 void fgPlatformInitWork( SFG_Window *window )
 {
-    PART_IMPL;
-    // NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
-    // Placeholder for initialization tasks
+    /* Not required at present */
 }
 
 void fgPlatformPosResZordWork( SFG_Window *window, unsigned int workMask )
@@ -111,5 +113,19 @@ void fgPlatformPosResZordWork( SFG_Window *window, unsigned int workMask )
 
 void fgPlatformVisibilityWork( SFG_Window *window )
 {
-    TODO_IMPL;
+    SFG_Window *win = window;
+    switch ( window->State.DesiredVisibility ) {
+    case DesireHiddenState:
+        fgPlatformHideWindow( window );
+        break;
+    case DesireIconicState:
+        /* Call on top-level window */
+        while ( win->Parent )
+            win = win->Parent;
+        fgPlatformIconifyWindow( win );
+        break;
+    case DesireNormalState:
+        fgPlatformShowWindow( window );
+        break;
+    }
 }
