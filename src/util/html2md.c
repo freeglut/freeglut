@@ -667,9 +667,21 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
 
                 in_list_item = true;
                 p = tag_end + 1;
+
+                // Skip leading whitespace after <li> tag
+                while (*p && isspace((unsigned char)*p)) {
+                    p++;
+                }
+
                 continue;
             }
             if (strncmp(tag, "</li>", 5) == 0) {
+                // Trim trailing whitespace before closing list item
+                while (output->size > 0 && isspace((unsigned char)output->text[output->size - 1])) {
+                    output->size--;
+                    output->text[output->size] = '\0';
+                }
+
                 sb_append(output, "\n");
                 in_list_item = false;
                 p = tag_end + 1;

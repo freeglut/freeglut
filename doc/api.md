@@ -1468,9 +1468,7 @@ constant values:
 
 The *updown* argument may take one of the two defined constant
 values:
-- 
-		GLUT_DOWN, GLUT_UP indicating if button is pressed or released.
-	
+- GLUT_DOWN, GLUT_UP indicating if button is pressed or released.
 
 **Changes From GLUT**
 
