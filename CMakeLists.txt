@@ -760,6 +760,7 @@ ADD_DEMO(keyboard        progs/demos/keyboard/keyboard.c)
 ADD_DEMO(indexed_color   progs/demos/indexed_color/idxcol.c)
 ADD_DEMO(3dview          progs/demos/3dview/3dview.c)
 ADD_DEMO(accum           progs/demos/accum/accum.c)
+ADD_DEMO(windows         progs/demos/windows/windows.c)
 
 #######################
 # INSTALLATION
