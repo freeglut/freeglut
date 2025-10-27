@@ -676,6 +676,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
     //  - OpenGL viewport is correct
     //  - OpenGL framebuffer size is correct
     [openGLView setWantsBestResolutionOpenGLSurface:NO];
+    window->Window.pContext.View = openGLView;
 
     //
     // 3. Create NSWindow and set fgOpenGLView as content view
@@ -797,7 +798,11 @@ void fgPlatformCloseWindow( SFG_Window *window )
  */
 void fgPlatformShowWindow( SFG_Window *window )
 {
-    TODO_IMPL;
+    NSWindow     *nsWindow   = (NSWindow *)window->Window.Handle;
+    fgOpenGLView *openGLView = (fgOpenGLView *)window->Window.pContext.View;
+    [nsWindow makeKeyAndOrderFront:nil];
+    [nsWindow makeFirstResponder:openGLView]; // Ensure view receives events
+    window->State.Visible = GL_TRUE;
 }
 
 /*
@@ -805,7 +810,9 @@ void fgPlatformShowWindow( SFG_Window *window )
  */
 void fgPlatformHideWindow( SFG_Window *window )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
+    [nsWindow orderOut:nil];
+    window->State.Visible = GL_FALSE;
 }
 
 /*
@@ -821,7 +828,8 @@ void fgPlatformIconifyWindow( SFG_Window *window )
  */
 void fgPlatformGlutSetWindowTitle( const char *str )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)fgStructure.CurrentWindow->Window.Handle;
+    [nsWindow setTitle:[NSString stringWithUTF8String:str]];
 }
 
 /*
@@ -837,7 +845,9 @@ void fgPlatformGlutSetIconTitle( const char *str )
  */
 void fgPlatformPositionWindow( SFG_Window *window, int x, int y )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
+    // flip y coordinate for OpenGL
+    [nsWindow setFrameOrigin:NSMakePoint( x, fgDisplay.ScreenHeight - y )];
 }
 
 /*
@@ -845,7 +855,8 @@ void fgPlatformPositionWindow( SFG_Window *window, int x, int y )
  */
 void fgPlatformPushWindow( SFG_Window *window )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
+    [nsWindow orderBack:nil];
 }
 
 /*
@@ -853,7 +864,8 @@ void fgPlatformPushWindow( SFG_Window *window )
  */
 void fgPlatformPopWindow( SFG_Window *window )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
+    [nsWindow orderFront:nil];
 }
 
 /*
@@ -861,7 +873,8 @@ void fgPlatformPopWindow( SFG_Window *window )
  */
 void fgPlatformFullScreenToggle( SFG_Window *win )
 {
-    TODO_IMPL;
+    NSWindow *nsWindow = (NSWindow *)win->Window.Handle;
+    [nsWindow toggleFullScreen:nil];
 }
 
 void fgPlatformSetWindow( SFG_Window *window )
