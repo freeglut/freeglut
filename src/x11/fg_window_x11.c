@@ -493,7 +493,26 @@ void fgPlatformCloseWindow( SFG_Window* window )
  */
 void fgPlatformShowWindow( SFG_Window *window )
 {
+    XEvent xev;
+    long evmask = SubstructureRedirectMask | SubstructureNotifyMask;
+
     XMapWindow( fgDisplay.pDisplay.Display, window->Window.Handle );
+
+    /* Send _NET_ACTIVE_WINDOW client message to the window manager to ensure iconified windows
+     * are restored.  This is required for GNOME flavored window managers Mutter, Cinnamon, etc.
+     */
+    memset( &xev, 0, sizeof( xev ) );
+    xev.type                 = ClientMessage;
+    xev.xclient.window       = window->Window.Handle;
+    xev.xclient.message_type = XInternAtom( fgDisplay.pDisplay.Display, "_NET_ACTIVE_WINDOW", False );
+    xev.xclient.format       = 32;
+    xev.xclient.data.l[0]    = 1;           /* source indication: 1 = application */
+    xev.xclient.data.l[1]    = CurrentTime; /* timestamp */
+    xev.xclient.data.l[2]    = 0;           /* Active window (0 = current window) */
+    if ( !XSendEvent( fgDisplay.pDisplay.Display, fgDisplay.pDisplay.RootWindow, 0, evmask, &xev ) ) {
+        fgWarning( "Failed to send _NET_ACTIVE_WINDOW message" );
+    }
+
     XFlush( fgDisplay.pDisplay.Display ); /* XXX Shouldn't need this */
 }
 
