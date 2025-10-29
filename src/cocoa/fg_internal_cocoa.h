@@ -76,14 +76,11 @@ struct CocoaPlatformDisplay {
 
 /* Platform-specific window context */
 struct CocoaPlatformContext {
-    void *CocoaContext; /* OpenGL context - NSOpenGLContext* */
-    void *PixelFormat;  /* Pixel format - NSOpenGLPixelFormat* */
+    void *PixelFormat; /* Pixel format - NSOpenGLPixelFormat* */
 };
 
 /* Platform window state info */
 struct CocoaWindowState {
-    int OldWidth;
-    int OldHeight;
     int FrameBufferWidth;
     int FrameBufferHeight;
 };
