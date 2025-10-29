@@ -752,9 +752,6 @@ void fgPlatformOpenWindow( SFG_Window *window,
     // 8. Store initial window size
     //
 
-    window->State.pWState.OldWidth  = frame.size.width;
-    window->State.pWState.OldHeight = frame.size.height;
-
     // Get the actual framebuffer dimensions
     NSRect backingBounds                    = [openGLView convertRectToBacking:[openGLView bounds]];
     window->State.pWState.FrameBufferWidth  = (int)backingBounds.size.width;

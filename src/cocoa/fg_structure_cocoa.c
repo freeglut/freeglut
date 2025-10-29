@@ -22,7 +22,7 @@
 
 void fgPlatformCreateWindow( SFG_Window *window )
 {
-    window->Window.pContext.PixelFormat = NULL;
-    window->State.pWState.OldWidth      = -1;
-    window->State.pWState.OldHeight     = -1;
+    window->Window.pContext.PixelFormat     = NULL;
+    window->State.pWState.FrameBufferHeight = -1;
+    window->State.pWState.FrameBufferWidth  = -1;
 }
