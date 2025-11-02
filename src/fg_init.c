@@ -96,6 +96,7 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       0,                      /* OpenGL ContextFlags */
                       0,                      /* OpenGL ContextProfile */
                       0,                      /* HasOpenGL20 */
+                      -1,                     /* HasSwapCtlTear */
                       NULL,                   /* ErrorFunc */
                       NULL,                   /* ErrorFuncData */
                       NULL,                   /* WarningFunc */

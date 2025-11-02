@@ -153,6 +153,8 @@ void fgOpenWindow( SFG_Window* window, const char* title,
 
     fgInitGL2();
 
+    fgPlatformInitSwapCtl();
+
     window->State.WorkMask |= GLUT_INIT_WORK;
 }
 

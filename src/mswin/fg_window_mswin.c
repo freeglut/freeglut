@@ -703,6 +703,8 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     /* Store title */
     window->State.pWState.WindowTitle = tstr;
 
+	window->Window.pContext.has_swap_ctl_tear = -1;
+
 #if !defined(_WIN32_WCE)
     /* Need to set requested style again, apparently Windows doesn't listen when requesting windows without title bar or borders */
     SetWindowLong(window->Window.Handle, GWL_STYLE, flags);

@@ -30,7 +30,8 @@
 
 
 /* Function prototypes */
-extern void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window* CurrentWindow );
+void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window* CurrentWindow );
+void fgPlatformSwapInterval(int n);
 
 
 /* -- INTERFACE FUNCTIONS -------------------------------------------------- */
@@ -100,5 +101,15 @@ void FGAPIENTRY glutPostWindowRedisplay( int windowID )
     freeglut_return_if_fail( window );
     window->State.WorkMask |= GLUT_DISPLAY_WORK;
 }
+
+
+/* swap interval (vsync) control */
+void FGAPIENTRY glutSwapInterval(int n)
+{
+	FREEGLUT_EXIT_IF_NOT_INITIALISED("glutSwapInterval");
+	fgPlatformSwapInterval(n);
+}
+
+
 
 /*** END OF FILE ***/

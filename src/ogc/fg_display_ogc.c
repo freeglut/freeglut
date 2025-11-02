@@ -113,3 +113,17 @@ void fgPlatformGlutSwapBuffers(SFG_PlatformDisplay *pDisplayPtr,
 {
     fgOgcDisplayShowEFB();
 }
+
+
+void fgPlatformInitSwapCtl(void)
+{
+}
+
+void fgPlatformSwapInterval(int n)
+{
+}
+
+int fgPlatformExtSupported(const char *ext)
+{
+	return 0;
+}

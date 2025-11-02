@@ -35,3 +35,49 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window* Cu
 {
     SwapBuffers( CurrentWindow->Window.pContext.Device );
 }
+
+void fgPlatformInitSwapCtl(void)
+{
+	SFG_PlatformContext *fgctx = &fgStructure.CurrentWindow->Window.pContext;
+	if(fgctx->has_swap_ctl_tear >= 0) {
+		return;		/* swap control was already initialized for this context */
+	}
+
+	fgctx->wgl_get_extensions_string = (wgl_getextstr_func)glutGetProcAddress("wglGetExtensionsStringEXT");
+
+	if((fgctx->wgl_swap_interval = (wgl_swapint_func)glutGetProcAddress("wglSwapIntervalEXT"))) {
+		fgctx->has_swap_ctl_tear = glutExtensionSupported("WGL_EXT_swap_control_tear");
+	} else {
+		fgctx->has_swap_ctl_tear = 0;
+	}
+}
+
+void fgPlatformSwapInterval(int n)
+{
+	SFG_PlatformContext *fgctx = &fgStructure.CurrentWindow->Window.pContext;
+
+	if(n < 0 && !fgctx->has_swap_ctl_tear) {
+		/* if a negative swap interval was requested and adaptive vsync is not
+		 * available (WGL_EXT_swap_control_tear), fallback to regular vsync
+		 * with the equivalent positive interval.
+		 */
+		n = -n;
+	}
+	if(fgctx->wgl_swap_interval) {
+		fgctx->wgl_swap_interval(n);
+	}
+}
+
+int fgPlatformExtSupported(const char *ext)
+{
+	const char *str;
+	SFG_PlatformContext *fgctx = &fgStructure.CurrentWindow->Window.pContext;
+
+	if(!fgctx->wgl_get_extensions_string) {
+		return 0;
+	}
+	if((str = fgctx->wgl_get_extensions_string()) && fgMatchExt(str, ext)) {
+		return 1;
+	}
+	return 0;
+}
