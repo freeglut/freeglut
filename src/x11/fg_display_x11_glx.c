@@ -34,3 +34,7 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window* Cu
     glXSwapBuffers( pDisplayPtr->Display, CurrentWindow->Window.Handle );
 }
 
+void fgPlatformSwapInterval(int n)
+{
+	/* TODO */
+}

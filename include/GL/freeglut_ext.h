@@ -217,6 +217,9 @@ FGAPI void    FGAPIENTRY glutSolidTeaspoon( double size );
 typedef void (*GLUTproc)();
 FGAPI GLUTproc FGAPIENTRY glutGetProcAddress( const char *procName );
 
+/* swap interval control (vsync) */
+FGAPI void FGAPIENTRY glutSwapInterval(int n);
+
 /*
  * Multi-touch/multi-pointer extensions
  */
