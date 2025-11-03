@@ -23,7 +23,7 @@
 #endif
 
 /* backward compatibility with GLUT for testing */
-#if 1
+#if 1 && !defined( USE_GLUT )
 #include <GL/freeglut.h>
 #else
 #include <GLUT/glut.h>
@@ -116,7 +116,7 @@ void move_window( int value )
     int Y    = winGeom[win].y;
 #ifdef FREEGLUT
     maxX -= glutGet( GLUT_WINDOW_BORDER_WIDTH ) * 2;
-    maxY -= glutGet( GLUT_WINDOW_HEADER_HEIGHT );
+    maxY -= glutGet( GLUT_WINDOW_BORDER_HEIGHT );
 #endif
 
     /* Initialize movement directions */
@@ -330,7 +330,8 @@ void window_info( void )
     printf( "GLUT_ELAPSED_TIME: %d\n", glutGet( GLUT_ELAPSED_TIME ) );
 #ifdef FREEGLUT
     printf( "GLUT_WINDOW_BORDER_WIDTH: %d\n", glutGet( GLUT_WINDOW_BORDER_WIDTH ) );
-    printf( "GLUT_WINDOW_HEADER_HEIGHT: %d\n", glutGet( GLUT_WINDOW_HEADER_HEIGHT ) );
+    assert( GLUT_WINDOW_BORDER_HEIGHT == GLUT_WINDOW_HEADER_HEIGHT ); /* both defined the same */
+    printf( "GLUT_WINDOW_BORDER_HEIGHT: %d\n", glutGet( GLUT_WINDOW_BORDER_HEIGHT ) );
 #endif
 
     glEnable( GL_BLEND );
