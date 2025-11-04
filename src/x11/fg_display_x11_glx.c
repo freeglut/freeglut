@@ -38,3 +38,7 @@ void fgPlatformSwapInterval(int n)
 {
 	/* TODO */
 }
+
+int fgPlatformExtSupported(const char *ext)
+{
+}
