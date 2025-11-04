@@ -22,16 +22,27 @@
 #include <GLUT/glut.h>
 #endif
 
-#define UNSTABLE_MSG "Unstable window position... :("
-#define STABLE_MSG   "Stable window position!"
+#define CALIBRATING_MSG "Calibrating window position..."
+#define UNSTABLE_MSG    "Unstable window position... :("
+#define STABLE_MSG      "Stable window position!"
+#define HELP_MSG        "Press arrow keys to adjust target position."
 
 /* Move window slowly for unstable */
 const int UNSTABLE_TIMER_INTERVAL = 300;
 const int STABLE_TIMER_INTERVAL   = 30;
 
-static int   EXPECTED_X, EXPECTED_Y;
-static char  STATUS_MSG[256] = UNSTABLE_MSG;
-static float MSG_COLOR[3]    = { 1.0f, 0.0f, 0.0f };
+/* Only run calibration after window is positioned */
+const int CALIBRATION_DELAY = 1000;
+
+static int TARGET_X, TARGET_Y;
+static int OFFSET_X, OFFSET_Y;
+
+static char STATUS_STR[256] = CALIBRATING_MSG;
+static char TARGET_STR[256];
+static char HELP_STR[256];
+
+static float STATUS_MSG_COLOR[3] = { 0.8f, 0.4f, 0.1f };
+static float TARGET_MSG_COLOR[3] = { 0.7, 0.7f, 0.7f };
 
 void print_position_info( const char *msg )
 {
@@ -52,10 +63,30 @@ void print_position_info( const char *msg )
 #endif
 }
 
-void timer( int value )
+void adjust_target_position( int key, int x, int y )
+{
+    switch ( key ) {
+    case GLUT_KEY_UP:
+        TARGET_Y -= 1;
+        break;
+    case GLUT_KEY_DOWN:
+        TARGET_Y += 1;
+        break;
+    case GLUT_KEY_LEFT:
+        TARGET_X -= 1;
+        break;
+    case GLUT_KEY_RIGHT:
+        TARGET_X += 1;
+        break;
+    default:
+        break;
+    }
+}
+
+void validate_position( int value )
 {
     static int i;
-    int        x, y;
+    int        x, y, adjusted_x, adjusted_y;
     int        next_timer;
     float      luma = fabs( sin( glutGet( GLUT_ELAPSED_TIME ) / 500.0f ) ) * 0.5f + 0.5f;
 
@@ -63,37 +94,67 @@ void timer( int value )
     y = glutGet( GLUT_WINDOW_Y );
 
     /*
-     * FreeGLUT returns the content offset, not the frame offset as used in
-     * original GLUT and in PositionWindow.
-     *
      * See docs/api.md#conventions for details details
      */
-#if defined( FREEGLUT )
-    x -= 2 * glutGet( GLUT_WINDOW_BORDER_WIDTH );
-    y -= glutGet( GLUT_WINDOW_BORDER_HEIGHT );
-#endif
+    adjusted_x = x - OFFSET_X;
+    adjusted_y = y - OFFSET_Y;
 
-    if ( EXPECTED_X == x && EXPECTED_Y == y ) {
-        strncpy( STATUS_MSG, STABLE_MSG, sizeof( STATUS_MSG ) );
-        next_timer   = STABLE_TIMER_INTERVAL;
-        MSG_COLOR[0] = luma, MSG_COLOR[1] = luma, MSG_COLOR[2] = luma;
+    sprintf( TARGET_STR,
+        "Pos:%d,%d | Adj:%d,%d | Tgt:%d,%d | Off:%d,%d | Err:%d,%d",
+        x,
+        y,
+        adjusted_x,
+        adjusted_y,
+        TARGET_X,
+        TARGET_Y,
+        OFFSET_X,
+        OFFSET_Y,
+        adjusted_x - TARGET_X,
+        adjusted_y - TARGET_Y );
+
+    if ( TARGET_X == adjusted_x && TARGET_Y == adjusted_y ) {
+        strncpy( STATUS_STR, STABLE_MSG, sizeof( STATUS_STR ) );
+        next_timer          = STABLE_TIMER_INTERVAL;
+        STATUS_MSG_COLOR[0] = luma, STATUS_MSG_COLOR[1] = luma, STATUS_MSG_COLOR[2] = luma;
     }
     else {
-        strncpy( STATUS_MSG, UNSTABLE_MSG, sizeof( STATUS_MSG ) );
-        printf( "----- Iteration %d -----\n", i++ );
-        printf( " --> glutGet(GLUT_WINDOW_X)    %3d (EXPECTED: %d, delta:%d)\n", x, EXPECTED_X, x - EXPECTED_X );
-        printf( " --> glutGet(GLUT_WINDOW_Y)    %3d (EXPECTED: %d, delta:%d)\n", y, EXPECTED_Y, y - EXPECTED_Y );
-        printf( " --> glutPositionWindow( %d, %d )\n", x, y );
-
-        MSG_COLOR[0] = luma, MSG_COLOR[1] = 0.3f * luma, MSG_COLOR[2] = 0.0f;
+        strncpy( STATUS_STR, UNSTABLE_MSG, sizeof( STATUS_STR ) );
+        STATUS_MSG_COLOR[0] = luma, STATUS_MSG_COLOR[1] = 0.3f * luma, STATUS_MSG_COLOR[2] = 0.0f;
         next_timer = UNSTABLE_TIMER_INTERVAL;
+        printf( "%2d: %s\n", i++, TARGET_STR );
     }
 
     glutPostRedisplay( );
-    glutTimerFunc( next_timer, timer, 0 );
+    glutTimerFunc( next_timer, validate_position, 0 );
 
-    glutPositionWindow( x, y );
-    EXPECTED_X = x, EXPECTED_Y = y;
+    glutPositionWindow( TARGET_X, TARGET_Y );
+}
+
+/*
+ * FreeGLUT may return the content offset or the frame offset. So in order to
+ * position a window at an exact screen position, we need to calibrate the
+ * offset between the requested position and the actual position.
+ *
+ * See docs/api.md#conventions for details details
+ */
+void calibrate( int value )
+{
+    int x = glutGet( GLUT_WINDOW_X );
+    int y = glutGet( GLUT_WINDOW_Y );
+
+    OFFSET_X = x - TARGET_X;
+    OFFSET_Y = y - TARGET_Y;
+
+    printf( "\n==== Calibration complete ====\n" );
+    printf( " --> glutGet(GLUT_WINDOW_X)    %3d (EXPECTED: %d, OFFSET:%d)\n", x, TARGET_X, OFFSET_X );
+    printf( " --> glutGet(GLUT_WINDOW_Y)    %3d (EXPECTED: %d, OFFSET:%d)\n", y, TARGET_Y, OFFSET_Y );
+
+    /* only enable arrow key adjustments after calibration */
+    glutSpecialFunc( adjust_target_position );
+
+    /* update help message and fire off timer */
+    strncpy( HELP_STR, HELP_MSG, sizeof( HELP_STR ) );
+    glutTimerFunc( 0, validate_position, 0 );
 }
 
 void display( void )
@@ -101,23 +162,36 @@ void display( void )
     char *p;
 
     glClear( GL_COLOR_BUFFER_BIT );
-    glRasterPos2f( -0.90, 0 );
 
-    glColor3fv( MSG_COLOR );
-    for ( p = STATUS_MSG; *p; p++ )
+    glColor3fv( STATUS_MSG_COLOR );
+    glRasterPos2f( -0.95, 0 );
+    for ( p = STATUS_STR; *p; p++ )
         glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *p );
+
+    glColor3fv( TARGET_MSG_COLOR );
+    glRasterPos2f( -0.95, -0.2 );
+    for ( p = TARGET_STR; *p; p++ )
+        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_10, *p );
+
+    glRasterPos2f( -0.95, -0.4 );
+    for ( p = HELP_STR; *p; p++ )
+        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_10, *p );
+
     glFlush( );
 }
 
 int main( int argc, char **argv )
 {
     glutInit( &argc, argv );
-    glutInitWindowPosition( 0, 0 );
+    TARGET_X = 100, TARGET_Y = 100;
+    glutInitWindowPosition( TARGET_X, TARGET_Y );
 
     glutCreateWindow( "Window A" );
+    glutPositionWindow( TARGET_X, TARGET_Y );
+
     print_position_info( "Initial window info" );
 
-    glutTimerFunc( 0, timer, 0 );
+    glutTimerFunc( CALIBRATION_DELAY, calibrate, 0 );
     glutDisplayFunc( display );
     glutMainLoop( );
 
