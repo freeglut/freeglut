@@ -608,8 +608,25 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
 
             // Ordered lists
             if (strncmp(tag, "<ol>", 4) == 0 || strncmp(tag, "<ol ", 4) == 0) {
-                if (!in_list_item && output->size > 0 && output->text[output->size - 1] != '\n') {
-                    sb_append(output, "\n\n");
+                if (!in_list_item && output->size > 0) {
+                    // Count existing trailing newlines
+                    int trailing_newlines = 0;
+                    size_t pos = output->size - 1;
+                    while (pos > 0 && output->text[pos] == '\n') {
+                        trailing_newlines++;
+                        pos--;
+                    }
+
+                    // We want exactly 2 newlines (one blank line) for top-level lists
+                    if (list_depth == 0) {  // About to become depth 1
+                        if (trailing_newlines < 2) {
+                            for (int i = trailing_newlines; i < 2; i++) {
+                                sb_append(output, "\n");
+                            }
+                        }
+                    } else if (trailing_newlines == 0) {
+                        sb_append(output, "\n");
+                    }
                 }
                 list_depth++;
                 ordered_list[list_depth] = 1;
@@ -625,8 +642,25 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
 
             // Unordered lists
             if (strncmp(tag, "<ul>", 4) == 0 || strncmp(tag, "<ul ", 4) == 0) {
-                if (!in_list_item && output->size > 0 && output->text[output->size - 1] != '\n') {
-                    sb_append(output, "\n\n");
+                if (!in_list_item && output->size > 0) {
+                    // Count existing trailing newlines
+                    int trailing_newlines = 0;
+                    size_t pos = output->size - 1;
+                    while (pos > 0 && output->text[pos] == '\n') {
+                        trailing_newlines++;
+                        pos--;
+                    }
+
+                    // We want exactly 2 newlines (one blank line) for top-level lists
+                    if (list_depth == 0) {  // About to become depth 1
+                        if (trailing_newlines < 2) {
+                            for (int i = trailing_newlines; i < 2; i++) {
+                                sb_append(output, "\n");
+                            }
+                        }
+                    } else if (trailing_newlines == 0) {
+                        sb_append(output, "\n");
+                    }
                 }
                 list_depth++;
                 ordered_list[list_depth] = 0;
@@ -642,20 +676,33 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
 
             // List items
             if (strncmp(tag, "<li>", 4) == 0 || strncmp(tag, "<li ", 4) == 0) {
-                // Trim any trailing whitespace before adding list item
+                // Count trailing newlines before trimming
+                int newline_count = 0;
+                size_t pos = output->size;
+                while (pos > 0 && output->text[pos - 1] == '\n') {
+                    newline_count++;
+                    pos--;
+                }
+
+                // Remove all trailing whitespace
                 while (output->size > 0 && isspace((unsigned char)output->text[output->size - 1])) {
                     output->size--;
                     output->text[output->size] = '\0';
                 }
 
-                // Ensure we have at least one newline before the list item
-                if (output->size > 0 && output->text[output->size - 1] != '\n') {
+                // Add back up to 2 newlines (blank line before first item, single line between items)
+                int newlines_to_add = (newline_count < 2) ? newline_count : 2;
+                for (int i = 0; i < newlines_to_add; i++) {
                     sb_append(output, "\n");
                 }
 
-                for (int i = 1; i < list_depth; i++) {
-                    sb_append(output, "\t");
+                // Ensure we have at least one newline before the list item
+                if (newlines_to_add == 0 && output->size > 0) {
+                    sb_append(output, "\n");
                 }
+
+                // No indentation - user wants trimmed whitespace before '-'
+                // (removed the tab-adding loop)
 
                 if (ordered_list[list_depth] == 0) {
                     sb_append(output, "- ");
@@ -695,7 +742,8 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
 
 process_text:
         // Regular text
-        if (!skipping_contents && (!isspace((unsigned char)*p) || (in_paragraph || in_list_item))) {
+        // Process text if: not whitespace, OR in a list item, OR in a paragraph but not in a list
+        if (!skipping_contents && (!isspace((unsigned char)*p) || (in_list_item || (in_paragraph && list_depth == 0)))) {
             // Find the next block-level tag (not inline tags like <tt>, <b>, <a>)
             const char *next_block_tag = p;
             while (*next_block_tag) {

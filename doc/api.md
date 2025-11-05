@@ -211,6 +211,7 @@ Under UNIX/X11, it is apparently not possible to get the window border
 sizes in order to subtract them off the window's initial position until
 some time after the window has been created.  Therefore we decided on
 the following behavior, both under Windows and under UNIX/X11:
+
 - When you create a window with position (x,y) and size (w,h), the
 upper left hand corner of the outside of the window (the non-client
 area) is at (x,y) and the size of the drawable (client) area is (w,h).
@@ -1334,6 +1335,7 @@ disables the call to the window's special key release callback.
 
 
 The `key` argument may take one of the following defined constant values:
+
 - `GLUT_KEY_F1, GLUT_KEY_F2, ..., GLUT_KEY_F12`  - F1 through F12 keys
 - `GLUT_KEY_PAGE_UP, GLUT_KEY_PAGE_DOWN`  - Page Up and Page Down keys
 - `GLUT_KEY_HOME, GLUT_KEY_END`  - Home and End keys
@@ -1460,6 +1462,7 @@ Has user-data callback function.
 
 The *button* argument may take one of the following defined
 constant values:
+
 - `GLUT_SPACEBALL_BUTTON_A` (0x00000001)
 - `GLUT_SPACEBALL_BUTTON_B` (0x00000002)
 - `GLUT_SPACEBALL_BUTTON_C` (0x00000004)
@@ -1468,6 +1471,7 @@ constant values:
 
 The *updown* argument may take one of the two defined constant
 values:
+
 - GLUT_DOWN, GLUT_UP indicating if button is pressed or released.
 
 **Changes From GLUT**
@@ -1658,6 +1662,7 @@ Stores the `value` into a state variable named by
 
 
 The following state variables can be set:
+
 - GLUT_ACTION_ON_WINDOW_CLOSE - Controls what happens when a window is
 closed by the user or system. GLUT_ACTION_EXIT will immediately exit the
 application (default, GLUT's behavior). GLUT_ACTION_GLUTMAINLOOP_RETURNS
@@ -1705,6 +1710,7 @@ example:
 
 
 These queries are with respect to the current window:
+
 - GLUT_WINDOW_X - window X position, see [freeglut's conventions](#Conventions)
 - GLUT_WINDOW_Y - window Y position, see [freeglut's conventions](#Conventions)
 - GLUT_WINDOW_WIDTH - window width, see [freeglut's conventions](#Conventions)
@@ -1736,6 +1742,7 @@ including both border and caption (if any)
 
 
 These queries do not depend on the current window.
+
 - GLUT_SCREEN_WIDTH - width of the screen in pixels
 - GLUT_SCREEN_HEIGHT - height of the screen in pixels
 - GLUT_SCREEN_WIDTH_MM - width of the screen in millimeters
@@ -1813,6 +1820,7 @@ At the moment, *freeglut* fonts do not support the "`" (backquote) and
 
 
 *freeglut* supports the following bitmap fonts:
+
 - `GLUT_BITMAP_8_BY_13` - A variable-width font with every character fitting in a rectangle of 13 pixels high by at most 8 pixels wide.
 - `GLUT_BITMAP_9_BY_15` - A variable-width font with every character fitting in a rectangle of 15 pixels high by at most 9 pixels wide.
 - `GLUT_BITMAP_TIMES_ROMAN_10` - A 10-point variable-width Times Roman font.
@@ -1829,6 +1837,7 @@ It does not use any display lists in it rendering in bitmap fonts.
 
 *freeglut* supports
 the following stroke fonts:
+
 - `GLUT_STROKE_ROMAN` - A proportionally-spaced Roman Simplex font
 - `GLUT_STROKE_MONO_ROMAN` - A fixed-width Roman Simplex font
 
@@ -2652,6 +2661,7 @@ GameMode screen will be opened.
 A string is passed to this function that specifies a combination of
 resolution, pixel depth (ignored on Linux) and refresh rate. Valid
 formats are:
+
 - WxH:D@R
 - WxH:D
 - WxH@R
@@ -2659,7 +2669,6 @@ formats are:
 - :D@R
 - :D
 - @R
-
 
 
 Where W, H, D and R are placeholders for horizontal resolution, vertical
@@ -2686,6 +2695,7 @@ The returned value is an integer.
 example:  
 
 `int windowLeft = glutGet(GLUT_WINDOW_X);`
+
 - GLUT_GAME_MODE_ACTIVE - 1 if currently in GameMode
 - GLUT_GAME_MODE_DISPLAY_CHANGED - 1 if currently in GameMode
 - GLUT_GAME_MODE_POSSIBLE - 1 if display mode requested with
@@ -2695,6 +2705,7 @@ example:
 These queries return information about the current display mode if in
 GameMode, or about the requested display mode before entering
 GameMode:
+
 - GLUT_GAME_MODE_WIDTH - (requested) width of GameMode window
 - GLUT_GAME_MODE_HEIGHT - (requested) height of GameMode window
 - GLUT_GAME_MODE_PIXEL_DEPTH - (requested) pixel depth of GameMode window
@@ -2759,6 +2770,7 @@ All these functions have user-data callback functions.
 
 Limitation: currently on the cursor id is provided.  It may be
 desirable to get the device id as well in the following situations:
+
 - Support a 2-fingers gesture such as pinch-to-zoom on the
   touchscreen, while the mouse pointer or touchpad is performing an
   unrelated action, not part of the touchscreen gesture (may not be
@@ -2774,6 +2786,7 @@ whether/how to implement it.
 ## 20. Mobile Functions
 
 These new callbacks were added:
+
 - `glutInitContextFunc ← void` : called when the context
 is initialized or re-initialized (e.g. after a pause). Has user-data callback 
 function.
@@ -2781,12 +2794,14 @@ function.
 application's status changes, with event identifying the state entered. Has 
 user-data callback function.
 Possible states:
-	- application goes on a pause (or a stop) → GLUT_APPSTATUS_PAUSE
-	- application comes back from a pause → GLUT_APPSTATUS_RESUME. Is
+
+- application goes on a pause (or a stop) → GLUT_APPSTATUS_PAUSE
+- application comes back from a pause → GLUT_APPSTATUS_RESUME. Is
 called after the `glutInitContextFunc` callback.
 
 
 Supported mobile platforms
+
 - Android support is further described at
 the [Android page](android.php).
 - BlackBerry 10/BlackBerry PlayBook
@@ -2844,6 +2859,7 @@ platforms to GLUT's behavior on X11.
 
  The following environment variables
 are recognized by *freeglut*:
+
 - DISPLAY - specifies a display name.
 - GLUT_FPS - specifies a time interval
 	(in milliseconds) for reporting framerate messages to stderr.  For example,
