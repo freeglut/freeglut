@@ -1367,8 +1367,7 @@ The `glutSpaceballButtonFunc` function sets the window's Spaceball button callba
 
 **Usage**
 
-`void glutSpaceballButtonFunc ( void
-(* callback)( int button, int updown )`` );`
+`void glutSpaceballButtonFunc ( void (* callback)( int button, int updown ) );`
 
 Has user-data callback function.
 
@@ -1426,8 +1425,7 @@ The `glutDialsFunc` function sets the global dials&buttons box callback. freeglu
 
 **Usage**
 
-`void glutDialsFunc ( void (* callback)(
-int dial, int value )`` );`
+`void glutDialsFunc ( void (* callback)( int dial, int value ) );`
 
 Has user-data callback function.
 
@@ -1475,8 +1473,7 @@ that a call to the function will not produce an error..
 
 **Usage**
 
-`void glutTabletButtonFunc ( void
-(* callback)( int button, int updown, int x, int y )`` );`
+`void glutTabletButtonFunc ( void (* callback)( int button, int updown, int x, int y ) );`
 
 Has user-data callback function.
 
@@ -2173,12 +2170,12 @@ void glutSolidSphere(double dRadius, GLint slices, GLint stacks);
 
 **Arguments**
 
-`dRadius  `The desired radius of the sphere
+`dRadius`  The desired radius of the sphere
 
-`slices   `The desired number of slices (divisions
+`slices`   The desired number of slices (divisions
 in the longitudinal direction) in the sphere
 
-`stacks   `The desired number of stacks (divisions
+`stacks`   The desired number of stacks (divisions
 in the latitudinal direction) in the sphere.  The number of points in
 this direction, including the north and south poles, is `stacks+1`
 
@@ -2212,15 +2209,15 @@ nSides, GLint nRings);
 
 **Arguments**
 
-`dInnerRadius  `The radius of the tube.
+`dInnerRadius`  The radius of the tube.
 
-`dOuterRadius  `The distance from the center of the
+`dOuterRadius`  The distance from the center of the
 Torus to the center of the tube.
 
-`nSides        `The desired number of segments in a
+`nSides`        The desired number of segments in a
 single outer circle of the torus
 
-`nRings        `The desired number of outer circles
+`nRings`        The desired number of outer circles
 around the origin of the torus
 
 **Description**
@@ -2252,14 +2249,14 @@ stacks);
 
 **Arguments**
 
-`radius  `The desired radius of the cylinder
+`radius`  The desired radius of the cylinder
 
-`height  `The desired height of the cylinder
+`height`  The desired height of the cylinder
 
-`slices  `The desired number of slices around
+`slices`  The desired number of slices around
 the cylinder
 
-`stacks  `The desired number of segments between
+`stacks`  The desired number of segments between
 the base and the top of the cylinder (the number of points, including
 the tip, is `stacks + 1`)
 
@@ -2281,14 +2278,14 @@ stacks);
 
 **Arguments**
 
-`base    `The desired radius of the base of the cone
+`base`    The desired radius of the base of the cone
 
-`height  `The desired height of the cone
+`height`  The desired height of the cone
 
-`slices  `The desired number of slices around
+`slices`  The desired number of slices around
 the base of the cone
 
-`stacks  `The desired number of segments between
+`stacks`  The desired number of segments between
 the base and the tip of the cone (the number of points, including the tip,
 is `stacks + 1`)
 
@@ -2319,7 +2316,7 @@ void glutSolidCube(double dSize);
 
 **Arguments**
 
-`dSize  `The desired length of an edge of the cube
+`dSize`  The desired length of an edge of the cube
 
 **Description**
 
@@ -2498,7 +2495,7 @@ void glutSolidTeaspoon(double dSize);
 
 **Arguments**
 
-`dSize  `The desired size of the teapot, teacup and
+`dSize`  The desired size of the teapot, teacup and
 teaspoon - relative to a "standard" size
 
 **Description**
@@ -2518,11 +2515,13 @@ and teaspoon are rendered with their front facing polygon vertices
 winding clockwise. For OpenGL's default back face culling to work, you
 should use:
 
-`  glFrontFace(GL_CW);  
+```c
+  glFrontFace(GL_CW);
 
-  glutSolidTeapot(size);  
+  glutSolidTeapot(size);
 
-  glFrontFace(GL_CCW);`
+  glFrontFace(GL_CCW);
+```
 
 This bug reflect issues in the original teaset's vertex data
 (and is thus present in GLUT too).
@@ -2554,7 +2553,7 @@ void glutSetVertexAttribTexCoord2(GLint attrib);
 
 **Arguments**
 
-`attrib  `The index (address) of the vertex
+`attrib`  The index (address) of the vertex
 attribute
 
 **Changes From GLUT**
@@ -2742,12 +2741,12 @@ void glutIgnoreKeyRepeat(int ignore);
 
 **Arguments**
 
-`glutSetKeyRepeat's repeatMode  ` 
+`glutSetKeyRepeat's repeatMode`   
 GLUT_KEY_REPEAT_OFF to globally switch key repeat off, or
 GLUT_KEY_REPEAT_ON and GLUT_KEY_REPEAT_DEFAULT to globally switch key
 repeat on.  
 
-`glutIgnoreKeyRepeat's ignore   ` if non-zero, key
+`glutIgnoreKeyRepeat's ignore`    if non-zero, key
 repeat is switched off for the current window.
 
 **Notes**
