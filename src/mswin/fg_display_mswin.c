@@ -35,3 +35,13 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window* Cu
 {
     SwapBuffers( CurrentWindow->Window.pContext.Device );
 }
+
+void fgPlatformSwapInterval(int n)
+{
+	/* TODO */
+}
+
+int fgPlatformExtSupported(const char *ext)
+{
+	return 0;	/* TODO */
+}

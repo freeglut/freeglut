@@ -424,6 +424,7 @@ struct tagSFG_State
     int              ContextFlags;         /* OpenGL context flags          */
     int              ContextProfile;       /* OpenGL context profile        */
     int              HasOpenGL20;          /* fgInitGL2 could find all OpenGL 2.0 functions */
+    int              HasSwapCtlTear;       /* one of the *_swap_control_tear extensions is supported */
     FGErrorUC        ErrorFunc;            /* User defined error handler    */
     FGCBUserData     ErrorFuncData;        /* User defined error handler user data */
     FGWarningUC      WarningFunc;          /* User defined warning handler  */
@@ -1185,6 +1186,10 @@ void fgError( const char *fmt, ... );
 void fgWarning( const char *fmt, ... );
 
 SFG_Proc fgPlatformGetProcAddress( const char *procName );
+
+void fgPlatformInitSwapCtl(void);
+int fgMatchExt(const char *extlist, const char *name);
+int fgPlatformExtSupported(const char *ext);
 
 /* pushing attribute/value pairs into an array */
 #define ATTRIB(a) attributes[where++]=(a)

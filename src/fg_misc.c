@@ -35,9 +35,6 @@ void fgPlatformSetColor(int idx, float r, float g, float b);
 float fgPlatformGetColor(int idx, int comp);
 void fgPlatformCopyColormap(int win);
 
-int fgPlatformExtSupported(const char *ext);
-
-int fgMatchExt(const char *extlist, const char *name);
 
 /* -- INTERFACE FUNCTIONS -------------------------------------------------- */
 

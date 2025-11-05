@@ -153,6 +153,12 @@ void fgOpenWindow( SFG_Window* window, const char* title,
 
     fgInitGL2();
 
+    if(fgState.HasSwapCtlTear < 0) {
+        /* swap control hasn't been initialized, initialize it now */
+        fgState.HasSwapCtlTear = 0;
+        fgPlatformInitSwapCtl();
+    }
+
     window->State.WorkMask |= GLUT_INIT_WORK;
 }
 
