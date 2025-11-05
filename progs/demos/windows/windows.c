@@ -4,7 +4,7 @@
  *
  * Demonstrates creating multiple freeglut windows and querying/manipulating their positions and sizes.
  *
- * This highlights some gotchas in window geometry handling, especially in freeglut vs original GLUT.
+ * This highlights some gotchas in window geometry handling
  *
  * See docs/api.md#conventions
  */
@@ -29,21 +29,39 @@
 #include <GLUT/glut.h>
 #endif
 
-#define MAX_WINDOWS 6
-
 #define MIN( a, b )    ( ( a ) < ( b ) ? ( a ) : ( b ) )
 #define MAX( a, b )    ( ( a ) > ( b ) ? ( a ) : ( b ) )
 #define MID( a, b, c ) MIN( MAX( a, b ), c )
 
+#define ARRAY_SIZE( a ) ( sizeof( a ) / sizeof( a[0] ) )
+#define NUM_WINDOWS     ARRAY_SIZE( winGeom )
+#define WIN_SZ          200 /* MSVC  */
+
+const int CALIBRATION_DELAY  = 500;
+const int VELOCITY           = 3;
+const int ICONIFY_TRIGGER_MS = 3 * 1000;
+
+/* clang-format off */
 int win1, win2, win3, win4, win5;
 struct geom {
     int x, y;
     int w, h;
-} winGeom[MAX_WINDOWS];
+} winGeom[] = {
+        { 0, 0, 0, 0 }, /* unused - GLUT window IDs start at 1 */
+
+        /* X                Y               W            H */
+        { 0,                100,            WIN_SZ,     WIN_SZ      },  /* Window 1 */
+        { WIN_SZ + 50,      WIN_SZ + 100,   WIN_SZ,     WIN_SZ      },  /* Window 2 */
+        { WIN_SZ + 100,     100,            WIN_SZ,     WIN_SZ / 4  },  /* Window 3 */
+        { 4 * WIN_SZ,       WIN_SZ + 50,    WIN_SZ,     WIN_SZ      },  /* Window 4 */
+        { 3 * WIN_SZ,       3 * WIN_SZ,     WIN_SZ/2,   WIN_SZ/2    },  /* Window 5 */
+    };
+/* clang-format on */
 
 enum overlap { NO_OVERLAP, X_OVERLAP, Y_OVERLAP };
 
-enum overlap overlaps( struct geom *a, struct geom *b )
+/* Returns the axis with the smaller penetration depth. */
+enum overlap overlaps_axis( struct geom *a, struct geom *b )
 {
     int          x_overlap, y_overlap;
     struct geom *max_x, *min_x, *max_y, *min_y;
@@ -71,28 +89,41 @@ enum overlap overlaps( struct geom *a, struct geom *b )
     return Y_OVERLAP;
 }
 
-void get_geom( void )
+void update_window_geometry( void )
 {
+    static int calibrated;
+    static int offset_x, offset_y;
+
     int win = glutGetWindow( );
-    assert( win < MAX_WINDOWS );
+
+    assert( win < NUM_WINDOWS );
+
+    /*
+     * GLUT_WINDOW_X/Y may return the position of the window frame or the
+     * content area depending on the implementation. Calibrate once at the start
+     * to determine the offset
+     */
+    if ( !calibrated ) {
+        /* Calibrate offset between actual and requested position */
+        offset_x   = glutGet( GLUT_WINDOW_X ) - winGeom[win].x;
+        offset_y   = glutGet( GLUT_WINDOW_Y ) - winGeom[win].y;
+        calibrated = 1;
+        printf( "\nCalibration: using win %d offset = (%d, %d)\n-----------\n", win, offset_x, offset_y );
+
+        return;
+    }
+
     winGeom[win].x = glutGet( GLUT_WINDOW_X );
     winGeom[win].y = glutGet( GLUT_WINDOW_Y );
     winGeom[win].w = glutGet( GLUT_WINDOW_WIDTH );
     winGeom[win].h = glutGet( GLUT_WINDOW_HEIGHT );
+    winGeom[win].x -= offset_x;
+    winGeom[win].y -= offset_y;
+
 #ifdef FREEGLUT
     /*
-     * In freeglut, glutGet( GLUT_WINDOW_Y ) returns the content offset from
-     * the top of the screen, not the window frame offset. Adjust for that.
-     *
-     * This differs from the original GLUT behavior. See docs/api.md#conventions
-     */
-    winGeom[win].y -= glutGet( GLUT_WINDOW_BORDER_HEIGHT );
-
-    /*
-     * In freeglut and the original GLUT, glutGet( GLUT_WINDOW_WIDTH/HEIGHT )
-     * returns the content size, not the window frame size. Adjust for that.
-     *
-     * Unlike GLUT, freeglut provides GLUT_WINDOW_BORDER_WIDTH/HEIGHT
+     * GLUT_WINDOW_WIDTH/HEIGHT in doesn't include window frame decorations.
+     * freeglut exposes this, so we adjust for that.
      */
     winGeom[win].w += 2 * glutGet( GLUT_WINDOW_BORDER_WIDTH );
     winGeom[win].h += glutGet( GLUT_WINDOW_BORDER_HEIGHT );
@@ -102,69 +133,66 @@ void get_geom( void )
 /* Move the window, bouncing off screen edges and other windows */
 void move_window( int value )
 {
-    static int XDir[MAX_WINDOWS];
-    static int YDir[MAX_WINDOWS];
-    static int spd = 3;
+    static int x_dir[NUM_WINDOWS];
+    static int y_dir[NUM_WINDOWS];
 
     int win           = glutGetWindow( );
     struct geom *this = &winGeom[win];
     struct geom *other;
 
-    int maxX = glutGet( GLUT_SCREEN_WIDTH ) - glutGet( GLUT_WINDOW_WIDTH );
-    int maxY = glutGet( GLUT_SCREEN_HEIGHT ) - glutGet( GLUT_WINDOW_HEIGHT );
-    int X    = winGeom[win].x;
-    int Y    = winGeom[win].y;
-#ifdef FREEGLUT
-    maxX -= glutGet( GLUT_WINDOW_BORDER_WIDTH ) * 2;
-    maxY -= glutGet( GLUT_WINDOW_BORDER_HEIGHT );
-#endif
+    int min_x = 0, min_y = 0;
+    int max_x  = glutGet( GLUT_SCREEN_WIDTH ) - winGeom[win].w;
+    int max_y  = glutGet( GLUT_SCREEN_HEIGHT ) - winGeom[win].h;
+    int next_x = winGeom[win].x;
+    int next_y = winGeom[win].y;
 
     /* Initialize movement directions */
-    if ( !XDir[win] || !YDir[win] ) {
-        XDir[win] = 1;
-        YDir[win] = 1;
+    if ( !x_dir[win] || !y_dir[win] ) {
+        x_dir[win] = 1;
+        y_dir[win] = 1;
     }
 
     /* Collision detection between moving windows */
-    for ( other = winGeom; other < &winGeom[MAX_WINDOWS]; other++ ) {
+    for ( other = winGeom; other < &winGeom[NUM_WINDOWS]; other++ ) {
         if ( other == this )
             continue;
-        switch ( overlaps( this, other ) ) {
+        switch ( overlaps_axis( this, other ) ) {
         case NO_OVERLAP:
             break;
         case X_OVERLAP:
-            XDir[win] = -XDir[win];
-            while ( overlaps( this, other ) == X_OVERLAP )
-                this->x += XDir[win], X += XDir[win];
-            goto done; /* Only handle one window overlap per move */
+            x_dir[win] = -x_dir[win];
+            while ( overlaps_axis( this, other ) == X_OVERLAP )
+                this->x += x_dir[win], next_x += x_dir[win];
+            goto done; /* Resolve one collision per frame to prevent jitter */
         case Y_OVERLAP:
-            YDir[win] = -YDir[win];
-            while ( overlaps( this, other ) == Y_OVERLAP )
-                this->y += YDir[win], Y += YDir[win];
-            goto done; /* Only handle one window overlap per move */
+            y_dir[win] = -y_dir[win];
+            while ( overlaps_axis( this, other ) == Y_OVERLAP )
+                this->y += y_dir[win], next_y += y_dir[win];
+            goto done; /* Resolve one collision per frame to prevent jitter */
         }
     }
 
+    /* TODO The minimum X/Y might be larger than if the WM is using menu bars */
 done:
-    if ( X <= 0 )
-        XDir[win] = 1;
-    if ( X >= maxX )
-        XDir[win] = -1;
-    if ( Y <= 0 )
-        YDir[win] = 1;
-    if ( Y >= maxY )
-        YDir[win] = -1;
+    if ( next_x <= min_x )
+        x_dir[win] = 1;
+    if ( next_x >= max_x )
+        x_dir[win] = -1;
+    if ( next_y <= min_y )
+        y_dir[win] = 1;
+    if ( next_y >= max_y )
+        y_dir[win] = -1;
 
-    Y = MID( Y + YDir[win] * spd, 0, maxY );
-    X = MID( X + XDir[win] * spd, 0, maxX );
+    next_x = MID( next_x + x_dir[win] * VELOCITY, min_x, max_x );
+    next_y = MID( next_y + y_dir[win] * VELOCITY, min_y, max_y );
 
-    glutPositionWindow( X, Y );
+    glutPositionWindow( next_x, next_y );
 }
 
 void display( void )
 {
-    static int frames[MAX_WINDOWS];
-    static int starttime[MAX_WINDOWS];
+    static int frames[NUM_WINDOWS];
+    static int starttime[NUM_WINDOWS];
 
     int i;
     int win = glutGetWindow( );
@@ -217,7 +245,7 @@ void display( void )
             glutBitmapCharacter( GLUT_BITMAP_HELVETICA_10, *s );
         break;
 
-    case 4: /* 3D teapot flyby camera and window resizing */
+    case 4: /* 3D teapot flyby camera */
         glLoadIdentity( );
         a = cos( phase ) * 2.0f;
         b = cos( phase / 10 ) * 4.0f - cos( phase / 7 ) * 2.0f;
@@ -246,29 +274,33 @@ void display( void )
 /* Timer function to update all windows and move them around the screen */
 void timer( int a )
 {
-    static int minimized           = 0;
-    const int  minimized_threshold = 3 * 1000;
-    int        runtime             = glutGet( GLUT_ELAPSED_TIME ) % ( 3 * minimized_threshold );
-    float      scale               = glutGet( GLUT_INIT_WINDOW_WIDTH ) / 2.0f;
-    float      phase               = glutGet( GLUT_ELAPSED_TIME ) / 1000.0f;
+    static int minimized = 0;
+    int        runtime   = glutGet( GLUT_ELAPSED_TIME ) % ( 3 * ICONIFY_TRIGGER_MS );
+    float      scale     = glutGet( GLUT_INIT_WINDOW_WIDTH ) / 2.0f;
+    float      phase     = glutGet( GLUT_ELAPSED_TIME ) / 1000.0f;
 
+    /* Window 1 moves around */
     if ( win1 ) {
-        /* Window 1 moves around */
         glutSetWindow( win1 );
         glutPostRedisplay( );
-        get_geom( );
+        update_window_geometry( );
         move_window( 0 );
     }
 
+    /* Hide/Show window 2 on an trigger interval */
     if ( win2 ) {
-        /* Hide/Show window 2 on an interval */
-        if ( MID( runtime, minimized_threshold, 2 * minimized_threshold ) == runtime && !minimized ) {
+        /*
+         * t: 0            trigger          2*trigger         3*trigger
+         *    |----------------|----------------|----------------|
+         *         visible           hidden          visible
+         */
+        if ( MID( runtime, ICONIFY_TRIGGER_MS, 2 * ICONIFY_TRIGGER_MS ) == runtime && !minimized ) {
             glutSetWindow( win2 );
             glutIconifyWindow( );
-            minimized       = 1;
+            minimized = 1;
+            /* Move cached geometry off-screen to prevent collisions with moving windows */
             winGeom[win2].x = -1000;
-        }
-        else if ( runtime > 2 * minimized_threshold && minimized ) {
+        } else if ( MID( runtime, ICONIFY_TRIGGER_MS, 2 * ICONIFY_TRIGGER_MS ) != runtime && minimized ) {
             glutSetWindow( win2 );
             glutShowWindow( );
             minimized = 0;
@@ -276,30 +308,31 @@ void timer( int a )
         if ( !minimized ) {
             glutSetWindow( win2 );
             glutPostRedisplay( );
-            get_geom( );
+            update_window_geometry( );
         }
     }
 
+    /* Window 3 is stationary, but you can drag it around to obstruct the moving windows */
     if ( win3 ) {
         glutSetWindow( win3 );
         glutPostRedisplay( );
-        get_geom( );
+        update_window_geometry( );
     }
 
+    /* Window 4 is resized sinusoidally */
     if ( win4 ) {
-        /* Window 4 is resized sinusoidally */
         glutSetWindow( win4 );
         /* glutPostRedisplay( ); */ /* not needed, reshape triggers redisplay */
-        get_geom( );
+        update_window_geometry( );
         glutReshapeWindow( glutGet( GLUT_INIT_WINDOW_WIDTH ) + cos( phase ) * scale,
             glutGet( GLUT_INIT_WINDOW_HEIGHT ) + sin( phase / 3 ) * scale );
     }
 
+    /* Window 5 moves around */
     if ( win5 ) {
-        /* Window 5 moves around */
         glutSetWindow( win5 );
         glutPostRedisplay( );
-        get_geom( );
+        update_window_geometry( );
         move_window( 0 );
     }
 
@@ -309,88 +342,86 @@ void timer( int a )
 void global_info( void )
 {
     printf( "------------------- Global GLUT Info ------------------\n" );
+    printf( "GLUT_DISPLAY_MODE_POSSIBLE: %d\n", glutGet( GLUT_DISPLAY_MODE_POSSIBLE ) );
+    printf( "GLUT_INIT_DISPLAY_MODE: %d\n", glutGet( GLUT_INIT_DISPLAY_MODE ) );
+    printf( "GLUT_INIT_WINDOW_X: %d\n", glutGet( GLUT_INIT_WINDOW_X ) );
+    printf( "GLUT_INIT_WINDOW_Y: %d\n", glutGet( GLUT_INIT_WINDOW_Y ) );
+    printf( "GLUT_INIT_WINDOW_WIDTH: %d\n", glutGet( GLUT_INIT_WINDOW_WIDTH ) );
+    printf( "GLUT_INIT_WINDOW_HEIGHT: %d\n", glutGet( GLUT_INIT_WINDOW_HEIGHT ) );
     printf( "GLUT_SCREEN_WIDTH: %d\n", glutGet( GLUT_SCREEN_WIDTH ) );
     printf( "GLUT_SCREEN_HEIGHT: %d\n", glutGet( GLUT_SCREEN_HEIGHT ) );
     printf( "GLUT_SCREEN_WIDTH_MM: %d\n", glutGet( GLUT_SCREEN_WIDTH_MM ) );
     printf( "GLUT_SCREEN_HEIGHT_MM: %d\n", glutGet( GLUT_SCREEN_HEIGHT_MM ) );
-    printf( "GLUT_DISPLAY_MODE_POSSIBLE: %d\n", glutGet( GLUT_DISPLAY_MODE_POSSIBLE ) );
-    printf( "GLUT_INIT_DISPLAY_MODE: %d\n", glutGet( GLUT_INIT_DISPLAY_MODE ) );
 }
 
 void window_info( void )
 {
     printf( "------------------- Window %d Info ------------------\n", glutGetWindow( ) );
-    printf( "GLUT_INIT_DISPLAY_MODE: %d\n", glutGet( GLUT_INIT_DISPLAY_MODE ) );
-    printf( "GLUT_INIT_WINDOW_X: %d\n", glutGet( GLUT_INIT_WINDOW_X ) );
-    printf( "GLUT_INIT_WINDOW_Y: %d\n", glutGet( GLUT_INIT_WINDOW_Y ) );
+    printf( "GLUT_ELAPSED_TIME: %d\n", glutGet( GLUT_ELAPSED_TIME ) );
     printf( "GLUT_WINDOW_X: %d\n", glutGet( GLUT_WINDOW_X ) );
     printf( "GLUT_WINDOW_Y: %d\n", glutGet( GLUT_WINDOW_Y ) );
-    printf( "GLUT_INIT_WINDOW_WIDTH: %d\n", glutGet( GLUT_INIT_WINDOW_WIDTH ) );
-    printf( "GLUT_INIT_WINDOW_HEIGHT: %d\n", glutGet( GLUT_INIT_WINDOW_HEIGHT ) );
-    printf( "GLUT_ELAPSED_TIME: %d\n", glutGet( GLUT_ELAPSED_TIME ) );
 #ifdef FREEGLUT
     printf( "GLUT_WINDOW_BORDER_WIDTH: %d\n", glutGet( GLUT_WINDOW_BORDER_WIDTH ) );
-    assert( GLUT_WINDOW_BORDER_HEIGHT == GLUT_WINDOW_HEADER_HEIGHT ); /* both defined the same */
     printf( "GLUT_WINDOW_BORDER_HEIGHT: %d\n", glutGet( GLUT_WINDOW_BORDER_HEIGHT ) );
+    assert( GLUT_WINDOW_BORDER_HEIGHT == GLUT_WINDOW_HEADER_HEIGHT ); /* both defined the same */
 #endif
+}
 
+int create_window( int id )
+{
+    int  win;
+    char title[32];
+
+    sprintf( title, "Window %d", id );
+
+    win = glutCreateWindow( title );
+    glutPositionWindow( winGeom[win].x, winGeom[win].y );
+    glutReshapeWindow( winGeom[win].w, winGeom[win].h );
+    glutDisplayFunc( display ); /* display function is per window*/
+    window_info( );
+
+    /* Set up some default GL state */
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_LINE_SMOOTH );
+
+    return win;
 }
 
 int main( int argc, char **argv )
 {
-    static int dim = 200;
     glutInit( &argc, argv );
     glutInitDisplayMode( GLUT_SINGLE | GLUT_RGBA );
-    glutInitWindowSize( dim, dim );
+    glutInitWindowSize( WIN_SZ, WIN_SZ );
 
     global_info( );
 
-    /* Window 1 */
-    glutInitWindowPosition( 0, 10 );
-    win1 = glutCreateWindow( "Window 1" );
-    glutDisplayFunc( display ); /* display function is per window*/
-    window_info( );
-    glLineWidth( 3.0f ); /* only applies to window 1 (each window has its own GL context) */
+    /*
+     * --- Create multiple windows (each window has its own GL context) ---
+     */
 
-    /* Window 2 */
-    glutInitWindowPosition( dim + 50, dim + 100 );
-    win2 = glutCreateWindow( "Window 2" );
-    glutDisplayFunc( display );
-    window_info( );
-    glClearColor( 0.1, 0.3, 0.3, 1.0f ); /* set window 2 clear color to something other than black */
+    win1 = create_window( 1 );
+    glLineWidth( 3.0f ); /* only applies to window 1  */
 
-    /* Window 3 */
-    glutInitWindowPosition( dim + 100, 100 );
-    win3 = glutCreateWindow( "Window 3" );
-    glutReshapeWindow( dim, dim / 4 );
-    glutDisplayFunc( display );
-    window_info( );
+    win2 = create_window( 2 );
+    glClearColor( 0.1, 0.3, 0.3, 1.0f );
 
-    /* Window 4 */
-    glutInitWindowPosition( 4 * dim, dim + 50 );
-    win4 = glutCreateWindow( "Window 4" );
-    glutDisplayFunc( display );
-    window_info( );
-    /* Set the projection matrix for window 4 */
+    win3 = create_window( 3 );
+
+    win4 = create_window( 4 );
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
     gluPerspective( 60.0, 1.0, 1.0, 100.0 );
     glMatrixMode( GL_MODELVIEW );
 
-    /* Window 5 */
-    glutInitWindowPosition( 2 * dim + 100, 3 * dim + 100 );
-    win5 = glutCreateWindow( "Window 5" );
-    glutReshapeWindow( dim / 2, dim / 2 );
-    glutDisplayFunc( display );
-    window_info( );
+    win5 = create_window( 5 );
 
-    glutSetIconTitle( "Icon Title" );
+    /*
+     * --- Start event loop ---
+     */
 
     /* Timer function is global, not per window */
-    glutTimerFunc( 0, timer, 0 );
+    glutTimerFunc( CALIBRATION_DELAY, timer, 0 ); /* Delay for initial positioning */
     glutMainLoop( );
 
     return 0;
