@@ -205,34 +205,65 @@ and their compatibility with GLUT, are made explicit.
 There is considerable confusion about the "right thing to do" concerning
 window size and position. GLUT itself is not consistent between
 Windows and UNIX/X11; since platform independence is a virtue for
-*freeglut*, we decided to break with GLUT's behaviour.   
+*freeglut*, we decided to break with GLUT's behaviour.
 
-Under UNIX/X11, it is apparently not possible to get the window border
+
+**Important:** Window positioning behavior is highly dependent on the
+window manager (WM) on X11/UNIX systems. The window system has significant
+discretion in how it handles window placement requests and is not obligated
+to honor them precisely. Different window managers may interpret positioning
+requests differently, making exact window positioning inherently ambiguous
+on these platforms.
+
+
+Under UNIX/X11, it is not possible to get the window border
 sizes in order to subtract them off the window's initial position until
-some time after the window has been created.  Therefore we decided on
-the following behavior, both under Windows and under UNIX/X11:
+some time after the window has been created. *freeglut* follows
+the following conventions, both under Windows and under UNIX/X11:
 
-- When you create a window with position (x,y) and size (w,h), the
-upper left hand corner of the outside of the window (the non-client
-area) is at (x,y) and the size of the drawable (client) area is (w,h).
-The coordinates taken by `glutInitPosition` and
-`glutPositionWindow`, as well as the coordinates provided by
-*freeglut* when it calls the `glutPositionFunc` callback,
-specify the top-left of the non-client area of the window. By default
-only positive-signed coordinates are supported. If GLUT_ALLOW_NEGATIVE_WINDOW_POSITION
-is enabled, then negative coordinates are supported. An exception
-for `glutPositionWindow` exists as it's always supported negative
-window coordinates.
-- When you query the size and position of the window using
-`glutGet`, *freeglut* will return the size of the drawable
-area--the (w,h) that you specified when you created the window--and the
-coordinates of the upper left hand corner of the drawable (client)
-area--which is NOT the (x,y) position of the window you specified
-when you created it.
+- **Window positioning (setting):** When you create a window with
+position (x,y) and size (w,h), or call `glutPositionWindow`,
+*freeglut* requests that the upper left corner of the
+window frame (non-client area, including decorations) be placed at (x,y),
+and that the drawable (client) area have size (w,h). The coordinates taken
+by `glutInitPosition` and `glutPositionWindow`, as well as
+the coordinates provided by *freeglut* when it calls the
+`glutPositionFunc` callback, specify the intended top-left of the
+non-client area (window frame).  
+  
+
+However, on X11/UNIX systems, the window manager may:
+- Position the client area (drawable area) at the requested coordinates, offsetting the frame accordingly
+- Position the window frame (including decorations) at the requested coordinates
+- Ignore the request entirely (e.g., tiling window managers)
+- Apply its own positioning policies
+- Spawn xeyes and look intently at the user
+
+  
+
+By default only positive-signed coordinates are supported. If
+GLUT_ALLOW_NEGATIVE_WINDOW_POSITION is enabled, then negative coordinates
+are supported. An exception for `glutPositionWindow` exists as it
+always supports negative window coordinates.
+
+- **Window positioning (querying):** When you query the position of
+the window using `glutGet` with `GLUT_WINDOW_X` or
+`GLUT_WINDOW_Y`, *freeglut* returns the coordinates of the
+upper left corner of the drawable (client) area, NOT the window
+frame position that was specified in the positioning request. Similarly,
+`glutGet` with `GLUT_WINDOW_WIDTH` or
+`GLUT_WINDOW_HEIGHT` returns the size of the drawable area as
+specified when the window was created.  
+  
+
+This mismatch between the frame coordinates used for positioning and the
+client coordinates returned by queries can cause windows to drift when
+repositioned. Applications that need to reposition windows reliably should
+measure the actual offset between requested and reported positions after
+window creation, then compensate for this offset in subsequent positioning
+calls.
 
 #### 3.2.2 User-data callbacks
-
-
 
 
 GLUT was created as a tool to help teach OpenGL programming. To simplify
@@ -268,11 +299,7 @@ invoked.
 
 ### 3.3 Terminology
 
-
-
 ### 3.4 Differences from GLUT 3.7
-
-
 
 
 Since the *freeglut* library was developed in order to update GLUT,
@@ -282,8 +309,6 @@ freeglut* function behaviours.  The important ones are summarized
 here.
 
 #### 3.4.1 glutMainLoop Behaviour
-
-
 
 
 One of the commonest complaints about the GLUT library was that once an
@@ -298,8 +323,6 @@ up and close down.
 #### 3.4.2 Action on Window Closure
 
 
-
-
 Another difficulty with GLUT, especially with multiple-window programs,
 is that if the user clicks on the "x" in the window header the application
 exits immediately.  The application programmer can now set an option,
@@ -310,15 +333,11 @@ GLUT should simply exit (the default).
 #### 3.4.3 Fullscreen windows
 
 
-
-
 Function to leave fullscreen window mode, `glutLeaveFullScreen`,
 or to toggle between fullscreen and normal window mode,
 `glutFullScreenToggle`, have been added.
 
 #### 3.4.4 Changes to Callbacks
-
-
 
 
 Several new callbacks have been added and several callbacks which were specific
@@ -335,16 +354,12 @@ callback he should contact the *freeglut* development team.
 #### 3.4.5 String Rendering
 
 
-
-
 New functions have been added to render full character strings (including
 carriage returns) rather than rendering one character at a time.  More
 functions return the widths of character strings and the font heights, in
 pixels for bitmapped fonts and in OpenGL units for the stroke fonts.
 
 #### 3.4.6  Geometry Rendering
-
-
 
 
 Two functions have been added to render a wireframe and a solid rhombic
@@ -363,22 +378,14 @@ generated for the teaset.
 #### 3.4.7  Extension Function Queries
 
 
-
-
 glutGetProcAddress is a wrapper for the glXGetProcAddressARB and wglGetProcAddress
 functions.
 
 ## 4. Initialization Functions
 
-
-
 ### 4.1 glutInit
 
-
-
 ### 4.2 glutInitWindowPosition, glutInitWindowSize
-
-
 
 
 The `glutInitWindowPosition` and `glutInitWindowSize`
@@ -407,10 +414,25 @@ but it certainly makes an attempt to.
 The position and size of a window are a matter of some subtlety.  Most
 windows have a usable area surrounded by a border and with a title bar
 on the top.  The border and title bar are commonly called "decorations."
-The position of the window unfortunately varies with the operating system.
-On both Linux and Windows, you specify the coordinates of the upper
-left-hand corner of the window's decorations. Also for both operating
-systems, the size of the window is the size of the usable interior.  
+
+
+**Window Positioning:** When setting window position, you specify the
+intended coordinates of the upper left-hand corner of the window's decorations
+(frame). The size parameter specifies the size of the usable interior (client
+area).  
+  
+
+However, **on X11/UNIX systems**, the window manager has final authority
+over window placement and may not honor the requested position exactly. The
+window manager may position the frame at the requested location, adjust it to
+account for decorations, or apply its own positioning policies. See
+[freeglut's conventions](#Conventions) for detailed information
+about this window manager discretion.  
+  
+
+**On Windows**, the positioning behavior is more predictable, with the
+window frame being positioned at the requested coordinates.
+
 
 With `glutGet` information can be acquired about the current
 window's size, position and decorations. Note however that according to
@@ -420,9 +442,9 @@ coordinates used when setting window position. In addition, GLUT only
 accepts positive window coordinates, and ignores all negative window
 coordinates. But if GLUT_ALLOW_NEGATIVE_WINDOW_POSITION is enabled,
 then negative window coordinates can be used. This is useful for
-multi-montitor setups where the second monitor may be in the negative
+multi-monitor setups where the second monitor may be in the negative
 desktop space of the primary monitor, as now the window can be placed
-on the additional monitors. Furthermore, this flag also determines how 
+on the additional monitors. Furthermore, this flag also determines how
 negative coordinates and sizes are interpreted for subwindows.
 
 
@@ -448,10 +470,7 @@ will accept negative window coordinates.
 
 ### 4.3 glutInitDisplayMode
 
-
-
 ### 4.4 glutInitDisplayString
-
 
 **Changes From GLUT**
 
@@ -464,7 +483,6 @@ is ignored. However, many of these values can be set with glutSetOption
 for now...
 
 ### 4.5 glutInitErrorFunc, glutInitWarningFunc
-
 
 
 The `glutInitErrorFunc` and `glutInitWarningFunc`
@@ -508,8 +526,6 @@ GLUT does not provide these functions.
 ## 5. Event Processing Functions
 
 
-
-
 After an application has finished initializing its windows and menus, it
 enters an event loop.  Within this loop, *freeglut* polls the
 data entry devices (keyboard, mouse, etc.) and calls the application's appropriate
@@ -530,8 +546,6 @@ glutLeaveMainLoop`, causes the event loop to exit nicely; this is preferable
 to the application's calling `exit` from within a GLUT callback.
 
 ### 5.1 glutMainLoop
-
-
 
 
 The `glutMainLoop` function enters the event loop.
@@ -564,8 +578,6 @@ but I think it is important enough that it bears repeating.)
 ### 5.2  glutMainLoopEvent
 
 
-
-
 The `glutMainLoopEvent` function processes a single iteration
 in the *freeglut* event loop.
 
@@ -585,8 +597,6 @@ to control its own event loop and still use the *freeglut* windowing system.
 GLUT does not include this function.
 
 ### 5.3  glutLeaveMainLoop
-
-
 
 
 The `glutLeaveMainLoop` function causes *freeglut* to stop
@@ -620,15 +630,9 @@ GLUT does not include this function.
 
 ## 6. Window Functions
 
-
-
 ### 6.1 glutCreateWindow
 
-
-
 ### 6.2 glutCreateSubwindow
-
-
 
 
 The `glutCreateSubwindow` function creates a subwindow of an existing window.
@@ -665,15 +669,9 @@ which changes the the functionality of `glutCreateSubwindow`.
 
 ### 6.3 glutDestroyWindow
 
-
-
 ### 6.4 glutSetWindow, glutGetWindow
 
-
-
 ### 6.5 glutSetWindowTitle, glutSetIconTitle
-
-
 
 
 The `glutSetWindowTitle`, `glutSetIconTitle` set the
@@ -706,23 +704,13 @@ emulated on Windows by *freeglut*.
 
 ### 6.6 glutReshapeWindow
 
-
-
 ### 6.7 glutPositionWindow
-
-
 
 ### 6.8 glutShowWindow, glutHideWindow, glutIconifyWindow
 
-
-
 ### 6.9 glutPushWindow, glutPopWindow
 
-
-
 ### 6.10 glutFullScreen, glutLeaveFullScreen, glutFullScreenToggle
-
-
 
 
 The `glutFullScreen`, `glutLeaveFullScreen` and
@@ -761,35 +749,19 @@ GLUT does not include the `glutLeaveFullScreen` and
 
 ## 7. Display Functions
 
-
-
 ### 7.1 glutPostRedisplay
-
-
 
 ### 7.2 glutPostWindowRedisplay
 
-
-
 ### 7.3 glutSwapBuffers
-
-
 
 ## 8. Mouse Cursor Functions
 
-
-
 ### 8.1 glutSetCursor
-
-
 
 ### 8.2 glutWarpPointer
 
-
-
 ## 9. Overlay Functions
-
-
 
 
 *freeglut* does not allow overlays, although it does "answer the mail"
@@ -802,8 +774,6 @@ Consortium and ask for them to be implemented.  He should also be prepared
 to assist in the implementation.
 
 ### 9.1  glutEstablishOverlay
-
-
 
 
 The `glutEstablishOverlay` function is not implemented in *freeglut*.
@@ -822,8 +792,6 @@ The `glutEstablishOverlay` function is not implemented in *freeglut*.
 GLUT implements this function.
 
 ### 9.2  glutRemoveOverlay
-
-
 
 
 The `glutRemoveOverlay` function is not implemented in *freeglut*.
@@ -845,8 +813,6 @@ GLUT implements this function.
 ### 9.3  glutUseLayer
 
 
-
-
 The `glutUseLayer` function is not implemented in *freeglut*.
 
 **Usage**
@@ -864,8 +830,6 @@ is not implemented in *freeglut*.
 GLUT implements this function.
 
 ### 9.4 glutPostOverlayRedisplay
-
-
 
 
 The `glutPostOverlayRedisplay` function is not implemented in *freeglut*.
@@ -887,8 +851,6 @@ GLUT implements this function.
 ### 9.5  glutPostWindowOverlayRedisplay
 
 
-
-
 The `glutPostWindowOverlayRedisplay` function is not implemented
 in *freeglut*.
 
@@ -906,8 +868,6 @@ The `glutPostWindowOverlayRedisplay` function is not implemented in *freeglut*.
 GLUT implements this function.
 
 ### 9.6 glutShowOverlay, glutHideOverlay
-
-
 
 
 The `glutShowOverlay` and `glutHideOverlay` functions
@@ -931,40 +891,23 @@ GLUT implements these functions.
 
 ## 10. Menu Functions
 
-
-
 ### 10.1 glutCreateMenu
-
-
 
 Has user-data callback function.
 
 ### 10.2 glutDestroyMenu
 
-
-
 ### 10.3 glutGetMenu, glutSetMenu
-
-
 
 ### 10.4 glutAddMenuEntry
 
-
-
 ### 10.5 glutAddSubMenu
-
-
 
 ### 10.6 glutChangeToMenuEntry
 
-
-
 ### 10.7 glutChangeToSubMenu
 
-
-
 ### 10.8 glutSetMenuFont
-
 
 
 `glutSetMenuFont` sets the (bitmap) font to be used for drawing
@@ -987,31 +930,19 @@ GLUT does not provide this function.
 
 ### 10.9 glutRemoveMenuItem
 
-
-
 ### 10.10 glutAttachMenu, glutDetachMenu
 
-
-
 ### 10.11 glutMenuDestroyFunc
-
-
 
 Has user-data callback function.
 
 ## 11. Global Callback Registration Functions
 
-
-
 ### 11.1 glutTimerFunc
-
-
 
 Has user-data callback function.
 
 ### 11.2 glutIdleFunc
-
-
 
 
 The `glutIdleFunc` function sets the global idle callback. *
@@ -1064,39 +995,25 @@ the idle callback.
 
 ### 11.3 glutMenuStatusFunc
 
-
-
 Has user-data callback function.
 
 ### 11.4 glutMenuStateFunc
 
-
-
 ## 12. Window-Specific Callback Registration Functions
 
-
-
 ### 12.1 glutDisplayFunc
-
-
 
 Has user-data callback function.
 
 ### 12.2 glutOverlayDisplayFunc
 
-
-
 Has user-data callback function.
 
 ### 12.3 glutReshapeFunc
 
-
-
 Has user-data callback function.
 
 ### 12.4 glutPositionFunc
-
-
 
 
 The `glutPositionFunc` function sets the window's position
@@ -1112,11 +1029,13 @@ Has user-data callback function.
 
 **Description**
 
-When *freeglut* calls this callback, it provides the new
-position on the screen of the top-left of the non-client area,
-that is, the same coordinates used by `glutInitPosition` and
-`glutPositionWindow`. To get the position on the screen of the
-top-left of the client area, use `glutGet(GLUT_WINDOW_X)` and
+When *freeglut* calls this callback, it attempts to provide the new
+position on the screen of the top-left of the non-client area (window
+frame), that is, the same frame coordinates as specified by
+`glutInitPosition` and `glutPositionWindow`. However, on
+X11/UNIX systems, the actual position reported depends on the window manager's
+interpretation and may vary. To get the position on the screen of the top-left
+of the client area, use `glutGet(GLUT_WINDOW_X)` and
 `glutGet(GLUT_WINDOW_Y)`. See [freeglut's
 conventions](#Conventions) for more information.
 
@@ -1125,8 +1044,6 @@ conventions](#Conventions) for more information.
 This function is not implemented in GLUT.
 
 ### 12.5 glutCloseFunc
-
-
 
 
 The `glutCloseFunc` function sets the window's close
@@ -1171,13 +1088,9 @@ This function is not implemented in GLUT.
 
 ### 12.6 glutKeyboardFunc
 
-
-
 Has user-data callback function.
 
 ### 12.7 glutSpecialFunc
-
-
 
 
 The `glutSpecialFunc` function sets the window's special key press
@@ -1223,6 +1136,7 @@ disables the call to the window's special key press callback.
 
 
 The `key` argument may take one of the following defined constant values:
+
 - `GLUT_KEY_F1, GLUT_KEY_F2, ..., GLUT_KEY_F12` - F1 through F12 keys
 - `GLUT_KEY_PAGE_UP, GLUT_KEY_PAGE_DOWN`        - Page Up and Page Down keys
 - `GLUT_KEY_HOME, GLUT_KEY_END`                 - Home and End keys
@@ -1711,10 +1625,10 @@ example:
 
 These queries are with respect to the current window:
 
-- GLUT_WINDOW_X - window X position, see [freeglut's conventions](#Conventions)
-- GLUT_WINDOW_Y - window Y position, see [freeglut's conventions](#Conventions)
-- GLUT_WINDOW_WIDTH - window width, see [freeglut's conventions](#Conventions)
-- GLUT_WINDOW_HEIGHT - window height, see [freeglut's conventions](#Conventions)
+- GLUT_WINDOW_X - X position of the window's client (drawable) area, relative to screen origin. Note that this returns the client area position, not the window frame position used by `glutPositionWindow`. See [freeglut's conventions](#Conventions)
+- GLUT_WINDOW_Y - Y position of the window's client (drawable) area, relative to screen origin. Note that this returns the client area position, not the window frame position used by `glutPositionWindow`. See [freeglut's conventions](#Conventions)
+- GLUT_WINDOW_WIDTH - width of the window's client (drawable) area. See [freeglut's conventions](#Conventions)
+- GLUT_WINDOW_HEIGHT - height of the window's client (drawable) area. See [freeglut's conventions](#Conventions)
 - GLUT_WINDOW_BORDER_WIDTH - window border width
 - GLUT_WINDOW_BORDER_HEIGHT - height of non-client area above window,
 including both border and caption (if any)
