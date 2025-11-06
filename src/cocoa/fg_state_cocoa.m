@@ -24,6 +24,8 @@
 
 int fgPlatformGlutDeviceGet( GLenum eWhat )
 {
+    AUTORELEASE_POOL;
+
     switch ( eWhat ) {
     case GLUT_HAS_KEYBOARD:
         return 1;
@@ -43,6 +45,8 @@ int fgPlatformGlutDeviceGet( GLenum eWhat )
 
 int fgPlatformGlutGet( GLenum eWhat )
 {
+    AUTORELEASE_POOL;
+
     if ( !fgStructure.CurrentWindow )
         return 0;
 
@@ -195,6 +199,8 @@ int fgPlatformGlutGet( GLenum eWhat )
 
 int *fgPlatformGlutGetModeValues( GLenum eWhat, int *size )
 {
+    AUTORELEASE_POOL;
+
     /*
      * There is no documentation for this function in the freeglut API, nor is
      * it used in the test suite.  It seems to be a way to get a list of values

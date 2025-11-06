@@ -69,6 +69,16 @@ static void FGUNUSED DBG( const char *fmt, ... )
 #define FREEGLUT_MENU_PEN_HFORE_COLORS { 0.0f, 0.0f, 0.0f, 1.0f }
 #define FREEGLUT_MENU_PEN_HBACK_COLORS { 1.0f, 1.0f, 1.0f, 1.0f }
 
+/* Autorelease pool management */
+extern void       *objc_autoreleasePoolPush( void );
+extern void        objc_autoreleasePoolPop( void *pool );
+static inline void autorelease_pool_cleanup( void **pool )
+{
+    objc_autoreleasePoolPop( *pool );
+}
+#define AUTORELEASE_POOL \
+    void *pool __attribute__( ( cleanup( autorelease_pool_cleanup ) ) ) = objc_autoreleasePoolPush( )
+
 /* Platform-specific display structure */
 struct CocoaPlatformDisplay {
     void *DisplayLink; /* Core Video Display Link for vsync - CVDisplayLinkRef */

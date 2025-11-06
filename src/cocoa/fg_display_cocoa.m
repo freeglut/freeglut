@@ -40,6 +40,8 @@ CVReturn fgDisplayLinkCallback( CVDisplayLinkRef displayLink,
     CVOptionFlags                               *flagsOut,
     void                                        *displayLinkContext )
 {
+    AUTORELEASE_POOL;
+
     static uint64_t FGUNUSED frameCount = 0;
 
     pthread_mutex_lock( &swapMutex );
@@ -63,6 +65,8 @@ CVReturn fgDisplayLinkCallback( CVDisplayLinkRef displayLink,
 
 void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window *CurrentWindow )
 {
+    AUTORELEASE_POOL;
+
     if ( pDisplayPtr->DisplayLink ) {
 
         /*

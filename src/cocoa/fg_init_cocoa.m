@@ -31,6 +31,8 @@ fg_time_t fgPlatformSystemTime( void );
 
 void fgPlatformInitialize( const char *displayName )
 {
+    AUTORELEASE_POOL;
+
     // Initialize the Cocoa application
     [NSApplication sharedApplication]; // This creates the singleton instance of NSApplication (NSApp)
     [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
@@ -72,6 +74,8 @@ void fgPlatformInitialize( const char *displayName )
 
 void fgPlatformDeinitialiseInputDevices( void )
 {
+    AUTORELEASE_POOL;
+
     fghCloseInputDevices( );
 
     fgState.JoysticksInitialised = GL_FALSE;
@@ -80,6 +84,8 @@ void fgPlatformDeinitialiseInputDevices( void )
 
 void fgPlatformCloseDisplay( void )
 {
+    AUTORELEASE_POOL;
+
     // Clean up display-related resources
     if ( fgDisplay.pDisplay.DisplayLink != NULL ) {
         CVDisplayLinkStop( fgDisplay.pDisplay.DisplayLink );
@@ -90,6 +96,8 @@ void fgPlatformCloseDisplay( void )
 
 void fgPlatformDestroyContext( SFG_PlatformDisplay pDisplay, SFG_WindowContextType MContext )
 {
+    AUTORELEASE_POOL;
+
     NSOpenGLContext *context = (NSOpenGLContext *)MContext;
     [context clearDrawable]; // Ensure the context is detached from any drawable
     [context release];
