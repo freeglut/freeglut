@@ -51,6 +51,8 @@ BOOL shouldQuit = NO;
 
 - (BOOL)windowShouldClose:(NSWindow *)sender
 {
+    AUTORELEASE_POOL;
+
     glutDestroyWindow( self.fgWindow->ID ); // Freeglut’s window cleanup
     shouldQuit = YES;
     return YES;
@@ -58,6 +60,8 @@ BOOL shouldQuit = NO;
 
 - (void)windowDidChangeOcclusionState:(NSNotification *)notification
 {
+    AUTORELEASE_POOL;
+
     BOOL isVisible               = [notification.object occlusionState] & NSWindowOcclusionStateVisible;
     self.fgWindow->State.Visible = isVisible;
 
@@ -87,6 +91,8 @@ BOOL shouldQuit = NO;
  */
 + (uint16_t)standardizeKeyCode:(uint16_t)key
 {
+    AUTORELEASE_POOL;
+
     switch ( key ) {
     case 0x7F:       // macOS Delete key (forward delete)
         return 0x08; // Maps to universal Backspace key code
@@ -103,6 +109,8 @@ BOOL shouldQuit = NO;
  */
 + (char)convertFunctionKeyToGlutSpecial:(uint16_t)key
 {
+    AUTORELEASE_POOL;
+
     switch ( key ) {
     case NSUpArrowFunctionKey:
         return GLUT_KEY_UP;
@@ -164,6 +172,8 @@ BOOL shouldQuit = NO;
  */
 + (char)convertModifierToGlutSpecial:(uint16_t)modifierKey
 {
+    AUTORELEASE_POOL;
+
     switch ( modifierKey ) {
     // macOS hardware key codes for modifier keys
     case 0x38: // Left Shift
@@ -188,6 +198,8 @@ BOOL shouldQuit = NO;
 
 - (BOOL)acceptsFirstResponder
 {
+    AUTORELEASE_POOL;
+
     return YES; // Allow the view to receive keyboard events
 }
 
@@ -195,6 +207,8 @@ BOOL shouldQuit = NO;
 
 - (NSPoint)mouseLocation:(NSEvent *)event fromOutsideEvent:(BOOL)fromOutside
 {
+    AUTORELEASE_POOL;
+
     NSPoint mouseLoc;
     if ( fromOutside ) {
         // Get mouse location even when the event occurred outside the event (used for key events)
@@ -216,40 +230,54 @@ BOOL shouldQuit = NO;
 /* Enable mouse movement events */
 - (BOOL)acceptsMouseMovedEvents
 {
+    AUTORELEASE_POOL;
+
     return YES;
 }
 
 /* Left button */
 - (void)mouseDown:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     [self handleMouseEvent:event withButton:GLUT_LEFT_BUTTON state:GLUT_DOWN];
 }
 
 - (void)mouseUp:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     [self handleMouseEvent:event withButton:GLUT_LEFT_BUTTON state:GLUT_UP];
 }
 
 /* Right button */
 - (void)rightMouseDown:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     [self handleMouseEvent:event withButton:GLUT_RIGHT_BUTTON state:GLUT_DOWN];
 }
 
 - (void)rightMouseUp:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     [self handleMouseEvent:event withButton:GLUT_RIGHT_BUTTON state:GLUT_UP];
 }
 
 /* Middle button */
 - (void)otherMouseDown:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     int button = ( [event buttonNumber] == 2 ) ? GLUT_MIDDLE_BUTTON : [event buttonNumber];
     [self handleMouseEvent:event withButton:button state:GLUT_DOWN];
 }
 
 - (void)otherMouseUp:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     int button = ( [event buttonNumber] == 2 ) ? GLUT_MIDDLE_BUTTON : [event buttonNumber];
     [self handleMouseEvent:event withButton:button state:GLUT_UP];
 }
@@ -257,6 +285,8 @@ BOOL shouldQuit = NO;
 /* Centralized handler for mouse events */
 - (void)handleMouseEvent:(NSEvent *)event withButton:(int)button state:(int)state
 {
+    AUTORELEASE_POOL;
+
     if ( !self.fgWindow ) {
         fgError( "Freeglut window not set for %s", __func__ );
     }
@@ -268,6 +298,8 @@ BOOL shouldQuit = NO;
 /* Passive motion: mouse moves with no buttons pressed */
 - (void)mouseMoved:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     if ( !self.fgWindow ) {
         fgError( "Freeglut window not set for %s", __func__ );
     }
@@ -279,6 +311,8 @@ BOOL shouldQuit = NO;
 /* Active motion: left mouse moves with a button pressed */
 - (void)mouseDragged:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     if ( !self.fgWindow ) {
         fgError( "Freeglut window not set for %s", __func__ );
     }
@@ -289,16 +323,22 @@ BOOL shouldQuit = NO;
 
 - (void)rightMouseDragged:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     [self mouseDragged:event];
 }
 
 - (void)otherMouseDragged:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     [self mouseDragged:event];
 }
 
 - (void)scrollWheel:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     if ( !self.fgWindow ) {
         fgError( "Freeglut window not set for %s", __func__ );
     }
@@ -344,6 +384,8 @@ BOOL shouldQuit = NO;
 
 - (void)updateModifiers:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     // Update the modifier key state
     int modifiers = 0;
     if ( [event modifierFlags] & NSEventModifierFlagShift ) {
@@ -364,6 +406,8 @@ BOOL shouldQuit = NO;
 /* Handles individual modifier key changes */
 - (void)flagsChanged:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     if ( !self.fgWindow ) {
         fgError( "Freeglut window not set for %s", __func__ );
     }
@@ -411,6 +455,8 @@ BOOL shouldQuit = NO;
 
 - (void)keyDown:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     if ( !self.fgWindow ) {
         fgError( "Freeglut window not set for %s", __func__ );
     }
@@ -436,6 +482,8 @@ BOOL shouldQuit = NO;
 
 - (void)keyUp:(NSEvent *)event
 {
+    AUTORELEASE_POOL;
+
     if ( !self.fgWindow ) {
         fgError( "Freeglut window not set for %s", __func__ );
     }
@@ -467,6 +515,8 @@ BOOL shouldQuit = NO;
 
 - (void)reshape
 {
+    AUTORELEASE_POOL;
+
     [super reshape];
 
     if ( !self.fgWindow ) {
@@ -509,6 +559,8 @@ BOOL shouldQuit = NO;
  */
 void fgPlatformReshapeWindow( SFG_Window *window, int width, int height )
 {
+    AUTORELEASE_POOL;
+
     if ( !window ) {
         fgError( "Invalid window passed to fgPlatformReshapeWindow" );
     }
@@ -531,6 +583,8 @@ void fgPlatformReshapeWindow( SFG_Window *window, int width, int height )
 
 BOOL isValidOpenGLContext( int MajorVersion, int MinorVersion, int ContextFlags, int ContextProfile )
 {
+    AUTORELEASE_POOL;
+
     // Case 1: OpenGL 2.1 or below (Compatibility mode)
     if ( MajorVersion < 2 || ( MajorVersion == 2 && MinorVersion <= 1 ) ) {
         if ( ContextProfile != 0 && ContextProfile != GLUT_COMPATIBILITY_PROFILE ) {
@@ -577,6 +631,8 @@ void fgPlatformOpenWindow( SFG_Window *window,
     GLboolean                          gameMode,
     GLboolean                          isSubWindow )
 {
+    AUTORELEASE_POOL;
+
     //
     // 0. Sanity Checks
     //
@@ -790,6 +846,8 @@ void fgPlatformOpenWindow( SFG_Window *window,
  */
 void fgPlatformCloseWindow( SFG_Window *window )
 {
+    AUTORELEASE_POOL;
+
     NSWindow        *nsWindow = (NSWindow *)window->Window.Handle;
     NSOpenGLContext *context  = (NSOpenGLContext *)window->Window.Context;
 
@@ -806,6 +864,8 @@ void fgPlatformCloseWindow( SFG_Window *window )
  */
 void fgPlatformShowWindow( SFG_Window *window )
 {
+    AUTORELEASE_POOL;
+
     NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
 
     if ( [nsWindow isMiniaturized] ) {
@@ -820,6 +880,8 @@ void fgPlatformShowWindow( SFG_Window *window )
  */
 void fgPlatformHideWindow( SFG_Window *window )
 {
+    AUTORELEASE_POOL;
+
     NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
     [nsWindow orderOut:nil];
     window->State.Visible = GL_FALSE;
@@ -830,6 +892,8 @@ void fgPlatformHideWindow( SFG_Window *window )
  */
 void fgPlatformIconifyWindow( SFG_Window *window )
 {
+    AUTORELEASE_POOL;
+
     NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
     [nsWindow miniaturize:nil];
     window->State.Visible = GL_FALSE;
@@ -840,6 +904,8 @@ void fgPlatformIconifyWindow( SFG_Window *window )
  */
 void fgPlatformGlutSetWindowTitle( const char *str )
 {
+    AUTORELEASE_POOL;
+
     NSWindow *nsWindow = (NSWindow *)fgStructure.CurrentWindow->Window.Handle;
     [nsWindow setTitle:[NSString stringWithUTF8String:str]];
 }
@@ -849,6 +915,8 @@ void fgPlatformGlutSetWindowTitle( const char *str )
  */
 void fgPlatformGlutSetIconTitle( const char *str )
 {
+    AUTORELEASE_POOL;
+
     NSWindow *nsWindow = (NSWindow *)fgStructure.CurrentWindow->Window.Handle;
 
     // you cannot set the icon title on macOS, but you can set the miniwindow title
@@ -860,6 +928,8 @@ void fgPlatformGlutSetIconTitle( const char *str )
  */
 void fgPlatformPositionWindow( SFG_Window *window, int x, int y )
 {
+    AUTORELEASE_POOL;
+
     SFG_PlatformWindowState *pWState = &window->State.pWState;
 
     if ( !pWState ) {
@@ -884,6 +954,8 @@ void fgPlatformPositionWindow( SFG_Window *window, int x, int y )
  */
 void fgPlatformPushWindow( SFG_Window *window )
 {
+    AUTORELEASE_POOL;
+
     NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
     [nsWindow orderBack:nil];
 }
@@ -893,6 +965,8 @@ void fgPlatformPushWindow( SFG_Window *window )
  */
 void fgPlatformPopWindow( SFG_Window *window )
 {
+    AUTORELEASE_POOL;
+
     NSWindow *nsWindow = (NSWindow *)window->Window.Handle;
     [nsWindow orderFront:nil];
 }
@@ -902,12 +976,16 @@ void fgPlatformPopWindow( SFG_Window *window )
  */
 void fgPlatformFullScreenToggle( SFG_Window *win )
 {
+    AUTORELEASE_POOL;
+
     NSWindow *nsWindow = (NSWindow *)win->Window.Handle;
     [nsWindow toggleFullScreen:nil];
 }
 
 void fgPlatformSetWindow( SFG_Window *window )
 {
+    AUTORELEASE_POOL;
+
     if ( window && window->Window.Context ) {
         [(NSOpenGLContext *)window->Window.Context makeCurrentContext];
     }

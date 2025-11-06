@@ -85,6 +85,8 @@ void fgPlatformProcessSingleEvent( void )
 
 void fgPlatformMainLoopPreliminaryWork( void )
 {
+    AUTORELEASE_POOL;
+
     [NSApp finishLaunching];               // Completes the app launch process
     [NSApp activateIgnoringOtherApps:YES]; // Bring app to the front
 }
@@ -97,6 +99,8 @@ void fgPlatformInitWork( SFG_Window *window )
 
 void fgPlatformPosResZordWork( SFG_Window *window, unsigned int workMask )
 {
+    AUTORELEASE_POOL;
+
     if ( workMask & GLUT_FULL_SCREEN_WORK )
         fgPlatformFullScreenToggle( window );
     if ( workMask & GLUT_POSITION_WORK )
@@ -113,6 +117,8 @@ void fgPlatformPosResZordWork( SFG_Window *window, unsigned int workMask )
 
 void fgPlatformVisibilityWork( SFG_Window *window )
 {
+    AUTORELEASE_POOL;
+
     SFG_Window *win = window;
     switch ( window->State.DesiredVisibility ) {
     case DesireHiddenState:
