@@ -21,6 +21,7 @@
 #endif
 
 void display(void);
+void idle(void);
 void reshape(int x, int y);
 void keypress(unsigned char key, int x, int y);
 
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
-	glutIdleFunc(glutPostRedisplay);
+	glutIdleFunc(idle);
 	glutKeyboardFunc(keypress);
 
 	exttext[n++] = "extensions:";
@@ -73,8 +74,6 @@ int main(int argc, char **argv)
 	glutMainLoop();
 	return 0;
 }
-
-void mglut_sincos(float angle, float *sptr, float *cptr);
 
 void display(void)
 {
@@ -145,6 +144,11 @@ void display(void)
 
 	glutSwapBuffers();
 	nframes++;
+}
+
+void idle(void)
+{
+	glutPostRedisplay();
 }
 
 void reshape(int x, int y)
