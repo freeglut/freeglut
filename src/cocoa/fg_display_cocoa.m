@@ -82,3 +82,16 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window *Cu
     NSOpenGLContext *context = (NSOpenGLContext *)CurrentWindow->Window.Context;
     [context flushBuffer]; // Swap buffers to present the frame
 }
+
+void fgPlatformInitSwapCtl(void)
+{
+}
+
+void fgPlatformSwapInterval(int n)
+{
+}
+
+int fgPlatformExtSupported(const char *ext)
+{
+	return 0;
+}

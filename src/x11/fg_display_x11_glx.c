@@ -49,6 +49,10 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window* Cu
 
 void fgPlatformInitSwapCtl(void)
 {
+    if(fgState.HasSwapCtlTear >= 0) {
+		return;		/* swap control was already initialized */
+    }
+
 #ifdef GLX_VERSION_1_4
 	glx_swap_interval_ext = (glx_swapint_ext_func)glutGetProcAddress("glXSwapIntervalEXT");
 	glx_swap_interval_mesa = (glx_swapint_mesa_func)glutGetProcAddress("glXSwapIntervalMESA");

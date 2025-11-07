@@ -31,3 +31,17 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window* Cu
   if (!eglSwapBuffers(pDisplayPtr->egl.Display, CurrentWindow->Window.pContext.egl.Surface))
     fgError("eglSwapBuffers: error %x\n", eglGetError());
 }
+
+
+void fgPlatformInitSwapCtl(void)
+{
+}
+
+void fgPlatformSwapInterval(int n)
+{
+}
+
+int fgPlatformExtSupported(const char *ext)
+{
+	return 0;
+}
