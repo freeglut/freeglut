@@ -27,7 +27,7 @@
 #ifndef  FREEGLUT_INTERNAL_BLACKBERRY_H
 #define  FREEGLUT_INTERNAL_BLACKBERRY_H
 
-//Minor modified version of fg_internal_android.h
+/* Minor modified version of fg_internal_android.h */
 
 /* -- PLATFORM-SPECIFIC INCLUDES ------------------------------------------- */
 /* BlackBerry OpenGL ES is accessed through EGL */
@@ -71,7 +71,7 @@ struct touchscreen {
 };
 
 /* -- INPUT DEFINITIONS ---------------------------------------------------- */
-#define WHEEL_DELTA 120 //This is taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms646254(v=vs.85).aspx
+#define WHEEL_DELTA 120 /* This is taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms646254(v=vs.85).aspx */
 
 
 /* -- JOYSTICK-SPECIFIC STRUCTURES AND TYPES ------------------------------- */

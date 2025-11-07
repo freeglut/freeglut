@@ -58,7 +58,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
 
     /* Choose config and screen format */
     fghChooseConfig(&window->Window.pContext.egl.Config);
-    int screenFormat = SCREEN_FORMAT_RGBA8888; //Only SCREEN_FORMAT_RGBA8888 and SCREEN_FORMAT_RGB565 are supported. See fg_window_egl for more info
+    int screenFormat = SCREEN_FORMAT_RGBA8888; /* Only SCREEN_FORMAT_RGBA8888 and SCREEN_FORMAT_RGB565 are supported. See fg_window_egl for more info */
     int configAttri;
 #define EGL_QUERY_COMP(att, comp) (eglGetConfigAttrib(fgDisplay.pDisplay.egl.Display, window->Window.pContext.egl.Config, att, &configAttri) == GL_TRUE && (configAttri comp))
     if (EGL_QUERY_COMP(EGL_ALPHA_SIZE, <= 0) && EGL_QUERY_COMP(EGL_RED_SIZE, <= 5) &&
@@ -81,7 +81,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
         screenUsage |= SCREEN_USAGE_OPENGL_ES1;
     }
 #if !defined(__X86__) && !defined(__PLAYBOOK__)
-    screenUsage |= SCREEN_USAGE_DISPLAY; // Physical device copy directly into physical display
+    screenUsage |= SCREEN_USAGE_DISPLAY; /* Physical device copy directly into physical display */
 #endif
     if (screen_set_window_property_iv(sWindow, SCREEN_PROPERTY_FORMAT, &screenFormat)) {
         screen_destroy_window(sWindow);
@@ -111,7 +111,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
         value[0] = w;
         value[1] = h;
         */
-        //TEMP until ^^ is uncommented
+        /*TEMP until ^^ is uncommented */
         if (screen_get_window_property_iv(sWindow, SCREEN_PROPERTY_BUFFER_SIZE, value)) {
             screen_destroy_window(sWindow);
             fgError("Could not get window mode");
@@ -193,7 +193,7 @@ void fgPlatformOpenWindow( SFG_Window* window, const char* title,
     /* Save window and set state */
     window->Window.Handle = sWindow;
     window->State.WorkMask |= GLUT_INIT_WORK;
-    window->State.IsFullscreen = GL_TRUE; //XXX Always fullscreen for now
+    window->State.IsFullscreen = GL_TRUE; /*XXX Always fullscreen for now */
 
     /* Create context */
     window->Window.Context = EGL_NO_CONTEXT;
@@ -290,7 +290,7 @@ void fgPlatformGlutSetWindowTitle( const char* title )
  */
 void fgPlatformGlutSetIconTitle( const char* title )
 {
-    //XXX Possibly a window cover label?
+    /* XXX Possibly a window cover label? */
     fprintf(stderr, "fgPlatformGlutSetIconTitle: STUB\n");
 }
 

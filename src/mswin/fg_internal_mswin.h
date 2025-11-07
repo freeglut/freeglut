@@ -140,14 +140,14 @@ struct tagSFG_PlatformJoystick
 
 /* -- PRIVATE FUNCTION DECLARATIONS ---------------------------------------- */
 /* Spaceball device functions, defined in fg_spaceball_mswin.c */
-//Added by Jinrong Xie <stonexjr at gmail.com> 12/24/2014
+/* Added by Jinrong Xie <stonexjr at gmail.com> 12/24/2014 */
 int  fgIsSpaceballWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam);
 void fgSpaceballHandleWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
 /* Function to be called on exit */
 extern void (__cdecl *__glutExitFunc)( int return_value );
 
-// Defined in fg_window_mswin.c
+/* Defined in fg_window_mswin.c */
 TCHAR* fghTstrFromStr(const char* str);
 
 #endif  /* FREEGLUT_INTERNAL_MSWIN_H */

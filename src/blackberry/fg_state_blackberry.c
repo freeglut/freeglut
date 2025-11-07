@@ -32,7 +32,7 @@
 #include "fg_internal.h"
 #include "egl/fg_state_egl.h"
 
-//From fg_state_android.c
+/* From fg_state_android.c */
 int fgPlatformGlutDeviceGet ( GLenum eWhat )
 {
 #ifndef __PLAYBOOK__

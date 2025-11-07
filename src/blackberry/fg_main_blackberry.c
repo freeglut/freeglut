@@ -115,16 +115,16 @@ unsigned int key_special(int qnxKeycode)
     case KEYCODE_INSERT:
         return GLUT_KEY_INSERT;
     case KEYCODE_UP:
-    //case KEYCODE_KP_UP:
+    /*case KEYCODE_KP_UP: */
         return GLUT_KEY_UP;
     case KEYCODE_DOWN:
-    //case KEYCODE_KP_DOWN:
+    /*case KEYCODE_KP_DOWN: */
         return GLUT_KEY_DOWN;
     case KEYCODE_LEFT:
-    //case KEYCODE_KP_LEFT:
+    /*case KEYCODE_KP_LEFT: */
         return GLUT_KEY_LEFT;
     case KEYCODE_RIGHT:
-    //case KEYCODE_KP_RIGHT:
+    /*case KEYCODE_KP_RIGHT: */
         return GLUT_KEY_RIGHT;
     case KEYCODE_NUM_LOCK:
         return GLUT_KEY_NUM_LOCK;
@@ -162,7 +162,7 @@ unsigned char key_ascii(int qnxKeycode)
     return qnxKeycode;
 }
 
-//From fg_main_x11
+/* From fg_main_x11 */
 fg_time_t fgPlatformSystemTime ( void )
 {
 #ifdef CLOCK_MONOTONIC
@@ -292,12 +292,12 @@ void fgPlatformHandleKeyboardHeight(SFG_Window* window, int height)
     int screenHeight;
     int nScreenHeight = -1;
 
-    screenHeight = glutGet(GLUT_WINDOW_HEIGHT); //Using this takes rotation into account
+    screenHeight = glutGet(GLUT_WINDOW_HEIGHT); /*Using this takes rotation into account */
     if(height == 0) {
         nScreenHeight = screenHeight;
     }
     else if(!screen_get_window_property_iv(window->Window.Handle, SCREEN_PROPERTY_POSITION, size)) {
-        /* Calculate the new screen size */ //XXX Make sure to use display size instead of screen size
+        /* Calculate the new screen size   XXX Make sure to use display size instead of screen size */
         nScreenHeight = ((size[1] + screenHeight) - height) - size[1];
     }
 
@@ -340,7 +340,7 @@ void fgPlatformHandleKeyboardHeight(SFG_Window* window, int height)
 void fgPlatformProcessSingleEvent ( void )
 {
     if(fgStructure.CurrentWindow == NULL) {
-        //XXX Is this right? Would this just cause a whole lot of busy looping while we wait for events?
+        /* XXX Is this right? Would this just cause a whole lot of busy looping while we wait for events? */
         LOGW("fgPlatformProcessSingleEvent: Missing current window. Skipping event processing");
         return;
     }
@@ -365,7 +365,7 @@ void fgPlatformProcessSingleEvent ( void )
             screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_TYPE, &eventType);
             switch (eventType) {
 
-            //Mostly from fg_main_android
+            /* Mostly from fg_main_android */
             case SCREEN_EVENT_MTOUCH_TOUCH:
             case SCREEN_EVENT_MTOUCH_RELEASE:
             case SCREEN_EVENT_MTOUCH_MOVE:
@@ -389,13 +389,13 @@ void fgPlatformProcessSingleEvent ( void )
                     handle_left_mouse(touchEvent.x, touchEvent.y, size[1], eventType, window);
                 }
 
-                //Now handle mutlitouch (adapted from fg_main_windows)
+                /* Now handle mutlitouch (adapted from fg_main_windows) */
                 if (eventType == SCREEN_EVENT_MTOUCH_TOUCH) {
                     INVOKE_WCB( *window, MultiEntry,  ( touchEvent.contact_id, GLUT_ENTERED ) );
                     INVOKE_WCB( *window, MultiButton, ( touchEvent.contact_id, touchEvent.x, touchEvent.y, 0, GLUT_DOWN ) );
                 } else if (eventType == SCREEN_EVENT_MTOUCH_MOVE) {
                     INVOKE_WCB( *window, MultiMotion, ( touchEvent.contact_id, touchEvent.x, touchEvent.y ) );
-                    //XXX No motion is performed without contact, thus MultiPassive is never used
+                    /* XXX No motion is performed without contact, thus MultiPassive is never used */
                 } else if (eventType == SCREEN_EVENT_MTOUCH_RELEASE) {
                     INVOKE_WCB( *window, MultiButton, ( touchEvent.contact_id, touchEvent.x, touchEvent.y, 0, GLUT_UP ) );
                     INVOKE_WCB( *window, MultiEntry,  ( touchEvent.contact_id, GLUT_LEFT ) );
@@ -407,15 +407,15 @@ void fgPlatformProcessSingleEvent ( void )
 
             case SCREEN_EVENT_POINTER:
             {
-                //Based off/part taken from GamePlay3d PlatformBlackBerry
+                /* Based off/part taken from GamePlay3d PlatformBlackBerry */
                 static int mouse_pressed = 0;
                 int buttons;
                 int position[2];
                 int wheel;
-                // A move event will be fired unless a button state changed.
+                /* A move event will be fired unless a button state changed. */
                 bool move = true;
                 bool left_move = false;
-                // This is a mouse move event, it is applicable to a device with a usb mouse or simulator.
+                /* This is a mouse move event, it is applicable to a device with a usb mouse or simulator. */
                 screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
                 screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
 #ifndef __PLAYBOOK__
@@ -429,12 +429,12 @@ void fgPlatformProcessSingleEvent ( void )
 
                 LOGI("fgPlatformProcessSingleEvent: SCREEN_EVENT_POINTER: Buttons: 0x%X, X: %d, Y: %d, Wheel: %d, Mod: 0x%X", SLOG2_FA_SIGNED(buttons), SLOG2_FA_SIGNED(position[0]), SLOG2_FA_SIGNED(position[1]), SLOG2_FA_SIGNED(wheel), SLOG2_FA_SIGNED(mod));
 
-                //XXX Is multitouch be handled in a good way?
+                /* XXX Is multitouch be handled in a good way? */
 
                 /* Remember the current modifiers state so user can query it from their callback */
                 fgState.Modifiers = fgPlatformGetModifiers(mod);
 
-                // Handle left mouse. Interpret as touch if the left mouse event is not consumed.
+                /* Handle left mouse. Interpret as touch if the left mouse event is not consumed. */
                 if (buttons & SCREEN_LEFT_MOUSE_BUTTON) {
                     if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON) {
                         left_move = true;
@@ -449,7 +449,7 @@ void fgPlatformProcessSingleEvent ( void )
                     handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_RELEASE, window);
                 }
 
-                // Handle right mouse.
+                /* Handle right mouse. */
                 if (buttons & SCREEN_RIGHT_MOUSE_BUTTON) {
                     if ((mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) == 0) {
                         move = false;
@@ -462,7 +462,7 @@ void fgPlatformProcessSingleEvent ( void )
                     INVOKE_WCB(*window, Mouse, (GLUT_RIGHT_BUTTON, GLUT_UP, position[0], position[1]));
                 }
 
-                // Handle middle mouse.
+                /* Handle middle mouse. */
                 if (buttons & SCREEN_MIDDLE_MOUSE_BUTTON) {
                     if ((mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) == 0) {
                         move = false;
@@ -475,7 +475,7 @@ void fgPlatformProcessSingleEvent ( void )
                     INVOKE_WCB(*window, Mouse, (GLUT_MIDDLE_BUTTON, GLUT_UP, position[0], position[1]));
                 }
 
-                // Fire a move event if none of the buttons changed.
+                /* Fire a move event if none of the buttons changed. */
                 if (left_move || move) {
                     handle_left_mouse(position[0], position[1], size[1], SCREEN_EVENT_MTOUCH_MOVE, window);
                 }
@@ -496,7 +496,7 @@ void fgPlatformProcessSingleEvent ( void )
                         if (!FETCH_WCB(*window, MouseWheel) && !FETCH_WCB(*window, Mouse))
                             break;
 
-                        //XXX fgSetWindow(window);
+                        /* XXX fgSetWindow(window); */
 
                         while(abs(fgState.MouseWheelTicks) >= WHEEL_DELTA)
                         {
@@ -527,7 +527,7 @@ void fgPlatformProcessSingleEvent ( void )
                 break;
             }
 
-            //Based off fg_main_android
+            /* Based off fg_main_android */
             case SCREEN_EVENT_KEYBOARD:
             {
                 int flags;
@@ -631,7 +631,7 @@ void fgPlatformProcessSingleEvent ( void )
                     LOGW("NAVIGATOR_EXIT: No current window");
                 }
 
-                //XXX Should this be a bit more "forceful" so that it doesn't continue to loop through events?
+                /* XXX Should this be a bit more "forceful" so that it doesn't continue to loop through events? */
                 break;
             }
 
@@ -738,7 +738,7 @@ void fgPlatformProcessSingleEvent ( void )
                 break;
 #endif
 
-            case 0: //Doesn't exist in header, but shows up when keyboard shows and resizes
+            case 0: /* Doesn't exist in header, but shows up when keyboard shows and resizes */
             case NAVIGATOR_OTHER:
                 break;
 
@@ -747,7 +747,7 @@ void fgPlatformProcessSingleEvent ( void )
                 break;
             }
         }
-        /* 
+        /*
          * BlackBerry 10 navigator provides keyboard events, but they conflict with how we handle keyboard events.
          * Causing multiple reshape messages and can leave window state incorrectly setup.
          */
