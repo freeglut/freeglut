@@ -78,6 +78,7 @@ typedef HWND    SFG_WindowHandleType;
 typedef HGLRC   SFG_WindowContextType;
 typedef HPALETTE SFG_WindowColormapType;
 
+typedef const char *(*wgl_getextstr_func)(void);
 typedef BOOL (WINAPI *wgl_swapint_func)(int);
 
 typedef struct tagSFG_PlatformContext SFG_PlatformContext;
@@ -87,6 +88,7 @@ struct tagSFG_PlatformContext {
 	/* extension entry points are context-specific on windows, so we'll keep
 	 * them here
 	 */
+	wgl_getextstr_func wgl_get_extensions_string;
 	wgl_swapint_func wgl_swap_interval;
 	int has_swap_ctl_tear;
 };
