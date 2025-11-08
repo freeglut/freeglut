@@ -181,7 +181,7 @@ void keypress(unsigned char key, int x, int y)
 	default:
 		if(key >= '0' && key <= '9') {
 			interv = key - '0';
-			if(glutGetModifiers() & GLUT_ACTIVE_CTRL) {
+			if(glutGetModifiers()) {
 				interv = -interv;
 			}
 			glutSwapInterval(interv);
