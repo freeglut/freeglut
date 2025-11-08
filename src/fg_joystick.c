@@ -1,8 +1,4 @@
 /*
- * fg_joystick.c
- *
- * Joystick handling code
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Steve Baker, <sjbaker1@airmail.net>
  *
@@ -23,6 +19,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* Joystick handling */
 
 /*
  * FreeBSD port by Stephen Montgomery-Smith <stephen@math.missouri.edu>
@@ -45,8 +42,8 @@
  */
 #if TARGET_HOST_MAC_OSX
 #define K_NUM_DEVICES   32
-int numDevices;
-io_object_t ioDevices[K_NUM_DEVICES];
+static int numDevices;
+static io_object_t ioDevices[K_NUM_DEVICES];
 
 static void fghJoystickFindDevices ( SFG_Joystick* joy, mach_port_t );
 static CFDictionaryRef fghJoystickGetCFProperties ( SFG_Joystick* joy, io_object_t );
