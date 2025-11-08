@@ -42,6 +42,7 @@
 	- [7.1 glutPostRedisplay](#71-glutpostredisplay)
 	- [7.2 glutPostWindowRedisplay](#72-glutpostwindowredisplay)
 	- [7.3 glutSwapBuffers](#73-glutswapbuffers)
+    - [7.4 glutSwapInterval](#74-glutswapinterval)
 - [8. Mouse Cursor Functions](#8-mouse-cursor-functions)
 	- [8.1 glutSetCursor](#81-glutsetcursor)
 	- [8.2 glutWarpPointer](#82-glutwarppointer)
@@ -754,6 +755,44 @@ GLUT does not include the `glutLeaveFullScreen` and
 ### 7.2 glutPostWindowRedisplay
 
 ### 7.3 glutSwapBuffers
+
+### 7.4 glutSwapInterval
+
+`glutSwapInterval` allows the application to control the synchronization of
+buffer swaps with display frames (v-sync).
+
+**Usage**
+
+`void glutSwapInterval(int interval);`
+
+**Description**
+
+An `interval` of 0 requests no synchronization, buffers should be swapped
+immediately, even if the display device is in the middle of scanning out the
+previous frame. This may result in visible artifacts (tearing).
+
+An `interval` of 1 is the standard v-sync setting. The swap is performed during
+the next vertical blanking period, after the current frame is done being scanned
+out to the display. Any other positive `interval` greater than 1, will wait for
+that many v-blank periods before swapping.
+
+Negative `interval` values are for "adaptive v-sync". If drawing is completed
+and the swap is ready to be executed before the target v-blank, the swap will be
+performed at the target v-blank, exactly as if the `interval` was positive. If
+the target interval has elapsed and the swap is running late, instead of
+waiting more, the swap will be performed immediately, unsynchronzied with the
+display.
+
+Not all GL implementations support all of these semantics. Freeglut will attempt
+to fall-back to the nearest-equivalent supported swap interval. If adaptive
+v-sync is not supported, negative values will be flipped to their positive
+equivalent. If running unsynchronized is not possible, an interval of 1 will be
+used instead.
+
+**Changes From GLUT**
+
+GLUT does not include this function.
+
 
 ## 8. Mouse Cursor Functions
 

@@ -1,0 +1,44 @@
+.TH glutSwapInterval 3 "October 2025" "freeglut" "freeglut"
+.SH NAME
+glutSwapInterval - controls synchronization of buffer swaps with display (v-sync).
+.SH SYNTAX
+.nf
+.LP
+void glutSwapInterval(int interval);
+.fi
+.SH ARGUMENTS
+.IP \fIinterval\fP 1i
+number of vertical blanking periods to wait for before swapping.
+.SH DESCRIPTION
+An
+.I interval
+of 0 requests no synchronization, buffers should be swapped
+immediately, even if the display device is in the middle of scanning out the
+previous frame. This may result in visible artifacts (tearing).
+
+An
+.I interval
+of 1 is the standard v-sync setting. The swap is performed during
+the next vertical blanking period, after the current frame is done being scanned
+out to the display. Any other positive
+.I interval
+greater than 1, will wait for that many v-blank periods before swapping.
+
+Negative
+.I interval
+values are for ``adaptive v-sync''. If drawing is completed
+and the swap is ready to be executed before the target v-blank, the swap will be
+performed at the target v-blank, exactly as if the `interval` was positive. If
+the target interval has elapsed and the swap is running late, instead of
+waiting more, the swap will be performed immediately, unsynchronzied with the
+display.
+
+Not all GL implementations support all of these semantics. Freeglut will attempt
+to fall-back to the nearest-equivalent supported swap interval. If adaptive
+v-sync is not supported, negative values will be flipped to their positive
+equivalent. If running unsynchronized is not possible, an interval of 1 will be
+used instead.
+.SH SEE ALSO
+glutSwapBuffers
+.SH AUTHOR
+John Tsiombikas (nuclear@mutantstargoat.com)

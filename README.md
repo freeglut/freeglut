@@ -42,7 +42,7 @@ PORTS
 Currently supported platforms:
  - UNIX systems with X11 or Wayland (such as GNU/Linux, FreeBSD, IRIX, etc)
  - MS Windows
- - macOS with XQuartz (no native Cocoa support yet)
+ - macOS with XQuartz (default) or native Cocoa (experimental)
  - Android (NDK)
  - BlackBerry
  - Nintendo GameCube and Wii
