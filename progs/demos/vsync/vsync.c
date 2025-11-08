@@ -144,6 +144,7 @@ void display(void)
 
 	glutSwapBuffers();
 	nframes++;
+	glFinish();
 }
 
 void idle(void)
