@@ -1,15 +1,19 @@
 Freeglut on MacOS X
 ===================
 
-Currently freeglut does not support the native Cocoa API and the OpenGL
-framework which works with it, but rather relies on X11 (XQuartz) and the Mesa
-OpenGL and GLX libraries.
+Freeglut on macos can be compiled to either rely on an X server and GLX, or use
+the native Cocoa and OpenGL frameworks. Freeglut versions before 3.8.0 only
+supported X11/GLX, and it's the most complete and well-tested version, but it
+requires an X server (XQuartz) at runtime. The Cocoa is the native macos option,
+and will eventually become the default, but for now it's considered
+experimental. If you use it, please file bug reports about any issues you
+encounter: https://github.com/freeglut/freeglut/issues
 
+
+Build instructions (X11/GLX)
+----------------------------
 The simplest way to set up the prerequisites for building and using freeglut is
 with the homebrew package management system: https://brew.sh
-
-Build instructions
-------------------
 
 Prerequisites:
   - If you don't already have homebrew, go to https://brew.sh and follow their
@@ -32,9 +36,26 @@ Build freeglut:
       `cmake -DFREEGLUT_BUILD_DEMOS=OFF -DOPENGL_gl_LIBRARY=/opt/homebrew/lib/libGL.dylib ..`
   - Run `make` to build freeglut, and `make install` to install it.
 
+
+Build instructions (Cocoa)
+--------------------------
+
+Prerequisites:
+  - Make sure you have cmake installed, and the cmake binary is in the PATH. See
+    X11/GLX instructions on how to install it with homebrew, or head over to
+    https://cmake.org/
+  - If you don't already have a compiler toolchain installed, download the Xcode
+    commandline tools from the apple store and install them first.
+
+Build freeglut:
+  - Create a build directory under the freeglut directory and change into it:
+      `mkdir build && cd build`
+  - Run cmake to generate the makefile: `cmake -DFREEGLUT_COCOA=ON ..`
+  - Run `make` to build freeglut, and `make install` to install it.
+
+
 Usage
 -----
-
 To use freeglut in your program **do not** include `<GLUT/glut.h>`; that header
 is part of Apple's GLUT framework. Use `#include <GL/glut.h>` instead as usual,
 or `#include <GL/freeglut.h>` if you wish to take advantage of the extended
@@ -44,9 +65,11 @@ Similarly, to link with freeglut **do not** use `-framework GLUT` in your
 linker command line. Instead use the standard `-lglut` argument, as you would
 on any other UNIX system.
 
+Link with `-lGL` if you're using the X11/GLX version of freeglut, or with
+`-framework OpenGL` if you're using the Cocoa version.
+
 Known issues
 ------------
-
 Some versions of XQuartz do not map the option keys to ALT by default, making
 it impossible to get the `GLUT_ACTIVE_ALT` bit set in the bitmask returned by
 `glutGetModifiers`. To change this behavior go to the XQuartz preferences and
