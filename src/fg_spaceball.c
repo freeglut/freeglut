@@ -1,5 +1,5 @@
 /* Spaceball support for Linux.
- * Written by John Tsiombikas <nuclear@member.fsf.org>
+ * Written by John Tsiombikas <nuclear@mutantstargoat.com>
  *
  * This code supports 3Dconnexion's 6-dof space-whatever devices.
  * It can communicate with either the proprietary 3Dconnexion daemon (3dxsrv)
@@ -13,14 +13,11 @@
 
 #if( !_WIN32 || _WIN32_WINNT >= 0x0501)
 
-/* -- PRIVATE FUNCTIONS --------------------------------------------------- */
-
 extern void fgPlatformInitializeSpaceball(void);
 extern void fgPlatformSpaceballClose(void);
 extern int fgPlatformHasSpaceball(void);
 extern int fgPlatformSpaceballNumButtons(void);
 extern void fgPlatformSpaceballSetWindow(SFG_Window *window);
-
 
 int fg_sball_initialized = 0;
 

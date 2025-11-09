@@ -1,8 +1,4 @@
 /*
- * fg_misc.c
- *
- * Functions that didn't fit anywhere else...
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 9 1999
@@ -35,8 +31,6 @@ void fgPlatformSetColor(int idx, float r, float g, float b);
 float fgPlatformGetColor(int idx, int comp);
 void fgPlatformCopyColormap(int win);
 
-
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
 
 int FGAPIENTRY glutExtensionSupported(const char *ext)
 {
@@ -104,9 +98,7 @@ int fgMatchExt(const char *extlist, const char *name)
 #endif
 #endif
 
-/*
- * A cut-down local version of gluErrorString to avoid depending on GLU.
- */
+/* A cut-down local version of gluErrorString to avoid depending on GLU */
 static const char* fghErrorString( GLenum error )
 {
   switch ( error ) {
@@ -125,9 +117,7 @@ static const char* fghErrorString( GLenum error )
   }
 }
 
-/*
- * This function reports all the OpenGL errors that happened till now
- */
+/* This function reports all the OpenGL errors that happened till now */
 void FGAPIENTRY glutReportErrors( void )
 {
     GLenum error;
@@ -136,9 +126,6 @@ void FGAPIENTRY glutReportErrors( void )
         fgWarning( "GL error: %s", fghErrorString( error ) );
 }
 
-/*
- * Control the auto-repeat of keystrokes to the current window
- */
 void FGAPIENTRY glutIgnoreKeyRepeat( int ignore )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutIgnoreKeyRepeat" );
@@ -176,31 +163,20 @@ void FGAPIENTRY glutSetKeyRepeat( int repeatMode )
     }
 }
 
-/*
- *
- */
 void FGAPIENTRY glutSetColor(int idx, GLfloat r, GLfloat g, GLfloat b)
 {
 	FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetColor" );
 	fgPlatformSetColor(idx, r, g, b);
 }
 
-/*
- *
- */
 GLfloat FGAPIENTRY glutGetColor(int idx, int component)
 {
 	FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGetColor" );
 	return fgPlatformGetColor(idx, component);
 }
 
-/*
- *
- */
 void FGAPIENTRY glutCopyColormap(int window)
 {
 	FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCopyColormap" );
 	fgPlatformCopyColormap(window);
 }
-
-/*** END OF FILE ***/

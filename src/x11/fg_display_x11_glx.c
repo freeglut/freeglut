@@ -1,8 +1,4 @@
 /*
- * fg_display_x11.c
- *
- * Display message posting, context buffer swapping.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>

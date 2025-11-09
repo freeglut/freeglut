@@ -1,8 +1,4 @@
 /*
- * fg_main.c
- *
- * The windows message processing methods.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Fri Dec 3 1999
@@ -45,18 +41,16 @@
 #    define MIN(a,b) (((a)<(b)) ? (a) : (b))
 #endif
 
-extern void fgProcessWork   ( SFG_Window *window );
-extern fg_time_t fgPlatformSystemTime ( void );
+extern void fgProcessWork( SFG_Window *window );
+extern fg_time_t fgPlatformSystemTime( void );
 extern void fgPlatformSleepForEvents( fg_time_t msec );
-extern void fgPlatformProcessSingleEvent ( void );
-extern void fgPlatformMainLoopPreliminaryWork ( void );
+extern void fgPlatformProcessSingleEvent( void );
+extern void fgPlatformMainLoopPreliminaryWork( void );
 
 extern void fgPlatformInitWork(SFG_Window* window);
 extern void fgPlatformPosResZordWork(SFG_Window* window, unsigned int workMask);
 extern void fgPlatformVisibilityWork(SFG_Window* window);
 
-
-/* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
 
 void fghOnReshapeNotify(SFG_Window *window, int width, int height, GLboolean forceNotify)
 {
@@ -83,7 +77,6 @@ void fghOnReshapeNotify(SFG_Window *window, int width, int height, GLboolean for
          * the already-drawn part does not get drawn again and things look funny.
          * But without this we get this bad behaviour whenever we resize the
          * window.
-         * DN: Hmm.. the above sounds like a concern only in single buffered mode...
          */
         window->State.WorkMask |= GLUT_DISPLAY_WORK;
         if( window->IsMenu )
@@ -150,8 +143,7 @@ void fghRedrawWindowAndChildren ( SFG_Window *window )
 }
 
 
-static void fghcbProcessWork( SFG_Window *window,
-                              SFG_Enumerator *enumerator )
+static void fghcbProcessWork( SFG_Window *window, SFG_Enumerator *enumerator )
 {
     if( window->State.WorkMask )
         fgProcessWork ( window );
@@ -159,9 +151,7 @@ static void fghcbProcessWork( SFG_Window *window,
     fgEnumSubWindows( window, fghcbProcessWork, enumerator );
 }
 
-/*
- * Make all windows process their work list
- */
+/* Make all windows process their work list */
 static void fghProcessWork( void )
 {
     SFG_Enumerator enumerator;
@@ -172,9 +162,7 @@ static void fghProcessWork( void )
     fgEnumWindows( fghcbProcessWork, &enumerator );
 }
 
-/*
- * Window enumerator callback to check for the joystick polling code
- */
+/* Window enumerator callback to check for the joystick polling code */
 static void fghcbCheckJoystickPolls( SFG_Window *window,
                                      SFG_Enumerator *enumerator )
 {
@@ -215,9 +203,7 @@ static void fghCheckJoystickPolls( void )
     fgEnumWindows( fghcbCheckJoystickPolls, &enumerator );
 }
 
-/*
- * Check the global timers
- */
+/* Check the global timers */
 static void fghCheckTimers( void )
 {
     fg_time_t checkTime = fgElapsedTime( );
@@ -249,17 +235,11 @@ fg_time_t fgSystemTime(void)
     return fgPlatformSystemTime();
 }
 
-/*
- * Elapsed Time
- */
 fg_time_t fgElapsedTime( void )
 {
     return fgSystemTime() - fgState.Time;
 }
 
-/*
- * Error Messages.
- */
 void fgError( const char *fmt, ... )
 {
     va_list ap;
@@ -348,9 +328,7 @@ static int fghHavePendingWork (void)
     return !!enumerator.data;
 }
 
-/*
- * Returns the number of GLUT ticks (milliseconds) till the next timer event.
- */
+/* Returns the number of GLUT ticks (milliseconds) till the next timer event */
 static fg_time_t fghNextTimer( void )
 {
     fg_time_t currentTime;
@@ -438,11 +416,7 @@ void fgProcessWork(SFG_Window *window)
 }
 
 
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
-/*
- * Executes a single iteration in the freeglut processing loop.
- */
+/* Executes a single iteration in the freeglut processing loop */
 void FGAPIENTRY glutMainLoopEvent( void )
 {
     /* Process input */
@@ -528,15 +502,9 @@ void FGAPIENTRY glutMainLoop( void )
         exit( 0 );
 }
 
-/*
- * Leaves the freeglut processing loop.
- */
+/* Leaves the freeglut processing loop */
 void FGAPIENTRY glutLeaveMainLoop( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutLeaveMainLoop" );
     fgState.ExecState = GLUT_EXEC_STATE_STOP ;
 }
-
-
-
-/*** END OF FILE ***/

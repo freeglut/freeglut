@@ -64,14 +64,10 @@ extern void fgPlatformJoystickOpen( SFG_Joystick* joy );
 extern void fgPlatformJoystickInit( SFG_Joystick *fgJoystick[], int ident );
 extern void fgPlatformJoystickClose ( int ident );
 
-/*
- * The static joystick structure pointer
- */
+/* The static joystick structure pointer */
 SFG_Joystick *fgJoystick [ MAX_NUM_JOYSTICKS ];
 
-/*
- * Read the raw joystick data
- */
+/* Read the raw joystick data */
 void fgJoystickRawRead( SFG_Joystick* joy, int* buttons, float* axes )
 {
     int i;
@@ -90,9 +86,7 @@ void fgJoystickRawRead( SFG_Joystick* joy, int* buttons, float* axes )
     fgPlatformJoystickRawRead ( joy, buttons, axes );
 }
 
-/*
- * Correct the joystick axis data
- */
+/* Correct the joystick axis data */
 static float fghJoystickFudgeAxis( SFG_Joystick* joy, float value, int axis )
 {
     if( value < joy->center[ axis ] )
@@ -129,9 +123,7 @@ static float fghJoystickFudgeAxis( SFG_Joystick* joy, float value, int axis )
     }
 }
 
-/*
- * Read the corrected joystick data
- */
+/* Read the corrected joystick data */
 static void fghJoystickRead( SFG_Joystick* joy, int* buttons, float* axes )
 {
     float raw_axes[ _JS_MAX_AXES ];
@@ -154,13 +146,9 @@ static void fghJoystickRead( SFG_Joystick* joy, int* buttons, float* axes )
             axes[ i ] = fghJoystickFudgeAxis( joy, raw_axes[ i ], i );
 }
 
-/*
- * Happy happy happy joy joy joy (happy new year toudi :D)
- */
-
 
 #if TARGET_HOST_MAC_OSX
-/** open the IOKit connection, enumerate all the HID devices, add their
+/* open the IOKit connection, enumerate all the HID devices, add their
 interface references to the static array. We then use the array index
 as the device number when we come to open() the joystick. */
 static int fghJoystickFindDevices ( SFG_Joystick *joy, mach_port_t masterPort )
@@ -250,7 +238,7 @@ static void fghJoystickElementEnumerator ( SFG_Joystick *joy, void *element, voi
       static_cast<jsJoystick*>(vjs)->parseElement ( (CFDictionaryRef) element );
 }
 
-/** element enumerator function : pass NULL for top-level*/
+/* element enumerator function : pass NULL for top-level*/
 static void fghJoystickEnumerateElements ( SFG_Joystick *joy, CFTypeRef element )
 {
       FREEGLUT_INTERNAL_ERROR_EXIT( (CFGetTypeID(element) == CFArrayGetTypeID(),
@@ -305,10 +293,6 @@ static void fghJoystickAddHatElement ( SFG_Joystick *joy, CFDictionaryRef button
     /* do we map hats to axes or buttons? */
 }
 #endif
-
-/*
- *  Platform-Specific Code
- */
 
 #if TARGET_HOST_MACINTOSH
 void fgPlatformJoystickRawRead( SFG_Joystick* joy, int* buttons, float* axes )
@@ -624,9 +608,7 @@ static void fghJoystickOpen( SFG_Joystick* joy )
 
 }
 
-/*
- * This function replaces the constructor method in the JS library.
- */
+/* This function replaces the constructor method in the JS library */
 static void fghJoystickInit( int ident )
 {
     if( ident >= MAX_NUM_JOYSTICKS )
@@ -647,9 +629,7 @@ static void fghJoystickInit( int ident )
     fghJoystickOpen( fgJoystick[ ident  ] );
 }
 
-/*
- * Try initializing all the joysticks (well, both of them)
- */
+/* Try initializing all the joysticks (well, both of them) */
 void fgInitialiseJoysticks ( void )
 {
     if( !fgState.JoysticksInitialised )
@@ -709,9 +689,7 @@ void fgJoystickPollWindow( SFG_Window* window )
     }
 }
 
-/*
- * Implementation for glutDeviceGet(GLUT_HAS_JOYSTICK)
- */
+/* Implementation for glutDeviceGet(GLUT_HAS_JOYSTICK) */
 int fgJoystickDetect( void )
 {
     int ident;
@@ -728,13 +706,7 @@ int fgJoystickDetect( void )
     return 0;
 }
 
-/*
- * Joystick information, setup and execution functions
- */
-
-/*
- * Forces the joystick callback to be executed
- */
+/* Forces the joystick callback to be executed */
 void FGAPIENTRY glutForceJoystickFunc( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutForceJoystickFunc" );
@@ -819,5 +791,3 @@ void glutJoystickGetCenter( int ident, float *axes )
     memcpy( axes, fgJoystick[ ident ]->center,
             fgJoystick[ ident ]->num_axes * sizeof( float ) );
 }
-
-/*** END OF FILE ***/

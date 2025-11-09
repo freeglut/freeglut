@@ -1,8 +1,4 @@
 /*
- * freeglut_ext_mswin.c
- *
- * The Windows-specific mouse cursor related stuff.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by John F. Fay, <fayjf@sourceforge.net>
  * Creation date: Thu Jan 19, 2012

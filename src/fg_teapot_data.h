@@ -1,6 +1,4 @@
 /*
- * fg_teapot_data.h
- *
  * The freeglut library teapot data include file.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a

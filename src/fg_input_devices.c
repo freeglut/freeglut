@@ -1,10 +1,4 @@
 /*
- * fg_input_devices.c
- *
- * Handles miscellaneous input devices via direct serial-port access.
- * Proper X11 XInput device support is not yet supported.
- * Also lacks Mac support.
- *
  * Written by Joe Krahn <krahn@niehs.nih.gov> 2005
  *
  * Copyright (c) 2005 Stephen J. Baker. All Rights Reserved.
@@ -26,6 +20,11 @@
  * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
+ */
+/*
+ * Handles miscellaneous input devices via direct serial-port access.
+ * Proper X11 XInput device support is not yet supported.
+ * Also lacks Mac support.
  */
 
 #include <GL/freeglut.h>
@@ -86,12 +85,10 @@ static SERIALPORT *dialbox_port=NULL;
 
 /*****************************************************************/
 
-/*
- * Implementation for glutDeviceGet(GLUT_HAS_DIAL_AND_BUTTON_BOX)
- */
+/* Implementation for glutDeviceGet(GLUT_HAS_DIAL_AND_BUTTON_BOX) */
 int fgInputDeviceDetect( void )
 {
-    fgInitialiseInputDevices ();
+    fgInitialiseInputDevices();
 
     if ( !dialbox_port )
         return 0;
@@ -102,9 +99,7 @@ int fgInputDeviceDetect( void )
     return 1;
 }
 
-/*
- * Try initializing the input device(s)
- */
+/* Try initializing the input device(s) */
 void fgInitialiseInputDevices ( void )
 {
     if( !fgState.InputDevsInitialised )
@@ -121,9 +116,6 @@ void fgInitialiseInputDevices ( void )
     }
 }
 
-/*
- *
- */
 void fgInputDeviceClose( void )
 {
     if ( fgState.InputDevsInitialised )
@@ -133,8 +125,6 @@ void fgInputDeviceClose( void )
         fgState.InputDevsInitialised = GL_FALSE;
     }
 }
-
-/********************************************************************/
 
 /* Check all windows for dialbox callbacks */
 static void fghcbEnumDialCallbacks ( SFG_Window *window, SFG_Enumerator *enumerator )
@@ -155,7 +145,6 @@ static void send_dial_event ( int num, int value )
     fgEnumWindows ( fghcbEnumDialCallbacks, &enumerator );
 }
 
-/********************************************************************/
 static void poll_dials ( int id )
 {
     int data;
@@ -204,4 +193,3 @@ static void poll_dials ( int id )
 
     glutTimerFunc ( 2, poll_dials, 0 );
 }
-

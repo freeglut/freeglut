@@ -1,8 +1,4 @@
 /*
- * fg_display.c
- *
- * Display message posting, context buffer swapping.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Fri Dec 3 1999
@@ -24,6 +20,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* Display message posting, context buffer swapping */
 
 #include <GL/freeglut.h>
 #include "fg_internal.h"
@@ -34,11 +31,7 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window* Cu
 void fgPlatformSwapInterval(int n);
 
 
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
-/*
- * Marks the current window to have the redisplay performed when possible...
- */
+/* Marks the current window to have the redisplay performed when possible... */
 void FGAPIENTRY glutPostRedisplay( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutPostRedisplay" );
@@ -51,18 +44,12 @@ void FGAPIENTRY glutPostRedisplay( void )
     fgStructure.CurrentWindow->State.WorkMask |= GLUT_DISPLAY_WORK;
 }
 
-/*
- * Swaps the buffers for the current window (if any)
- */
+/* Swaps the buffers for the current window (if any) */
 void FGAPIENTRY glutSwapBuffers( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSwapBuffers" );
     FREEGLUT_EXIT_IF_NO_WINDOW ( "glutSwapBuffers" );
 
-    /*
-     * "glXSwapBuffers" already performs an implicit call to "glFlush". What
-     * about "SwapBuffers"?
-     */
     glFlush( );
     if( ! fgStructure.CurrentWindow->Window.DoubleBuffered )
         return;
@@ -89,9 +76,7 @@ void FGAPIENTRY glutSwapBuffers( void )
     }
 }
 
-/*
- * Mark appropriate window to be displayed
- */
+/* Mark appropriate window to be displayed */
 void FGAPIENTRY glutPostWindowRedisplay( int windowID )
 {
     SFG_Window* window;
@@ -109,7 +94,3 @@ void FGAPIENTRY glutSwapInterval(int n)
 	FREEGLUT_EXIT_IF_NOT_INITIALISED("glutSwapInterval");
 	fgPlatformSwapInterval(n);
 }
-
-
-
-/*** END OF FILE ***/

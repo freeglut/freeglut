@@ -1,8 +1,4 @@
 /*
- * fg_callback_macros.h
- *
- * The freeglut library callback macro file.
- *
  * Copyright (C) 2016 Vincent Simonetti
  * Creation date: Sat Jan 16 2016
  *
@@ -27,17 +23,13 @@
 #ifndef FREEGLUT_CALLBACK_MACROS_H
 #define FREEGLUT_CALLBACK_MACROS_H
 
-/*
- * ----------------------------------------------------------------------------------------------------------------------
- * There are two sets of macros here. One is for executing window callbacks, the others are for setting window callbacks.
- * ----------------------------------------------------------------------------------------------------------------------
+/* There are two sets of macros here. One is for executing window callbacks,
+ * the others are for setting window callbacks.
  */
 
-/*
- * Compiler define: FG_COMPILER_SUPPORTS_VA_ARGS: if the compiler supports variadic macros
+/* What supports variadic macros based off Wikipedia article on it (GCC-like
+ * must support C99 or higher to use variadic macros)
  */
-
-/* What supports variadic macros based off Wikipedia article on it (GCC-like must support C99 or higher to use variadic macros) */
 #if (((defined(__GNUC__) && (__GNUC__ >= 3)) || \
       (defined(__clang__))) && \
         (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L))) || \
@@ -50,39 +42,24 @@
 #endif
 
 /*
- * --------------------------
  * Executing window callbacks
  * --------------------------
  *
- * Info:
+ * If you are just adding a new callback/changing its argument count, just go
+ * to the bottom of the file.
  *
- * This took a while to figure out, so be sure try to understand what is happening so that you can ensure that whatever you
- * change won't break other areas.
+ * The first set of macros is for any compiler that supports C99 by default. It
+ * requires each callback to have a specific argument count passthrough macro.
+ * The only reason there are specific count macros is so that (see paraghraph
+ * below) don't need have their own set of callback macros. Ideally, there
+ * would only be ZERO and ONE_OR_MORE. This works by having callback-specific
+ * macros call a specific handler macro to return user data (ZERO) or return
+ * one or more arguments along with userData (ONE_OR_MORE) where, with variadic
+ * macros, it just reuses the arguments.
  *
- * If you are just adding a new callback/changing its argument count, just go to the bottom of the file.
- *
- * This whole file exists purely for the sake of preventing the need to implement additional parsing logic for each callback
- * to pass user arguments. Of course, the necessity to support older compilers means that, as seen in the line above, there
- * is still a requirement to add/modify code to handle callbacks. If freeglut ever requires newer compilers (at minimum, ones
- * that support C99 or higher), code can very slowly be removed from this file. Even better would be if the C standard eventually
- * supports something similar to what GCC has implemented or offers an alternative. Another option is if C++ would be "allowed" by
- * project maintainers, as then templates can be used and function overloading. Ironically, the template would probably look worse
- * than the GCC macro, so maybe it's good to stay as is.
- *
- * Onto the different "versions" of macros:
- *
- * The first is for any compiler that supports C99 by default. It requires each callback to have a specific argument count
- * passthrough macro. The only reason there are specific count macros is so that (see paraghraph below) don't need have their own
- * set of callback macros. Ideally, there would only be ZERO and ONE_OR_MORE. This works by having callback-specific macros call a
- * specific handler macro to return user data (ZERO) or return one or more arguments along with userData (ONE_OR_MORE) where, with
- * variadic macros, it just reuses the arguments.
- *
- * The last macro set is for the poor individual who has to use a compiler that doesn't support C99 by default, or may not support
- * it at all. Stuff like MSVC6... It works by having a specific-count macro that "extracts" each argument to have them reused without
- * the parenthesis.
- *
- * There is a 3rd macro set that only worked on GCC/Clang, and thus was removed (last seen in revision e9676fc of the GIT mirror.
- * Not sure at this time what the SVN number is.) as it's a non-standard functionality.
+ * The last macro set is for compilers that doesn't support C99. It works by
+ * having a specific-count macro that "extracts" each argument to have them
+ * reused without the parenthesis.
  */
 
 /*
@@ -178,13 +155,7 @@
 #define EXPAND_WCB_SUB_InitContext(args) EXPAND_WCB_ZERO args
 #define EXPAND_WCB_SUB_AppStatus(args) EXPAND_WCB_ONE args
 
-/*
- * ------------------------
- * Setting window callbacks
- * ------------------------
- *
- * These originally existed in fg_callbacks.c
- */
+/* --- Setting window callbacks --- */
 
 /*
  * All of the window-specific callbacks setting methods can be generalized to this:
@@ -332,5 +303,3 @@ void FGAPIENTRY glut##a##Func( FGCB##b callback )                         \
         IMPLEMENT_CURRENT_WINDOW_CALLBACK_FUNC_2NAME_GLUT(a,a)
 
 #endif /* FREEGLUT_CALLBACK_MACROS_H */
-
-/*** END OF FILE ***/

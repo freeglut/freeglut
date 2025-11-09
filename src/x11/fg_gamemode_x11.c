@@ -1,8 +1,4 @@
 /*
- * fg_gamemode_x11.c
- *
- * The game mode handling code.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>
@@ -257,9 +253,7 @@ void fgPlatformRememberState( void )
 
 }
 
-/*
- * Restores the previously remembered visual settings
- */
+/* Restores the previously remembered visual settings */
 void fgPlatformRestoreState( void )
 {
     /* Restore the remembered pointer position: */
@@ -356,9 +350,7 @@ void fgPlatformRestoreState( void )
 
 #ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
 
-/*
- * Checks a single display mode settings against user's preferences.
- */
+/* Checks a single display mode settings against user's preferences  */
 static GLboolean fghCheckDisplayMode( int width, int height, int depth, int refresh )
 {
     /* The desired values should be stored in fgState structure... */
@@ -402,9 +394,7 @@ static int fghCheckDisplayModes( GLboolean exactMatch, int displayModesCount, XF
 
 #endif
 
-/*
- * Changes the current display mode to match user's settings
- */
+/* Changes the current display mode to match user's settings */
 GLboolean fgPlatformChangeDisplayMode( GLboolean haveToTest )
 {
     GLboolean success = GL_FALSE;
@@ -511,7 +501,6 @@ GLboolean fgPlatformChangeDisplayMode( GLboolean haveToTest )
 
 void fgPlatformEnterGameMode( void )
 {
-
     /*
      * Sync needed to avoid a real race, the Xserver must have really created
      * the window before we can grab the pointer into it:

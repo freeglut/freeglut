@@ -1,8 +1,5 @@
-/* fg_cmap_mswin.c
- *
- * Win32 implementation of the colormap functions
- *
- * Copyright (C) 2022 John Tsiombikas <nuclear@member.fsf.org>
+/*
+ * Copyright (C) 2022 John Tsiombikas <nuclear@mutantstargoat.com>
  * Creation date: Sat September 3 2022
  *
  * Permission is hereby granted, free of charge, to any person obtaining a

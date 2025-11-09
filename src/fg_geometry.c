@@ -1,8 +1,4 @@
 /*
- * fg_geometry.c
- *
- * Freeglut geometry rendering methods.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Fri Dec 3 1999
@@ -24,6 +20,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* geometry rendering */
 
 #include <GL/freeglut.h>
 #include "fg_internal.h"
@@ -632,7 +629,7 @@ static void fghDrawGeometrySolid20(GLfloat *vertices, GLfloat *normals, GLfloat 
 
 
 
-/**
+/*
  * Generate vertex indices for visualizing the normals.
  * vertices are written into verticesForNormalVisualization.
  * This must be freed by caller, we do the free at the
@@ -745,7 +742,7 @@ static void fghDrawNormalVisualization20(GLint attribute_v_coord)
 #endif	/* GL version at least 1.1 */
 }
 
-/**
+/*
  * Generate all combinations of vertices and normals needed to draw object.
  * Optional shape decomposition to triangles:
  * We'll use glDrawElements to draw all shapes that are not naturally
@@ -812,8 +809,6 @@ static void fghGenerateGeometry(int numFaces, int numEdgePerFace, GLfloat *verti
 }
 
 
-/* -- INTERNAL SETUP OF GEOMETRY --------------------------------------- */
-/* -- stuff that can be cached -- */
 /* Cache of input to glDrawArrays or glDrawElements
  * In general, we build arrays with all vertices or normals.
  * We can't compress this and use glDrawElements as all combinations of
@@ -1384,10 +1379,8 @@ static void fghGenerateSphere(GLfloat radius, GLint slices, GLint stacks, GLfloa
     free(cost2);
 }
 
-void fghGenerateCone(
-    GLfloat base, GLfloat height, GLint slices, GLint stacks,   /*  input */
-    GLfloat **vertices, GLfloat **normals, int* nVert           /* output */
-    )
+void fghGenerateCone(GLfloat base, GLfloat height, GLint slices, GLint stacks,
+        GLfloat **vertices, GLfloat **normals, int* nVert)
 {
     int i,j;
     int idx = 0;    /* idx into vertex/normal buffer */
@@ -1477,10 +1470,8 @@ void fghGenerateCone(
     free(cost);
 }
 
-void fghGenerateCylinder(
-    GLfloat radius, GLfloat height, GLint slices, GLint stacks, /*  input */
-    GLfloat **vertices, GLfloat **normals, int* nVert           /* output */
-    )
+void fghGenerateCylinder(GLfloat radius, GLfloat height, GLint slices, GLint stacks,
+        GLfloat **vertices, GLfloat **normals, int* nVert)
 {
     int i,j;
     int idx = 0;    /* idx into vertex/normal buffer */
@@ -1582,10 +1573,8 @@ void fghGenerateCylinder(
     free(cost);
 }
 
-void fghGenerateTorus(
-    double dInnerRadius, double dOuterRadius, GLint nSides, GLint nRings, /*  input */
-    GLfloat **vertices, GLfloat **normals, int* nVert                     /* output */
-    )
+void fghGenerateTorus(double dInnerRadius, double dOuterRadius, GLint nSides,
+        GLint nRings, GLfloat **vertices, GLfloat **normals, int* nVert)
 {
     GLfloat  iradius = (float)dInnerRadius;
     GLfloat  oradius = (float)dOuterRadius;
@@ -1646,7 +1635,6 @@ void fghGenerateTorus(
     free(cphi);
 }
 
-/* -- INTERNAL DRAWING functions --------------------------------------- */
 #define _DECLARE_INTERNAL_DRAW_DO_DECLARE(name,nameICaps,nameCaps,vertIdxs)\
     static void fgh##nameICaps( GLboolean useWireMode )\
     {\
@@ -2210,39 +2198,28 @@ static void fghTorus( GLfloat dInnerRadius, GLfloat dOuterRadius, GLint nSides, 
 }
 
 
-/* -- INTERFACE FUNCTIONS ---------------------------------------------- */
-
-
-/*
- * Draws a solid sphere
- */
+/* Draws a solid sphere */
 void FGAPIENTRY glutSolidSphere(double radius, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidSphere" );
     fghSphere((GLfloat)radius, slices, stacks, GL_FALSE );
 }
 
-/*
- * Draws a wire sphere
- */
+/* Draws a wire sphere */
 void FGAPIENTRY glutWireSphere(double radius, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireSphere" );
     fghSphere((GLfloat)radius, slices, stacks, GL_TRUE );
 }
 
-/*
- * Draws a solid cone
- */
+/* Draws a solid cone */
 void FGAPIENTRY glutSolidCone( double base, double height, GLint slices, GLint stacks )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidCone" );
     fghCone((GLfloat)base, (GLfloat)height, slices, stacks, GL_FALSE );
 }
 
-/*
- * Draws a wire cone
- */
+/* Draws a wire cone */
 void FGAPIENTRY glutWireCone( double base, double height, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireCone" );
@@ -2250,36 +2227,28 @@ void FGAPIENTRY glutWireCone( double base, double height, GLint slices, GLint st
 }
 
 
-/*
- * Draws a solid cylinder
- */
+/* Draws a solid cylinder */
 void FGAPIENTRY glutSolidCylinder(double radius, double height, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidCylinder" );
     fghCylinder((GLfloat)radius, (GLfloat)height, slices, stacks, GL_FALSE );
 }
 
-/*
- * Draws a wire cylinder
- */
+/* Draws a wire cylinder */
 void FGAPIENTRY glutWireCylinder(double radius, double height, GLint slices, GLint stacks)
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireCylinder" );
     fghCylinder((GLfloat)radius, (GLfloat)height, slices, stacks, GL_TRUE );
 }
 
-/*
- * Draws a wire torus
- */
+/* Draws a wire torus */
 void FGAPIENTRY glutWireTorus( double dInnerRadius, double dOuterRadius, GLint nSides, GLint nRings )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireTorus" );
     fghTorus((GLfloat)dInnerRadius, (GLfloat)dOuterRadius, nSides, nRings, GL_TRUE);
 }
 
-/*
- * Draws a solid torus
- */
+/* Draws a solid torus */
 void FGAPIENTRY glutSolidTorus( double dInnerRadius, double dOuterRadius, GLint nSides, GLint nRings )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidTorus" );
@@ -2288,7 +2257,6 @@ void FGAPIENTRY glutSolidTorus( double dInnerRadius, double dOuterRadius, GLint 
 
 
 
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
 /* Macro to generate interface functions */
 #define DECLARE_SHAPE_INTERFACE(nameICaps)\
     void FGAPIENTRY glutWire##nameICaps( void )\
@@ -2330,6 +2298,3 @@ void FGAPIENTRY glutSolidSierpinskiSponge ( int num_levels, double offset[3], do
 }
 
 DECLARE_SHAPE_INTERFACE(Tetrahedron)
-
-
-/*** END OF FILE ***/

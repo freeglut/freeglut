@@ -1,8 +1,4 @@
 /*
- * fg_overlay.c
- *
- * Overlay management functions (as defined by GLUT API)
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 16 1999
@@ -28,12 +24,6 @@
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
-/*
- * NOTE: functions declared in this file probably will not be implemented.
- */
-
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
 void FGAPIENTRY glutEstablishOverlay( void )             { /* Not implemented */ }
 void FGAPIENTRY glutRemoveOverlay( void )                { /* Not implemented */ }
 void FGAPIENTRY glutUseLayer( GLenum layer )             { /* Not implemented */ }
@@ -41,5 +31,3 @@ void FGAPIENTRY glutPostOverlayRedisplay( void )         { /* Not implemented */
 void FGAPIENTRY glutPostWindowOverlayRedisplay( int ID ) { /* Not implemented */ }
 void FGAPIENTRY glutShowOverlay( void )                  { /* Not implemented */ }
 void FGAPIENTRY glutHideOverlay( void )                  { /* Not implemented */ }
-
-/*** END OF FILE ***/

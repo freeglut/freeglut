@@ -1,8 +1,4 @@
 /*
- * fg_window_x11_glx.c
- *
- * Window management methods for X11 with GLX
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>

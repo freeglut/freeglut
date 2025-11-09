@@ -1,8 +1,4 @@
 /*
- * fg_menu.c
- *
- * Pull-down menu creation and handling.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 16 1999
@@ -24,13 +20,12 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* Pull-down menu creation and handling */
 
 #define FREEGLUT_BUILDING_LIB
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
-
-/* -- DEFINITIONS ---------------------------------------------------------- */
 
 /*
  * FREEGLUT_MENU_FONT can be any freeglut bitmapped font.
@@ -80,11 +75,7 @@ extern void fghPlatformGetCursorPos(const SFG_Window *window, GLboolean client, 
 extern SFG_Font* fghFontByID( void* font );
 extern void fgPlatformHideWindow( SFG_Window* window );
 
-/* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
 
-/*
- * Private function to find a menu entry by index
- */
 static SFG_MenuEntry *fghFindMenuEntry( SFG_Menu* menu, int index )
 {
     SFG_MenuEntry *entry;
@@ -102,9 +93,6 @@ static SFG_MenuEntry *fghFindMenuEntry( SFG_Menu* menu, int index )
     return entry;
 }
 
-/*
- * Deactivates a menu pointed by the function argument.
- */
 static void fghDeactivateSubMenu( SFG_MenuEntry *menuEntry )
 {
     SFG_MenuEntry *subMenuIter;
@@ -129,23 +117,17 @@ static void fghDeactivateSubMenu( SFG_MenuEntry *menuEntry )
     }
 }
 
-/*
- * Private function to get the virtual maximum screen extent
- */
+/* get the virtual maximum screen extent */
 static GLvoid fghGetVMaxExtent( SFG_Window* window, int* x, int* y )
 {
-    if( fgStructure.GameModeWindow )
+    if( fgStructure.GameModeWindow ) {
         fgPlatformGetGameModeVMaxExtent ( window, x, y );
-    else
-    {
+    } else {
         *x = fgDisplay.ScreenWidth;
         *y = fgDisplay.ScreenHeight;
     }
 }
 
-/*
- * Private function to check for the current menu/sub menu activity state
- */
 static GLboolean fghCheckMenuStatus( SFG_Menu* menu )
 {
     SFG_MenuEntry* menuEntry;
@@ -285,9 +267,7 @@ static GLboolean fghCheckMenuStatus( SFG_Menu* menu )
     return GL_FALSE;
 }
 
-/*
- * Displays a menu box and all of its submenus (if they are active)
- */
+/* Displays a menu box and all of its submenus (if they are active) */
 static void fghDisplayMenuBox( SFG_Menu* menu )
 {
     SFG_MenuEntry *menuEntry;
@@ -402,10 +382,7 @@ static void fghDisplayMenuBox( SFG_Menu* menu )
     }
 }
 
-/*
- * Private static function to set the parent window of a submenu and all
- * of its submenus.
- */
+/* set the parent window of a submenu and all of its submenus */
 static void fghSetMenuParentWindow( SFG_Window *window, SFG_Menu *menu )
 {
     SFG_MenuEntry *menuEntry;
@@ -420,9 +397,7 @@ static void fghSetMenuParentWindow( SFG_Window *window, SFG_Menu *menu )
 }
 
 
-/*
- * Displays the currently active menu for the current window
- */
+/* Displays the currently active menu for the current window */
 void fgDisplayMenu( void )
 {
     SFG_Window* window = fgStructure.CurrentWindow;
@@ -472,9 +447,6 @@ void fgDisplayMenu( void )
     fgSetWindow ( window );
 }
 
-/*
- * Activates a menu pointed by the function argument
- */
 static void fghActivateMenu( SFG_Window* window, int button )
 {
     int max_x, max_y;
@@ -553,9 +525,7 @@ void fgUpdateMenuHighlight ( SFG_Menu *menu )
     fghCheckMenuStatus( menu );
 }
 
-/*
- * Check whether an active menu absorbs a mouse click
- */
+/* Check whether an active menu absorbs a mouse click */
 GLboolean fgCheckActiveMenu ( SFG_Window *window, int button, GLboolean pressed,
                               int mouse_x, int mouse_y )
 {
@@ -664,10 +634,8 @@ GLboolean fgCheckActiveMenu ( SFG_Window *window, int button, GLboolean pressed,
     return is_handled;
 }
 
-/*
- * Deactivates a menu pointed by the function argument.
- */
 static SFG_Menu* menuDeactivating = NULL;
+
 void fgDeactivateMenu( SFG_Window *window )
 {
     SFG_Window *parent_window = NULL;
@@ -730,9 +698,6 @@ void fgDeactivateMenu( SFG_Window *window )
     }
 }
 
-/*
- * Recalculates current menu's box size
- */
 void fghCalculateMenuBoxSize( void )
 {
     SFG_MenuEntry* menuEntry;
@@ -775,11 +740,7 @@ void fghCalculateMenuBoxSize( void )
 }
 
 
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
-/*
- * Creates a new menu object, adding it to the freeglut structure
- */
+/* Creates a new menu object, adding it to the freeglut structure */
 int FGAPIENTRY glutCreateMenuUcall( FGCBMenuUC callback, FGCBUserData userData )
 {
     /* The menu object creation code resides in fg_structure.c */
@@ -811,9 +772,7 @@ int FGAPIENTRY glutCreateMenu( FGCBMenu callback )
     return glutCreateMenuUcall( fghCreateMenuCallback, *((FGCBUserData*)reference) );
 }
 
-/*
- * Destroys a menu object, removing all references to it
- */
+/* Destroys a menu object, removing all references to it */
 void FGAPIENTRY glutDestroyMenu( int menuID )
 {
     SFG_Menu* menu;
@@ -829,9 +788,7 @@ void FGAPIENTRY glutDestroyMenu( int menuID )
     fgDestroyMenu( menu );
 }
 
-/*
- * Returns the ID number of the currently active menu
- */
+/* Returns the ID number of the currently active menu */
 int FGAPIENTRY glutGetMenu( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGetMenu" );
@@ -842,9 +799,7 @@ int FGAPIENTRY glutGetMenu( void )
     return 0;
 }
 
-/*
- * Sets the current menu given its menu ID
- */
+/* Sets the current menu given its menu ID */
 void FGAPIENTRY glutSetMenu( int menuID )
 {
     SFG_Menu* menu;
@@ -857,9 +812,7 @@ void FGAPIENTRY glutSetMenu( int menuID )
     fgStructure.CurrentMenu = menu;
 }
 
-/*
- * Adds a menu entry to the bottom of the current menu
- */
+/* Adds a menu entry to the bottom of the current menu */
 void FGAPIENTRY glutAddMenuEntry( const char* label, int value )
 {
     SFG_MenuEntry* menuEntry;
@@ -879,9 +832,7 @@ void FGAPIENTRY glutAddMenuEntry( const char* label, int value )
     fghCalculateMenuBoxSize( );
 }
 
-/*
- * Add a sub menu to the bottom of the current menu
- */
+/* Add a sub menu to the bottom of the current menu */
 void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
 {
     SFG_MenuEntry *menuEntry;
@@ -905,9 +856,7 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
     fghCalculateMenuBoxSize( );
 }
 
-/*
- * Changes the current menu's font
- */
+/* Changes the current menu's font */
 void FGAPIENTRY glutSetMenuFont( int menuID, void* fontID )
 {
     SFG_Font* font;
@@ -930,9 +879,7 @@ void FGAPIENTRY glutSetMenuFont( int menuID, void* fontID )
     fghCalculateMenuBoxSize( );
 }
 
-/*
- * Changes the specified menu item in the current menu into a menu entry
- */
+/* Changes the specified menu item in the current menu into a menu entry */
 void FGAPIENTRY glutChangeToMenuEntry( int item, const char* label, int value )
 {
     SFG_MenuEntry* menuEntry = NULL;
@@ -958,9 +905,7 @@ void FGAPIENTRY glutChangeToMenuEntry( int item, const char* label, int value )
     fghCalculateMenuBoxSize( );
 }
 
-/*
- * Changes the specified menu item in the current menu into a sub-menu trigger.
- */
+/* Changes the specified menu item in the current menu into a sub-menu trigger.  */
 void FGAPIENTRY glutChangeToSubMenu( int item, const char* label,
                                      int subMenuID )
 {
@@ -993,9 +938,7 @@ void FGAPIENTRY glutChangeToSubMenu( int item, const char* label,
     fghCalculateMenuBoxSize( );
 }
 
-/*
- * Removes the specified menu item from the current menu
- */
+/* Removes the specified menu item from the current menu */
 void FGAPIENTRY glutRemoveMenuItem( int item )
 {
     SFG_MenuEntry* menuEntry;
@@ -1019,9 +962,7 @@ void FGAPIENTRY glutRemoveMenuItem( int item )
     fghCalculateMenuBoxSize( );
 }
 
-/*
- * Attaches a menu to the current window
- */
+/* Attaches a menu to the current window */
 void FGAPIENTRY glutAttachMenu( int button )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAttachMenu" );
@@ -1038,9 +979,7 @@ void FGAPIENTRY glutAttachMenu( int button )
     fgStructure.CurrentWindow->Menu[ button ] = fgStructure.CurrentMenu;
 }
 
-/*
- * Detaches a menu from the current window
- */
+/* Detaches a menu from the current window */
 void FGAPIENTRY glutDetachMenu( int button )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutDetachMenu" );
@@ -1057,9 +996,6 @@ void FGAPIENTRY glutDetachMenu( int button )
     fgStructure.CurrentWindow->Menu[ button ] = NULL;
 }
 
-/*
- * A.Donev: Set and retrieve the menu's user data
- */
 void* FGAPIENTRY glutGetMenuData( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGetMenuData" );
@@ -1071,5 +1007,3 @@ void FGAPIENTRY glutSetMenuData(void* data)
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetMenuData" );
     fgStructure.CurrentMenu->UserData=data;
 }
-
-/*** END OF FILE ***/

@@ -1,8 +1,4 @@
 /*
- * fg_gl2.c
- *
- * Load OpenGL (ES) 2.0 functions used by fg_geometry
- *
  * Copyright (C) 2012  Sylvain Beucler
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -22,6 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* Load OpenGL (ES) 2.0 functions used by fg_geometry */
 
 #include <GL/freeglut.h>
 #include "fg_internal.h"

@@ -1,8 +1,4 @@
 /*
- * fg_state_x11_glx.c
- *
- * X11-specific freeglut state query methods.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by John F. Fay, <fayjf@sourceforge.net>
  * Creation date: Sat Feb 4 2012

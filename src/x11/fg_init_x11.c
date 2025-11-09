@@ -1,8 +1,4 @@
 /*
- * fg_init_x11.c
- *
- * Various freeglut initialization functions.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>
@@ -236,16 +232,16 @@ void fgPlatformInitialize( const char* displayName )
     {
       const Atom supported = fghGetAtom("_NET_SUPPORTED");
       const Atom state     = fghGetAtom("_NET_WM_STATE");
-      
+
       /* Check if the state hint is supported. */
       if (fgHintPresent(fgDisplay.pDisplay.RootWindow, supported, state))
       {
         const Atom full_screen = fghGetAtom("_NET_WM_STATE_FULLSCREEN");
-        
+
         fgDisplay.pDisplay.State = state;
-        
+
         /* Check if the window manager supports full screen. */
-        /**  Check "_NET_WM_ALLOWED_ACTIONS" on our window instead? **/
+        /*  Check "_NET_WM_ALLOWED_ACTIONS" on our window instead? */
         if (fgHintPresent(fgDisplay.pDisplay.RootWindow, supported, full_screen))
         {
           fgDisplay.pDisplay.StateFullScreen = full_screen;
@@ -260,7 +256,6 @@ void fgPlatformInitialize( const char* displayName )
 
     /* Get start time */
     fgState.Time = fgSystemTime();
-    
 
     fgState.Initialised = GL_TRUE;
 

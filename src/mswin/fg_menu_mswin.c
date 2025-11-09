@@ -1,8 +1,4 @@
 /*
- * fg_menu_mswin.c
- *
- * The Windows-specific mouse cursor related stuff.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by John F. Fay, <fayjf@sourceforge.net>
  * Creation date: Sun Jan 22, 2012
@@ -96,9 +92,6 @@ void fgPlatformCheckMenuDeactivate(HWND newFocusWnd)
     }
 }
 
-
-
-/* -- PLATFORM-SPECIFIC INTERFACE FUNCTION -------------------------------------------------- */
 
 int FGAPIENTRY __glutCreateMenuWithExit( void(* callback)( int ), void (__cdecl *exit_function)(int) )
 {

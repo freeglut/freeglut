@@ -1,8 +1,4 @@
 /*
- * fg_gamemode_mswin.c
- *
- * The Windows-specific mouse cursor related stuff.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by John F. Fay, <fayjf@sourceforge.net>
  * Creation date: Thu Jan 19, 2012
@@ -28,9 +24,7 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
-/*
- * Changes to requested devmode, if it doesn't match current mode
- */
+/* Changes to requested devmode, if it doesn't match current mode */
 GLboolean fghChangeDisplayMode(GLboolean haveToTest, DEVMODE *devModeRequested)
 {
     GLboolean success = GL_FALSE;
@@ -132,9 +126,7 @@ void fgPlatformRememberState( void )
 
 }
 
-/*
- * Restores the previously remembered visual settings
- */
+/* Restores the previously remembered visual settings */
 void fgPlatformRestoreState( void )
 {
     /* Restore the previously remembered desktop display settings */
@@ -144,15 +136,13 @@ void fgPlatformRestoreState( void )
 
 
 
-/*
- * Changes the current display mode to match user's settings
- */
+/* Changes the current display mode to match user's settings */
 GLboolean fgPlatformChangeDisplayMode( GLboolean haveToTest )
 {
     DEVMODE  devMode;
 
     /* Get current display mode */
-    EnumDisplaySettings( fgDisplay.pDisplay.DisplayName, ENUM_CURRENT_SETTINGS, &devMode ); 
+    EnumDisplaySettings( fgDisplay.pDisplay.DisplayName, ENUM_CURRENT_SETTINGS, &devMode );
     devMode.dmFields = 0;
 
     if (fgState.GameModeSize.X!=-1)
@@ -179,10 +169,10 @@ GLboolean fgPlatformChangeDisplayMode( GLboolean haveToTest )
     return fghChangeDisplayMode(haveToTest, &devMode);
 }
 
-void fgPlatformEnterGameMode( void ) 
+void fgPlatformEnterGameMode( void )
 {
 }
 
-void fgPlatformLeaveGameMode( void ) 
+void fgPlatformLeaveGameMode( void )
 {
 }

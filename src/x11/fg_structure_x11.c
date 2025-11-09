@@ -1,8 +1,4 @@
 /*
- * fg_structure.c
- *
- * Windows and menus need tree structure
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>

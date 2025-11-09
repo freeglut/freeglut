@@ -1,10 +1,4 @@
 /*
- * fg_input_devices_x11.c
- *
- * Handles miscellaneous input devices via direct serial-port access.
- * Proper X11 XInput device support is not yet supported.
- * Also lacks Mac support.
- *
  * Written by Joe Krahn <krahn@niehs.nih.gov> 2005
  *
  * Copyright (c) 2005 Stephen J. Baker. All Rights Reserved.
@@ -29,6 +23,11 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+/*
+ * Handles miscellaneous input devices via direct serial-port access.
+ * Proper X11 XInput device support is not yet supported.
+ * Also lacks Mac support.
+ */
 
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
@@ -50,11 +49,7 @@ typedef struct _serialport SERIALPORT;
 
 void fg_serial_flush ( SERIALPORT *port );
 
-/*****************************************************************/
-
-/*
- * Try initializing the input device(s)
- */
+/* Try initializing the input device(s) */
 void fgPlatformRegisterDialDevice ( const char *dial_device )
 {
 }

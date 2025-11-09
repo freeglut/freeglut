@@ -1,8 +1,4 @@
 /*
- * fg_font.c
- *
- * Bitmap and stroke fonts displaying.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 16 1999
@@ -24,21 +20,12 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* Bitmap and stroke font drawing */
 
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
-/*
- * TODO BEFORE THE STABLE RELEASE:
- *
- *  Test things out ...
- */
-
-/* -- IMPORT DECLARATIONS -------------------------------------------------- */
-
-/*
- * These are the font faces defined in fg_font_data.c file:
- */
+/* These are the font faces defined in fg_font_data.c file: */
 extern SFG_Font fgFontFixed8x13;
 extern SFG_Font fgFontFixed9x15;
 extern SFG_Font fgFontHelvetica10;
@@ -49,8 +36,6 @@ extern SFG_Font fgFontTimesRoman24;
 extern SFG_StrokeFont fgStrokeRoman;
 extern SFG_StrokeFont fgStrokeMonoRoman;
 
-
-/* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
 
 /*
  * Matches a font ID with a SFG_Font structure pointer.
@@ -90,12 +75,7 @@ static SFG_StrokeFont* fghStrokeByID( void* font )
     return 0;
 }
 
-
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
-/*
- * Draw a bitmap character
- */
+/* Draw a bitmap character */
 void FGAPIENTRY glutBitmapCharacter( void* fontID, int character )
 {
     const GLubyte* face;
@@ -109,9 +89,7 @@ void FGAPIENTRY glutBitmapCharacter( void* fontID, int character )
     }
     freeglut_return_if_fail( ( character >= 1 )&&( character < 256 ) );
 
-    /*
-     * Find the character we want to draw (???)
-     */
+    /* Find the character we want to draw */
     face = font->Characters[ character ];
 
 #ifdef GL_VERSION_1_1
@@ -225,9 +203,7 @@ void FGAPIENTRY glutBitmapString( void* fontID, const unsigned char *string )
 #endif
 }
 
-/*
- * Returns the width in pixels of a font's character
- */
+/* Returns the width in pixels of a font's character */
 int FGAPIENTRY glutBitmapWidth( void* fontID, int character )
 {
     SFG_Font* font;
@@ -242,9 +218,7 @@ int FGAPIENTRY glutBitmapWidth( void* fontID, int character )
     return *( font->Characters[ character ] );
 }
 
-/*
- * Return the width of a string drawn using a bitmap font
- */
+/* Return the width of a string drawn using a bitmap font */
 int FGAPIENTRY glutBitmapLength( void* fontID, const unsigned char* string )
 {
     unsigned char c;
@@ -277,9 +251,7 @@ int FGAPIENTRY glutBitmapLength( void* fontID, const unsigned char* string )
     return length;
 }
 
-/*
- * Returns the height of a bitmap font
- */
+/* Returns the height of a bitmap font */
 int FGAPIENTRY glutBitmapHeight( void* fontID )
 {
     SFG_Font* font;
@@ -293,9 +265,7 @@ int FGAPIENTRY glutBitmapHeight( void* fontID )
     return font->Height;
 }
 
-/*
- * Draw a stroke character
- */
+/* Draw a stroke character */
 void FGAPIENTRY glutStrokeCharacter( void* fontID, int character )
 {
     const SFG_StrokeChar *schar;
@@ -322,7 +292,7 @@ void FGAPIENTRY glutStrokeCharacter( void* fontID, int character )
         for( j = 0; j < strip->Number; j++ )
             glVertex2f( strip->Vertices[ j ].X, strip->Vertices[ j ].Y );
         glEnd( );
-        
+
         if (fgState.StrokeFontDrawJoinDots)
         {
             glBegin( GL_POINTS );
@@ -387,9 +357,7 @@ void FGAPIENTRY glutStrokeString( void* fontID, const unsigned char *string )
         }
 }
 
-/*
- * Return the width in pixels of a stroke character
- */
+/* Return the width in pixels of a stroke character */
 GLfloat FGAPIENTRY glutStrokeWidthf( void* fontID, int character )
 {
     const SFG_StrokeChar *schar;
@@ -415,9 +383,7 @@ int FGAPIENTRY glutStrokeWidth(void* fontID, int character)
     return ( int )( glutStrokeWidthf(fontID,character) + 0.5f );
 }
 
-/*
- * Return the width of a string drawn using a stroke font
- */
+/* Return the width of a string drawn using a stroke font */
 GLfloat FGAPIENTRY glutStrokeLengthf( void* fontID, const unsigned char* string )
 {
     unsigned char c;
@@ -459,9 +425,7 @@ int FGAPIENTRY glutStrokeLength( void* fontID, const unsigned char* string )
     return( int )( glutStrokeLengthf(fontID,string) + 0.5f );
 }
 
-/*
- * Returns the height of a stroke font
- */
+/* Returns the height of a stroke font */
 GLfloat FGAPIENTRY glutStrokeHeight( void* fontID )
 {
     SFG_StrokeFont* font;
@@ -474,5 +438,3 @@ GLfloat FGAPIENTRY glutStrokeHeight( void* fontID )
     }
     return font->Height;
 }
-
-/*** END OF FILE ***/

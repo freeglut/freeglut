@@ -1,8 +1,4 @@
 /*
- * fg_gamemode.c
- *
- * The game mode handling code.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 16 1999
@@ -24,12 +20,12 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* game mode handling */
 
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
 
-/* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
 extern void fgPlatformRememberState( void );
 extern void fgPlatformRestoreState( void );
 extern GLboolean fgPlatformChangeDisplayMode( GLboolean haveToTest );
@@ -37,11 +33,7 @@ extern void fgPlatformEnterGameMode( void );
 extern void fgPlatformLeaveGameMode( void );
 
 
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
-/*
- * Sets the game mode display string
- */
+/* Sets the game mode display string */
 void FGAPIENTRY glutGameModeString( const char* string )
 {
     int width = -1, height = -1, depth = -1, refresh = -1;
@@ -79,9 +71,7 @@ void FGAPIENTRY glutGameModeString( const char* string )
 
 
 
-/*
- * Enters the game mode
- */
+/* Enters the game mode */
 int FGAPIENTRY glutEnterGameMode( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutEnterGameMode" );
@@ -110,9 +100,7 @@ int FGAPIENTRY glutEnterGameMode( void )
     return fgStructure.GameModeWindow->ID;
 }
 
-/*
- * Leaves the game mode
- */
+/* Leaves the game mode */
 void FGAPIENTRY glutLeaveGameMode( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutLeaveGameMode" );
@@ -127,9 +115,7 @@ void FGAPIENTRY glutLeaveGameMode( void )
     fgPlatformRestoreState();
 }
 
-/*
- * Returns information concerning the freeglut game mode
- */
+/* Returns information concerning the freeglut game mode */
 int FGAPIENTRY glutGameModeGet( GLenum eWhat )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGameModeGet" );
@@ -155,14 +141,10 @@ int FGAPIENTRY glutGameModeGet( GLenum eWhat )
         return fgState.GameModeRefresh;
 
     case GLUT_GAME_MODE_DISPLAY_CHANGED:
-        /*
-         * This is true if the game mode has been activated successfully..
-         */
+        /* This is true if the game mode has been activated successfully..  */
         return !!fgStructure.GameModeWindow;
     }
 
     fgWarning( "Unknown gamemode get: %d", eWhat );
     return -1;
 }
-
-/*** END OF FILE ***/

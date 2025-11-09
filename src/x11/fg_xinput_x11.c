@@ -22,9 +22,7 @@ extern int fgPlatformGetModifiers( int state );
 /* extension opcode for XInput */
 static int xi_opcode = -1;
 
-/**
- * \brief Sets window up for XI2 events.
- */
+/* Sets window up for XI2 events */
 void fgRegisterDevices(Display* dpy, Window win)
 {
 	XIEventMask mask;
@@ -140,8 +138,8 @@ void fgPrintXIDeviceEvent(XIDeviceEvent* event)
 
 }
 
-/**
- * \brief This function is called when an Extension Event is received
+/*
+ * This function is called when an Extension Event is received
  * and calls the corresponding callback functions for these events.
  */
 void fgHandleExtensionEvents( XEvent* base_ev )

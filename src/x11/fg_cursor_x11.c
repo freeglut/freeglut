@@ -1,8 +1,4 @@
 /*
- * fg_cursor_x11.c
- *
- * The Windows-specific mouse cursor related stuff.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by John F. Fay, <fayjf@sourceforge.net>
  * Creation date: Sun Feb 5, 2012
@@ -31,9 +27,6 @@
 /* This code is for Posix/X11, Solaris, and OSX */
 #include <X11/cursorfont.h>
 
-/*
- * A factory method for an empty cursor
- */
 static Cursor getEmptyCursor( void )
 {
     static Cursor cursorNone = None;
@@ -67,7 +60,7 @@ struct tag_cursorCacheEntry {
 /*
  * Note: The arrangement of the table below depends on the fact that
  * the "normal" GLUT_CURSOR_* values start a 0 and are consecutive.
- */ 
+ */
 static cursorCacheEntry cursorCache[] = {
     { XC_arrow,               None, 0 }, /* GLUT_CURSOR_RIGHT_ARROW */
     { XC_top_left_arrow,      None, 0 }, /* GLUT_CURSOR_LEFT_ARROW */

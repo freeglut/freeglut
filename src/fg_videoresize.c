@@ -1,8 +1,4 @@
 /*
- * fg_videoresize.c
- *
- * Video resize functions (as defined by GLUT API)
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 16 1999
@@ -28,17 +24,8 @@
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
-/*
- * NOTE: functions declared in this file probably will not be implemented.
- */
-
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
-int  FGAPIENTRY glutVideoResizeGet( GLenum eWhat )            {    return( 0x00 );    }
+int  FGAPIENTRY glutVideoResizeGet( GLenum eWhat )            {    return 0;    }
 void FGAPIENTRY glutSetupVideoResizing( void )                { /* Not implemented */ }
 void FGAPIENTRY glutStopVideoResizing( void )                 { /* Not implemented */ }
 void FGAPIENTRY glutVideoResize( int x, int y, int w, int h ) { /* Not implemented */ }
 void FGAPIENTRY glutVideoPan( int x, int y, int w, int h )    { /* Not implemented */ }
-
-/*** END OF FILE ***/
-

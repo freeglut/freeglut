@@ -1,8 +1,4 @@
 /*
- * fg_init.c
- *
- * Various freeglut initialization functions.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 2 1999
@@ -24,24 +20,11 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* Various initialization functions */
 
 #define FREEGLUT_BUILDING_LIB
 #include <GL/freeglut.h>
 #include "fg_internal.h"
-
-/*
- * TODO BEFORE THE STABLE RELEASE:
- *
- *  fgDeinitialize()        -- Win32's OK, X11 needs the OS-specific
- *                             deinitialization done
- *  glutInitDisplayString() -- display mode string parsing
- *
- * Wouldn't it be cool to use gettext() for error messages? I just love
- * bash saying  "nie znaleziono pliku" instead of "file not found" :)
- * Is gettext easily portable?
- */
-
-/* -- GLOBAL VARIABLES ----------------------------------------------------- */
 
 /*
  * A structure pointed by fgDisplay holds all information
@@ -103,8 +86,6 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       NULL                    /* WarningFuncData */
 };
 
-
-/* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
 
 extern void fgPlatformInitialize( const char* displayName );
 extern void fgPlatformDeinitialiseInputDevices ( void );
@@ -224,9 +205,7 @@ void fghCloseInputDevices ( void )
 }
 
 
-/*
- * Perform the freeglut deinitialization...
- */
+/* Perform the freeglut deinitialization...  */
 void fgDeinitialize( void )
 {
     SFG_Timer *timer;
@@ -324,8 +303,6 @@ void fgDeinitialize( void )
     fgState.Initialised = GL_FALSE;
 }
 
-/* -- HELPER FUNCTIONS -------------------------------------------------- */
-
 typedef enum {
   NONE, EQ, NEQ, LTE, GTE, GT, LT, MIN, INVALID
 } Comparison;
@@ -405,7 +382,6 @@ Criterion parseCriteria(char *word)
     return c;
 }
 
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
 #if defined(NEED_XPARSEGEOMETRY_IMPL) || defined(TARGET_HOST_MS_WINDOWS)
 #   include "util/xparsegeometry_repl.h"
 #endif
@@ -469,17 +445,13 @@ void FGAPIENTRY glutInit( int* pargc, char** argv )
     }
 }
 
-/*
- * Undoes all the "glutInit" stuff
- */
+/* Undoes all the "glutInit" stuff */
 void FGAPIENTRY glutExit ( void )
 {
   fgDeinitialize ();
 }
 
-/*
- * Sets the default initial window position for new windows
- */
+/* Sets the default initial window position for new windows */
 void FGAPIENTRY glutInitWindowPosition( int x, int y )
 {
     fgState.Position.X = x;
@@ -491,9 +463,7 @@ void FGAPIENTRY glutInitWindowPosition( int x, int y )
         fgState.Position.Use = GL_FALSE;
 }
 
-/*
- * Sets the default initial window size for new windows
- */
+/* Sets the default initial window size for new windows */
 void FGAPIENTRY glutInitWindowSize( int width, int height )
 {
     fgState.Size.X = width;
@@ -505,9 +475,7 @@ void FGAPIENTRY glutInitWindowSize( int width, int height )
         fgState.Size.Use = GL_FALSE;
 }
 
-/*
- * Sets the default display mode for all new windows
- */
+/* Sets the default display mode for all new windows */
 void FGAPIENTRY glutInitDisplayMode( unsigned int displayMode )
 {
     /* We will make use of this value when creating a new OpenGL context... */
@@ -840,5 +808,3 @@ void FGAPIENTRY glutInitWarningFunc( FGWarning callback )
         glutInitWarningFuncUcall( NULL, NULL );
     }
 }
-
-/*** END OF FILE ***/

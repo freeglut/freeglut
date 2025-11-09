@@ -1,8 +1,4 @@
 /*
- * fg_joystick_x11.c
- *
- * Joystick handling code
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Steve Baker, <sjbaker1@airmail.net>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>
@@ -290,7 +286,7 @@ static int fghJoystickInitializeHID(struct os_specific_s *os,
 #endif
 
 
-/*this should be defined in a header file */
+/* this should be defined in a header file */
 #define MAX_NUM_JOYSTICKS  2
 extern SFG_Joystick *fgJoystick [ MAX_NUM_JOYSTICKS ];
 

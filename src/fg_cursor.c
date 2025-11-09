@@ -1,8 +1,4 @@
 /*
- * fg_cursor.c
- *
- * The mouse cursor related stuff.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 16 1999
@@ -24,38 +20,22 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* mouse cursor related stuff */
 
 #include <GL/freeglut.h>
 #include "fg_internal.h"
-
-/*
- * TODO BEFORE THE STABLE RELEASE:
- *  glutSetCursor()     -- Win32 mappings are incomplete.
- *
- * It would be good to use custom mouse cursor shapes, and introduce
- * an option to display them using glBitmap() and/or texture mapping,
- * apart from the windowing system version.
- */
-
-/* -- PRIVATE FUNCTIONS --------------------------------------------------- */
 
 extern void fgPlatformSetCursor ( SFG_Window *window, int cursorID );
 extern void fgPlatformWarpPointer ( int x, int y );
 
 
-
-/* -- INTERNAL FUNCTIONS ---------------------------------------------------- */
 void fgSetCursor ( SFG_Window *window, int cursorID )
 {
     fgPlatformSetCursor ( window, cursorID );
 }
 
 
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
-/*
- * Set the cursor image to be used for the current window
- */
+/* Set the cursor image to be used for the current window */
 void FGAPIENTRY glutSetCursor( int cursorID )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetCursor" );
@@ -65,9 +45,7 @@ void FGAPIENTRY glutSetCursor( int cursorID )
     fgStructure.CurrentWindow->State.Cursor = cursorID;
 }
 
-/*
- * Moves the mouse pointer to given window coordinates
- */
+/* Moves the mouse pointer to given window coordinates */
 void FGAPIENTRY glutWarpPointer( int x, int y )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWarpPointer" );
@@ -75,5 +53,3 @@ void FGAPIENTRY glutWarpPointer( int x, int y )
 
     fgPlatformWarpPointer ( x, y );
 }
-
-/*** END OF FILE ***/

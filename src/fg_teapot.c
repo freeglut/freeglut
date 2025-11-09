@@ -1,8 +1,4 @@
 /*
- * fg_teapot.c
- *
- * Teapot(tm) rendering code.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Fri Dec 24 1999
@@ -24,8 +20,8 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
-/* notes:
+/* teapot rendering
+ * notes:
  * the (very little) required math is found here: http://www.gamasutra.com/view/feature/131848/tessellation_of_4x4_bezier_patches_.php?print=1
  * a much more optimized version is here, didn't bother to implement that: http://www.gamasutra.com/view/feature/131794/an_indepth_look_at_bicubic_bezier_.php?print=1
  */
@@ -130,7 +126,6 @@ static GLboolean initedTeaspoonW   = GL_FALSE;
 
 
 
-/* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
 extern void fghDrawGeometrySolid(GLfloat *vertices, GLfloat *normals, GLfloat *textcs, GLsizei numVertices,
                                  GLushort *vertIdxs, GLsizei numParts, GLsizei numVertIdxsPerPart);
 extern void fghDrawGeometryWire(GLfloat *vertices, GLfloat *normals, GLsizei numVertices,
@@ -473,11 +468,6 @@ static void fghTeaset( GLfloat scale, GLboolean useWireMode,
 }
 
 
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
-/*
- * Renders a wired teapot...
- */
 void FGAPIENTRY glutWireTeapot( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireTeapot" );
@@ -490,9 +480,6 @@ void FGAPIENTRY glutWireTeapot( double size )
                GLUT_WIRE_TEAPOT_N_VERT, GLUT_TEAPOT_N_INPUT_PATCHES, GLUT_TEAPOT_N_PATCHES, 0);
 }
 
-/*
- * Renders a filled teapot...
- */
 void FGAPIENTRY glutSolidTeapot( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidTeapot" );
@@ -506,9 +493,6 @@ void FGAPIENTRY glutSolidTeapot( double size )
 }
 
 
-/*
- * Renders a wired teacup...
- */
 void FGAPIENTRY glutWireTeacup( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireTeacup" );
@@ -521,9 +505,6 @@ void FGAPIENTRY glutWireTeacup( double size )
                GLUT_WIRE_TEACUP_N_VERT, GLUT_TEACUP_N_INPUT_PATCHES, GLUT_TEACUP_N_PATCHES, 0);
 }
 
-/*
- * Renders a filled teacup...
- */
 void FGAPIENTRY glutSolidTeacup( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidTeacup" );
@@ -537,9 +518,6 @@ void FGAPIENTRY glutSolidTeacup( double size )
 }
 
 
-/*
- * Renders a wired teaspoon...
- */
 void FGAPIENTRY glutWireTeaspoon( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutWireTeaspoon" );
@@ -552,9 +530,6 @@ void FGAPIENTRY glutWireTeaspoon( double size )
                GLUT_WIRE_TEASPOON_N_VERT, GLUT_TEASPOON_N_INPUT_PATCHES, GLUT_TEASPOON_N_PATCHES, 0);
 }
 
-/*
- * Renders a filled teaspoon...
- */
 void FGAPIENTRY glutSolidTeaspoon( double size )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSolidTeaspoon" );
@@ -566,5 +541,3 @@ void FGAPIENTRY glutSolidTeaspoon( double size )
                GL_FALSE, GL_FALSE, -0.0315f,
                GLUT_SOLID_TEASPOON_N_VERT, GLUT_TEASPOON_N_INPUT_PATCHES, GLUT_TEASPOON_N_PATCHES, GLUT_SOLID_TEASPOON_N_TRI);
 }
-
-/*** END OF FILE ***/

@@ -1,8 +1,4 @@
 /*
- * fg_internal_x11.h
- *
- * The freeglut library private include file.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by Diederick C. Niehorster, <dcnieho@gmail.com>
  * Creation date: Fri Jan 20, 2012
@@ -29,7 +25,6 @@
 #define  FREEGLUT_INTERNAL_X11_H
 
 
-/* -- PLATFORM-SPECIFIC INCLUDES ------------------------------------------- */
 #ifdef EGL_VERSION_1_0
 #include "egl/fg_internal_egl.h"
 #else
@@ -50,7 +45,6 @@
 #endif
 
 
-/* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
 /* The structure used by display initialization in fg_init.c */
 typedef struct tagSFG_PlatformDisplay SFG_PlatformDisplay;
 struct tagSFG_PlatformDisplay
@@ -129,7 +123,7 @@ struct tagSFG_PlatformWindowState
     GLboolean       KeyRepeating;       /* Currently in repeat mode?         */    
 };
 
-/* -- JOYSTICK-SPECIFIC STRUCTURES AND TYPES ------------------------------- */
+/* -- JOYSTICK-SPECIFIC STRUCTURES AND TYPES -- */
 /*
  * Initial defines from "js.h" starting around line 33 with the existing "fg_joystick.c"
  * interspersed

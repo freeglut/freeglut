@@ -1,8 +1,4 @@
 /*
- * fg_menu_x11.c
- *
- * Pull-down menu creation and handling.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>
@@ -29,9 +25,7 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
-/*
- *  * Private function to get the virtual maximum screen extent
- *   */
+/* get the virtual maximum screen extent */
 GLvoid fgPlatformGetGameModeVMaxExtent( SFG_Window* window, int* x, int* y )
 {
     int wx, wy;

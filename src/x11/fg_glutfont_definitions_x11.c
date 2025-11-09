@@ -1,8 +1,4 @@
 /*
- * freeglut_glutfont_definitions_x11.c
- *
- * Bitmap and stroke fonts displaying.
- *
  * Copyright (c) 2003 Stephen J. Baker (whether he wants it or not).
  * All Rights Reserved.
  * Written by John F. Fay <fayjf@sourceforge.net>, who releases the

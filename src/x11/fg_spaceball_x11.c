@@ -1,5 +1,5 @@
 /* Spaceball support for Linux.
- * Written by John Tsiombikas <nuclear@member.fsf.org>
+ * Copyright (c) 2012 John Tsiombikas <nuclear@mutantstargoat.com>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>
  * Creation date: Thur Feb 2 2012
  *

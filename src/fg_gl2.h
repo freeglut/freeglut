@@ -1,8 +1,4 @@
 /*
- * fg_gl2.h
- *
- * Load OpenGL (ES) 2.0 functions used by fg_geometry
- *
  * Copyright (C) 2012  Sylvain Beucler
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -22,6 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* Load OpenGL (ES) 2.0 functions used by fg_geometry */
 
 #ifndef  FG_GL2_H
 #define  FG_GL2_H
@@ -48,9 +45,9 @@
 /* Load functions dynamically, they are not defined in e.g. win32's
    OpenGL headers */
 
-#    ifndef APIENTRY
-#        define APIENTRY
-#    endif
+#ifndef APIENTRY
+#define APIENTRY
+#endif
 
 /* extension #defines, types and entries, avoiding a dependency on additional
    libraries like GLEW or the GL/glext.h header */
@@ -75,8 +72,8 @@ extern FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
 extern FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
 extern FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
 
-#    endif
+#endif
 
 extern void fgInitGL2( void );
 
-#endif
+#endif	/* FG_GL2_H */

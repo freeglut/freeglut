@@ -1,8 +1,4 @@
 /*
- * fg_spaceball_mswin.c
- *
- * Spaceball support for Windows
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by Evan Felix <karcaw at gmail.com>
  * Creation date: Sat Feb 4, 2012

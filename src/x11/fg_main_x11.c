@@ -1,8 +1,4 @@
 /*
- * fg_main_x11.c
- *
- * The X11-specific windows message processing methods.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>
@@ -61,17 +57,6 @@ extern void fgPlatformShowWindow( SFG_Window *window );
 /* used in the event handling code to match and discard stale mouse motion events */
 static Bool match_motion(Display *dpy, XEvent *xev, XPointer arg);
 
-/*
- * TODO BEFORE THE STABLE RELEASE:
- *
- * There are some issues concerning window redrawing under X11, and maybe
- * some events are not handled.
- *
- * Need to investigate why the X11 version breaks out with an error when
- * closing a window (using the window manager, not glutDestroyWindow)...
- */
- 
- 
 
 fg_time_t fgPlatformSystemTime ( void )
 {
@@ -90,7 +75,6 @@ fg_time_t fgPlatformSystemTime ( void )
  * Does the magic required to relinquish the CPU until something interesting
  * happens.
  */
-
 void fgPlatformSleepForEvents( fg_time_t msec )
 {
     /*
@@ -585,7 +569,6 @@ void fgPlatformProcessSingleEvent ( void )
     SFG_Window* window;
     XEvent event;
 
-    /* This code was repeated constantly, so here it goes into a definition: */
 #define GETWINDOW(a)                             \
     window = fgWindowByHandle( event.a.window ); \
     if( window == NULL )                         \
@@ -675,15 +658,6 @@ void fgPlatformProcessSingleEvent ( void )
             break;
 
         case Expose:
-            /*
-             * We are too dumb to process partial exposes...
-             *
-             * XXX Well, we could do it.  However, it seems to only
-             * XXX be potentially useful for single-buffered (since
-             * XXX double-buffered does not respect viewport when we
-             * XXX do a buffer-swap).
-             *
-             */
             if( event.xexpose.count == 0 )
             {
                 GETWINDOW( xexpose );
@@ -695,7 +669,7 @@ void fgPlatformProcessSingleEvent ( void )
             break;
 
         case UnmapNotify:
-            /* We get this when iconifying a window. */ 
+            /* We get this when iconifying a window. */
             GETWINDOW( xunmap );
             INVOKE_WCB( *window, WindowStatus, ( GLUT_HIDDEN ) );
             window->State.Visible = GL_FALSE;
@@ -1096,7 +1070,7 @@ void fgPlatformPosResZordWork(SFG_Window* window, unsigned int workMask)
 
 void fgPlatformVisibilityWork(SFG_Window* window)
 {
-    /* Visibility status of window gets updated in the window message handlers above 
+    /* Visibility status of window gets updated in the window message handlers above
      * XXX: is this really the case? check
      */
     SFG_Window *win = window;

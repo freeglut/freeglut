@@ -1,8 +1,4 @@
 /*
- * fg_init.h
- *
- * Various freeglut initialization functions.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 2 1999
@@ -25,8 +21,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __FG_INIT_H__
-#define __FG_INIT_H__
+#ifndef FG_INIT_H__
+#define FG_INIT_H__
 
 extern void fghCloseInputDevices(void);
 extern void fgDeinitialize(void);

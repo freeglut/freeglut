@@ -1,8 +1,4 @@
 /*
- * fg_ext.c
- *
- * Functions related to OpenGL extensions.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 9 1999
@@ -24,6 +20,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* Functions related to OpenGL extensions */
 
 #define GLX_GLXEXT_PROTOTYPES
 #include <GL/freeglut.h>

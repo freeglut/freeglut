@@ -1,8 +1,4 @@
 /*
- * fg_structure.c
- *
- * Windows and menus need tree structure
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Sat Dec 18 1999
@@ -28,13 +24,10 @@
 #include <GL/freeglut.h>
 #include "fg_internal.h"
 
-/* -- GLOBAL EXPORTS ------------------------------------------------------- */
-
 /*
  * The SFG_Structure container holds information about windows and menus
  * created between glutInit() and glutMainLoop() return.
  */
-
 SFG_Structure fgStructure = { { NULL, NULL },  /* The list of windows       */
                               { NULL, NULL },  /* The list of menus         */
                               { NULL, NULL },  /* Windows to Destroy list   */
@@ -45,8 +38,6 @@ SFG_Structure fgStructure = { { NULL, NULL },  /* The list of windows       */
                               0,               /* The current new window ID */
                               0 };             /* The current new menu ID   */
 
-
-/* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
 
 extern void fgPlatformCreateWindow ( SFG_Window *window );
 extern void fghDefaultReshape(int width, int height, FGCBUserData userData);
@@ -116,9 +107,7 @@ SFG_Window* fgCreateWindow( SFG_Window* parent, const char* title,
     return window;
 }
 
-/*
- * This private function creates a menu and adds it to the menus list
- */
+/* create a menu and adds it to the menus list */
 SFG_Menu* fgCreateMenu( FGCBMenuUC menuCallback, FGCBUserData userData )
 {
     SFG_Window *current_window = fgStructure.CurrentWindow;
@@ -189,9 +178,7 @@ void fgAddToWindowDestroyList( SFG_Window* window )
     window->State.WorkMask = 0;
 }
 
-/*
- * Function to close down all the windows in the "WindowsToDestroy" list
- */
+/* close down all the windows in the "WindowsToDestroy" list */
 void fgCloseWindows( void )
 {
     while( fgStructure.WindowsToDestroy.First )
@@ -387,9 +374,7 @@ void fgDestroyStructure( void )
         fgDestroyWindow( ( SFG_Window * )fgStructure.Windows.First );
 }
 
-/*
- * Helper function to enumerate through all registered top-level windows
- */
+/* Helper function to enumerate through all registered top-level windows */
 void fgEnumWindows( FGCBWindowEnumerator enumCallback, SFG_Enumerator* enumerator )
 {
     SFG_Window *window;
@@ -409,9 +394,7 @@ void fgEnumWindows( FGCBWindowEnumerator enumCallback, SFG_Enumerator* enumerato
     }
 }
 
-/*
-* Helper function to enumerate through all registered top-level windows
-*/
+/* Helper function to enumerate through all registered top-level windows */
 void fgEnumMenus( FGCBMenuEnumerator enumCallback, SFG_Enumerator* enumerator )
 {
     SFG_Menu *menu;
@@ -455,9 +438,6 @@ void fgEnumSubWindows( SFG_Window* window, FGCBWindowEnumerator enumCallback,
     }
 }
 
-/*
- * A static helper function to look for a window given its handle
- */
 static void fghcbWindowByHandle( SFG_Window *window,
                                  SFG_Enumerator *enumerator )
 {
@@ -496,9 +476,6 @@ SFG_Window* fgWindowByHandle ( SFG_WindowHandleType hWindow )
     return NULL;
 }
 
-/*
- * A static helper function to look for a window given its ID
- */
 static void fghcbWindowByID( SFG_Window *window, SFG_Enumerator *enumerator )
 {
     /* Make sure we do not overwrite our precious results... */
@@ -536,9 +513,6 @@ SFG_Window* fgWindowByID( int windowID )
     return NULL;
 }
 
-/*
- * A static helper function to look for a menu given its ID
- */
 static void fghcbMenuByID( SFG_Menu *menu,
     SFG_Enumerator *enumerator )
 {
@@ -574,9 +548,6 @@ SFG_Menu* fgMenuByID( int menuID )
     return NULL;
 }
 
-/*
- * A static helper function to look for an active menu
- */
 static void fghcbGetActiveMenu( SFG_Menu *menu,
     SFG_Enumerator *enumerator )
 {
@@ -612,9 +583,6 @@ SFG_Menu* fgGetActiveMenu( void )
     return NULL;
 }
 
-/*
- * List functions...
- */
 void fgListInit(SFG_List *list)
 {
     list->First = NULL;
@@ -685,5 +653,3 @@ void fgListInsert(SFG_List *list, SFG_Node *next, SFG_Node *node)
     else
         list->First = node;
 }
-
-/*** END OF FILE ***/

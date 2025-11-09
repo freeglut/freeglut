@@ -1,8 +1,4 @@
 /*
- * fg_state.c
- *
- * Freeglut state query methods.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 16 1999
@@ -24,22 +20,10 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* Freeglut state query functions */
 
 #include <GL/freeglut.h>
 #include "fg_internal.h"
-
-/*
- * TODO BEFORE THE STABLE RELEASE:
- *
- *  glutGet()               -- X11 tests passed, but check if all enums
- *                             handled (what about Win32?)
- *  glutDeviceGet()         -- X11 tests passed, but check if all enums
- *                             handled (what about Win32?)
- *  glutGetModifiers()      -- OK, but could also remove the limitation
- *  glutLayerGet()          -- what about GLUT_NORMAL_DAMAGED?
- *
- * The fail-on-call policy will help adding the most needed things imho.
- */
 
 extern int fgPlatformGlutGet ( GLenum eWhat );
 extern int fgPlatformGlutDeviceGet ( GLenum eWhat );
@@ -47,16 +31,6 @@ extern int *fgPlatformGlutGetModeValues(GLenum eWhat, int *size);
 extern SFG_Font* fghFontByID( void* font );
 
 
-/* -- LOCAL DEFINITIONS ---------------------------------------------------- */
-
-/* -- PRIVATE FUNCTIONS ---------------------------------------------------- */
-
-
-/* -- INTERFACE FUNCTIONS -------------------------------------------------- */
-
-/*
- * General settings assignment method
- */
 void FGAPIENTRY glutSetOption( GLenum eWhat, int value )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutSetOption" );
@@ -132,9 +106,6 @@ void FGAPIENTRY glutSetOption( GLenum eWhat, int value )
     }
 }
 
-/*
- * General settings query method
- */
 int FGAPIENTRY glutGet( GLenum eWhat )
 {
     switch (eWhat)
@@ -238,9 +209,6 @@ int FGAPIENTRY glutGet( GLenum eWhat )
     }
 }
 
-/*
- * Returns various device information.
- */
 int FGAPIENTRY glutDeviceGet( GLenum eWhat )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutDeviceGet" );
@@ -297,9 +265,6 @@ int FGAPIENTRY glutDeviceGet( GLenum eWhat )
     }
 }
 
-/*
- * This should return the current state of ALT, SHIFT and CTRL keys.
- */
 int FGAPIENTRY glutGetModifiers( void )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGetModifiers" );
@@ -312,9 +277,6 @@ int FGAPIENTRY glutGetModifiers( void )
     return fgState.Modifiers;
 }
 
-/*
- * Return the state of the GLUT API overlay subsystem. A misery ;-)
- */
 int FGAPIENTRY glutLayerGet( GLenum eWhat )
 {
     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutLayerGet" );
@@ -338,15 +300,9 @@ int FGAPIENTRY glutLayerGet( GLenum eWhat )
         return 0;
 
     case GLUT_TRANSPARENT_INDEX:
-        /*
-        * Return just anything, which is always defined as zero
-        *
-        * XXX HUH?
-        */
         return 0;
 
     case GLUT_NORMAL_DAMAGED:
-        /* XXX Actually I do not know. Maybe. */
         return 0;
 
     case GLUT_OVERLAY_DAMAGED:
@@ -357,7 +313,6 @@ int FGAPIENTRY glutLayerGet( GLenum eWhat )
         break;
     }
 
-    /* And fail. That's good. Programs do love failing. */
     return -1;
 }
 
@@ -372,5 +327,3 @@ int * FGAPIENTRY glutGetModeValues(GLenum eWhat, int *size)
 
   return array;
 }
-
-/*** END OF FILE ***/

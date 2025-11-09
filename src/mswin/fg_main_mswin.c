@@ -1,8 +1,4 @@
 /*
- * fg_main_mswin.c
- *
- * The Windows-specific mouse cursor related stuff.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by John F. Fay, <fayjf@sourceforge.net>
  * Creation date: Sat Jan 21, 2012
@@ -774,9 +770,7 @@ SFG_Window* fghWindowUnderCursor(SFG_Window *window)
     return window;
 }
 
-/*
- * The window procedure for handling Win32 events
- */
+/* The window procedure for handling Win32 events */
 LRESULT CALLBACK fgPlatformWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     SFG_Window *window;

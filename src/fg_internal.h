@@ -1,8 +1,4 @@
 /*
- * fg_internal.h
- *
- * The freeglut library private include file.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 2 1999
@@ -24,6 +20,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/* freeglut private include file */
 
 #ifndef  FREEGLUT_INTERNAL_H
 #define  FREEGLUT_INTERNAL_H
@@ -114,18 +111,14 @@
 #   define  TARGET_HOST_MACOS_COCOA    0
 #endif
 
-/* -- FIXED CONFIGURATION LIMITS ------------------------------------------- */
-
 #define  FREEGLUT_MAX_MENUS            3
 
-/* These files should be available on every platform. */
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
 #include <stdarg.h>
 
-/* These are included based on autoconf directives. */
 #ifdef HAVE_SYS_TYPES_H
 #    include <sys/types.h>
 #endif
@@ -141,13 +134,6 @@
 #    include <time.h>
 #endif
 
-/* -- AUTOCONF HACKS --------------------------------------------------------*/
-
-/* XXX: Update autoconf to avoid these.
- * XXX: Are non-POSIX platforms intended not to use autoconf?
- * If so, perhaps there should be a config_guess.h for them. Alternatively,
- * config guesses could be placed above, just after the config.h exclusion.
- */
 #if defined(__FreeBSD__) || defined(__NetBSD__)
 #    define HAVE_USB_JS 1
 #endif
@@ -229,15 +215,10 @@
 #endif
 
 
-/* -- GLOBAL TYPE DEFINITIONS ---------------------------------------------- */
-
 /*
  * Freeglut callbacks type definitions
  *
  * If anything here is modified or added, update fg_callback_macros.h functions.
- *
- * This is not ideal, but freeglut needs to either define minimal compiler specs,
- * or update header every time this is changed or updated.
  */
 typedef void* FGCBUserData;
 
@@ -493,42 +474,16 @@ struct tagSFG_Context
 #define GLUT_FULL_SCREEN_WORK (1<<5)
 #define GLUT_DISPLAY_WORK     (1<<6)
 
-/*
- * An enumeration containing the desired mapping state of a window
- */
+/* An enumeration containing the desired mapping state of a window */
 typedef enum
 {
   DesireHiddenState,
   DesireIconicState,
   DesireNormalState
-} fgDesiredVisibility ;
+} fgDesiredVisibility;
 
-/*
- *  There is considerable confusion about the "right thing to
- *  do" concerning window  size and position.  GLUT itself is
- *  not consistent between Windows and UNIX/X11; since
- *  platform independence is a virtue for "freeglut", we
- *  decided to break with GLUT's behaviour.
- *
- *  Under UNIX/X11, it is apparently not possible to get the
- *  window border sizes in order to subtract them off the
- *  window's initial position until some time after the window
- *  has been created.  Therefore we decided on the following
- *  behaviour, both under Windows and under UNIX/X11:
- *  - When you create a window with position (x,y) and size
- *    (w,h), the upper left hand corner of the outside of the
- *    window is at (x,y) and the size of the drawable area is
- *    (w,h).
- *  - When you query the size and position of the window--as
- *    is happening here for Windows--"freeglut" will return
- *    the size of the drawable area--the (w,h) that you
- *    specified when you created the window--and the coordinates
- *    of the upper left hand corner of the drawable area, i.e.
- *    of the client rect--which is NOT the (x,y) you specified.
- */
 typedef struct tagSFG_WindowState SFG_WindowState;
-struct tagSFG_WindowState   /* as per notes above, sizes always refer to the client area (thus without the window decorations) */
-{
+struct tagSFG_WindowState {
     /* window state - size, position, look */
     int             Xpos;               /* Window's top-left of client area, X-coordinate */
     int             Ypos;               /* Window's top-left of client area, Y-coordinate */
@@ -909,7 +864,7 @@ struct tagSFG_StrokeFont
 };
 
 
-/* -- JOYSTICK-SPECIFIC STRUCTURES AND TYPES ------------------------------- */
+/* -- JOYSTICK-SPECIFIC STRUCTURES AND TYPES -- */
 /*
  * Initial defines from "js.h" starting around line 33 with the existing "fg_joystick.c"
  * interspersed
@@ -987,8 +942,6 @@ struct tagSFG_Joystick
 
 
 
-/* -- GLOBAL VARIABLES EXPORTS --------------------------------------------- */
-
 /* Freeglut display related stuff (initialized once per session) */
 extern SFG_Display fgDisplay;
 
@@ -997,9 +950,6 @@ extern SFG_Structure fgStructure;
 
 /* The current freeglut settings */
 extern SFG_State fgState;
-
-
-/* -- PRIVATE FUNCTION DECLARATIONS ---------------------------------------- */
 
 /*
  * A call to this function makes us sure that the Display and Structure
@@ -1201,5 +1151,3 @@ void fghContextCreationError( void );
 int fghNumberOfAuxBuffersRequested( void );
 
 #endif /* FREEGLUT_INTERNAL_H */
-
-/*** END OF FILE ***/

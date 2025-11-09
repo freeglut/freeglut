@@ -1,8 +1,4 @@
 /*
- * fg_state_mswin.c
- *
- * The Windows-specific state query methods.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by John F. Fay, <fayjf@sourceforge.net>
  * Creation date: Sun Jan 22, 2012

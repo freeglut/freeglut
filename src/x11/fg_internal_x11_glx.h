@@ -1,8 +1,4 @@
 /*
- * fg_internal_x11.h
- *
- * The freeglut library private include file.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Creation date: Fri Jan 20, 2012
  *

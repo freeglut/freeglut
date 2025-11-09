@@ -1,8 +1,4 @@
 /*
- * fg_version.h
- *
- * The freeglut library private include file.
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Thu Dec 2 1999
@@ -37,7 +33,7 @@
 #endif
 
 #ifndef VERSION_MINOR
-#define VERSION_MINOR 6
+#define VERSION_MINOR 8
 #endif
 
 #ifndef VERSION_PATCH

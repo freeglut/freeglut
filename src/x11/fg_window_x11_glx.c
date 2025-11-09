@@ -1,8 +1,4 @@
 /*
- * fg_window_x11_glx.c
- *
- * Window management methods for X11 with GLX
- *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Copied for Platform code by Evan Felix <karcaw at gmail.com>
@@ -34,9 +30,7 @@
 #define ATTRIB(a) attributes[where++]=(a)
 #define ATTRIB_VAL(a,v) {ATTRIB(a); ATTRIB(v);}
 
-/*
- * Chooses a visual basing on the current display mode settings
- */
+/* Chooses a visual basing on the current display mode settings */
 
 #ifdef USE_FBCONFIG
 int fghChooseConfig(GLXFBConfig* fbconfig)
@@ -218,7 +212,7 @@ GLXContext fghCreateNewContext( SFG_Window* window )
   /* new context creation */
   int attributes[9];
   CreateContextAttribsProc createContextAttribs = (CreateContextAttribsProc) fgPlatformGetProcAddress( "glXCreateContextAttribsARB" );
- 
+
   /* glXCreateContextAttribsARB not found, yet the user has requested the new context creation */
   if ( !createContextAttribs && !fghIsLegacyContextRequested(window) ) {
     fgWarning( "OpenGL >2.1 context requested but glXCreateContextAttribsARB is not available! Falling back to legacy context creation" );

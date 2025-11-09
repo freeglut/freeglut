@@ -1,8 +1,4 @@
 /*
- * fg_internal_mswin.h
- *
- * The freeglut library private include file.
- *
  * Copyright (c) 2012 Stephen J. Baker. All Rights Reserved.
  * Written by John F. Fay, <fayjf@sourceforge.net>
  * Creation date: Thu Jan 19, 2012
@@ -138,7 +134,6 @@ struct tagSFG_PlatformJoystick
 #define  FREEGLUT_MENU_PEN_HBACK_COLORS  {0.15f, 0.15f, 0.45f, 1.0f}
 
 
-/* -- PRIVATE FUNCTION DECLARATIONS ---------------------------------------- */
 /* Spaceball device functions, defined in fg_spaceball_mswin.c */
 /* Added by Jinrong Xie <stonexjr at gmail.com> 12/24/2014 */
 int  fgIsSpaceballWinEvent(HWND hwnd, WPARAM wParam, LPARAM lParam);
