@@ -1,3 +1,30 @@
+2024-11-10  John Tsiombikas <nuclear@mutantstargoat.com>
+
+	freeglut 3.8 changes:
+
+	* New experimental Cocoa (native MacOS X) backend.
+	* Add glutSwapInterval, to control vsync (currently X11 and win32 only).
+	* glutExtensionSupported now also reports platform extensions (GLX/WGL).
+	* Fix build issues with new cmake versions while maintaining
+	  compatibility with old cmake.
+	* Fix handling of UTF8 window/icon titles.
+	* Fix issue with some X11 window managers not properly restoring
+	  iconified windows (send _NET_ACTIVE_WINDOW EWMH client message).
+	* Fix build issues with C23 compilers (empty argument list semantics).
+	* Fix compatibility with older versions of windows which don't have
+	  RAWHID support (before XP), by loading the entry points dynamically.
+	* Fix glutInitDisplayString parsing of "aux", and add =N parsing support
+	  to specify samples and auxbufs.
+	* Various fixes and improvements in the GameCube/Wii backend.
+	* Altbuild support for Solaris 2.6/SUN Workshop C.
+	* Started conversion of documentation from the website to markdown in
+	  the source tree: doc/api.md
+	* Added the original GLUT manpages, with permission from Mark Kilgard.
+	* New demos: accum, vsync, and windows.
+	* Cleanup of some old and no longer relevant, or redundant comments in
+	  the source code.
+	* Removed some out of date README files, and updated others.
+
 2024-06-08  John Tsiombikas <nuclear@member.fsf.org>
 
 	freeglut 3.6 changes:
