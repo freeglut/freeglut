@@ -1,49 +1,62 @@
-Cross-compilation from GNU/Linux (static and shared DLL)
-========================================================
+Windows cross-build on GNU/Linux hosts with MinGW
+=================================================
 
-Install MinGW, and specify which MinGW you're using:
+MinGW cross toolchain installation
+----------------------------------
+Install MinGW, and set the `GNU_HOST` environment variable to the version of
+MinGW you're using:
 
-- on Debian/Ubuntu, mingw-w64, 64-bit executables:
+  - on Debian/Ubuntu, mingw-w64, 64-bit:
+  
+    apt-get install mingw-w64
+    GNU_HOST=x86_64-w64-mingw32
+  
+  - on Debian/Ubuntu, mingw-w64, 32-bit:
+  
+    apt-get install mingw-w64
+    GNU_HOST=i686-w64-mingw32
+  
+  - on Fedora, mingw32, 32-bit:
+  
+    yum install mingw32-gcc
+    GNU_HOST=i686-pc-mingw32
+  
+  - on older Debian/Ubuntu versions, mingw32:
+  
+    apt-get install mingw32
+    GNU_HOST=i586-mingw32msvc
 
-  apt-get install mingw-w64
-  GNU_HOST=x86_64-w64-mingw32
 
-- on Debian/Ubuntu, mingw-w64, 32-bit executables:
-
-  apt-get install mingw-w64
-  GNU_HOST=i686-w64-mingw32
-
-- on Fedora, mingw32, 32-bit executables:
-
-  yum install mingw32-gcc
-  GNU_HOST=i686-pc-mingw32
-
-- on Debian/Ubuntu, mingw32 (deprecated):
-
-  apt-get install mingw32
-  GNU_HOST=i586-mingw32msvc
-
-
-With CMake
-----------
-
+Build freeglut
+--------------
 Cross-compile with:
 
-  mkdir cross-woe/ && cd cross-woe/
+  mkdir cross-build && cd cross-build
   cmake \
     -D GNU_HOST=$GNU_HOST \
     -D CMAKE_TOOLCHAIN_FILE=mingw_cross_toolchain.cmake \
-    -D CMAKE_INSTALL_PREFIX=/freeglut \
+    -D CMAKE_INSTALL_PREFIX=$HOME/fgwin \
     ..
-  make -j4
-  make install DESTDIR=$(pwd)
+  make
+  make install
 
-Everything is now in the new 'freeglut/' directory.
-The .dll is in 'freeglut/lib/'.
+Everything is now in the new 'fgwin' directory under your home directory.
+The freeglut dll is in 'fgwin/bin/'.
 
 
-Compiling your code
--------------------
+Build windows applications
+--------------------------
+Let's manually build (and run) one of the freeglut demos, to demonstrate how to
+cross-compile a windows program using freeglut.
 
-Compilation of your own programs is done as usual.
-See README.cygwin_mingw for details.
+From the freeglut root directory:
+
+    x86_64-w64-mingw32-gcc -o 3dview.o -I$HOME/fgwin/include -c progs/demos/3dview/3dview.c
+    x86_64-w64-mingw32-gcc -o 3dview.exe 3dview.o -L$HOME/fgwin/lib -lfreeglut -lopengl32
+    cp ~/fgwin/bin/libfreeglut.dll .
+    wine 3dview.exe
+
+For systems with a standard PREFIX for foreign architectures, like debian, you
+can install freeglut to `/usr/x86_64-w64-mingw32` (64bit) or
+`/usr/i686-w64-mingw32` (32bit) (`CMAKE_INSTALL_PREFIX`), and you won't have to
+specify include and library search paths when you build your programs.
