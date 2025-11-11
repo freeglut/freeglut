@@ -212,8 +212,20 @@ void convert_inline_html(const char *html, StringBuilder *output) {
                 continue;
             }
 
-            // Links
-            if (strncmp(tag, "<a ", 3) == 0) {
+            // Underline tags
+            if (strncmp(tag, "<u>", 3) == 0) {
+                sb_append(output, "__");
+                p = tag_end + 1;
+                continue;
+            }
+            if (strncmp(tag, "</u>", 4) == 0) {
+                sb_append(output, "__");
+                p = tag_end + 1;
+                continue;
+            }
+
+            // Links (check for <a followed by whitespace)
+            if (tag[0] == '<' && tag[1] == 'a' && isspace((unsigned char)tag[2])) {
                 const char *href_start = strstr(tag, "href=\"");
                 if (href_start) {
                     href_start += 6;
@@ -360,7 +372,9 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
                 strncmp(tag, "<ol", 3) == 0 ||
                 strncmp(tag, "</ol>", 5) == 0 ||
                 strncmp(tag, "<li", 3) == 0 ||
-                strncmp(tag, "</li>", 5) == 0
+                strncmp(tag, "</li>", 5) == 0 ||
+                strncmp(tag, "<pre", 4) == 0 ||
+                strncmp(tag, "</pre>", 6) == 0
             );
 
             if (!is_block_tag) {
@@ -386,6 +400,10 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
                     extract_text_content(heading, temp);
                     char *heading_text = trim(temp->text);
 
+                    // Add to header list (always, even if we skip output)
+                    char *anchor = generate_anchor(heading_text);
+                    headers_add(headers, 1, heading_text, anchor);
+
                     // Check if this is the header to skip
                     if (config->skip_h1_header &&
                         strcasestr(heading_text, config->skip_h1_header)) {
@@ -399,10 +417,6 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
                     if (skipping_contents) {
                         skipping_contents = false;
                     }
-
-                    // Add to header list
-                    char *anchor = generate_anchor(heading_text);
-                    headers_add(headers, 1, heading_text, anchor);
 
                     // Output the heading (h1 -> ##)
                     if (in_paragraph) {
@@ -503,6 +517,59 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
                 continue;
             }
 
+            // Pre-formatted code blocks
+            if (strncmp(tag, "<pre", 4) == 0) {
+                p = tag_end + 1;
+                const char *pre_end = strcasestr(p, "</pre>");
+                if (pre_end) {
+                    if (in_paragraph) {
+                        sb_append(output, "\n\n");
+                        in_paragraph = false;
+                    }
+                    if (output->size > 0 && output->text[output->size - 1] != '\n') {
+                        sb_append(output, "\n\n");
+                    }
+
+                    // Extract code content
+                    char code[16384];
+                    size_t len = pre_end - p;
+                    if (len >= sizeof(code)) len = sizeof(code) - 1;
+                    strncpy(code, p, len);
+                    code[len] = '\0';
+
+                    // Output as markdown code fence
+                    sb_append(output, "```c\n");
+
+                    // Process the code content - convert HTML entities back to characters
+                    char *c = code;
+                    while (*c) {
+                        if (*c == '&') {
+                            if (strncmp(c, "&lt;", 4) == 0) {
+                                sb_append_char(output, '<');
+                                c += 4;
+                            } else if (strncmp(c, "&gt;", 4) == 0) {
+                                sb_append_char(output, '>');
+                                c += 4;
+                            } else if (strncmp(c, "&amp;", 5) == 0) {
+                                sb_append_char(output, '&');
+                                c += 5;
+                            } else if (strncmp(c, "&nbsp;", 6) == 0) {
+                                sb_append_char(output, ' ');
+                                c += 6;
+                            } else {
+                                sb_append_char(output, *c++);
+                            }
+                        } else {
+                            sb_append_char(output, *c++);
+                        }
+                    }
+
+                    sb_append(output, "```\n\n");
+                    p = pre_end + 6;
+                }
+                continue;
+            }
+
             // Paragraphs
             if (strncmp(tag, "<p>", 3) == 0 || strncmp(tag, "<p ", 3) == 0) {
                 // Check for multiline <tt> pattern: <p><tt>\n
@@ -524,15 +591,20 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
                         strncpy(content, p, content_len);
                         content[content_len] = '\0';
 
-                        // Convert the content: replace <br> with newlines and &nbsp; with spaces
+                        // Convert the content: join lines, only breaking at semicolons
                         StringBuilder *temp = sb_create();
                         const char *cp = content;
                         while (*cp) {
                             if (strncmp(cp, "<br>", 4) == 0 ||
                                 strncmp(cp, "<br/>", 5) == 0 ||
                                 strncmp(cp, "<br />", 6) == 0) {
-                                sb_append_char(temp, '\n');
+                                // Skip <br> tags - we'll add newlines only at semicolons
                                 cp += (*cp == '<' && *(cp+3) == '>') ? 4 : (*(cp+4) == '>') ? 5 : 6;
+                                // Add a space if we're joining lines (unless there's already whitespace)
+                                if (temp->size > 0 && temp->text[temp->size - 1] != ' ' &&
+                                    temp->text[temp->size - 1] != '\n') {
+                                    sb_append_char(temp, ' ');
+                                }
                             } else if (strncmp(cp, "&nbsp;", 6) == 0) {
                                 sb_append_char(temp, ' ');
                                 cp += 6;
@@ -545,8 +617,20 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
                             } else if (strncmp(cp, "&amp;", 5) == 0) {
                                 sb_append_char(temp, '&');
                                 cp += 5;
+                            } else if (*cp == '\n' || *cp == '\r') {
+                                // Skip literal newlines, add space instead if needed
+                                if (temp->size > 0 && temp->text[temp->size - 1] != ' ' &&
+                                    temp->text[temp->size - 1] != '\n') {
+                                    sb_append_char(temp, ' ');
+                                }
+                                cp++;
                             } else {
-                                sb_append_char(temp, *cp++);
+                                sb_append_char(temp, *cp);
+                                // Add newline after semicolons
+                                if (*cp == ';') {
+                                    sb_append_char(temp, '\n');
+                                }
+                                cp++;
                             }
                         }
 
@@ -701,8 +785,11 @@ void html_to_markdown(const char *html, StringBuilder *output, HeaderList *heade
                     sb_append(output, "\n");
                 }
 
-                // No indentation - user wants trimmed whitespace before '-'
-                // (removed the tab-adding loop)
+                // Add indentation for nested lists (depth > 1)
+                // Top-level lists (depth 1) have no indentation
+                for (int i = 1; i < list_depth; i++) {
+                    sb_append(output, "  ");  // 2 spaces per level
+                }
 
                 if (ordered_list[list_depth] == 0) {
                     sb_append(output, "- ");
@@ -775,7 +862,9 @@ process_text:
                     strncmp(tag_start, "<ol", 3) == 0 ||
                     strncmp(tag_start, "</ol>", 5) == 0 ||
                     strncmp(tag_start, "<li", 3) == 0 ||
-                    strncmp(tag_start, "</li>", 5) == 0) {
+                    strncmp(tag_start, "</li>", 5) == 0 ||
+                    strncmp(tag_start, "<pre", 4) == 0 ||
+                    strncmp(tag_start, "</pre>", 6) == 0) {
                     // Found a block-level tag, process text up to here
                     char text[8192];
                     size_t len = tag_start - p;
