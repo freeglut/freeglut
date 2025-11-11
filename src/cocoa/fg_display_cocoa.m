@@ -87,15 +87,18 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window *Cu
     [context flushBuffer]; // Swap buffers to present the frame
 }
 
-void fgPlatformInitSwapCtl(void)
+void fgPlatformInitSwapCtl( void )
 {
+    TODO_IMPL;
 }
 
-void fgPlatformSwapInterval(int n)
+void fgPlatformSwapInterval( int n )
 {
+    TODO_IMPL;
 }
 
-int fgPlatformExtSupported(const char *ext)
+int fgPlatformExtSupported( const char *ext )
 {
-	return 0;
+    TODO_IMPL;
+    return 0;
 }
