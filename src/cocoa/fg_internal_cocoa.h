@@ -21,7 +21,10 @@
 #define FREEGLUT_INTERNAL_COCOA_H
 
 /* Add '#define DEBUG_LOG' for debug logging */
+
+#ifndef NDEBUG
 #define UNIMPLEMENTED_WARNING
+#endif
 
 /* Use CVDisplayLink for display synchronization */
 #define USE_CVDISPLAYLINK
