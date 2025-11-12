@@ -3,10 +3,12 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutEstablishOverlay 3 "April 2025" "freeglut" "freeglut"
+.TH glutEstablishOverlay 3 "November 2025" "freeglut" "freeglut"
 .SH NAME
 glutEstablishOverlay - establishes an overlay (if possible) for the
 current window.
+.SH WARNING
+Not yet implemented in freeglut.
 .SH SYNTAX
 .nf
 .LP

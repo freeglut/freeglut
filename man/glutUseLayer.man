@@ -3,9 +3,11 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutUseLayer 3 "April 2025" "freeglut" "freeglut"
+.TH glutUseLayer 3 "November 2025" "freeglut" "freeglut"
 .SH NAME
 glutUseLayer - changes the layer in use for the current window.
+.SH WARNING
+Not yet implemented in freeglut.
 .SH SYNTAX
 .nf
 .LP
