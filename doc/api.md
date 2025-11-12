@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+- [1. Contents](#1-contents)
 - [2. Introduction](#2-introduction)
 - [3. Background](#3-background)
 	- [3.1 Design Philosophy](#31-design-philosophy)
@@ -42,7 +43,7 @@
 	- [7.1 glutPostRedisplay](#71-glutpostredisplay)
 	- [7.2 glutPostWindowRedisplay](#72-glutpostwindowredisplay)
 	- [7.3 glutSwapBuffers](#73-glutswapbuffers)
-    - [7.4 glutSwapInterval](#74-glutswapinterval)
+	- [7.4 glutSwapInterval](#74-glutswapinterval)
 - [8. Mouse Cursor Functions](#8-mouse-cursor-functions)
 	- [8.1 glutSetCursor](#81-glutsetcursor)
 	- [8.2 glutWarpPointer](#82-glutwarppointer)
@@ -125,8 +126,7 @@
 	- [15.8 glutWireDodecahedron, glutSolidDodecahedron](#158-glutwiredodecahedron-glutsoliddodecahedron)
 	- [15.9  glutWireIcosahedron, glutSolidIcosahedron](#159-glutwireicosahedron-glutsolidicosahedron)
 	- [15.10 glutWireRhombicDodecahedron, glutSolidRhombicDodecahedron](#1510-glutwirerhombicdodecahedron-glutsolidrhombicdodecahedron)
-	- [15.11 glutWireTeapot, glutSolidTeapot, glutWireTeacup,
-glutSolidTeacup, glutWireTeaspoon, glutSolidTeaspoon](#1511-glutwireteapot-glutsolidteapot-glutwireteacup-glutsolidteacup-glutwireteaspoon-glutsolidteaspoon)
+	- [15.11 glutWireTeapot, glutSolidTeapot, glutWireTeacup,](#1511-glutwireteapot-glutsolidteapot-glutwireteacup)
 	- [15.12 glutSetVertexAttribCoord3, glutSetVertexAttribNormal, glutSetVertexAttribTexCoord2](#1512-glutsetvertexattribcoord3-glutsetvertexattribnormal-glutsetvertexattribtexcoord2)
 - [16. Game Mode Functions](#16-game-mode-functions)
 	- [16.1 glutGameModeString](#161-glutgamemodestring)
@@ -134,8 +134,7 @@ glutSolidTeacup, glutWireTeaspoon, glutSolidTeaspoon](#1511-glutwireteapot-gluts
 	- [16.3 glutGameModeGet](#163-glutgamemodeget)
 - [17. Video Resize Functions](#17-video-resize-functions)
 	- [17.1 glutVideoResizeGet](#171-glutvideoresizeget)
-	- [17.2 glutSetupVideoResizing,
-glutStopVideoResizing](#172-glutsetupvideoresizing-glutstopvideoresizing)
+	- [17.2 glutSetupVideoResizing,](#172-glutsetupvideoresizing)
 	- [17.3 glutVideoResize](#173-glutvideoresize)
 	- [17.4 glutVideoPan](#174-glutvideopan)
 - [18. Color Map Functions](#18-color-map-functions)
@@ -224,7 +223,7 @@ the following conventions, both under Windows and under UNIX/X11:
 
 - **Window positioning (setting):** When you create a window with
 position (x,y) and size (w,h), or call `glutPositionWindow`,
-*freeglut* requests that the upper left corner of the
+*freeglut* __requests__ that the upper left corner of the
 window frame (non-client area, including decorations) be placed at (x,y),
 and that the drawable (client) area have size (w,h). The coordinates taken
 by `glutInitPosition` and `glutPositionWindow`, as well as
@@ -234,11 +233,11 @@ non-client area (window frame).
   
 
 However, on X11/UNIX systems, the window manager may:
-- Position the client area (drawable area) at the requested coordinates, offsetting the frame accordingly
-- Position the window frame (including decorations) at the requested coordinates
-- Ignore the request entirely (e.g., tiling window managers)
-- Apply its own positioning policies
-- Spawn xeyes and look intently at the user
+  - Position the client area (drawable area) at the requested coordinates, offsetting the frame accordingly
+  - Position the window frame (including decorations) at the requested coordinates
+  - Ignore the request entirely (e.g., tiling window managers)
+  - Apply its own positioning policies
+  - Spawn xeyes and look intently at the user
 
   
 
@@ -246,16 +245,15 @@ By default only positive-signed coordinates are supported. If
 GLUT_ALLOW_NEGATIVE_WINDOW_POSITION is enabled, then negative coordinates
 are supported. An exception for `glutPositionWindow` exists as it
 always supports negative window coordinates.
-
 - **Window positioning (querying):** When you query the position of
 the window using `glutGet` with `GLUT_WINDOW_X` or
 `GLUT_WINDOW_Y`, *freeglut* returns the coordinates of the
-upper left corner of the drawable (client) area, NOT the window
+upper left corner of the drawable (client) area, __NOT__ the window
 frame position that was specified in the positioning request. Similarly,
 `glutGet` with `GLUT_WINDOW_WIDTH` or
 `GLUT_WINDOW_HEIGHT` returns the size of the drawable area as
-specified when the window was created.  
-  
+specified when the window was created.
+
 
 This mismatch between the frame coordinates used for positioning and the
 client coordinates returned by queries can cause windows to drift when
@@ -269,32 +267,37 @@ calls.
 
 GLUT was created as a tool to help teach OpenGL programming. To simplify
 development, callbacks were used for handling display, input, and other
-events. But at the time it was developed, the purpose, or for some other 
+events. But at the time it was developed, the purpose, or for some other
 unknown reason, the callbacks lacked any user-provided data argument.
 This has caused considerable difficulties for any significantly advanced
-usage of GLUT, and now *freeglut*. This has prevented any attempt to 
+usage of GLUT, and now *freeglut*. This has prevented any attempt to
 wrap *freeglut* in a C++ wrapper, make per-window, per-callback data
 structure, and potentially made it undesirable to modern C developers who
 tend to be well versed in "don't use globals". To combat these
-complaints and *issues*, many callbacks (with some deprecated 
+complaints and *issues*, many callbacks (with some deprecated
 callbacks excluded) support user-data callbacks provided through additional
 functions provided in *freeglut*. All callbacks that support user-data
 callbacks are marked as such.
 
 
-The general rule to follow is to take the *freeglut* callback function 
+The general rule to follow is to take the *freeglut* callback function
 and append "Ucall" to the end of the function, add an additional `void*`
 argument to the end of the argument list of both the *freeglut* function
 and the callback function. This will pass the user-data to the callback when it's
 invoked.
 
+
 **Examples**
 
-`void glutPositionFunc ( void (* func)( int x, int y ) );`  
+
+`void glutPositionFunc ( void (* func)( int x, int y ) );`
+
 
 `void glutPositionFuncUcall ( void (* func)( int x, int y, void* user_data ), void* user_data );`
 
-`void glutKeyboardUpFunc ( void (* func)( unsigned char key, int x, int y ) );`  
+
+`void glutKeyboardUpFunc ( void (* func)( unsigned char key, int x, int y ) );`
+
 
 `void glutKeyboardUpFuncUcall ( void (* func)( unsigned char key, int x, int y, void* user_data ), void* user_data );`
 
@@ -393,11 +396,15 @@ The `glutInitWindowPosition` and `glutInitWindowSize`
 functions specify a desired position and size for windows that *freeglut*
 will create in the future.
 
+
 **Usage**
 
-`void glutInitWindowPosition ( int x, int y );`   
 
-   `void glutInitWindowSize ( int width, int height );`
+`void glutInitWindowPosition ( int x, int y );`
+
+
+`void glutInitWindowSize ( int width, int height );`
+
 
 **Description**
 
@@ -420,16 +427,16 @@ on the top.  The border and title bar are commonly called "decorations."
 **Window Positioning:** When setting window position, you specify the
 intended coordinates of the upper left-hand corner of the window's decorations
 (frame). The size parameter specifies the size of the usable interior (client
-area).  
-  
+area).
+
 
 However, **on X11/UNIX systems**, the window manager has final authority
 over window placement and may not honor the requested position exactly. The
 window manager may position the frame at the requested location, adjust it to
 account for decorations, or apply its own positioning policies. See
-[freeglut's conventions](#Conventions) for detailed information
-about this window manager discretion.  
-  
+[freeglut's conventions](#32-conventions) for detailed information
+about this window manager discretion.
+
 
 **On Windows**, the positioning behavior is more predictable, with the
 window frame being positioned at the requested coordinates.
@@ -437,7 +444,7 @@ window frame being positioned at the requested coordinates.
 
 With `glutGet` information can be acquired about the current
 window's size, position and decorations. Note however that according to
-[freeglut's conventions](#Conventions), the information
+[freeglut's conventions](#32-conventions), the information
 returned about the window coordinates does not correspond to the
 coordinates used when setting window position. In addition, GLUT only
 accepts positive window coordinates, and ignores all negative window
@@ -457,6 +464,7 @@ minimum window width on Windows which is 104 pixels.  The user may specify
 a smaller width, but the Windows system calls ignore it.  It is also
 impossible to make a window narrower than this by dragging on its corner.
 
+
 **Changes From GLUT**
 
 
@@ -472,6 +480,7 @@ will accept negative window coordinates.
 ### 4.3 glutInitDisplayMode
 
 ### 4.4 glutInitDisplayString
+
 
 **Changes From GLUT**
 
@@ -492,21 +501,27 @@ issued from within *freeglut* so that the user can deal with these.
 Useful for rerouting to another output sink (e.g., logging) and also to
 avoid exit(1) being called upon error. As with other glutInit*
 functions, these can be set before glutInit is called, so any output
-from the library can be handled by the user.
+from the library can be handled by the user.*
+
 
 **Usage**
 
-`void glutInitErrorFunc   ( void (* callback)( const char *fmt, va_list ap) );`  
+
+`void glutInitErrorFunc   ( void (* callback)( const char *fmt, va_list ap) );`
+
 
 `void glutInitWarningFunc ( void (* callback)( const char *fmt, va_list ap) );`
 
+
 These functions have user-data callback functions.
+
 
 **Description**
 
 
 The users callback is passed a format string and a variable argument
-list that can be passed to functions such as `printf`.  
+list that can be passed to functions such as `printf`.
+
 
 Note that there are the preprocessor definitions
 `FREEGLUT_PRINT_ERRORS` and `FREEGLUT_PRINT_WARNINGS`,
@@ -520,7 +535,9 @@ exit. Whether `FREEGLUT_PRINT_ERRORS` and
 client callback is called, it only affects whether warnings and errors
 are printed to `stderr` when no callback is defined.
 
+
 **Changes From GLUT**
+
 
 GLUT does not provide these functions.
 
@@ -551,17 +568,22 @@ to the application's calling `exit` from within a GLUT callback.
 
 The `glutMainLoop` function enters the event loop.
 
+
 **Usage**
+
 
 `void glutMainLoop ( void );`
 
+
 **Description**
+
 
 The `glutMainLoop` function
 causes the program to enter the window event loop.  An application should
 call this function at most once.  It will call any application callback
 functions as required to process mouse clicks, mouse motion, key presses,
 and so on.
+
 
 **Changes From GLUT**
 
@@ -582,9 +604,12 @@ but I think it is important enough that it bears repeating.)
 The `glutMainLoopEvent` function processes a single iteration
 in the *freeglut* event loop.
 
+
 **Usage**
 
+
 `void glutMainLoopEvent ( void );`
+
 
 **Description**
 
@@ -593,7 +618,9 @@ The `glutMainLoopEvent` function causes *freeglut* to process
 one iteration's worth of events in its event loop.  This allows the application
 to control its own event loop and still use the *freeglut* windowing system.
 
+
 **Changes From GLUT**
+
 
 GLUT does not include this function.
 
@@ -603,9 +630,12 @@ GLUT does not include this function.
 The `glutLeaveMainLoop` function causes *freeglut* to stop
 its event loop.
 
+
 **Usage**
 
+
 `void glutLeaveMainLoop ( void );`
+
 
 **Description**
 
@@ -625,7 +655,9 @@ loop or it may leave both loops.  If the reader has a strong preference
 for one behaviour over the other he should contact the *freeglut* Programming
 Consortium and ask for the code to be fixed.
 
+
 **Changes From GLUT**
+
 
 GLUT does not include this function.
 
@@ -638,10 +670,12 @@ GLUT does not include this function.
 
 The `glutCreateSubwindow` function creates a subwindow of an existing window.
 
+
 **Usage**
 
 
 `int glutCreateSubwindow(int window, int x, int y, int width, int height);`
+
 
 **Description**
 
@@ -652,20 +686,21 @@ window ID is returned by `glutCreateSubwindow`. By default, the position coordin
 Negative coordinates be treated as coordinates from the opposite edge for a given axis. In addition, the width of the window will be taken into account.
 For example, if the parent window is 100 pixels wide, and the *x* is 10, and *width* is 20, the subwindow will be located at `x = 10`.
 If *x* is -10, then the subwindow will be located at 70 `(parent - abs(pos) - dim)`. If the *width* or *height* are negative, then the dimension is taken as a
-subtraction of the parent dimension. For example, if the parent window is 100 pixels wide, and the *x* is 10, and *width* is 20, the 
+subtraction of the parent dimension. For example, if the parent window is 100 pixels wide, and the *x* is 10, and *width* is 20, the
 subwindow will have a size of 20. If *width* is -20, then the subwindow will have a width of 70 `(parent - pos - abs(dim))`.
 
 
 If GLUT_ALLOW_NEGATIVE_WINDOW_POSITION is enabled, the window behavior differs. Negative window coordinates are now accepted and may result in windows outside
 of the viewing area, depending on the platform of operation. Negative *width* and *height* are still used as a subtraction of the parent window dimension,
-but they do not take *x* or *y* into account. For example, if the parent window is 100 pixels wide, and the *x* is 10, and *width* is 20, the 
-subwindow will be located at `x = 10`. If *x* is -10, then the subwindow will be located at `x = -10`. If the parent window is 100 pixels wide, 
+but they do not take *x* or *y* into account. For example, if the parent window is 100 pixels wide, and the *x* is 10, and *width* is 20, the
+subwindow will be located at `x = 10`. If *x* is -10, then the subwindow will be located at `x = -10`. If the parent window is 100 pixels wide,
 and the *x* is 10, and *width* is 20, the subwindow will have a size of 20. If *width* is -20, then the subwindow will have a width of 80 `(parent - abs(dim))`.
+
 
 **Changes From GLUT**
 
 
-GLUT does not support negative *x* or *y*. Nor does it have GLUT_ALLOW_NEGATIVE_WINDOW_POSITION 
+GLUT does not support negative *x* or *y*. Nor does it have GLUT_ALLOW_NEGATIVE_WINDOW_POSITION
 which changes the the functionality of `glutCreateSubwindow`.
 
 ### 6.3 glutDestroyWindow
@@ -679,11 +714,15 @@ The `glutSetWindowTitle`, `glutSetIconTitle` set the
 window title for when the window is in a visible state and when it is in
 an iconified state respectively.
 
+
 **Usage**
 
-`glutSetWindowTitle(const char* title);`  
+
+`glutSetWindowTitle(const char* title);`
+
 
 `glutSetIconTitle(const char* title);`
+
 
 **Description**
 
@@ -693,12 +732,15 @@ the system. The initial title is set when you call glutCreateWindow().
 By means of the `glutSetWindowTitle` function you can set the
 titles for your top-level *freeglut* windows. If you just want one
 title for the window over the window's entire life, you should set it
-when you open the window with glutCreateWindow().  
+when you open the window with glutCreateWindow().
+
 
 `glutSetIconTitle` sets the title to be displayed for the window
 when it is in iconified (minimized) state.
 
+
 **Changes From GLUT**
+
 
 `glutSetIconTitle` does nothing in GLUT on Windows, but is
 emulated on Windows by *freeglut*.
@@ -718,13 +760,18 @@ The `glutFullScreen`, `glutLeaveFullScreen` and
 `glutFullScreenToggle` functions are used to transition the
 current window between fullscreen and normal mode.
 
+
 **Usage**
 
-`void glutFullScreen ( void );`  
 
-`void glutLeaveFullScreen ( void );`  
+`void glutFullScreen ( void );`
+
+
+`void glutLeaveFullScreen ( void );`
+
 
 `void glutFullScreenToggle ( void );`
+
 
 **Description**
 
@@ -733,17 +780,22 @@ The `glutFullScreen` function causes the current window to enter
 fullscreen mode, `glutLeaveFullScreen` to go back to the window
 size and position as it was before entering fullscreen mode, and
 `glutFullScreenToggle` toggles between fullscreen and normal
-mode.  
+mode.
+
 
 In multi-monitor setups on Windows 2000 and newer, the window will
-become fullscreen on the monitor that it overlaps the most.  
+become fullscreen on the monitor that it overlaps the most.
 
-Calls to these functions are ignored for gamemode and child windows.  
+
+Calls to these functions are ignored for gamemode and child windows.
+
 
 Use `glutGet(GLUT_FULL_SCREEN)` to query fullscreen state of
 current window.
 
+
 **Changes From GLUT**
+
 
 GLUT does not include the `glutLeaveFullScreen` and
 `glutFullScreenToggle` functions.
@@ -758,23 +810,30 @@ GLUT does not include the `glutLeaveFullScreen` and
 
 ### 7.4 glutSwapInterval
 
+
 `glutSwapInterval` allows the application to control the synchronization of
 buffer swaps with display frames (v-sync).
 
+
 **Usage**
+
 
 `void glutSwapInterval(int interval);`
 
+
 **Description**
+
 
 An `interval` of 0 requests no synchronization, buffers should be swapped
 immediately, even if the display device is in the middle of scanning out the
 previous frame. This may result in visible artifacts (tearing).
 
+
 An `interval` of 1 is the standard v-sync setting. The swap is performed during
 the next vertical blanking period, after the current frame is done being scanned
 out to the display. Any other positive `interval` greater than 1, will wait for
 that many v-blank periods before swapping.
+
 
 Negative `interval` values are for "adaptive v-sync". If drawing is completed
 and the swap is ready to be executed before the target v-blank, the swap will be
@@ -783,16 +842,18 @@ the target interval has elapsed and the swap is running late, instead of
 waiting more, the swap will be performed immediately, unsynchronzied with the
 display.
 
+
 Not all GL implementations support all of these semantics. Freeglut will attempt
 to fall-back to the nearest-equivalent supported swap interval. If adaptive
 v-sync is not supported, negative values will be flipped to their positive
 equivalent. If running unsynchronized is not possible, an interval of 1 will be
 used instead.
 
+
 **Changes From GLUT**
 
-GLUT does not include this function.
 
+GLUT does not include this function.
 
 ## 8. Mouse Cursor Functions
 
@@ -817,16 +878,21 @@ to assist in the implementation.
 
 The `glutEstablishOverlay` function is not implemented in *freeglut*.
 
+
 **Usage**
 
+
 `void glutEstablishOverlay ( void );`
+
 
 **Description**
 
 
 The `glutEstablishOverlay` function is not implemented in *freeglut*.
 
+
 **Changes From GLUT**
+
 
 GLUT implements this function.
 
@@ -835,9 +901,12 @@ GLUT implements this function.
 
 The `glutRemoveOverlay` function is not implemented in *freeglut*.
 
+
 **Usage**
 
+
 `void glutRemoveOverlay ( void );`
+
 
 **Description**
 
@@ -845,7 +914,9 @@ The `glutRemoveOverlay` function is not implemented in *freeglut*.
 The `glutRemoveOverlay` function
 is not implemented in *freeglut*.
 
+
 **Changes From GLUT**
+
 
 GLUT implements this function.
 
@@ -854,9 +925,12 @@ GLUT implements this function.
 
 The `glutUseLayer` function is not implemented in *freeglut*.
 
+
 **Usage**
 
+
 `void glutUseLayer ( GLenum layer );`
+
 
 **Description**
 
@@ -864,7 +938,9 @@ The `glutUseLayer` function is not implemented in *freeglut*.
 The `glutUseLayer` function
 is not implemented in *freeglut*.
 
+
 **Changes From GLUT**
+
 
 GLUT implements this function.
 
@@ -873,9 +949,12 @@ GLUT implements this function.
 
 The `glutPostOverlayRedisplay` function is not implemented in *freeglut*.
 
+
 **Usage**
 
+
 `void glutPostOverlayRedisplay ( void );`
+
 
 **Description**
 
@@ -883,7 +962,9 @@ The `glutPostOverlayRedisplay` function is not implemented in *freeglut*.
 The `glutPostOverlayRedisplay` function is not implemented
 in *freeglut*.
 
+
 **Changes From GLUT**
+
 
 GLUT implements this function.
 
@@ -893,16 +974,21 @@ GLUT implements this function.
 The `glutPostWindowOverlayRedisplay` function is not implemented
 in *freeglut*.
 
+
 **Usage**
 
+
 `void glutPostWindowOverlayRedisplay ( int window );`
+
 
 **Description**
 
 
 The `glutPostWindowOverlayRedisplay` function is not implemented in *freeglut*.
 
+
 **Changes From GLUT**
+
 
 GLUT implements this function.
 
@@ -912,25 +998,31 @@ GLUT implements this function.
 The `glutShowOverlay` and `glutHideOverlay` functions
 are not implemented in *freeglut*.
 
+
 **Usage**
 
-`void glutShowOverlay( void );`
-    
 
- `void glutHideOverlay( void );`
+`void glutShowOverlay( void );`
+
+
+`void glutHideOverlay( void );`
+
 
 **Description**
 
 
 The `glutShowOverlay` and `glutHideOverlay` functions are not implemented in *freeglut*.
 
+
 **Changes From GLUT**
+
 
 GLUT implements these functions.
 
 ## 10. Menu Functions
 
 ### 10.1 glutCreateMenu
+
 
 Has user-data callback function.
 
@@ -952,18 +1044,23 @@ Has user-data callback function.
 `glutSetMenuFont` sets the (bitmap) font to be used for drawing
 the specified menu.
 
+
 **Usage**
 
+
 `void glutSetMenuFont( int menuID, void* fontID );`
+
 
 **Description**
 
 
-Only bitmap fonts (`GLUT_BITMAP_xxx`, see here for a list) can be used as menu fonts.  A
+Only bitmap fonts (`GLUT_BITMAP_xxx`, see [here](#FontRendering) for a list) can be used as menu fonts.  A
 warning is issued and the request is ignored if the supplied font is a
 stroke font, or an unknown font.
 
+
 **Changes From GLUT**
+
 
 GLUT does not provide this function.
 
@@ -973,11 +1070,13 @@ GLUT does not provide this function.
 
 ### 10.11 glutMenuDestroyFunc
 
+
 Has user-data callback function.
 
 ## 11. Global Callback Registration Functions
 
 ### 11.1 glutTimerFunc
+
 
 Has user-data callback function.
 
@@ -987,13 +1086,18 @@ Has user-data callback function.
 The `glutIdleFunc` function sets the global idle callback. *
 freeglut*  calls the idle callback when there are no inputs from the user.
 
+
 **Usage**
+
 
 `void glutIdleFunc ( void (*func ) ( void ) );`
 
+
 `func` The new global idle callback function
 
+
 Has user-data callback function.
+
 
 **Description**
 
@@ -1007,7 +1111,8 @@ has no parameters and returns no value.  *freeglut* does not change
 the *current window* or the *current menu* before invoking the idle
 callback; programs with multiple windows or menus must explicitly set the
 *current window* and *current menu*
- and not rely on its current setting.   
+and not rely on its current setting.
+
 
 The amount of computation and rendering done in an idle
 callback should be minimized to avoid affecting the program's interactive
@@ -1016,12 +1121,15 @@ be done in a single invocation of an idle callback. Note that no actual
 drawing to the framebuffer should be done from the idle callback, this
 is not supported. While it might work on some platforms, it will not on
 others or might stop working in the future. Drawing should be done in
-the `glutDisplayFunc` callback.  
+the `glutDisplayFunc` callback.
+
 
 Calling `glutIdleFunc` with a NULL argument
 disables the call to an idle callback.
 
+
 **Changes From GLUT**
+
 
 Application programmers should note that
 if they have specified the "continue execution" action on window closure,
@@ -1034,6 +1142,7 @@ the idle callback.
 
 ### 11.3 glutMenuStatusFunc
 
+
 Has user-data callback function.
 
 ### 11.4 glutMenuStateFunc
@@ -1042,13 +1151,16 @@ Has user-data callback function.
 
 ### 12.1 glutDisplayFunc
 
+
 Has user-data callback function.
 
 ### 12.2 glutOverlayDisplayFunc
 
+
 Has user-data callback function.
 
 ### 12.3 glutReshapeFunc
+
 
 Has user-data callback function.
 
@@ -1059,26 +1171,33 @@ The `glutPositionFunc` function sets the window's position
 callback. *freeglut* calls the position callback when the window is
 repositioned/moved programatically or by the user.
 
+
 **Usage**
+
 
 `void glutPositionFunc ( void
 (* func)( int x, int y) );`
 
+
 Has user-data callback function.
+
 
 **Description**
 
+
 When *freeglut* calls this callback, it attempts to provide the new
-position on the screen of the top-left of the non-client area (window
+position on the screen of the top-left of the __non-client area__ (window
 frame), that is, the same frame coordinates as specified by
 `glutInitPosition` and `glutPositionWindow`. However, on
 X11/UNIX systems, the actual position reported depends on the window manager's
 interpretation and may vary. To get the position on the screen of the top-left
 of the client area, use `glutGet(GLUT_WINDOW_X)` and
 `glutGet(GLUT_WINDOW_Y)`. See [freeglut's
-conventions](#Conventions) for more information.
+conventions](#32-conventions) for more information.
+
 
 **Changes From GLUT**
+
 
 This function is not implemented in GLUT.
 
@@ -1089,13 +1208,18 @@ The `glutCloseFunc` function sets the window's close
 callback. *freeglut* calls the close callback when the window is
 about to be destroyed.
 
+
 **Usage**
+
 
 `void glutCloseFunc ( void (*func) ( void ) );`
 
+
 `func` The window's new closure callback function
 
+
 Has user-data callback function.
+
 
 **Description**
 
@@ -1107,25 +1231,31 @@ is about to be closed, either because it is requested using
 window header (for top-level windows only), or due to a pending closure
 of a subwindow's parent window. In the first case, the closure callback
 is not invoked from the `glutDestroyWindow` call, but at a
-later time point.  
+later time point.
+
 
 *freeglut* sets the *current window* to the window
 which is about to be closed when the callback is invoked. The window can
-thus be retrieved in the callback using `glutGetWindow`.  
+thus be retrieved in the callback using `glutGetWindow`.
+
 
 Users looking to prevent *freeglut* from exiting when a window is
 closed, should look into using glutSetOption to set
 `GLUT_ACTION_ON_WINDOW_CLOSE`. Some settings will prevent the
-application from exiting when a window is closed.  
+application from exiting when a window is closed.
+
 
 Please note that `glutWMCloseFunc`, a deprecated function, is an
 alias to `glutCloseFunc`.
 
+
 **Changes From GLUT**
+
 
 This function is not implemented in GLUT.
 
 ### 12.6 glutKeyboardFunc
+
 
 Has user-data callback function.
 
@@ -1136,26 +1266,34 @@ The `glutSpecialFunc` function sets the window's special key press
 callback. *freeglut* calls the special key press callback when the
 user presses a special key.
 
+
 **Usage**
+
 
 `void glutSpecialFunc ( void (*func)
 ( int key, int x, int y ) );`
 
+
 `func `The window's
-new special key press callback function   
+new special key press callback function
 
- `key `The
-key whose press triggers the callback   
 
- `x
+`key `The
+key whose press triggers the callback
+
+
+`x
 `The x-coordinate of the mouse relative
-to the window at the time the key is pressed   
+to the window at the time the key is pressed
 
- `y
+
+`y
 `The y-coordinate of the mouse relative
 to the window at the time the key is pressed
 
+
 Has user-data callback function.
+
 
 **Description**
 
@@ -1168,7 +1306,8 @@ the time at which the special key is pressed.  The function returns no
 value.  *freeglut* sets the *current window* to the window
 which is active when the callback is invoked.  "Special keys" are the
 function keys, the arrow keys, the Page Up and Page Down keys, and the Insert
-key.  The Delete key is considered to be a regular key.   
+key.  The Delete key is considered to be a regular key.
+
 
 Calling `glutSpecialUpFunc` with a NULL argument
 disables the call to the window's special key press callback.
@@ -1182,7 +1321,9 @@ The `key` argument may take one of the following defined constant values:
 - `GLUT_KEY_LEFT, GLUT_KEY_RIGHT, GLUT_KEY_UP, GLUT_KEY_DOWN` - Arrow keys
 - `GLUT_KEY_INSERT`                             - Insert key
 
+
 **Changes From GLUT**
+
 
 None.
 
@@ -1193,26 +1334,34 @@ The `glutKeyboardUpFunc` function sets the window's key release
 callback. *freeglut* calls the key release callback when the user releases
 a key.
 
+
 **Usage**
+
 
 `void glutKeyboardUpFunc ( void (*func)
 ( unsigned char key, int x, int y ) );`
 
+
 `func `The window's
-new key release callback function   
+new key release callback function
 
- `key `The
-key whose release triggers the callback   
 
- `x
+`key `The
+key whose release triggers the callback
+
+
+`x
 `The x-coordinate of the mouse relative
-to the window at the time the key is released   
+to the window at the time the key is released
 
- `y
+
+`y
 `The y-coordinate of the mouse relative
 to the window at the time the key is released
 
+
 Has user-data callback function.
+
 
 **Description**
 
@@ -1223,8 +1372,8 @@ user releases a key from the keyboard.  The callback function has one
 argument:  the name of the function to be invoked ("called back") at
 the time at which the key is released.  The function returns no value.
 *Freeglut* sets the *current window* to the window which is
-active when the callback is invoked.   
- While *freeglut* checks
+active when the callback is invoked.
+While *freeglut* checks
 for upper or lower case letters, it does not do so for non-alphabetical
 characters.  Nor does it account for the Caps-Lock key being on.
 The operating system may send some unexpected characters to
@@ -1232,11 +1381,13 @@ The operating system may send some unexpected characters to
 key.  *freeglut* also invokes the callback when the user
 releases the Control, Alt, or Shift keys, among others.  Releasing
 the Delete key causes this function to be invoked with a value of
-127 for `key`.   
- Calling `glutKeyboardUpFunc` with
+127 for `key`.
+Calling `glutKeyboardUpFunc` with
 a NULL argument disables the call to the window's key release callback.
 
+
 **Changes From GLUT**
+
 
 This function is not implemented in GLUT
 versions before Version 4.  It has been designed to be as close to GLUT
@@ -1250,26 +1401,34 @@ The `glutSpecialUpFunc` function sets the window's special key
 release callback. *freeglut* calls the special key release callback
 when the user releases a special key.
 
+
 **Usage**
+
 
 `void glutSpecialUpFunc ( void (*func)
 ( int key, int x, int y ) );`
 
+
 `func `The window's
-new special key release callback function   
+new special key release callback function
 
- `key `The
-key whose release triggers the callback   
 
- `x
+`key `The
+key whose release triggers the callback
+
+
+`x
 `The x-coordinate of the mouse relative
-to the window at the time the key is released   
+to the window at the time the key is released
 
- `y
+
+`y
 `The y-coordinate of the mouse relative
 to the window at the time the key is released
 
+
 Has user-data callback function.
+
 
 **Description**
 
@@ -1281,9 +1440,10 @@ at the time at which the special key is released.  The function returns
 no value. *freeglut* sets the *current window* to the window
 which is active when the callback is invoked.  "Special keys" are the
 function keys, the arrow keys, the Page Up and Page Down keys, and the Insert
-key.  The Delete key is considered to be a regular key.   
+key.  The Delete key is considered to be a regular key.
 
- Calling `glutSpecialUpFunc` with a NULL argument
+
+Calling `glutSpecialUpFunc` with a NULL argument
 disables the call to the window's special key release callback.
 
 
@@ -1294,6 +1454,7 @@ The `key` argument may take one of the following defined constant values:
 - `GLUT_KEY_HOME, GLUT_KEY_END`  - Home and End keys
 - `GLUT_KEY_LEFT, GLUT_KEY_RIGHT, GLUT_KEY_UP, GLUT_KEY_DOWN` - arrow keys
 - `GLUT_KEY_INSERT` - Insert key
+
 
 **Changes From GLUT**
 
@@ -1306,9 +1467,11 @@ have them fixed.
 
 ### 12.10 glutMotionFunc, glutPassiveMotionFunc
 
+
 Both functions have user-data callback functions.
 
 ### 12.11 glutMouseFunc
+
 
 Has user-data callback function.
 
@@ -1319,33 +1482,42 @@ The `glutMouseWheelFunc` function sets the window's mouse wheel
 callback. *freeglut* calls the mouse wheel callback when the user
 spins the mouse wheel.
 
+
 **Usage**
+
 
 `void glutMouseWheelFunc ( void( *callback )( int wheel, int
 direction, int x, int y ));`
 
+
 Has user-data callback function.
 
+
 **Description**
+
 
 If the mouse wheel is spun over your (sub)window, *freeglut*
 will report this via the MouseWheel callback. `wheel` is the wheel
 number, `direction` is +/- 1, and `x` and `y` are
-the mouse coordinates.  
-  
+the mouse coordinates.
+
 
 If you do not register a wheel callback, wheel events will be reported
 as mouse buttons.
 
+
 **Changes From GLUT**
+
 
 This function is not implemented in GLUT.
 
 ### 12.13 glutEntryFunc
 
+
 Has user-data callback function.
 
 ### 12.14 glutJoystickFunc
+
 
 Has user-data callback function.
 
@@ -1357,17 +1529,24 @@ The `glutSpaceballMotionFunc` function is implemented in
 provided so that GLUT-based programs can compile and link against
 *freeglut* without modification.
 
+
 The `glutSpaceballMotionFunc` function sets the window's Spaceball motion callback. *freeglut* invokes this callback when the user push/pull Spaceball cap in *x*, *y*, and *z* directions.
+
 
 **Usage**
 
+
 `void glutSpaceballMotionFunc ( void (* callback)( int x, int y, int z ) );`
+
 
 Has user-data callback function.
 
+
 **Description**
 
+
 The *x*, *y*, and *z* arguments indicate the amount of translation in integer along x, y, and z axis respectively.
+
 
 The x, y, and z axes form a common OpenGL right-handed coordinate system. A positive value of *x*, *y*, or *z* indicates movement along the positive direction of the respective axis, while the negative one denotes movement along negative direction.
 
@@ -1379,17 +1558,24 @@ The `glutSpaceballRotateFunc` function is implemented in
 provided so that GLUT-based programs can compile and link against
 *freeglut* without modification.
 
+
 The `glutSpaceballRotateFunc` function sets the window's Spaceball rotation callback. *freeglut* invokes this callback when the user rotates/twists Spaceball cap.
+
 
 **Usage**
 
+
 `void glutSpaceballRotateFunc ( void (* callback)( int rx, int ry, int rz ) );`
+
 
 Has user-data callback function.
 
+
 **Description**
 
+
 The *rx*, *ry*, and *rz* arguments indicate the amount of rotation in integer with respect to x, y, and z axis respectively.
+
 
 The x, y, and z axes form a common OpenGL right-handed coordinate system. Positive value of *rx*, *ry*, or *rz* indicates counter-clock wise rotation along the respective axis, while negative one denotes clock wise rotation.
 
@@ -1404,13 +1590,18 @@ provided so that GLUT-based programs can compile and link against
 
 The `glutSpaceballButtonFunc` function sets the window's Spaceball button callback. *freeglut* invokes this callback when the user presses/releases one of the Spaceball buttons.
 
+
 **Usage**
+
 
 `void glutSpaceballButtonFunc ( void (* callback)( int button, int updown ) );`
 
+
 Has user-data callback function.
 
+
 **Description**
+
 
 The *button* argument may take one of the following defined
 constant values:
@@ -1421,10 +1612,12 @@ constant values:
 - `GLUT_SPACEBALL_BUTTON_D` (0x00000008)
 - `GLUT_SPACEBALL_BUTTON_E` (0x00000010)
 
+
 The *updown* argument may take one of the two defined constant
 values:
 
 - GLUT_DOWN, GLUT_UP indicating if button is pressed or released.
+
 
 **Changes From GLUT**
 
@@ -1438,23 +1631,27 @@ are the same.
 
 The `glutDialsFunc` function sets the global dials&buttons box callback. freeglut calls the callback when there is input from the box buttons.
 
+
 **Usage**
 
 
 `void glutButtonBoxFunc ( void (* callback)( int button, int updown ) );`
 
+
 Has user-data callback function.
+
 
 **Description**
 
 
 The Dials&Buttons box is an ancient device presenting several pushable
 or rotatable buttons, sending the events to the computer via serial
-I/O.  
+I/O.
 
 
-See http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg
-[[1](http://www.nekochan.net/reputable/sgipix.html)]
+See [http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg](http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg)
+
+
 for instance.
 
 ### 12.19 glutDialsFunc
@@ -1462,22 +1659,27 @@ for instance.
 
 The `glutDialsFunc` function sets the global dials&buttons box callback. freeglut calls the callback when there is input from the box dials.
 
+
 **Usage**
+
 
 `void glutDialsFunc ( void (* callback)( int dial, int value ) );`
 
+
 Has user-data callback function.
+
 
 **Description**
 
 
 The Dials&Buttons box is an ancient device presenting several pushable
 or rotatable buttons, sending the events to the computer via serial
-I/O.  
+I/O.
 
 
-See http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg
-[[1](http://www.nekochan.net/reputable/sgipix.html)]
+See [http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg](http://www.reputable.com/sgipix/sgi-dialnbutton1.jpg)
+
+
 for instance.
 
 ### 12.20 glutTabletMotionFunc
@@ -1487,19 +1689,25 @@ The `glutTabletMotionFunc` function is not implemented in *
 freeglut*, although the library does "answer the mail" to the extent
 that a call to the function will not produce an error..
 
+
 **Usage**
 
 
 `void glutTabletMotionFunc ( void (* callback)( int x, int y ) );`
 
+
 Has user-data callback function.
 
+
 **Description**
+
 
 The `glutTabletMotionFunc` function
 is not implemented in *freeglut*.
 
+
 **Changes From GLUT**
+
 
 GLUT implements this function.
 
@@ -1510,11 +1718,15 @@ The `glutTabletButtonFunc` function is not implemented in *
 freeglut*, although the library does "answer the mail" to the extent
 that a call to the function will not produce an error..
 
+
 **Usage**
+
 
 `void glutTabletButtonFunc ( void (* callback)( int button, int updown, int x, int y ) );`
 
+
 Has user-data callback function.
+
 
 **Description**
 
@@ -1522,7 +1734,9 @@ Has user-data callback function.
 The `glutTabletButtonFunc` function
 is not implemented in *freeglut*.
 
+
 **Changes From GLUT**
+
 
 GLUT implements this function.
 
@@ -1534,19 +1748,25 @@ functions set the window's visibility and windowStatus callbacks for the
 current window. Setting one overwrites the other. *freeglut* calls
 these callbacks when the visibility status of a window changes.
 
+
 **Usage**
 
+
 `void glutVisibilityFunc ( void( *callback )( int state ));`
-  
+
+
 `void glutWindowStatusFunc ( void( *callback )( int state ));`
 
+
 Both functions have user-data callback functions.
+
 
 **Description**
 
 
 `glutVisibilityFunc` is deprecated and superseded by the more
-informative `glutWindowStatusFunc`.  
+informative `glutWindowStatusFunc`.
+
 
 For `glutWindowStatusFunc`, the state callback parameter is one
 of GLUT_HIDDEN, GLUT_FULLY_RETAINED, GLUT_PARTIALLY_RETAINED, or
@@ -1558,20 +1778,24 @@ windows). GLUT_PARTIALLY_RETAINED means that the window is partially
 retained (some but not all pixels belonging to the window are covered by
 other windows). GLUT_FULLY_COVERED means the window is shown but no part
 of the window is visible, i.e., until the window's status changes, all
-further rendering to the window is discarded.  
+further rendering to the window is discarded.
+
 
 GLUT considers a window visible if any pixel of the window is visible or
-any pixel of any descendant window is visible on the screen.  
+any pixel of any descendant window is visible on the screen.
+
 
 GLUT applications are encouraged to disable rendering and/or animation
 when windows have a status of either GLUT_HIDDEN or
-GLUT_FULLY_COVERED.  
+GLUT_FULLY_COVERED.
+
 
 If the window status callback for a window is disabled and later
 re-enabled, the window status of the window is undefined; any change in
 window window status will be reported, that is if you disable a window
 status callback and re-enable the callback, you are guaranteed the next
-window status change will be reported.  
+window status change will be reported.
+
 
 Setting the window status callback for a window disables the visibility
 callback set for the window (and vice versa). The visibility callback is
@@ -1581,7 +1805,8 @@ depending on the current visibility of the window. GLUT_VISIBLE does not
 distinguish a window being totally versus partially visible.
 GLUT_NOT_VISIBLE means no part of the window is visible, i.e., until the
 window's visibility changes, all further rendering to the window is
-discarded.  
+discarded.
+
 
 Not all window managers support such finegrained callback messages or
 can even ensure basic correctness. On Windows, there are no
@@ -1589,7 +1814,9 @@ notifications if the visibility status of a window changes and
 *freeglut* might be in visible state even if the window is fully
 obscured by other windows.
 
+
 **Changes From GLUT**
+
 
 None.
 
@@ -1600,12 +1827,15 @@ None.
 
 Allows you to set some general state/option variables.
 
+
 **Usage**
 
 
 `void glutSetOption ( GLenum eWhat, int value );`
 
+
 **Description**
+
 
 Stores the `value` into a state variable named by
 `eWhat`.
@@ -1636,14 +1866,16 @@ glutSetCursor().
 windows if GLUT_AUX was set in the displayMode.
 - GLUT_MULTISAMPLE - Set the number of samples to request for new
 windows if GLUT_MULTISAMPLE was set in the displayMode.
-- GLUT_GEOMETRY_VISUALIZE_NORMALS - Set whether *freeglut*'s geometric object rendering
-functions also visualize the object's normals or not.
+- GLUT_GEOMETRY_VISUALIZE_NORMALS - Set whether [*freeglut*'s geometric object rendering
+functions](#GeometricObject) also visualize the object's normals or not.
 - GLUT_STROKE_FONT_DRAW_JOIN_DOTS - Set whether join dots are drawn
 between line segments when drawing letters of stroke fonts or not.
 - GLUT_ALLOW_NEGATIVE_WINDOW_POSITION - Set if negative positions can be
 used for window coordinates.
 
+
 **Changes From GLUT**
+
 
 This function is not implemented in GLUT.
 
@@ -1654,17 +1886,18 @@ The following state variables may be queried with `glutGet`.
 The returned value is an integer.
 
 
-example:  
+example:
+
 
 `int windowLeft = glutGet(GLUT_WINDOW_X);`
 
 
 These queries are with respect to the current window:
 
-- GLUT_WINDOW_X - X position of the window's client (drawable) area, relative to screen origin. Note that this returns the client area position, not the window frame position used by `glutPositionWindow`. See [freeglut's conventions](#Conventions)
-- GLUT_WINDOW_Y - Y position of the window's client (drawable) area, relative to screen origin. Note that this returns the client area position, not the window frame position used by `glutPositionWindow`. See [freeglut's conventions](#Conventions)
-- GLUT_WINDOW_WIDTH - width of the window's client (drawable) area. See [freeglut's conventions](#Conventions)
-- GLUT_WINDOW_HEIGHT - height of the window's client (drawable) area. See [freeglut's conventions](#Conventions)
+- GLUT_WINDOW_X - X position of the window's client (drawable) area, relative to screen origin. Note that this returns the client area position, not the window frame position used by `glutPositionWindow`. See [freeglut's conventions](#32-conventions)
+- GLUT_WINDOW_Y - Y position of the window's client (drawable) area, relative to screen origin. Note that this returns the client area position, not the window frame position used by `glutPositionWindow`. See [freeglut's conventions](#32-conventions)
+- GLUT_WINDOW_WIDTH - width of the window's client (drawable) area. See [freeglut's conventions](#32-conventions)
+- GLUT_WINDOW_HEIGHT - height of the window's client (drawable) area. See [freeglut's conventions](#32-conventions)
 - GLUT_WINDOW_BORDER_WIDTH - window border width
 - GLUT_WINDOW_BORDER_HEIGHT - height of non-client area above window,
 including both border and caption (if any)
@@ -1680,7 +1913,7 @@ including both border and caption (if any)
 - GLUT_WINDOW_ACCUM_BLUE_SIZE - number of blue bits in the accumulation buffer
 - GLUT_WINDOW_ACCUM_ALPHA_SIZE - number of alpha bits in the accumulation buffer
 - GLUT_WINDOW_DOUBLEBUFFER - 1 if the color buffer is double buffered, 0 otherwise
-- GLUT_WINDOW_RGBA - 1 if the color buffers are RGB[A], 0 for color index
+- GLUT_WINDOW_RGBA - 1 if the color buffers are RGB, 0 for color index
 - GLUT_WINDOW_PARENT - parent window ID
 - GLUT_WINDOW_NUM_CHILDREN - number of child windows
 - GLUT_WINDOW_COLORMAP_SIZE - number of entries in the window's colormap
@@ -1707,10 +1940,10 @@ These queries do not depend on the current window.
 glutInitDisplayMode or glutSetOption(GLUT_INIT_DISPLAY_MODE, value)
 - GLUT_ELAPSED_TIME - time (in milliseconds) elapsed since glutInit or glutGet(GLUT_ELAPSED_TIME) was first called
 - GLUT_INIT_STATE - 1 if *freeglut* has been initialized through
-    a call to `glutInit`
+a call to `glutInit`
 - GLUT_VERSION - Return value will be X*10000+Y*100+Z where X is the
-    major version, Y is the minor version and Z is the patch level.
-    This query is only supported in *freeglut* (version 2.0.0 or later).
+major version, Y is the minor version and Z is the patch level.
+This query is only supported in *freeglut* (version 2.0.0 or later).
 - GLUT_ALLOW_NEGATIVE_WINDOW_POSITION - 1 if negative window positions are enabled, 0 otherwise
 
 ### 13.3 glutDeviceGet
@@ -1727,11 +1960,15 @@ glutInitDisplayMode or glutSetOption(GLUT_INIT_DISPLAY_MODE, value)
 `glutGetProcAddress` returns
 a pointer to a named GL or *freeglut* function.
 
+
 **Usage**
+
 
 `void *glutGetProcAddress ( const char *procName );`
 
+
 `procName` Name of an OpenGL or GLUT function.
+
 
 **Description**
 
@@ -1747,7 +1984,9 @@ better with various implementations of OpenGL.
 Both OpenGL functions and *freeglut*
 functions can be queried with this function.
 
+
 **Changes From GLUT**
+
 
 GLUT does not include this function.
 
@@ -1766,7 +2005,7 @@ to position characters.
 
 It should be noted that *freeglut* fonts are similar but not identical to GLUT fonts.
 At the moment, *freeglut* fonts do not support the "`" (backquote) and
-"|" (vertical line) characters; in their place it renders asterisks.
+"|" (vertical line) characters; in their place it renders asterisks.`
 
 
 *freeglut* supports the following bitmap fonts:
@@ -1802,17 +2041,22 @@ width of a character and to render carriage returns when appropriate.
 The `glutBitmapCharacter` function renders a single bitmapped
 character in the *current window* using the specified font.
 
+
 **Usage**
+
 
 `void glutBitmapCharacter ( void *font,
 int character );`
 
+
 `font
 `The bitmapped font to use in rendering
-the character   
+the character
 
- `character `The ASCII
+
+`character `The ASCII
 code of the character to be rendered
+
 
 **Description**
 
@@ -1827,7 +2071,9 @@ the cursor position as part of its call to `glBitmap`  and so the
 application does not need to call `glRasterPos*` again  for successive
 characters on the same line.
 
+
 **Changes From GLUT**
+
 
 Nonexistent characters are rendered as
 asterisks. The rendering position in *freeglut* is apparently off
@@ -1839,17 +2085,22 @@ from GLUT's position by a few pixels vertically and one or two pixels horizontal
 The `glutBitmapString` function renders a string of bitmapped
 characters in the *current window* using the specified font.
 
+
 **Usage**
+
 
 `void glutBitmapString ( void *font,
 char *string );`
 
+
 `font
 `The bitmapped font to use in rendering
-the character string   
+the character string
 
- `string `String
+
+`string `String
 of characters to be rendered
+
 
 **Description**
 
@@ -1863,7 +2114,9 @@ call `glRasterPos*` to set the position of the string in the window.
 The `glutBitmapString` function handles carriage returns.
 Nonexistent characters are rendered as asterisks.
 
+
 **Changes From GLUT**
+
 
 GLUT does not include this function.
 
@@ -1873,25 +2126,33 @@ GLUT does not include this function.
 The `glutBitmapWidth` function returns the width in pixels of
 a single bitmapped character in the specified font.
 
+
 **Usage**
+
 
 `int glutBitmapWidth ( void *font,
 int character );`
 
+
 `font
 `The bitmapped font to use in calculating
-the character width   
+the character width
 
- `character `The ASCII
+
+`character `The ASCII
 code of the character
 
+
 **Description**
+
 
 The `glutBitmapWidth`
 function returns the width of the given character in the specified bitmap
 font. Because the font is bitmapped, the width is an exact integer.
 
+
 **Changes From GLUT**
+
 
 Nonexistent characters return the width
 of an asterisk.
@@ -1902,18 +2163,24 @@ of an asterisk.
 The `glutBitmapLength` function returns the width in pixels of
 a string of bitmapped characters in the specified font.
 
+
 **Usage**
+
 
 `int glutBitmapLength ( void *font,
 char *string );`
 
-`font `The bitmapped
-font to use in calculating the character width   
 
- `string `String of characters
+`font `The bitmapped
+font to use in calculating the character width
+
+
+`string `String of characters
 whose width is to be calculated
 
+
 **Description**
+
 
 The `glutBitmapLength` function returns the width in pixels of the given character string in
 the specified bitmap font. Because the font is bitmapped, the width
@@ -1922,11 +2189,14 @@ character widths returned by a series of calls to `glutBitmapWidth`.
 The width of nonexistent characters is counted to be the width of
 an asterisk.
 
- If the string contains
+
+If the string contains
 one or more carriage returns, *freeglut* calculates the widths in pixels
 of the lines separately and returns the largest width.
 
+
 **Changes From GLUT**
+
 
 GLUT does not include this function.
 
@@ -1936,22 +2206,29 @@ GLUT does not include this function.
 The `glutBitmapHeight` function returns the height in pixels of
 the specified font.
 
+
 **Usage**
+
 
 `int glutBitmapHeight ( void *font
 );`
+
 
 `font
 `The bitmapped font to use in calculating
 the character height
 
+
 **Description**
+
 
 The `glutBitmapHeight` function returns the height of a character in the specified bitmap font.
 Because the font is bitmapped, the height is an exact integer. The fonts
 are designed such that all characters have (nominally) the same height.
 
+
 **Changes From GLUT**
+
 
 GLUT does not include this function.
 
@@ -1961,14 +2238,18 @@ GLUT does not include this function.
 The `glutStrokeCharacter` function renders a single stroke character
 in the *current window* using the specified font.
 
+
 **Usage**
 
 
 `void glutStrokeCharacter ( void *font, int character );`
 
-`font`The stroke font to use in rendering the character   
 
-   `character`The ASCII code of the character to be rendered
+`font`The stroke font to use in rendering the character
+
+
+`character`The ASCII code of the character to be rendered
+
 
 **Description**
 
@@ -1981,7 +2262,9 @@ function advances the cursor position by a call to `glTranslatef`
 and so the application does not need to call the OpenGL positioning functions
 again for successive characters on the same line.
 
+
 **Changes From GLUT**
+
 
 Nonexistent characters are rendered as
 asterisks.
@@ -1992,17 +2275,22 @@ asterisks.
 The `glutStrokeString` function renders a string of characters
 in the *current window* using the specified stroke font.
 
+
 **Usage**
+
 
 `void glutStrokeString ( void *font,
 char *string );`
 
+
 `font
 `The stroke font to use in rendering
-the character string   
+the character string
 
- `string `String
+
+`string `String
 of characters to be rendered
+
 
 **Description**
 
@@ -2014,7 +2302,9 @@ the position of the string in the window. The `glutStrokeString`
 function handles carriage returns. Nonexistent characters are rendered
 as asterisks.
 
+
 **Changes From GLUT**
+
 
 GLUT does not include this function.
 
@@ -2024,17 +2314,22 @@ GLUT does not include this function.
 The `glutStrokeWidth` function returns the width in model units of
 a single character in the specified stroke font, rounded to an int.
 
+
 **Usage**
+
 
 `int glutStrokeWidth ( void *font,
 int character );`
 
+
 `font
 `The stroke font to use in calculating
-the character width   
+the character width
 
- `character `The ASCII
+
+`character `The ASCII
 code of the character
+
 
 **Description**
 
@@ -2044,7 +2339,9 @@ function returns the width of the given character in the specified stroke
 font. Because the font is a stroke font, the width is actually a floating-point
 number; the function rounds it to the nearest integer for the return value.
 
+
 **Changes From GLUT**
+
 
 Nonexistent characters return the width
 of an asterisk.
@@ -2055,17 +2352,22 @@ of an asterisk.
 The `glutStrokeWidthf` function returns the width in model units of
 a single character in the specified stroke font.
 
+
 **Usage**
+
 
 `GLfloat glutStrokeWidthf ( void *font,
 int character );`
 
+
 `font
 `The stroke font to use in calculating
-the character width   
+the character width
 
- `character `The ASCII
+
+`character `The ASCII
 code of the character
+
 
 **Description**
 
@@ -2074,7 +2376,9 @@ The `glutStrokeWidthf`
 function returns the width of the given character in the specified stroke
 font. Function was included in an unreleased GLUT 3.8.
 
+
 **Changes From GLUT**
+
 
 Nonexistent characters return the width
 of an asterisk.
@@ -2085,16 +2389,21 @@ of an asterisk.
 The `glutStrokeLength` function returns the width in model units of
 a string of characters in the specified stroke font, rounded to an int.
 
+
 **Usage**
+
 
 `int glutStrokeLength ( void *font,
 char *string );`
 
-`font `The stroke
-font to use in calculating the character width   
 
- `string `String of characters
+`font `The stroke
+font to use in calculating the character width
+
+
+`string `String of characters
 whose width is to be calculated
+
 
 **Description**
 
@@ -2102,11 +2411,12 @@ whose width is to be calculated
 The `glutStrokeLength` function returns the width in model units of the given character string in
 the specified stroke font. Because the font is a stroke font, the width
 of an individual character is a floating-point number. *freeglut*
-  adds the floating-point widths and rounds the final result to return the
+adds the floating-point widths and rounds the final result to return the
 integer value. Thus the return value may differ from the sum of the
 character widths returned by a series of calls to `glutStrokeWidth`.
 The width of nonexistent characters is counted to be the width
 of an asterisk.
+
 
 If the string contains
 one or more carriage returns, *freeglut* calculates the widths in pixels
@@ -2118,16 +2428,21 @@ of the lines separately and returns the largest width.
 The `glutStrokeLengthf` function returns the width in model units of
 a string of characters in the specified stroke font.
 
+
 **Usage**
+
 
 `GLfloat glutStrokeLengthf ( void *font,
 char *string );`
 
-`font `The stroke
-font to use in calculating the character width   
 
- `string `String of characters
+`font `The stroke
+font to use in calculating the character width
+
+
+`string `String of characters
 whose width is to be calculated
+
 
 **Description**
 
@@ -2139,6 +2454,7 @@ character widths returned by a series of calls to
 The width of nonexistent characters is counted to be the width
 of an asterisk.
 
+
 If the string contains
 one or more carriage returns, *freeglut* calculates the widths in pixels
 of the lines separately and returns the largest width.
@@ -2149,24 +2465,30 @@ of the lines separately and returns the largest width.
 The `glutStrokeHeight` function returns the height in pixels of
 the specified font.
 
+
 **Usage**
+
 
 `GLfloat glutStrokeHeight ( void *font
 );`
 
+
 `font
 `The stroke font to use in calculating
 the character height
+
 
 **Description**
 
 
 The `glutStrokeHeight` function returns the height of a character in the specified stroke font.
 The application programmer should note that, unlike the other *freeglut*
-  font functions, this one returns a floating-point number.  The fonts
+font functions, this one returns a floating-point number.  The fonts
 are designed such that all characters have (nominally) the same height.
 
+
 **Changes From GLUT**
+
 
 GLUT does not include this function.
 
@@ -2185,7 +2507,8 @@ draws.  The functions generate normals appropriate for lighting but,
 except for the teapot functions, do not generate texture coordinates. Do
 note that depth testing (GL_LESS) should be enabled for the correct
 drawing of the nonconvex objects, i.e., the glutTorus,
-glutSierpinskiSponge, glutTeapot, glutTeacup and glutTeaspoon.  
+glutSierpinskiSponge, glutTeapot, glutTeacup and glutTeaspoon.
+
 
 Also see the `GLUT_GEOMETRY_VISUALIZE_NORMALS` option that can be
 set with `glutSetOption`. Lastly, see
@@ -2199,34 +2522,42 @@ objects with shaders.
 The `glutWireSphere` and `glutSolidSphere` functions
 draw a wireframe and solid sphere respectively.
 
+
 **Definition**
 
 ```c
 void glutWireSphere (double dRadius, GLint slices, GLint stacks);
-
 void glutSolidSphere(double dRadius, GLint slices, GLint stacks);
 ```
 
+
 **Arguments**
+
 
 `dRadius`  The desired radius of the sphere
 
+
 `slices`   The desired number of slices (divisions
 in the longitudinal direction) in the sphere
+
 
 `stacks`   The desired number of stacks (divisions
 in the latitudinal direction) in the sphere.  The number of points in
 this direction, including the north and south poles, is `stacks+1`
 
+
 **Description**
 
+
 The `glutWireSphere` and `
-  glutSolidSphere` functions render a sphere centered at the origin
+glutSolidSphere` functions render a sphere centered at the origin
 of the modeling coordinate system. The north and south poles of the
 sphere are on the positive and negative Z-axes respectively and the prime
 meridian crosses the positive X-axis.
 
+
 **Changes From GLUT**
+
 
 None that we know of.
 
@@ -2236,37 +2567,44 @@ None that we know of.
 The `glutWireTorus` and `glutSolidTorus` functions draw
 a wireframe and solid torus (donut shape) respectively.
 
+
 **Definition**
 
 ```c
-void glutWireTorus (double dInnerRadius, double dOuterRadius, GLint
-nSides, GLint nRings);
-
-void glutSolidTorus(double dInnerRadius, double dOuterRadius, GLint
-nSides, GLint nRings);
+void glutWireTorus (double dInnerRadius, double dOuterRadius, GLint nSides, GLint nRings);
+void glutSolidTorus(double dInnerRadius, double dOuterRadius, GLint nSides, GLint nRings);
 ```
+
 
 **Arguments**
 
+
 `dInnerRadius`  The radius of the tube.
+
 
 `dOuterRadius`  The distance from the center of the
 Torus to the center of the tube.
 
+
 `nSides`        The desired number of segments in a
 single outer circle of the torus
+
 
 `nRings`        The desired number of outer circles
 around the origin of the torus
 
+
 **Description**
 
+
 The `glutWireTorus` and `
-  glutSolidTorus` functions render a torus centered at the origin of
+glutSolidTorus` functions render a torus centered at the origin of
 the modeling coordinate system. The torus is circularly symmetric about
 the Z-axis and starts at the positive X-axis.
 
+
 **Changes From GLUT**
+
 
 None that we know of.
 
@@ -2276,24 +2614,27 @@ None that we know of.
 The `glutWireCylinder` and `glutSolidCylinder` functions draw
 a wireframe and solid cone respectively.
 
+
 **Definition**
 
 ```c
-void glutWireCylinder (double base, double height, GLint slices, GLint
-stacks);
-
-void glutSolidCylinder(double base, double height, GLint slices, GLint
-stacks);
+void glutWireCylinder (double base, double height, GLint slices, GLint stacks);
+void glutSolidCylinder(double base, double height, GLint slices, GLint stacks);
 ```
+
 
 **Arguments**
 
+
 `radius`  The desired radius of the cylinder
+
 
 `height`  The desired height of the cylinder
 
+
 `slices`  The desired number of slices around
 the cylinder
+
 
 `stacks`  The desired number of segments between
 the base and the top of the cylinder (the number of points, including
@@ -2305,37 +2646,44 @@ the tip, is `stacks + 1`)
 The `glutWireCone` and `glutSolidCone` functions draw
 a wireframe and solid cone respectively.
 
+
 **Definition**
 
 ```c
-void glutWireCone (double base, double height, GLint slices, GLint
-stacks);
-
-void glutSolidCone(double base, double height, GLint slices, GLint
-stacks);
+void glutWireCone (double base, double height, GLint slices, GLint stacks);
+void glutSolidCone(double base, double height, GLint slices, GLint stacks);
 ```
+
 
 **Arguments**
 
+
 `base`    The desired radius of the base of the cone
+
 
 `height`  The desired height of the cone
 
+
 `slices`  The desired number of slices around
 the base of the cone
+
 
 `stacks`  The desired number of segments between
 the base and the tip of the cone (the number of points, including the tip,
 is `stacks + 1`)
 
+
 **Description**
 
+
 The `glutWireCone` and `
-  glutSolidCone` functions render a right circular cone with a base
+glutSolidCone` functions render a right circular cone with a base
 centered at the origin and in the X-Y plane and its tip on the positive Z-axis.
 The wire cone is rendered with triangular elements.
 
+
 **Changes From GLUT**
+
 
 None that we know of.
 
@@ -2345,25 +2693,31 @@ None that we know of.
 The `glutWireCube` and `glutSolidCube` functions draw a
 wireframe and solid cube respectively.
 
+
 **Definition**
 
 ```c
 void glutWireCube (double dSize);
-
 void glutSolidCube(double dSize);
 ```
 
+
 **Arguments**
+
 
 `dSize`  The desired length of an edge of the cube
 
+
 **Description**
 
+
 The `glutWireCube` and `
-  glutSolidCube` functions render a cube of the desired size, centered
+glutSolidCube` functions render a cube of the desired size, centered
 at the origin. Its faces are normal to the coordinate directions.
 
+
 **Changes From GLUT**
+
 
 None that we know of.
 
@@ -2374,15 +2728,17 @@ The `glutWireTetrahedron` and `glutSolidTetrahedron`
 functions draw a wireframe and solid tetrahedron (four-sided Platonic solid)
 respectively.
 
+
 **Definition**
 
 ```c
 void glutWireTetrahedron (void);
-
 void glutSolidTetrahedron(void);
 ```
 
+
 **Description**
+
 
 The `glutWireTetrahedron` and
 `glutSolidTetrahedron` functions render a tetrahedron whose corners
@@ -2390,7 +2746,9 @@ are each a distance of one from the origin.  The length of each side
 is 2/3 sqrt(6).  One corner is on the positive X-axis and another is
 in the X-Y plane with a positive Y-coordinate.
 
+
 **Changes From GLUT**
+
 
 None that we know of.
 
@@ -2400,15 +2758,17 @@ None that we know of.
 The `glutWireOctahedron` and `glutSolidOctahedron` functions
 draw a wireframe and solid octahedron (eight-sided Platonic solid) respectively.
 
+
 **Definition**
 
 ```c
 void glutWireOctahedron (void);
-
 void glutSolidOctahedron(void);
 ```
 
+
 **Description**
+
 
 The `glutWireOctahedron` and
 `glutSolidOctahedron` functions render an octahedron whose corners
@@ -2416,7 +2776,9 @@ are each a distance of one from the origin.  The length of each side
 is sqrt(2).  The corners are on the positive and negative coordinate
 axes.
 
+
 **Changes From GLUT**
+
 
 None that we know of.
 
@@ -2427,15 +2789,17 @@ The `glutWireDodecahedron` and `glutSolidDodecahedron`
 functions draw a wireframe and solid dodecahedron (twelve-sided Platonic
 solid) respectively.
 
+
 **Definition**
 
 ```c
 void glutWireDodecahedron (void);
-
 void glutSolidDodecahedron(void);
 ```
 
+
 **Description**
+
 
 The `glutWireDodecahedron` and
 `glutSolidDodecahedron` functions render a dodecahedron whose corners
@@ -2443,7 +2807,9 @@ are each a distance of sqrt(3) from the origin.  The length of each
 side is sqrt(5)-1.  There are twenty corners; interestingly enough,
 eight of them coincide with the corners of a cube with sizes of length 2.
 
+
 **Changes From GLUT**
+
 
 None that we know of.
 
@@ -2454,13 +2820,14 @@ The `glutWireIcosahedron` and `glutSolidIcosahedron`
 functions draw a wireframe and solid icosahedron (twenty-sided Platonic solid)
 respectively.
 
+
 **Definition**
 
 ```c
 void glutWireIcosahedron (void);
-
 void glutSolidIcosahedron(void);
 ```
+
 
 **Description**
 
@@ -2471,7 +2838,9 @@ are each a unit distance from the origin. The length of each side is
 slightly greater than one.  Two of the corners lie on the positive and
 negative X-axes.
 
+
 **Changes From GLUT**
+
 
 None that we know of.
 
@@ -2482,13 +2851,14 @@ The `glutWireRhombicDodecahedron` and `glutSolidRhombicDodecahedron`
 functions draw a wireframe and solid rhombic dodecahedron (twelve-sided
 semi-regular solid) respectively.
 
+
 **Definition**
 
 ```c
 void glutWireRhombicDodecahedron (void);
-
 void glutSolidRhombicDodecahedron(void);
 ```
+
 
 **Description**
 
@@ -2502,11 +2872,15 @@ which four faces meet.  The length of each side is sqrt(3)/2.  Vertices
 at which four faces meet are found at (0, 0, +/- 1) and (+/- sqrt(2)/2,
 +/- sqrt(2)/2, 0).
 
+
 **Changes From GLUT**
+
 
 GLUT does not include these functions.
 
 ### 15.11 glutWireTeapot, glutSolidTeapot, glutWireTeacup,
+
+
 glutSolidTeacup, glutWireTeaspoon, glutSolidTeaspoon
 
 
@@ -2516,36 +2890,38 @@ and `glutSolidTeacup` functions a wireframe and solid teacup, and
 the `glutWireTeaspoon` and `glutSolidTeaspoon` functions a
 wireframe and solid teaspoon.
 
+
 **Definition**
 
 ```c
 void glutWireTeapot   (double dSize);
-
 void glutSolidTeapot  (double dSize);
-
 void glutWireTeacup   (double dSize);
-
 void glutSolidTeacup  (double dSize);
-
 void glutWireTeaspoon (double dSize);
-
 void glutSolidTeaspoon(double dSize);
 ```
 
+
 **Arguments**
+
 
 `dSize`  The desired size of the teapot, teacup and
 teaspoon - relative to a "standard" size
 
+
 **Description**
+
 
 The `glutWireTeapot` and ` glutSolidTeapot` functions
 render a teapot of the desired size, centered at the origin. This is the
 famous teapot created by Martin Newell. The other functions render the
 teacup and teaspoon he used in the table scene figure in his PhD thesis.
-Vertex data retrieved from: ftp://ftp.funet.fi/pub/sci/graphics/packages/objects/teasetorig.gz.
+Vertex data retrieved from: [ftp://ftp.funet.fi/pub/sci/graphics/packages/objects/teasetorig.gz](ftp://ftp.funet.fi/pub/sci/graphics/packages/objects/teasetorig.gz).
+
 
 **Bugs**
+
 
 OpenGL's default `glFrontFace` state assumes that front facing
 polygons (for the purpose of face culling) have vertices that wind
@@ -2556,16 +2932,17 @@ should use:
 
 ```c
   glFrontFace(GL_CW);
-
   glutSolidTeapot(size);
-
   glFrontFace(GL_CCW);
 ```
+
 
 This bug reflect issues in the original teaset's vertex data
 (and is thus present in GLUT too).
 
+
 **Changes From GLUT**
+
 
 GLUT only has the teapot and misses the rest of the teaset.
 
@@ -2580,22 +2957,25 @@ shaders before calling the above geometry functions, and *freeglut*
 will upload the object geometry there. Texture coordinates are only
 generated for the teapot, teacup and teaspoon.
 
+
 **Definition**
 
 ```c
 void glutSetVertexAttribCoord3   (GLint attrib);
-
 void glutSetVertexAttribNormal   (GLint attrib);
-
 void glutSetVertexAttribTexCoord2(GLint attrib);
 ```
 
+
 **Arguments**
+
 
 `attrib`  The index (address) of the vertex
 attribute
 
+
 **Changes From GLUT**
+
 
 GLUT does not include these functions.
 
@@ -2608,7 +2988,9 @@ Specify the display mode that should be entered when GameMode is
 entered. Default is the current display mode of the monitor on which the
 GameMode screen will be opened.
 
-**Usage**  
+
+**Usage**
+
 
 A string is passed to this function that specifies a combination of
 resolution, pixel depth (ignored on Linux) and refresh rate. Valid
@@ -2644,18 +3026,19 @@ The following state variables may be queried with `glutGet`.
 The returned value is an integer.
 
 
-example:  
+example:
+
 
 `int windowLeft = glutGet(GLUT_WINDOW_X);`
 
 - GLUT_GAME_MODE_ACTIVE - 1 if currently in GameMode
 - GLUT_GAME_MODE_DISPLAY_CHANGED - 1 if currently in GameMode
 - GLUT_GAME_MODE_POSSIBLE - 1 if display mode requested with
-    `glutGameModeString` is possible
+`glutGameModeString` is possible
 
 
 These queries return information about the current display mode if in
-GameMode, or about the requested display mode before entering
+GameMode, or about the requested display mode __before__ entering
 GameMode:
 
 - GLUT_GAME_MODE_WIDTH - (requested) width of GameMode window
@@ -2665,11 +3048,14 @@ GameMode:
 
 ## 17. Video Resize Functions
 
+
 These functions are not implemented in *freeglut*.
 
 ### 17.1 glutVideoResizeGet
 
 ### 17.2 glutSetupVideoResizing,
+
+
 glutStopVideoResizing
 
 ### 17.3 glutVideoResize
@@ -2684,10 +3070,10 @@ glutStopVideoResizing
 
 ## 19. MultiTouch Functions
 
+
 MultiTouch callbacks are used to handle environments with multiple
 inputs, such as a multi-touch screen, multi-touch touchpad, or
-multiple mouses.  
-
+multiple mouses.
 
 ### 19.1 glutMultiEntryFunc &larr; id, GLUT_ENTERED|GLUT_LEFT
 
@@ -2697,39 +3083,39 @@ multiple mouses.
 
 ### 19.4 glutMultiPassiveFunc &larr; id, x, y
 
+
 These functions work like their non-multi variants, with an additional
 'deviceid' parameter describing the current input device (mouse or
-finger).  
+finger).
 
 
 Exception: in MultiButtonFunc, the order of callback parameters is
-different (x,y,button,state instead of button,state,x,y).  
+different (x,y,button,state instead of button,state,x,y).
 
 
 Currently, under X11, the non-multi callback variants are also called
-on X11 for each event.  
+on X11 for each event.
 
 
 Currently, under windows, the first (oldest) touch point also controls
 the mouse cursor, which triggers the non-multi callbacks as
-usual.  
+usual.
 
 
 All these functions have user-data callback functions.
-
-  
 
 
 Limitation: currently on the cursor id is provided.  It may be
 desirable to get the device id as well in the following situations:
 
 - Support a 2-fingers gesture such as pinch-to-zoom on the
-  touchscreen, while the mouse pointer or touchpad is performing an
-  unrelated action, not part of the touchscreen gesture (may not be
-  possible on some platforms).
+touchscreen, while the mouse pointer or touchpad is performing an
+unrelated action, not part of the touchscreen gesture (may not be
+possible on some platforms).
 - Avoid touch id conflicts between touchscreen and
-  touchpad/gamepad on Android; a possible work-around is to shift the
-  device id in the touch id.
+touchpad/gamepad on Android; a possible work-around is to shift the
+device id in the touch id.
+
 
 Since this extra support comes at the cost of extra complexity, we're
 [considering](http://sourceforge.net/mailarchive/forum.php?thread_name=20120518071314.GA28061%40perso.beuc.net&forum_name=freeglut-developer)
@@ -2737,18 +3123,18 @@ whether/how to implement it.
 
 ## 20. Mobile Functions
 
+
 These new callbacks were added:
 
 - `glutInitContextFunc ← void` : called when the context
-is initialized or re-initialized (e.g. after a pause). Has user-data callback 
+is initialized or re-initialized (e.g. after a pause). Has user-data callback
 function.
 - `glutAppStatusFunc ← event` : called when the
-application's status changes, with event identifying the state entered. Has 
+application's status changes, with event identifying the state entered. Has
 user-data callback function.
 Possible states:
-
-- application goes on a pause (or a stop) → GLUT_APPSTATUS_PAUSE
-- application comes back from a pause → GLUT_APPSTATUS_RESUME. Is
+  - application goes on a pause (or a stop) → GLUT_APPSTATUS_PAUSE
+  - application comes back from a pause → GLUT_APPSTATUS_RESUME. Is
 called after the `glutInitContextFunc` callback.
 
 
@@ -2770,25 +3156,30 @@ allows to globally switch off key repeat, while
 `glutIgnoreKeyRepeat` offers control over this behavior on a
 per-window basis.
 
+
 **Definition**
 
 ```c
 void glutSetKeyRepeat   (int repeatMode);
-
 void glutIgnoreKeyRepeat(int ignore);
 ```
 
+
 **Arguments**
 
-`glutSetKeyRepeat's repeatMode`   
+
+`glutSetKeyRepeat's repeatMode`
 GLUT_KEY_REPEAT_OFF to globally switch key repeat off, or
 GLUT_KEY_REPEAT_ON and GLUT_KEY_REPEAT_DEFAULT to globally switch key
-repeat on.  
+repeat on.
+
 
 `glutIgnoreKeyRepeat's ignore`    if non-zero, key
 repeat is switched off for the current window.
 
+
 **Notes**
+
 
 If key repeat is globally switched off through
 `glutSetKeyRepeat`, it cannot be reenabled on a per-window basis
@@ -2797,7 +3188,9 @@ repeat, set `glutSetKeyRepeat` to `GLUT_KEY_REPEAT_ON` and
 use `glutIgnoreKeyRepeat(GL_TRUE)` to switch off key repeat for
 the windows for which you don't want it.
 
+
 **Changes From GLUT**
+
 
 Nate Robbins' port of GLUT to win32 did not implement
 `glutSetKeyRepeat`, but *freeglut*'s behavior should conform on all
@@ -2809,24 +3202,26 @@ platforms to GLUT's behavior on X11.
 
 ## 22. Usage Notes
 
- The following environment variables
+
+The following environment variables
 are recognized by *freeglut*:
 
 - DISPLAY - specifies a display name.
 - GLUT_FPS - specifies a time interval
-	(in milliseconds) for reporting framerate messages to stderr.  For example,
-	if FREEGLUT_FPS is set to 5000, every 5 seconds a message will be printed
-	to stderr showing the current frame rate.  The frame rate is measured by counting
-	the number of times glutSwapBuffers() is called over the time interval.
+(in milliseconds) for reporting framerate messages to stderr.  For example,
+if FREEGLUT_FPS is set to 5000, every 5 seconds a message will be printed
+to stderr showing the current frame rate.  The frame rate is measured by counting
+the number of times glutSwapBuffers() is called over the time interval.
 
 
 Furthermore, on windows, there is a resource file identifier GLUT_ICON
 that you can specify for your executable file. It specifies the icon
 that goes in the upper left-hand corner of the *freeglut* windows.
-Your application's resource file should contain the line:  
+Your application's resource file should contain the line:
 
-`GLUT_ICON   ICON    DISCARDABLE     "icon.ico"`  
- where
+
+`GLUT_ICON   ICON    DISCARDABLE     "icon.ico"`
+where
 icon.ico is the filename of your icon. The One demo includes such an
 icon as an example.
 
@@ -2842,13 +3237,9 @@ to include `<GL/glut.h>` in their programs.
 Programs which use the *freeglut*-specific extensions to GLUT should include
 `<GL/freeglut.h>`.  One possible arrangement is as follows:
 
-
-#ifdef FREEGLUT
-#include <GL/freeglut.h>
-#else
-#include <GL/glut.h>
-#endif
-
+```c
+#ifdef FREEGLUT #include <GL/freeglut.h> #else #include <GL/glut.h> #endif 
+```
 
 
 It was initially planned to
@@ -2866,12 +3257,11 @@ minor version and Z is the patch level.
 
 This may be used as follows:
 
-
-if (glutGet(GLUT_VERSION) < 20001) {
-    printf("Sorry, you need freeglut version 2.0.1 or later to run this program.\n");
+```c
+if (glutGet(GLUT_VERSION) < 20001) {     printf("Sorry, you need freeglut version 2.0.1 or later to run this program.\n");
     exit(1);
-}
-
+} 
+```
 
 ### 21.4 References
 
