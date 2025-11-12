@@ -793,7 +793,7 @@ process_line_start:
                 sb_append(code, "<br>\n");
             }
 
-            sb_append(output, "<p><tt>");
+            sb_append(output, "<p><tt>\n");
             sb_append(output, code->text);
             sb_append(output, "</tt></p>\n\n");
             sb_free(code);
