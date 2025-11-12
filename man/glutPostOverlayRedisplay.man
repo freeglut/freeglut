@@ -3,11 +3,13 @@
 .\"
 .\" See the file "man/LICENSE" for information on usage and redistribution
 .\"
-.TH glutPostOverlayRedisplay 3 "April 2025" "freeglut" "freeglut"
+.TH glutPostOverlayRedisplay 3 "November 2025" "freeglut" "freeglut"
 .SH NAME
 glutPostOverlayRedisplay, glutPostWindowOverlayRedisplay - marks the
 overlay of the current or specified window as needing to be
 redisplayed.
+.SH WARNING
+Not yet implemented in freeglut.
 .SH SYNTAX
 .nf
 .LP
