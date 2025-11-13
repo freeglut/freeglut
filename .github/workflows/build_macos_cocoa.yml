@@ -1,4 +1,4 @@
-name: MacOS X (Cocoa) build
+name: macOS (Cocoa) build
 
 on:
   push:
