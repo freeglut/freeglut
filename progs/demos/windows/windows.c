@@ -35,7 +35,7 @@
 
 #define ARRAY_SIZE( a ) ( sizeof( a ) / sizeof( a[0] ) )
 #define NUM_WINDOWS     ARRAY_SIZE( winGeom )
-#define WIN_SZ          200 /* MSVC  */
+#define WIN_SZ          200
 
 const int CALIBRATION_DELAY  = 500;
 const int VELOCITY           = 3;
@@ -341,28 +341,48 @@ void timer( int a )
 
 void global_info( void )
 {
+    int size = 0, i = 0;
+    int *array = NULL;
+
+#define PRINT_ARRAY( name, arr, sz )                        \
+    printf( "  " name ":%s", sz ? "" : " Not Supported " ); \
+    for ( i = 0; i < sz; i++ ) printf( " %d,", arr[i] );    \
+    printf( "\b \n" );
+
     printf( "------------------- Global GLUT Info ------------------\n" );
-    printf( "GLUT_DISPLAY_MODE_POSSIBLE: %d\n", glutGet( GLUT_DISPLAY_MODE_POSSIBLE ) );
-    printf( "GLUT_INIT_DISPLAY_MODE: %d\n", glutGet( GLUT_INIT_DISPLAY_MODE ) );
-    printf( "GLUT_INIT_WINDOW_X: %d\n", glutGet( GLUT_INIT_WINDOW_X ) );
-    printf( "GLUT_INIT_WINDOW_Y: %d\n", glutGet( GLUT_INIT_WINDOW_Y ) );
-    printf( "GLUT_INIT_WINDOW_WIDTH: %d\n", glutGet( GLUT_INIT_WINDOW_WIDTH ) );
-    printf( "GLUT_INIT_WINDOW_HEIGHT: %d\n", glutGet( GLUT_INIT_WINDOW_HEIGHT ) );
-    printf( "GLUT_SCREEN_WIDTH: %d\n", glutGet( GLUT_SCREEN_WIDTH ) );
-    printf( "GLUT_SCREEN_HEIGHT: %d\n", glutGet( GLUT_SCREEN_HEIGHT ) );
-    printf( "GLUT_SCREEN_WIDTH_MM: %d\n", glutGet( GLUT_SCREEN_WIDTH_MM ) );
-    printf( "GLUT_SCREEN_HEIGHT_MM: %d\n", glutGet( GLUT_SCREEN_HEIGHT_MM ) );
+    printf( "glutGet():\n");
+    printf( "  GLUT_DISPLAY_MODE_POSSIBLE: %d\n", glutGet( GLUT_DISPLAY_MODE_POSSIBLE ) );
+    printf( "  GLUT_INIT_DISPLAY_MODE: %d\n", glutGet( GLUT_INIT_DISPLAY_MODE ) );
+    printf( "  GLUT_INIT_WINDOW_X: %d\n", glutGet( GLUT_INIT_WINDOW_X ) );
+    printf( "  GLUT_INIT_WINDOW_Y: %d\n", glutGet( GLUT_INIT_WINDOW_Y ) );
+    printf( "  GLUT_INIT_WINDOW_WIDTH: %d\n", glutGet( GLUT_INIT_WINDOW_WIDTH ) );
+    printf( "  GLUT_INIT_WINDOW_HEIGHT: %d\n", glutGet( GLUT_INIT_WINDOW_HEIGHT ) );
+    printf( "  GLUT_SCREEN_WIDTH: %d\n", glutGet( GLUT_SCREEN_WIDTH ) );
+    printf( "  GLUT_SCREEN_HEIGHT: %d\n", glutGet( GLUT_SCREEN_HEIGHT ) );
+    printf( "  GLUT_SCREEN_WIDTH_MM: %d\n", glutGet( GLUT_SCREEN_WIDTH_MM ) );
+    printf( "  GLUT_SCREEN_HEIGHT_MM: %d\n", glutGet( GLUT_SCREEN_HEIGHT_MM ) );
+#ifdef FREEGLUT
+    printf( "glutGetModeValues():\n");
+
+    array = glutGetModeValues(GLUT_AUX, &size);
+    PRINT_ARRAY("GLUT_AUX", array, size);
+    free(array);
+
+    array = glutGetModeValues(GLUT_MULTISAMPLE, &size);
+    PRINT_ARRAY("GLUT_MULTISAMPLE", array, size);
+    free(array);
+#endif
 }
 
 void window_info( void )
 {
     printf( "------------------- Window %d Info ------------------\n", glutGetWindow( ) );
-    printf( "GLUT_ELAPSED_TIME: %d\n", glutGet( GLUT_ELAPSED_TIME ) );
-    printf( "GLUT_WINDOW_X: %d\n", glutGet( GLUT_WINDOW_X ) );
-    printf( "GLUT_WINDOW_Y: %d\n", glutGet( GLUT_WINDOW_Y ) );
+    printf( "  GLUT_ELAPSED_TIME: %d\n", glutGet( GLUT_ELAPSED_TIME ) );
+    printf( "  GLUT_WINDOW_X: %d\n", glutGet( GLUT_WINDOW_X ) );
+    printf( "  GLUT_WINDOW_Y: %d\n", glutGet( GLUT_WINDOW_Y ) );
 #ifdef FREEGLUT
-    printf( "GLUT_WINDOW_BORDER_WIDTH: %d\n", glutGet( GLUT_WINDOW_BORDER_WIDTH ) );
-    printf( "GLUT_WINDOW_BORDER_HEIGHT: %d\n", glutGet( GLUT_WINDOW_BORDER_HEIGHT ) );
+    printf( "  GLUT_WINDOW_BORDER_WIDTH: %d\n", glutGet( GLUT_WINDOW_BORDER_WIDTH ) );
+    printf( "  GLUT_WINDOW_BORDER_HEIGHT: %d\n", glutGet( GLUT_WINDOW_BORDER_HEIGHT ) );
     assert( GLUT_WINDOW_BORDER_HEIGHT == GLUT_WINDOW_HEADER_HEIGHT ); /* both defined the same */
 #endif
 }
