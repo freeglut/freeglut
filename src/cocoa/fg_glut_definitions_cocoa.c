@@ -55,24 +55,24 @@ void *glutBitmapHelvetica18  = &glutBitmapHelvetica18;
 typedef struct _serialport SERIALPORT;
 SERIALPORT                *fg_serial_open( const char *device )
 {
-    TODO_IMPL;
+    NO_IMPL;
     return NULL;
 }
 void fg_serial_close( SERIALPORT *port )
 {
-    TODO_IMPL;
+    NO_IMPL;
 }
 int fg_serial_getchar( SERIALPORT *port )
 {
-    TODO_IMPL;
+    NO_IMPL;
     return EOF;
 }
 int fg_serial_putchar( SERIALPORT *port, unsigned char ch )
 {
-    TODO_IMPL;
+    NO_IMPL;
     return 0;
 }
 void fg_serial_flush( SERIALPORT *port )
 {
-    TODO_IMPL;
+    NO_IMPL;
 }
