@@ -22,17 +22,19 @@
 
 void fgPlatformSetColor( int idx, float r, float g, float b )
 {
-    TODO_IMPL;
+    /* Index color mode not supported in cocoa */
+    fgWarning( "glutSetColor: current window is RGBA\n" );
 }
 
 float fgPlatformGetColor( int idx, int comp )
 {
-    TODO_IMPL;
-
-    return 0.0f;
+    /* Index color mode not supported in cocoa */
+    fgWarning( "glutSetColor: current window is RGBA\n" );
+    return -1;
 }
 
 void fgPlatformCopyColormap( int win )
 {
-    TODO_IMPL;
+    /* Index color mode not supported in cocoa */
+    fgWarning( "glutCopyColormap: current window is RGBA\n" );
 }
