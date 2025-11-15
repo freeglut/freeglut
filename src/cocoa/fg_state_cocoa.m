@@ -22,6 +22,23 @@
 
 #import <Cocoa/Cocoa.h>
 
+static int *appendIfUnique( int *array, int *arr_size, int value )
+{
+    for ( int i = 0; i < *arr_size; i++ ) {
+        if ( array[i] == value )
+            return array; /* already present */
+    }
+
+    int *new_array = realloc( array, sizeof( int ) * ( *arr_size + 1 ) );
+    if ( !new_array ) {
+        fgWarning( "%s(): memory allocation failure", __FUNCTION__ );
+        return array;
+    }
+
+    new_array[( *arr_size )++] = value;
+    return new_array;
+}
+
 int fgPlatformGlutDeviceGet( GLenum eWhat )
 {
     AUTORELEASE_POOL;
@@ -201,6 +218,13 @@ int *fgPlatformGlutGetModeValues( GLenum eWhat, int *size )
 {
     AUTORELEASE_POOL;
 
+    int *supportedModes = NULL;
+
+    if ( !size ) {
+        fgError( "fgPlatformGlutGetModeValues: size pointer is NULL" );
+        return NULL;
+    }
+
     /*
      * There is no documentation for this function in the freeglut API, nor is
      * it used in the test suite.  It seems to be a way to get a list of values
@@ -208,14 +232,70 @@ int *fgPlatformGlutGetModeValues( GLenum eWhat, int *size )
      * returned.  The return value is a pointer to an array of integers.
      */
 
-    NO_IMPL;
-
     switch ( eWhat ) {
-    case GLUT_AUX:
-    case GLUT_MULTISAMPLE:
+    case GLUT_AUX: {
+        /*
+         * Query available auxiliary buffer counts.
+         *
+         * Cocoa typically supports up to 2 aux buffers, but we will check up to
+         * MAX_AUX_BUFFERS
+         */
+
+        const int MAX_AUX_BUFFERS = 4;
+
+        /* The "query" is really enumerating pixel formats and record the ones that work */
+        for ( int auxCount = 0; auxCount <= MAX_AUX_BUFFERS; auxCount++ ) {
+            NSOpenGLPixelFormatAttribute attrs[] = { NSOpenGLPFAAccelerated, NSOpenGLPFAAuxBuffers, auxCount, 0 };
+
+            NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
+            if ( pixelFormat != nil ) {
+                GLint actualAuxBuffers = 0;
+                [pixelFormat getValues:&actualAuxBuffers forAttribute:NSOpenGLPFAAuxBuffers forVirtualScreen:0];
+                supportedModes = appendIfUnique( supportedModes, size, actualAuxBuffers );
+                [pixelFormat release];
+            }
+        }
+
+        break;
+    }
+
+    case GLUT_MULTISAMPLE: {
+        /*
+         * Query available MSAA sample counts
+         *
+         * Unfortunately, Modern macOS GPUs only support up to 4 sample counts.
+         * But will check common counts for older hardware and hopeful future
+         * support
+         */
+        int queryModes[] = { 0, 1, 2, 4, 8, 16, 32, 64 };
+        int queryCnt     = sizeof( queryModes ) / sizeof( queryModes[0] );
+
+        /* The "query" is really enumerating pixel formats and record the ones that work */
+        for ( int i = 0; i < queryCnt; i++ ) {
+            NSOpenGLPixelFormatAttribute attrs[] = { NSOpenGLPFAAccelerated,
+                NSOpenGLPFAMultisample,
+                NSOpenGLPFASampleBuffers,
+                1,
+                NSOpenGLPFASamples,
+                queryModes[i],
+                0 };
+
+            NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
+            if ( pixelFormat != nil ) {
+                GLint actualSamples = 0;
+                [pixelFormat getValues:&actualSamples forAttribute:NSOpenGLPFASamples forVirtualScreen:0];
+                supportedModes = appendIfUnique( supportedModes, size, actualSamples );
+                [pixelFormat release];
+            }
+        }
+
+        break;
+    }
+
     default:
         fgWarning( "glutGetModeValues: not implemented for %d", eWhat );
         break;
     }
-    return NULL;
+
+    return supportedModes;
 }
