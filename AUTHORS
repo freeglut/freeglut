@@ -29,7 +29,7 @@ Eric Sandall
 James 'J.C.' Jones
     designing the new website
 
-John Tsiombikas <nuclear@member.fsf.org>
+John Tsiombikas <nuclear@mutantstargoat.com>
     mostly on the UNIX/X11 side of things.
 
 Sylvain Beucler
@@ -47,5 +47,14 @@ Matti Lehtonen
 
 Vincent Simonetti
     support for BlackBerry
+
+Alberto Mardegan
+    support for nintendo Wii/GameCube
+
+Andrew Woods
+    native macOS Cocoa backend, man/md doc tools
+
+Petar Katic
+    markdown docs conversion
 
 ...and all the opengl-gamedev-l people that made Pawel start this project :)
