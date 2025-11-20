@@ -799,7 +799,8 @@ void fgPlatformOpenWindow( SFG_Window *window,
     //
 
     if ( !window->IsMenu ) {
-        [nsWindow makeKeyAndOrderFront:nil];
+        [NSApp activateIgnoringOtherApps:YES];    // Ensure window is focused
+        [nsWindow makeKeyAndOrderFront:nil];      // Brings window to front
         [nsWindow makeFirstResponder:openGLView]; // Ensure view receives events
         window->State.Visible = GL_TRUE;
     }
@@ -871,7 +872,8 @@ void fgPlatformShowWindow( SFG_Window *window )
     if ( [nsWindow isMiniaturized] ) {
         [nsWindow deminiaturize:nil];
     }
-    [nsWindow makeKeyAndOrderFront:nil];
+    [NSApp activateIgnoringOtherApps:YES]; // Ensure window is focused
+    [nsWindow makeKeyAndOrderFront:nil];   // Brings window to front
     window->State.Visible = GL_TRUE;
 }
 
