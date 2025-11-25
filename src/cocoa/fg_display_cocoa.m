@@ -67,6 +67,30 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window *Cu
 {
     AUTORELEASE_POOL;
 
+    /*
+     * Swap the OpenGL buffers and, if enabled, wait for emulated VSync.
+     *
+     * On recent macOS versions, NSOpenGLContext’s swap-interval mechanism
+     * no longer provides reliable VSync. Two issues in particular make
+     * stable frame pacing difficult:
+     *
+     *  - Compositor timing mismatch: modern macOS systems often run their
+     *    internal compositor at 120 Hz (ProMotion) regardless of the actual
+     *    display refresh rate. On a 60 Hz monitor this causes every second
+     *    frame to be dropped.
+     *
+     *  - Low-precision timers: macOS sleep/wakeup timers have millisecond scale
+     *    jitter, making it unreliable to pace frames manually.
+     *
+     * To achieve more consistent pacing, we use a CVDisplayLink tied to the
+     * display’s true refresh rate. The display link executes its callback on
+     * a high-priority real-time work queue and signals the main thread when
+     * a new frame can be presented.
+     */
+
+    NSOpenGLContext *context = (NSOpenGLContext *)CurrentWindow->Window.Context;
+    [context flushBuffer]; // Swap buffers to present the frame
+
     if ( pDisplayPtr->DisplayLink ) {
 
         /*
@@ -79,12 +103,7 @@ void fgPlatformGlutSwapBuffers( SFG_PlatformDisplay *pDisplayPtr, SFG_Window *Cu
             pthread_cond_wait( &swapCond, &swapMutex ); // Wait for presentation from the display callback
         }
         pthread_mutex_unlock( &swapMutex );
-
-        /* The display just got refreshed, so we can swap the buffers */
     }
-
-    NSOpenGLContext *context = (NSOpenGLContext *)CurrentWindow->Window.Context;
-    [context flushBuffer]; // Swap buffers to present the frame
 }
 
 void fgPlatformInitSwapCtl( void )
