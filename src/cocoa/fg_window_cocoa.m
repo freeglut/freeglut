@@ -729,7 +729,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
     NSRect fullscreenFrame = [NSScreen mainScreen].frame;
     NSRect frame           = NSMakeRect( x, y, sizeUse ? w : 300, sizeUse ? h : 300 );
 
-    fgOpenGLView *openGLView = [[fgOpenGLView alloc] initWithFrame:fullscreenFrame];
+    fgOpenGLView *openGLView = [[fgOpenGLView alloc] initWithFrame:fullscreenFrame pixelFormat:pixelFormat];
     if ( !openGLView ) {
         fgError( "Failed to create fgOpenGLView" );
     }
