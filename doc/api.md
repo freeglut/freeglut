@@ -102,6 +102,7 @@
 	- [13.5 glutLayerGet](#135-glutlayerget)
 	- [13.6 glutExtensionSupported](#136-glutextensionsupported)
 	- [13.7 glutGetProcAddress](#137-glutgetprocaddress)
+	- [13.8 glutGetModeValues](#138-glutgetmodevalues)
 - [14. Font Rendering Functions](#14-font-rendering-functions)
 	- [14.1 glutBitmapCharacter](#141-glutbitmapcharacter)
 	- [14.2 glutBitmapString](#142-glutbitmapstring)
@@ -1983,6 +1984,47 @@ better with various implementations of OpenGL.
 
 Both OpenGL functions and *freeglut*
 functions can be queried with this function.
+
+
+**Changes From GLUT**
+
+
+GLUT does not include this function.
+
+### 13.8 glutGetModeValues
+
+
+`glutGetModeValues` returns a dynamically allocated array of integers describing
+which values are supported for a given display-mode attribute.
+
+
+**Usage**
+
+```c
+int *glutGetModeValues( GLenum mode, int *size );
+```
+
+
+**Description**
+
+
+The `mode` parameter selects which capability to query.
+
+
+The pointer `size` must be non-NULL and will be filled with the number of returned elements.
+
+
+The caller is responsible for freeing the returned array with `free()`.
+
+
+Currently supported mode queries:
+
+- `GLUT_AUX` - returns the supported counts of auxiliary buffers.
+- `GLUT_MULTISAMPLE` - returns the supported multisample sample counts.
+
+
+If the queried mode is not supported on the current platform, size is set to
+zero and `NULL` is returned.
 
 
 **Changes From GLUT**
