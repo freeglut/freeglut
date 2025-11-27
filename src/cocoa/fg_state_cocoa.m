@@ -225,13 +225,6 @@ int *fgPlatformGlutGetModeValues( GLenum eWhat, int *size )
         return NULL;
     }
 
-    /*
-     * There is no documentation for this function in the freeglut API, nor is
-     * it used in the test suite.  It seems to be a way to get a list of values
-     * for a given mode.  The size parameter is set to the number of values
-     * returned.  The return value is a pointer to an array of integers.
-     */
-
     switch ( eWhat ) {
     case GLUT_AUX: {
         /*
