@@ -40,6 +40,19 @@ static const double fgWheelThreshold = 1.0; // Threshold for mouse wheel events.
 BOOL shouldQuit = NO;
 
 /*****************************************************************
+ * OpenGL View Interface (aka prototype)                         *
+ *****************************************************************/
+
+@interface                       fgOpenGLView : NSOpenGLView
+@property ( assign ) SFG_Window *fgWindow;
+// Trackers for currently held keys.
+// Special and standard key codes overlap, so we need to track them separately.
+@property ( strong ) NSMutableSet *pressedStandardKeys;
+@property ( strong ) NSMutableSet *pressedSpecialKeys;
+- (void)releaseAllKeys;
+@end
+
+/*****************************************************************
  * Window Delegate                                               *
  *****************************************************************/
 
@@ -72,15 +85,23 @@ BOOL shouldQuit = NO;
         INVOKE_WCB( *self.fgWindow, WindowStatus, ( GLUT_FULLY_COVERED ) );
     }
 }
+
+- (void)windowDidResignKey:(NSNotification *)notification
+{
+    AUTORELEASE_POOL;
+
+    NSWindow     *window = notification.object;
+    fgOpenGLView *view   = (fgOpenGLView *)window.contentView;
+
+    // Release all keys and modifiers since we are going to lose focus
+    [view releaseAllKeys];
+}
+
 @end
 
 /*****************************************************************
- * OpenGL View                                                   *
+ * OpenGL View Implementation                                    *
  *****************************************************************/
-
-@interface                       fgOpenGLView : NSOpenGLView
-@property ( assign ) SFG_Window *fgWindow; // Freeglut’s window structure
-@end
 
 @implementation fgOpenGLView
 
@@ -196,11 +217,14 @@ BOOL shouldQuit = NO;
     return (char)modifierKey;
 }
 
-- (BOOL)acceptsFirstResponder
+- (instancetype)initWithFrame:(NSRect)frameRect pixelFormat:(NSOpenGLPixelFormat *)format
 {
-    AUTORELEASE_POOL;
-
-    return YES; // Allow the view to receive keyboard events
+    self = [super initWithFrame:frameRect pixelFormat:format];
+    if ( self ) {
+        _pressedStandardKeys = [[NSMutableSet alloc] init];
+        _pressedSpecialKeys  = [[NSMutableSet alloc] init];
+    }
+    return self;
 }
 
 #pragma mark Mouse Section
@@ -234,6 +258,15 @@ BOOL shouldQuit = NO;
 
     return YES;
 }
+
+// Unsure if we want this...
+#if 0
+/* Allow the view to receive mouse events for the first click */
+- (BOOL)acceptsFirstMouse:(NSEvent *)event
+{
+    return YES;
+}
+#endif
 
 /* Left button */
 - (void)mouseDown:(NSEvent *)event
@@ -382,6 +415,13 @@ BOOL shouldQuit = NO;
 
 #pragma mark Key Section
 
+- (BOOL)acceptsFirstResponder
+{
+    AUTORELEASE_POOL;
+
+    return YES; // Allow the view to receive keyboard events
+}
+
 - (void)updateModifiers:(NSEvent *)event
 {
     AUTORELEASE_POOL;
@@ -446,9 +486,11 @@ BOOL shouldQuit = NO;
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:YES];
 
     if ( state == GLUT_DOWN ) {
+        [self.pressedSpecialKeys addObject:@( specialKey )];
         INVOKE_WCB( *self.fgWindow, Special, ( specialKey, mouseLoc.x, mouseLoc.y ) );
     }
     else {
+        [self.pressedSpecialKeys removeObject:@( specialKey )];
         INVOKE_WCB( *self.fgWindow, SpecialUp, ( specialKey, mouseLoc.x, mouseLoc.y ) );
     }
 }
@@ -473,9 +515,11 @@ BOOL shouldQuit = NO;
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:YES];
 
     if ( isSpecial ) {
+        [self.pressedSpecialKeys addObject:@( convKey )];
         INVOKE_WCB( *self.fgWindow, Special, ( convKey, mouseLoc.x, mouseLoc.y ) );
     }
     else {
+        [self.pressedStandardKeys addObject:@( convKey )];
         INVOKE_WCB( *self.fgWindow, Keyboard, ( convKey, mouseLoc.x, mouseLoc.y ) );
     }
 }
@@ -500,11 +544,39 @@ BOOL shouldQuit = NO;
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:YES];
 
     if ( isSpecial ) {
+        [self.pressedSpecialKeys removeObject:@( convKey )];
         INVOKE_WCB( *self.fgWindow, SpecialUp, ( convKey, mouseLoc.x, mouseLoc.y ) );
     }
     else {
+        [self.pressedStandardKeys removeObject:@( convKey )];
         INVOKE_WCB( *self.fgWindow, KeyboardUp, ( convKey, mouseLoc.x, mouseLoc.y ) );
     }
+}
+
+- (void)releaseAllKeys
+{
+    AUTORELEASE_POOL;
+
+    NSPoint mouseLoc = [[self window] mouseLocationOutsideOfEventStream];
+    mouseLoc         = [self convertPoint:mouseLoc fromView:nil];
+    int x            = (int)mouseLoc.x;
+    int y            = (int)( self.bounds.size.height - mouseLoc.y );
+
+    // Fire off the callbacks for any pressed keys
+    for ( NSNumber *keyObj in self.pressedStandardKeys ) {
+        char key = [keyObj charValue];
+        INVOKE_WCB( *self.fgWindow, KeyboardUp, ( key, x, y ) );
+    }
+    [self.pressedStandardKeys removeAllObjects];
+
+    for ( NSNumber *keyObj in self.pressedSpecialKeys ) {
+        char key = [keyObj charValue];
+        INVOKE_WCB( *self.fgWindow, SpecialUp, ( key, x, y ) );
+    }
+    [self.pressedSpecialKeys removeAllObjects];
+
+    // Clear modifier state
+    fgState.Modifiers = 0;
 }
 
 #pragma mark -
