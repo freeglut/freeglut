@@ -564,13 +564,13 @@ ENDIF()
 # The generated config.h is placed in the project's build directory, just to
 # ensure that all CMake-generated files are kept away from the main source tree.
 # As a result, the build directory must to be added to the include path list.
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/config.h.in ${CMAKE_BINARY_DIR}/config.h)
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src)
 ADD_DEFINITIONS(-DHAVE_CONFIG_H)
 IF(WIN32)
     # we also have to generate freeglut.rc, which contains the version
     # number
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.rc.in ${CMAKE_BINARY_DIR}/freeglut.rc)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/freeglut.rc.in ${CMAKE_BINARY_DIR}/freeglut.rc)
     IF (MSVC AND NOT CMAKE_CL_64)
         # .def file only for 32bit Windows builds with Visual Studio
         CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/freeglutdll.def.in ${CMAKE_BINARY_DIR}/freeglutdll.def)
@@ -587,8 +587,8 @@ list(REMOVE_ITEM VERSION_DEPENDS ${VERSION_SRC}) # Exclude the generated file it
 
 add_custom_command(
     OUTPUT ${VERSION_SRC}
-    COMMAND ${CMAKE_COMMAND} -DINPUT_FILE=${CMAKE_CURRENT_SOURCE_DIR}/src/fg_version.c.in -DOUTPUT_FILE=${VERSION_SRC} -P ${CMAKE_CURRENT_SOURCE_DIR}/gen_date.cmake
-    DEPENDS ${VERSION_DEPENDS} ${CMAKE_CURRENT_SOURCE_DIR}/gen_date.cmake ${CMAKE_CURRENT_SOURCE_DIR}/src/fg_version.c.in
+    COMMAND ${CMAKE_COMMAND} -DINPUT_FILE=${CMAKE_CURRENT_SOURCE_DIR}/src/fg_version.c.in -DOUTPUT_FILE=${VERSION_SRC} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/gen_date.cmake
+    DEPENDS ${VERSION_DEPENDS} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/gen_date.cmake ${CMAKE_CURRENT_SOURCE_DIR}/src/fg_version.c.in
     COMMENT "Updating build date in fg_version.c"
 )
 
@@ -820,7 +820,7 @@ ENDIF()
 IF(FREEGLUT_BUILD_STATIC_LIBS)
   LIST(APPEND PC_CFLAGS -DFREEGLUT_STATIC)
 ENDIF()
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/freeglut.pc.in ${CMAKE_BINARY_DIR}/freeglut.pc @ONLY)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/freeglut.pc.in ${CMAKE_BINARY_DIR}/freeglut.pc @ONLY)
 if(NOT FREEGLUT_INSTALL_PKGCONFIGDIR)
 	SET(FREEGLUT_INSTALL_PKGCONFIGDIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()
@@ -840,7 +840,7 @@ EXPORT(EXPORT FreeGLUTTargets
     FILE "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTTargets.cmake"
     NAMESPACE FreeGLUT::
 )
-CONFIGURE_FILE(FreeGLUTConfig.cmake.in
+CONFIGURE_FILE(cmake/FreeGLUTConfig.cmake.in
     "${CMAKE_CURRENT_BINARY_DIR}/FreeGLUT/FreeGLUTConfig.cmake"
     @ONLY
 )
