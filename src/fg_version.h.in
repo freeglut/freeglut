@@ -28,10 +28,6 @@
 #ifndef  FREEGLUT_VERSION_H
 #define  FREEGLUT_VERSION_H
 
-/* Ordinarily it's cmake's job to update fg_version.h,
- * edit CMakeLists.txt rather than this file directly.
- */
-
 #ifndef VERSION_MAJOR
 #define VERSION_MAJOR @VERSION_MAJOR@
 #endif
@@ -43,5 +39,7 @@
 #ifndef VERSION_PATCH
 #define VERSION_PATCH @VERSION_PATCH@
 #endif
+
+extern const char * BUILD_DATE;
 
 #endif

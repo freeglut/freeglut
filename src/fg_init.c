@@ -394,6 +394,12 @@ void FGAPIENTRY glutInit( int* pargc, char** argv )
 {
     char* displayName = NULL;
     char* geometry = NULL;
+
+#ifndef NDEBUG
+    printf( "freeglut version %d.%d.%d, ", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH );
+    printf( "build date: %s\n", BUILD_DATE );
+#endif
+
     if( fgState.Initialised )
         fgError( "illegal glutInit() reinitialization attempt" );
 

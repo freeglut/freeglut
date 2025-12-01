@@ -32,9 +32,13 @@ set(VERSION_MAJOR 3)
 set(VERSION_MINOR 8)
 set(VERSION_PATCH 0)
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+string(TIMESTAMP VERSION_BUILD_DATE "%Y-%m-%d %H:%M:%S")
 
 # Update fg_version.h to match the versions number here in cmake
-CONFIGURE_FILE(src/fg_version.h.in src/fg_version.h)
+CONFIGURE_FILE(src/fg_version.h.in ${CMAKE_BINARY_DIR}/src/fg_version.h)
+
+# Generate fg_version.c with build date on every build
+set(VERSION_SRC ${CMAKE_BINARY_DIR}/src/fg_version.c)
 
 # shared lib version numbers (XXX: change before release)
 set(SO_MAJOR 3)		# increment on backwards incompatible API/ABI changes
@@ -142,6 +146,7 @@ SET(FREEGLUT_SRCS
     src/fg_structure.c
     src/fg_teapot.c
     src/fg_teapot_data.h
+    ${VERSION_SRC}
     src/fg_videoresize.c
     src/fg_window.c
 )
@@ -560,7 +565,7 @@ ENDIF()
 # ensure that all CMake-generated files are kept away from the main source tree.
 # As a result, the build directory must to be added to the include path list.
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
-INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src)
 ADD_DEFINITIONS(-DHAVE_CONFIG_H)
 IF(WIN32)
     # we also have to generate freeglut.rc, which contains the version
@@ -575,6 +580,17 @@ ENDIF()
 # ######################
 # BUILD OPTIONS
 # ######################
+
+# Create a dependency list so that updates to any of these sources automatically rebuild the generated version file.
+set(VERSION_DEPENDS ${FREEGLUT_SRCS})
+list(REMOVE_ITEM VERSION_DEPENDS ${VERSION_SRC}) # Exclude the generated file itself
+
+add_custom_command(
+    OUTPUT ${VERSION_SRC}
+    COMMAND ${CMAKE_COMMAND} -DINPUT_FILE=${CMAKE_CURRENT_SOURCE_DIR}/src/fg_version.c.in -DOUTPUT_FILE=${VERSION_SRC} -P ${CMAKE_CURRENT_SOURCE_DIR}/gen_date.cmake
+    DEPENDS ${VERSION_DEPENDS} ${CMAKE_CURRENT_SOURCE_DIR}/gen_date.cmake ${CMAKE_CURRENT_SOURCE_DIR}/src/fg_version.c.in
+    COMMENT "Updating build date in fg_version.c"
+)
 
 IF(FREEGLUT_BUILD_SHARED_LIBS)
     ADD_LIBRARY(freeglut SHARED ${FREEGLUT_SRCS})

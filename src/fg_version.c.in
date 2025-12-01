@@ -1,0 +1,3 @@
+#include "fg_version.h"
+
+const char * BUILD_DATE = "@VERSION_BUILD_DATE@";
