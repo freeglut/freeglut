@@ -34,7 +34,7 @@ Cross-compile with:
   mkdir cross-build && cd cross-build
   cmake \
     -D GNU_HOST=$GNU_HOST \
-    -D CMAKE_TOOLCHAIN_FILE=mingw_cross_toolchain.cmake \
+    -D CMAKE_TOOLCHAIN_FILE=../cmake/mingw_cross_toolchain.cmake \
     -D CMAKE_INSTALL_PREFIX=$HOME/fgwin \
     ..
   make

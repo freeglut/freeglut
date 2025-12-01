@@ -16,11 +16,11 @@ Compiling
   - Compile freeglut and install it in your Android cross-compiler path:
 
     PATH=/usr/src/ndk-standalone-9/bin:$PATH
-    cd /usr/src/freeglut-3.0/
+    cd /usr/src/freeglut-3.8/
     mkdir cross-android-gles/
     cd cross-android-gles/
     cmake \
-      -D CMAKE_TOOLCHAIN_FILE=../android_toolchain.cmake \
+      -D CMAKE_TOOLCHAIN_FILE=../cmake/android_toolchain.cmake \
       -D CMAKE_INSTALL_PREFIX=/usr/src/ndk-standalone-9/sysroot/usr \
       -D CMAKE_BUILD_TYPE=Debug \
       -D FREEGLUT_GLES=ON \
@@ -50,11 +50,11 @@ If you use CMake, you may want to copy our Android toolchain 'android_toolchain.
     PATH="$PATH:/usr/src/android-sdk-linux/tools"
     PATH="$PATH:/usr/src/android-sdk-linux/platform-tools"
     export PKG_CONFIG_PATH=/usr/src/ndk-standalone-9/sysroot/usr/share/pkgconfig
-    cp .../freeglut-3.0/android_toolchain.cmake .
+    cp .../freeglut-3.8/cmake/android_toolchain.cmake .
     mkdir cross-android/
     cd cross-android/
     cmake \
-      -D CMAKE_TOOLCHAIN_FILE=../android_toolchain.cmake \
+      -D CMAKE_TOOLCHAIN_FILE=../cmake/android_toolchain.cmake \
       -D CMAKE_INSTALL_PREFIX=/somewhere \
       -D CMAKE_BUILD_TYPE=Debug \
       -D MY_PROG_OPTION=something ... \
@@ -70,7 +70,7 @@ complete, stand-alone example.
   - Create a module hierarchy pointing to freeglut, with our Android.mk:
 
       mkdir freeglut-gles/
-      cp .../freeglut-3.0/android/Android.mk freeglut-gles/
+      cp .../freeglut-3.8/android/Android.mk freeglut-gles/
       ln -s /usr/src/ndk-standalone-9/sysroot/usr/include freeglut-gles/include
       ln -s /usr/src/ndk-standalone-9/sysroot/usr/lib freeglut-gles/lib
 
