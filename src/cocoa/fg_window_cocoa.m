@@ -835,6 +835,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
 
     // use the fgOpenGLView as the content view
     [nsWindow setContentView:openGLView];
+    [openGLView release]; // NSWindow retains a reference so we can release our own
 
     //
     // 4. Set window delegate
@@ -843,6 +844,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
     fgWindowDelegate *delegate = [[fgWindowDelegate alloc] init];
     delegate.fgWindow          = window;
     [nsWindow setDelegate:delegate];
+    [delegate release]; // NSWindow retains a reference so we can release our own
 
     //
     // 5. Create NSOpenGLContext, and associate it with the view
