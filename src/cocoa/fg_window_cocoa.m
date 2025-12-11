@@ -926,10 +926,12 @@ void fgPlatformCloseWindow( SFG_Window *window )
 
     [context clearDrawable];
 
-    [nsWindow close];
-
     [context release];
-    [nsWindow release];
+
+    [nsWindow close]; // This also releases the nsWindow and its content view
+
+    window->Window.Handle  = nil;
+    window->Window.Context = nil;
 }
 
 /*
