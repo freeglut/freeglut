@@ -890,16 +890,15 @@ void fgPlatformOpenWindow( SFG_Window *window,
     // 9. Setup CVLinkDisplay for VSync
     //
 
-    // Create and configure CVDisplayLink
+    // Create and configure CVDisplayLink, if not already created
 #ifdef USE_CVDISPLAYLINK
-    if ( fgState.DisplayMode & GLUT_DOUBLE ) {
+    if ( ( fgState.DisplayMode & GLUT_DOUBLE ) && !fgDisplay.pDisplay.DisplayLink ) {
         CVDisplayLinkCreateWithActiveCGDisplays( (CVDisplayLinkRef *)&fgDisplay.pDisplay.DisplayLink );
-        CVDisplayLinkSetOutputCallback(
-            fgDisplay.pDisplay.DisplayLink, &fgDisplayLinkCallback, (__bridge void *)openGLView );
+        CVDisplayLinkSetOutputCallback( fgDisplay.pDisplay.DisplayLink, &fgDisplayLinkCallback, nil );
         CVDisplayLinkStart( fgDisplay.pDisplay.DisplayLink );
     }
 #else
-    // As of macOS 15, VSync is not functional, so CVDisplayLink is the recommended way to handle VSync
+    // As of macOS 26, VSync is not functional, so CVDisplayLink is the recommended way to handle VSync
 
     // Set the swap interval parameter
     GLint swapInterval = 1; // 1 for VSync, 0 for no VSync
