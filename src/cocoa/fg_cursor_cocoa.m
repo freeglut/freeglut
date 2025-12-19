@@ -20,17 +20,54 @@
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
 
+#import <Cocoa/Cocoa.h>
+
+static NSScreen *fghScreenContainingPoint( NSPoint screenPoint )
+{
+    AUTORELEASE_POOL;
+
+    for ( NSScreen *screen in [NSScreen screens] ) {
+        if ( NSPointInRect( screenPoint, [screen frame] ) ) {
+            return screen;
+        }
+    }
+
+    return [NSScreen mainScreen];
+}
+
+void fghPlatformGetCursorPos( const SFG_Window *window, GLboolean client, SFG_XYUse *mouse_pos )
+{
+    AUTORELEASE_POOL;
+
+    NSPoint   screenLoc   = [NSEvent mouseLocation]; // Bottom-left origin
+    NSScreen *screen      = fghScreenContainingPoint( screenLoc );
+    NSRect    screenFrame = screen ? [screen visibleFrame] : NSZeroRect;
+
+    int x = (int)( screenLoc.x - screenFrame.origin.x );
+    int y = (int)( NSMaxY( screenFrame ) - screenLoc.y ); // Top-left origin within the usable frame
+
+    if ( client && window && window->Window.Handle ) {
+
+        NSWindow *nsWindow  = window->Window.Handle;
+        NSPoint   windowLoc = [nsWindow convertPointFromScreen:screenLoc];
+        NSView   *view      = [nsWindow contentView];
+        NSPoint   viewLoc   = [view convertPoint:windowLoc fromView:nil];
+
+        x = (int)viewLoc.x;
+        y = (int)( view.bounds.size.height - viewLoc.y );
+    }
+
+    mouse_pos->X   = x;
+    mouse_pos->Y   = y;
+    mouse_pos->Use = GL_TRUE;
+}
+
 void fgPlatformSetCursor( SFG_Window *window, int cursorID )
 {
     TODO_IMPL;
 }
 
 void fgPlatformWarpPointer( int x, int y )
-{
-    TODO_IMPL;
-}
-
-void fghPlatformGetCursorPos( const SFG_Window *window, GLboolean client, SFG_XYUse *mouse_pos )
 {
     TODO_IMPL;
 }
