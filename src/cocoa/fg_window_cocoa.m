@@ -26,6 +26,9 @@
 void fghOnReshapeNotify( SFG_Window *window, int width, int height, GLboolean forceNotify );
 void fghOnPositionNotify( SFG_Window *window, int x, int y, GLboolean forceNotify );
 
+void fghPlatformGetCursorPos( const SFG_Window *window, GLboolean client, SFG_XYUse *mouse_pos );
+void fgPlatformPositionWindow( SFG_Window *window, int x, int y );
+
 /* CVDisplayLink callback function */
 CVReturn fgDisplayLinkCallback( CVDisplayLinkRef displayLink,
     const CVTimeStamp                           *now,
@@ -38,6 +41,49 @@ enum { FG_MOUSE_WHEEL_Y = 0, FG_MOUSE_WHEEL_X = 1 };
 static const double fgWheelThreshold = 1.0; // Threshold for mouse wheel events. TODO: decide on a suitable value
 
 BOOL shouldQuit = NO;
+
+static NSRect fghUsableScreenFrameForWindow( const SFG_Window *window )
+{
+    AUTORELEASE_POOL;
+    if ( !window ) {
+        return NSZeroRect;
+    }
+
+    const SFG_Window *topLevel = window;
+    while ( topLevel->Parent && topLevel->Parent->Window.Handle ) {
+        topLevel = topLevel->Parent;
+    }
+
+    NSScreen *screen = [NSScreen mainScreen];
+
+    NSWindow *nsWindow = (NSWindow *)topLevel->Window.Handle;
+    if ( nsWindow.screen )
+        screen = nsWindow.screen;
+
+    return screen.visibleFrame;
+}
+
+static NSPoint fghFreeglutToCocoaScreenPoint( const SFG_Window *window, int x, int y, CGFloat height )
+{
+    AUTORELEASE_POOL;
+
+    NSRect frame = fghUsableScreenFrameForWindow( window );
+    return NSMakePoint( frame.origin.x + x, NSMaxY( frame ) - y - height );
+}
+
+static void fghCocoaContentOriginToFreeglut( const SFG_Window *window, NSRect contentRect, int *x, int *y )
+{
+    AUTORELEASE_POOL;
+
+    NSRect frame = fghUsableScreenFrameForWindow( window );
+
+    if ( x ) {
+        *x = (int)( contentRect.origin.x - frame.origin.x );
+    }
+    if ( y ) {
+        *y = (int)( NSMaxY( frame ) - NSMaxY( contentRect ) );
+    }
+}
 
 /*****************************************************************
  * OpenGL View Interface (aka prototype)                         *
@@ -335,10 +381,13 @@ BOOL shouldQuit = NO;
         mouseLoc = [event locationInWindow];
     }
 
-    // Convert the point to view coordinates
+    // Convert the point to view coordinates (logical points)
     mouseLoc = [self convertPoint:mouseLoc fromView:nil];
-    int x    = (int)mouseLoc.x;
-    int y    = (int)( self.bounds.size.height - mouseLoc.y ); // Flip y for OpenGL
+
+    // Convert to backing coordinates (pixels) for consistency with window width/height
+    NSPoint backingLoc = [self convertPointToBacking:mouseLoc];
+    int     x          = (int)backingLoc.x;
+    int     y = (int)( [self convertRectToBacking:self.bounds].size.height - backingLoc.y ); // Flip y for OpenGL
 
     return NSMakePoint( x, y );
 }
@@ -419,6 +468,15 @@ BOOL shouldQuit = NO;
     button = [self.class mapMouseButton:event button:button];
 
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:NO];
+
+    // Update window state mouse position for menu activation check
+    self.fgWindow->State.MouseX = (int)mouseLoc.x;
+    self.fgWindow->State.MouseY = (int)mouseLoc.y;
+
+    if ( fgCheckActiveMenu( self.fgWindow, button, state == GLUT_DOWN, mouseLoc.x, mouseLoc.y ) ) {
+        return;
+    }
+
     INVOKE_WCB( *self.fgWindow, Mouse, ( button, state, mouseLoc.x, mouseLoc.y ) );
 }
 
@@ -432,6 +490,22 @@ BOOL shouldQuit = NO;
     }
 
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:NO];
+
+    // Update window state mouse position
+    self.fgWindow->State.MouseX = (int)mouseLoc.x;
+    self.fgWindow->State.MouseY = (int)mouseLoc.y;
+
+    if ( self.fgWindow->ActiveMenu ) {
+        SFG_XYUse mouse_pos;
+        fghPlatformGetCursorPos( NULL, GL_FALSE, &mouse_pos );
+
+        self.fgWindow->ActiveMenu->Window->State.MouseX = mouse_pos.X - self.fgWindow->ActiveMenu->X;
+        self.fgWindow->ActiveMenu->Window->State.MouseY = mouse_pos.Y - self.fgWindow->ActiveMenu->Y;
+
+        fgUpdateMenuHighlight( self.fgWindow->ActiveMenu );
+        return;
+    }
+
     INVOKE_WCB( *self.fgWindow, Passive, ( mouseLoc.x, mouseLoc.y ) );
 }
 
@@ -445,6 +519,22 @@ BOOL shouldQuit = NO;
     }
 
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:NO];
+
+    // Update window state mouse position
+    self.fgWindow->State.MouseX = (int)mouseLoc.x;
+    self.fgWindow->State.MouseY = (int)mouseLoc.y;
+
+    if ( self.fgWindow->ActiveMenu ) {
+        SFG_XYUse mouse_pos;
+        fghPlatformGetCursorPos( NULL, GL_FALSE, &mouse_pos );
+
+        self.fgWindow->ActiveMenu->Window->State.MouseX = mouse_pos.X - self.fgWindow->ActiveMenu->X;
+        self.fgWindow->ActiveMenu->Window->State.MouseY = mouse_pos.Y - self.fgWindow->ActiveMenu->Y;
+
+        fgUpdateMenuHighlight( self.fgWindow->ActiveMenu );
+        return;
+    }
+
     INVOKE_WCB( *self.fgWindow, Motion, ( mouseLoc.x, mouseLoc.y ) );
 }
 
@@ -475,6 +565,10 @@ BOOL shouldQuit = NO;
 
     // Get mouse coordinates in the view
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:NO];
+
+    // Update window state mouse position
+    self.fgWindow->State.MouseX = (int)mouseLoc.x;
+    self.fgWindow->State.MouseY = (int)mouseLoc.y;
 
     double FGUNUSED deltaX = [event scrollingDeltaX];
     double          deltaY = [event scrollingDeltaY];
@@ -619,6 +713,10 @@ BOOL shouldQuit = NO;
     }
 
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:YES];
+
+    // Update window state mouse position
+    self.fgWindow->State.MouseX = (int)mouseLoc.x;
+    self.fgWindow->State.MouseY = (int)mouseLoc.y;
 
     if ( state == GLUT_DOWN ) {
         [self.pressedSpecialKeys addObject:@( specialKey )];
@@ -776,8 +874,9 @@ BOOL shouldQuit = NO;
     else {
         NSWindow *window = (NSWindow *)self.fgWindow->Window.Handle;
         NSRect    frame  = [window contentRectForFrameRect:[window frame]];
-        int       px     = (int)frame.origin.x;
-        int       py     = (int)( fgDisplay.ScreenHeight - frame.origin.y - frame.size.height );
+        int       px     = 0;
+        int       py     = 0;
+        fghCocoaContentOriginToFreeglut( self.fgWindow, frame, &px, &py );
         fghOnPositionNotify( self.fgWindow, px, py, GL_FALSE );
     }
 
@@ -1022,9 +1121,9 @@ void fgPlatformOpenWindow( SFG_Window *window,
 
     // profile selection
     attrs[attrIndex++] = NSOpenGLPFAOpenGLProfile;
-    if ( fgState.MajorVersion == 3 )
+    if ( fgState.MajorVersion == 3 && !window->IsMenu )
         attrs[attrIndex++] = NSOpenGLProfileVersion3_2Core;
-    else if ( fgState.MajorVersion == 4 )
+    else if ( fgState.MajorVersion == 4 && !window->IsMenu )
         attrs[attrIndex++] = NSOpenGLProfileVersion4_1Core;
     else
         attrs[attrIndex++] = NSOpenGLProfileVersionLegacy;
@@ -1040,10 +1139,6 @@ void fgPlatformOpenWindow( SFG_Window *window,
     // 2. Create fgOpenGLView without a pixel format (the pixel format is used later in step 5)
     //
 
-    // Flip y coordinate for OpenGL
-    y = positionUse ? fgDisplay.ScreenHeight - y - h : fgDisplay.ScreenHeight - h;
-    x = positionUse ? x : 0;
-
     //
     // HACK: The OpenGL accumulation buffer on macOS does not resize with the window. To ensure it's
     // large enough for any potential size, we initialize the OpenGL context with a fullscreen view.
@@ -1057,7 +1152,9 @@ void fgPlatformOpenWindow( SFG_Window *window,
     // simplicity.
     //
     NSRect fullscreenFrame = [NSScreen mainScreen].frame;
-    NSRect frame           = NSMakeRect( x, y, sizeUse ? w : 300, sizeUse ? h : 300 );
+    NSRect frame           = NSMakeRect( 0, 0, sizeUse ? w : 300, sizeUse ? h : 300 );
+
+    frame.origin = fghFreeglutToCocoaScreenPoint( window, positionUse ? x : 0, positionUse ? y : 0, frame.size.height );
 
     fgOpenGLView *openGLView = [[fgOpenGLView alloc] initWithFrame:fullscreenFrame pixelFormat:pixelFormat];
     if ( !openGLView ) {
@@ -1147,6 +1244,10 @@ void fgPlatformOpenWindow( SFG_Window *window,
     NSRect backingBounds                    = [openGLView convertRectToBacking:[openGLView bounds]];
     window->State.pWState.FrameBufferWidth  = (int)backingBounds.size.width;
     window->State.pWState.FrameBufferHeight = (int)backingBounds.size.height;
+
+    // Also set the standard freeglut window state width and height
+    window->State.Width  = window->State.pWState.FrameBufferWidth;
+    window->State.Height = window->State.pWState.FrameBufferHeight;
 
     //
     // 9. Setup CVLinkDisplay for VSync
@@ -1247,8 +1348,20 @@ void fgPlatformShowWindow( SFG_Window *window )
     if ( [nsWindow isMiniaturized] ) {
         [nsWindow deminiaturize:nil];
     }
-    [NSApp activateIgnoringOtherApps:YES]; // Ensure window is focused
-    [nsWindow makeKeyAndOrderFront:nil];   // Brings window to front
+
+    if ( window->IsMenu ) {
+        /*
+         * The menu activation path queues both resize and position work.
+         * Reapply the desired position here, after resize work has already
+         * completed, so the top-left anchor uses the final menu height.
+         */
+        fgPlatformPositionWindow( window, window->State.DesiredXpos, window->State.DesiredYpos );
+        [nsWindow orderFront:nil];
+    }
+    else {
+        [NSApp activateIgnoringOtherApps:YES]; // Ensure window is focused
+        [nsWindow makeKeyAndOrderFront:nil];   // Brings window to front
+    }
     window->State.Visible = GL_TRUE;
 }
 
@@ -1355,10 +1468,10 @@ void fgPlatformPositionWindow( SFG_Window *window, int x, int y )
     NSRect    frame    = [nsWindow frame];
 
 #ifdef ANIMATE_WINDOW_POSITION
-    frame.origin = NSMakePoint( x, fgDisplay.ScreenHeight - y - frame.size.height );
+    frame.origin = fghFreeglutToCocoaScreenPoint( window, x, y, frame.size.height );
     [nsWindow setFrame:frame display:YES animate:YES];
 #else
-    [nsWindow setFrameOrigin:NSMakePoint( x, fgDisplay.ScreenHeight - y - frame.size.height )];
+    [nsWindow setFrameOrigin:fghFreeglutToCocoaScreenPoint( window, x, y, frame.size.height )];
 #endif
 }
 
