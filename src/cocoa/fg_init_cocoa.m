@@ -33,9 +33,14 @@ void fgPlatformInitialize( const char *displayName )
 {
     AUTORELEASE_POOL;
 
-    // Initialize the Cocoa application
-    [NSApplication sharedApplication]; // This creates the singleton instance of NSApplication (NSApp)
-    [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+    static BOOL application_initialized;
+
+    // Initialize the Cocoa application if not already done
+    if ( !application_initialized ) {
+        [NSApplication sharedApplication]; // This creates the singleton instance of NSApplication (NSApp)
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+        application_initialized = YES;
+    }
 
     // Get the primary screen properties
     NSScreen *primaryScreen = [[NSScreen screens] objectAtIndex:0];
