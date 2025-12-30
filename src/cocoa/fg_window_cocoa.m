@@ -219,12 +219,23 @@ BOOL shouldQuit = NO;
 
 - (instancetype)initWithFrame:(NSRect)frameRect pixelFormat:(NSOpenGLPixelFormat *)format
 {
+    AUTORELEASE_POOL;
+
     self = [super initWithFrame:frameRect pixelFormat:format];
     if ( self ) {
         _pressedStandardKeys = [[NSMutableSet alloc] init];
         _pressedSpecialKeys  = [[NSMutableSet alloc] init];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    AUTORELEASE_POOL;
+
+    [_pressedStandardKeys release];
+    [_pressedSpecialKeys release];
+    [super dealloc];
 }
 
 #pragma mark Mouse Section
@@ -923,10 +934,11 @@ void fgPlatformCloseWindow( SFG_Window *window )
 {
     AUTORELEASE_POOL;
 
-    NSWindow         *nsWindow = (NSWindow *)window->Window.Handle;
-    NSOpenGLContext  *context  = (NSOpenGLContext *)window->Window.Context;
-    fgOpenGLView     *view     = [nsWindow contentView];
-    fgWindowDelegate *delegate = (fgWindowDelegate *)[nsWindow delegate];
+    NSWindow            *nsWindow    = (NSWindow *)window->Window.Handle;
+    NSOpenGLContext     *context     = (NSOpenGLContext *)window->Window.Context;
+    fgOpenGLView        *view        = [nsWindow contentView];
+    fgWindowDelegate    *delegate    = (fgWindowDelegate *)[nsWindow delegate];
+    NSOpenGLPixelFormat *pixelFormat = window->Window.pContext.PixelFormat;
 
     // 1. Unbind OpenGL context from the view
     [context clearDrawable];
@@ -942,11 +954,13 @@ void fgPlatformCloseWindow( SFG_Window *window )
     // 3. Close the Window
     [nsWindow close];
 
-    // 4. Release openGL context (view and delegate were already released in OpenWindow)
+    // 4. Release openGL context and pixel format (view and delegate were already released in OpenWindow)
     [context release];
+    [pixelFormat release];
 
-    window->Window.Handle  = nil;
-    window->Window.Context = nil;
+    window->Window.Handle               = nil;
+    window->Window.Context              = nil;
+    window->Window.pContext.PixelFormat = nil;
 }
 
 /*
