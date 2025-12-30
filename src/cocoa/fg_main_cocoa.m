@@ -87,7 +87,13 @@ void fgPlatformMainLoopPreliminaryWork( void )
 {
     AUTORELEASE_POOL;
 
-    [NSApp finishLaunching]; // Completes the app launch process
+    static BOOL application_initialized;
+
+    // Initialize the Cocoa application if not already done
+    if ( !application_initialized ) {
+        [NSApp finishLaunching]; // Completes the app launch process
+        application_initialized = YES;
+    }
 
     // Bring app to the front
     // Use the modern API which is more reliable than activateIgnoringOtherApps:

@@ -831,6 +831,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
                                                          defer:NO];
     [nsWindow setAcceptsMouseMovedEvents:YES];
     [nsWindow setTitle:[NSString stringWithUTF8String:title ? title : "freeglut"]];
+    [nsWindow setReleasedWhenClosed:YES]; // This is the default, but being explicit
     window->Window.Handle = nsWindow;
 
     // use the fgOpenGLView as the content view
@@ -922,14 +923,27 @@ void fgPlatformCloseWindow( SFG_Window *window )
 {
     AUTORELEASE_POOL;
 
-    NSWindow        *nsWindow = (NSWindow *)window->Window.Handle;
-    NSOpenGLContext *context  = (NSOpenGLContext *)window->Window.Context;
+    NSWindow         *nsWindow = (NSWindow *)window->Window.Handle;
+    NSOpenGLContext  *context  = (NSOpenGLContext *)window->Window.Context;
+    fgOpenGLView     *view     = [nsWindow contentView];
+    fgWindowDelegate *delegate = (fgWindowDelegate *)[nsWindow delegate];
 
+    // 1. Unbind OpenGL context from the view
     [context clearDrawable];
 
-    [context release];
+    /*
+     * 2. CRITICAL: Detach the content view before closing the window.
+     *
+     * Closing a window can enqueue deferred AppKit/CoreAnimation work that runs
+     * later on what will be a dangling view/context.
+     */
+    [nsWindow setContentView:nil];
 
-    [nsWindow close]; // This also releases the nsWindow and its content view
+    // 3. Close the Window
+    [nsWindow close];
+
+    // 4. Release openGL context (view and delegate were already released in OpenWindow)
+    [context release];
 
     window->Window.Handle  = nil;
     window->Window.Context = nil;
