@@ -856,7 +856,6 @@ void fgPlatformOpenWindow( SFG_Window *window,
     fgWindowDelegate *delegate = [[fgWindowDelegate alloc] init];
     delegate.fgWindow          = window;
     [nsWindow setDelegate:delegate];
-    [delegate release]; // NSWindow retains a reference so we can release our own
 
     //
     // 5. Create NSOpenGLContext, and associate it with the view
@@ -936,7 +935,6 @@ void fgPlatformCloseWindow( SFG_Window *window )
 
     NSWindow            *nsWindow    = (NSWindow *)window->Window.Handle;
     NSOpenGLContext     *context     = (NSOpenGLContext *)window->Window.Context;
-    fgOpenGLView        *view        = [nsWindow contentView];
     fgWindowDelegate    *delegate    = (fgWindowDelegate *)[nsWindow delegate];
     NSOpenGLPixelFormat *pixelFormat = window->Window.pContext.PixelFormat;
 
@@ -954,9 +952,10 @@ void fgPlatformCloseWindow( SFG_Window *window )
     // 3. Close the Window
     [nsWindow close];
 
-    // 4. Release openGL context and pixel format (view and delegate were already released in OpenWindow)
+    // 4. Release openGL context, pixel format and delegate (view already released in OpenWindow)
     [context release];
     [pixelFormat release];
+    [delegate release];
 
     window->Window.Handle               = nil;
     window->Window.Context              = nil;
