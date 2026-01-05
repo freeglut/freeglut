@@ -106,10 +106,16 @@ void fgPlatformMainLoopPreliminaryWork( void )
     }
 }
 
-/* Upon initial window creation, do any platform-specific work required for the window */
+/* Upon initial window creation, Force notify of initial position and reshape */
 void fgPlatformInitWork( SFG_Window *window )
 {
-    /* Not required at present */
+    AUTORELEASE_POOL;
+
+    fghOnPositionNotify( window, window->State.Xpos, window->State.Ypos, GL_TRUE );
+
+    // framebuffer dimensions already captured during window creation
+    fghOnReshapeNotify(
+        window, window->State.pWState.FrameBufferWidth, window->State.pWState.FrameBufferHeight, GL_TRUE );
 }
 
 void fgPlatformPosResZordWork( SFG_Window *window, unsigned int workMask )
