@@ -87,12 +87,13 @@ struct CocoaPlatformDisplay {
     void *DisplayLink; /* Core Video Display Link for vsync - CVDisplayLinkRef */
 };
 
-/* Platform-specific window context */
+/* Per SFG_Window context. Instanced for new GLUT windows or subwindows */
 struct CocoaPlatformContext {
     void *PixelFormat; /* Pixel format - NSOpenGLPixelFormat* */
+    void *View;        /* This window or subwindow's view - NSOpenGLView* */
 };
 
-/* Platform window state info */
+/* Per NSWindow state info. Instanced only for new GLUT windows, referenced by subwindows */
 struct CocoaWindowState {
     int FrameBufferWidth;
     int FrameBufferHeight;

@@ -67,7 +67,9 @@ int fgPlatformGlutGet( GLenum eWhat )
     if ( !fgStructure.CurrentWindow )
         return 0;
 
-    NSWindow *win = (NSWindow *)fgStructure.CurrentWindow->Window.Handle;
+    NSWindow *win         = (NSWindow *)fgStructure.CurrentWindow->Window.Handle;
+    NSView   *view        = (NSView *)fgStructure.CurrentWindow->Window.pContext.View;
+    BOOL      isSubWindow = fgStructure.CurrentWindow->Parent ? YES : NO;
 
     switch ( eWhat ) {
 
@@ -77,6 +79,15 @@ int fgPlatformGlutGet( GLenum eWhat )
      */
     case GLUT_WINDOW_X:
     case GLUT_WINDOW_Y: {
+        if ( isSubWindow && view && [view superview] ) {
+            NSRect  frame   = [view frame];
+            CGFloat parentH = [[view superview] bounds].size.height;
+            if ( eWhat == GLUT_WINDOW_X )
+                return frame.origin.x;
+            else
+                return (int)( parentH - frame.origin.y - frame.size.height );
+        }
+
         NSRect frame   = [win frame];
         NSRect content = [win contentRectForFrameRect:frame];
         if ( eWhat == GLUT_WINDOW_X )
@@ -86,6 +97,8 @@ int fgPlatformGlutGet( GLenum eWhat )
     }
 
     case GLUT_WINDOW_BORDER_WIDTH:
+        if ( isSubWindow )
+            return 0;
         /* Returns the width of the left or right border */
         {
             NSRect frame   = [win frame];
@@ -95,6 +108,8 @@ int fgPlatformGlutGet( GLenum eWhat )
         }
 
     case GLUT_WINDOW_HEADER_HEIGHT:
+        if ( isSubWindow )
+            return 0;
         /* Returns the height of the title bar */
         {
             NSRect frame   = [win frame];
@@ -104,6 +119,14 @@ int fgPlatformGlutGet( GLenum eWhat )
 
     case GLUT_WINDOW_WIDTH:
     case GLUT_WINDOW_HEIGHT: {
+        if ( isSubWindow && view ) {
+            NSRect frame = [view bounds];
+            if ( eWhat == GLUT_WINDOW_WIDTH )
+                return frame.size.width;
+            else
+                return frame.size.height;
+        }
+
         NSRect frame = [win contentRectForFrameRect:[win frame]];
         if ( eWhat == GLUT_WINDOW_WIDTH )
             return frame.size.width;
