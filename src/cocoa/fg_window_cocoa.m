@@ -518,8 +518,15 @@ BOOL shouldQuit = NO;
         return; // Ignore events with no characters
     }
 
-    unichar key    = [[event charactersIgnoringModifiers] characterAtIndex:0];
-    key            = [fgOpenGLView standardizeKeyCode:key];
+    // Only ignore the modifiers if we are dealing with unicode or non-ascii
+    // keys. This allows things like ctrl-r to be mapped to 0x12 instead of
+    // being treated like 'r' pressed with the ctrl modifier.
+    unichar key = [[event characters] characterAtIndex:0];
+    if ( [[event characters] length] > 1 || key > 0x7F ) {
+        key = [[event charactersIgnoringModifiers] characterAtIndex:0];
+    }
+    key = [fgOpenGLView standardizeKeyCode:key];
+
     char convKey   = [fgOpenGLView convertFunctionKeyToGlutSpecial:key];
     BOOL isSpecial = ( convKey != key );
 
@@ -547,8 +554,12 @@ BOOL shouldQuit = NO;
         return; // Ignore events with no characters
     }
 
-    uint16_t key   = [[event charactersIgnoringModifiers] characterAtIndex:0];
-    key            = [fgOpenGLView standardizeKeyCode:key];
+    unichar key = [[event characters] characterAtIndex:0];
+    if ( [[event characters] length] > 1 || key > 0x7F ) {
+        key = [[event charactersIgnoringModifiers] characterAtIndex:0];
+    }
+    key = [fgOpenGLView standardizeKeyCode:key];
+
     char convKey   = [fgOpenGLView convertFunctionKeyToGlutSpecial:key];
     BOOL isSpecial = ( convKey != key );
 
