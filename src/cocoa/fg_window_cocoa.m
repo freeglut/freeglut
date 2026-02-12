@@ -83,6 +83,15 @@ BOOL shouldQuit = NO;
         self.closeRequested = YES;
         glutDestroyWindow( self.fgWindow->ID ); // Queue freeglut cleanup
         shouldQuit = YES;
+
+        // Handle ActionOnWindowClose the same way X11 and Windows do
+        if ( fgState.ActionOnWindowClose == GLUT_ACTION_EXIT ) {
+            fgDeinitialize( );
+            exit( 0 );
+        }
+        else if ( fgState.ActionOnWindowClose == GLUT_ACTION_GLUTMAINLOOP_RETURNS ) {
+            fgState.ExecState = GLUT_EXEC_STATE_STOP;
+        }
     }
 
     return NO;
