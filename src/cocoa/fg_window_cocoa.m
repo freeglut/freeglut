@@ -58,6 +58,7 @@ BOOL shouldQuit = NO;
 
 @interface                       fgWindowDelegate : NSObject <NSWindowDelegate>
 @property ( assign ) SFG_Window *fgWindow; // Freeglut’s window structure
+@property ( assign ) BOOL        closeRequested;
 @end
 
 @implementation fgWindowDelegate
@@ -66,9 +67,25 @@ BOOL shouldQuit = NO;
 {
     AUTORELEASE_POOL;
 
-    glutDestroyWindow( self.fgWindow->ID ); // Freeglut’s window cleanup
-    shouldQuit = YES;
-    return YES;
+    //
+    // Keep ownership/lifetime under freeglut control. AppKit closes the
+    // NSWindow immediately if we return YES, but freeglut destroys windows
+    // later via the WindowsToDestroy queue handled in fgCloseWindows.
+    //
+    if ( !self.fgWindow ) {
+        return YES;
+    }
+
+    if ( self.closeRequested ) { // idempotent guard
+        fgWarning( "Window close already requested" );
+    }
+    else {
+        self.closeRequested = YES;
+        glutDestroyWindow( self.fgWindow->ID ); // Queue freeglut cleanup
+        shouldQuit = YES;
+    }
+
+    return NO;
 }
 
 - (void)windowDidChangeOcclusionState:(NSNotification *)notification
