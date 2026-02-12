@@ -24,7 +24,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern BOOL shouldQuit;
+extern BOOL shouldQuit; // defined in fg_window_cocoa.m
 
 static pthread_mutex_t swapMutex  = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t  swapCond   = PTHREAD_COND_INITIALIZER;
