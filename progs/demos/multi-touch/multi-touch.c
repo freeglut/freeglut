@@ -97,6 +97,8 @@ void onMouse(int button, int state, int x, int y) {
         cursors[0][0].x = (float)x;
         cursors[0][0].y = (float)y;
         printf("normal click\n");
+    } else {
+        printf("%s click\n", (button == GLUT_RIGHT_BUTTON) ? "right" : "middle");
     }
 }
 
