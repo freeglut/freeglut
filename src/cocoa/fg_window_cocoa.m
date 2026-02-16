@@ -266,6 +266,22 @@ BOOL shouldQuit = NO;
 
 #pragma mark Mouse Section
 
+// Emulate mouse button mapping based on modifier keys
++ (int)mapMouseButton:(NSEvent *)event button:(int)button
+{
+    if ( button != GLUT_LEFT_BUTTON )
+        return button;
+
+    switch ( [event modifierFlags] & NSEventModifierFlagDeviceIndependentFlagsMask ) {
+    case NSEventModifierFlagControl:
+        return GLUT_RIGHT_BUTTON;
+    case NSEventModifierFlagOption:
+        return GLUT_MIDDLE_BUTTON;
+    default:
+        return GLUT_LEFT_BUTTON;
+    }
+}
+
 - (NSPoint)mouseLocation:(NSEvent *)event fromOutsideEvent:(BOOL)fromOutside
 {
     AUTORELEASE_POOL;
@@ -360,6 +376,8 @@ BOOL shouldQuit = NO;
     if ( !self.fgWindow ) {
         fgError( "Freeglut window not set for %s", __func__ );
     }
+
+    button = [self.class mapMouseButton:event button:button];
 
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:NO];
     INVOKE_WCB( *self.fgWindow, Mouse, ( button, state, mouseLoc.x, mouseLoc.y ) );
