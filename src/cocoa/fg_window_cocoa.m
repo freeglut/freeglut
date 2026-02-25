@@ -47,8 +47,9 @@ BOOL shouldQuit = NO;
 @property ( assign ) SFG_Window *fgWindow;
 // Trackers for currently held keys.
 // Special and standard key codes overlap, so we need to track them separately.
-@property ( strong ) NSMutableSet *pressedStandardKeys;
-@property ( strong ) NSMutableSet *pressedSpecialKeys;
+@property ( strong ) NSMutableSet   *pressedStandardKeys;
+@property ( strong ) NSMutableSet   *pressedSpecialKeys;
+@property ( strong ) NSTrackingArea *mouseTrackingArea;
 
 - (void)releaseAllKeys;
 @end
@@ -268,9 +269,38 @@ BOOL shouldQuit = NO;
 {
     AUTORELEASE_POOL;
 
+    if ( _mouseTrackingArea ) {
+        [self removeTrackingArea:_mouseTrackingArea];
+        [_mouseTrackingArea release];
+        _mouseTrackingArea = nil;
+    }
+
     [_pressedStandardKeys release];
     [_pressedSpecialKeys release];
     [super dealloc];
+}
+
+// This allows the view to track mouse enter/exit events so we can trigger the
+// appropriate Entry callbacks.
+- (void)updateTrackingAreas
+{
+    AUTORELEASE_POOL;
+
+    if ( _mouseTrackingArea ) {
+        [self removeTrackingArea:_mouseTrackingArea];
+        [_mouseTrackingArea release];
+        _mouseTrackingArea = nil;
+    }
+
+    NSTrackingAreaOptions trackingOptions =
+        NSTrackingMouseEnteredAndExited | NSTrackingInVisibleRect | NSTrackingActiveInKeyWindow;
+    _mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect
+                                                      options:trackingOptions
+                                                        owner:self
+                                                     userInfo:nil];
+    [self addTrackingArea:_mouseTrackingArea];
+
+    [super updateTrackingAreas];
 }
 
 #pragma mark Mouse Section
@@ -475,6 +505,47 @@ BOOL shouldQuit = NO;
         INVOKE_WCB( *self.fgWindow, MouseWheel, ( FG_MOUSE_WHEEL_Y, direction, mouseLoc.x, mouseLoc.y ) );
         bufferedY -= direction * fgWheelThreshold;
     }
+}
+
+- (void)mouseEntered:(NSEvent *)event
+{
+    AUTORELEASE_POOL;
+
+    if ( !self.fgWindow ) {
+        fgError( "Freeglut window not set for %s", __func__ );
+    }
+
+    // If we are using subviews we need to make sure the correct view is the
+    // first responder so it can receive key events.
+    NSWindow *window = [self window];
+    if ( window && [window firstResponder] != self ) {
+        [window makeFirstResponder:self];
+    }
+
+    INVOKE_WCB( *self.fgWindow, Entry, ( GLUT_ENTERED ) );
+}
+
+- (void)mouseExited:(NSEvent *)event
+{
+    AUTORELEASE_POOL;
+
+    if ( !self.fgWindow ) {
+        fgError( "Freeglut window not set for %s", __func__ );
+    }
+
+    NSWindow *window = [self window];
+    if ( window && [window firstResponder] == self ) {
+        // Restore first responder on mouse exit: prefer parent subwindow, otherwise content view.
+        // This keeps subwindows receiving key events even when the cursor leaves their bounds.
+        if ( self.fgWindow->Parent ) {
+            [window makeFirstResponder:self.fgWindow->Parent->Window.pContext.View];
+        }
+        else {
+            [window makeFirstResponder:[window contentView]];
+        }
+    }
+
+    INVOKE_WCB( *self.fgWindow, Entry, ( GLUT_LEFT ) );
 }
 
 #pragma mark Key Section
@@ -832,6 +903,7 @@ static void fgOpenSubWindow( SFG_Window *window, int x, int y, int w, int h )
     }
     [openGLView setWantsBestResolutionOpenGLSurface:NO];
     [parentView addSubview:openGLView];
+    [openGLView updateTrackingAreas];
     openGLView.fgWindow = window;
 
     NSOpenGLContext *glContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
@@ -1021,6 +1093,7 @@ void fgPlatformOpenWindow( SFG_Window *window,
 
     // use the fgOpenGLView as the content view
     [nsWindow setContentView:openGLView];
+    [openGLView updateTrackingAreas];
     window->Window.pContext.View = openGLView;
     [openGLView release]; // NSWindow retains a reference so we can release our own
 
