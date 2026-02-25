@@ -851,6 +851,7 @@ static void fgOpenSubWindow( SFG_Window *window, int x, int y, int w, int h )
     window->Window.Handle                   = topLevelWindow;
     window->Window.Context                  = glContext;
     window->Window.pContext.View            = openGLView;
+    window->Window.pContext.PixelFormat     = pixelFormat;
 
     return;
 }
