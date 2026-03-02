@@ -6,6 +6,7 @@
 #define HAVE_SYS_TYPES_H
 #define HAVE_FCNTL_H
 #define HAVE_ERRNO_H
+#define HAVE__VSNPRINTF
 #define NEED_XPARSEGEOMETRY_IMPL
 #define HAVE_U__INT64
 

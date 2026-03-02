@@ -27,6 +27,9 @@
  */
 
 /* Include Files */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -248,9 +251,9 @@ void bitmapPrintf (const char *fmt, ...)
     va_list args;
 
     va_start(args, fmt);
-#if defined(WIN32) && !defined(__CYGWIN__)
+#if defined(HAVE__VSNPRINTF) && !defined(HAVE_VSNPRINTF)
     (void) _vsnprintf (buf, sizeof(buf), fmt, args);
-#else
+#else /* All platforms except MSVC <= 1200 */
     (void) vsnprintf (buf, sizeof(buf), fmt, args);
 #endif
     va_end(args);
