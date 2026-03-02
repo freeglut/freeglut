@@ -11,6 +11,8 @@
 #cmakedefine HAVE_ERRNO_H
 #cmakedefine HAVE_USBHID_H
 #cmakedefine HAVE_GETTIMEOFDAY
+#cmakedefine HAVE_VSNPRINTF
+#cmakedefine HAVE__VSNPRINTF
 #cmakedefine HAVE_VFPRINTF
 #cmakedefine HAVE_DOPRNT
 #cmakedefine NEED_XPARSEGEOMETRY_IMPL

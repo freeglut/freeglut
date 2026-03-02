@@ -27,6 +27,7 @@
 #define HAVE_ERRNO_H		/* errno.h */
 #define HAVE_GETTIMEOFDAY	/* gettimeofday() */
 #define HAVE_VFPRINTF		/* vfprintf() */
+#define HAVE_VSNPRINTF		/* vsnprintf() */
 #undef HAVE_STDINT_H		/* stdint.h - might not be available, undef if not found */
 #define HAVE_INTTYPES_H		/* inttypes.h */
 #undef HAVE_ULONG_LONG		/* unsigned long long */

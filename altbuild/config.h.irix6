@@ -19,6 +19,7 @@
 #define HAVE_ERRNO_H		/* errno.h */
 #define HAVE_GETTIMEOFDAY	/* gettimeofday() */
 #define HAVE_VFPRINTF		/* vfprintf() */
+#define HAVE_VSNPRINTF		/* vsnprintf() added in IRIX 6.2+ */
 #define HAVE_INTTYPES_H		/* inttypes.h */
 #define HAVE_ULONG_LONG		/* unsigned long long */
 #undef HAVE_STDINT_H		/* stdint.h - not available with MIPSpro cc */

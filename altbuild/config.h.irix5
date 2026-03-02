@@ -13,6 +13,7 @@
 #define HAVE_ERRNO_H
 #define HAVE_GETTIMEOFDAY
 #define HAVE_VFPRINTF
+#define HAVE_VSNPRINTF   /* Available via libc */
 #define HAVE_ULONG_LONG
 
 /* inttypes.h conflicts with sys/types.h */
