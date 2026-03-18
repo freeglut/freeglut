@@ -1,6 +1,6 @@
 prefix=@CMAKE_INSTALL_PREFIX@
 libdir=@CMAKE_INSTALL_FULL_LIBDIR@
-includedir=${prefix}/include
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
 
 Name: glut
 Description: A freely licensed and improved alternative to the GLUT library
