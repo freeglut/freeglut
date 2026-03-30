@@ -1309,6 +1309,9 @@ void fgPlatformCloseWindow( SFG_Window *window )
         // TODO: we should probably remove all subviews left here incase the
         // subviews are torn down after the parent window. Dont forget to invalidate
         // all Children windows' pContext.View pointers too.
+        // TODO: Teardown currently depends on destruction order and is fragile.
+        // Consider revisiting resource ownership so subwindows retain references to
+        // top-level resources (e.g., pixelFormat, delegate).
 
         // CRITICAL: Detach the content view before closing the window.
         [nsWindow setContentView:nil];
@@ -1316,10 +1319,10 @@ void fgPlatformCloseWindow( SFG_Window *window )
         // Close the Window
         [nsWindow close];
         [delegate release];
+        [pixelFormat release];
     }
 
     [context release];
-    [pixelFormat release];
 
     window->Window.Handle               = nil;
     window->Window.Context              = nil;
