@@ -101,19 +101,23 @@
 
 #define  GLUT_WINDOW_SRGB                   0x007D
 
-/*
+
+/* freeglut-specific glutInitDisplayMode bits
+ *
  * Only one GLUT_AUXn bit may be used at a time.
  *
  * Due to an unfortunate conflict with GLUT_SRGB that went unnoticed for years,
  * the value of GLUT_AUX and GLUT_AUX1 has been changed in 2026. In older
  * versions of freeglut, it had the value 0x1000.
  */
-#define  GLUT_AUX                           0x10000
-
+#define  GLUT_CAPTIONLESS                   0x0400
+#define  GLUT_BORDERLESS                    0x0800
+#define  GLUT_SRGB                          0x1000
 #define  GLUT_AUX1                          0x10000
 #define  GLUT_AUX2                          0x2000
 #define  GLUT_AUX3                          0x4000
 #define  GLUT_AUX4                          0x8000
+#define  GLUT_AUX                           GLUT_AUX1
 
 /*
  * Context-related flags, see fg_state.c
@@ -280,13 +284,6 @@ FGAPI void    FGAPIENTRY glutAppStatusFunc( void (* callback)( int ) );
 /* state flags that can be passed to callback set by glutAppStatusFunc */
 #define GLUT_APPSTATUS_PAUSE                0x0001
 #define GLUT_APPSTATUS_RESUME               0x0002
-
-/*
- * GLUT API macro definitions -- the display mode definitions
- */
-#define  GLUT_CAPTIONLESS                   0x0400
-#define  GLUT_BORDERLESS                    0x0800
-#define  GLUT_SRGB                          0x1000
 
 /* User-argument callbacks and implementation */
 #include "freeglut_ucall.h"
