@@ -480,6 +480,12 @@ will accept negative window coordinates.
 
 ### 4.3 glutInitDisplayMode
 
+**ABI compatibility notice**
+
+Starting from freeglut 3.9.0, the value of `GLUT_AUX` and `GLUT_AUX1` had to
+change, because for the previous 17 years it has been accidentally sharing the
+same value as the much more widely used `GLUT_SRGB`.
+
 ### 4.4 glutInitDisplayString
 
 
