@@ -31,6 +31,13 @@ Set if the Ctrl modifier is active.
 .TP 8
 .B GLUT_ACTIVE_ALT
 Set if the Alt modifier is active.
+.LP
+In addition to reporting modifier state through glutGetModifiers, \fIfreeglut\fP
+also delivers the modifier keys themselves as special key press/release events
+(GLUT_KEY_SHIFT_L/_R, GLUT_KEY_CTRL_L/_R, GLUT_KEY_ALT_L/_R and
+GLUT_KEY_SUPER_L/_R) through glutSpecialFunc / glutSpecialUpFunc when a modifier
+is pressed on its own. This is a \fIfreeglut\fP extension, consistent across all
+backends, that classic GLUT does not provide.
 .SH SEE ALSO
 glutSpecialFunc, glutKeyboardFunc, glutMouseFunc
 .SH AUTHOR

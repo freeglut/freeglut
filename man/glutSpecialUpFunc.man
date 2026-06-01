@@ -97,6 +97,25 @@ End directional key.
 .TP 8
 .B GLUT_KEY_INSERT
 Inset directional key.
+.TP 8
+.B GLUT_KEY_SHIFT_L, GLUT_KEY_SHIFT_R
+Left and right Shift keys.
+.TP 8
+.B GLUT_KEY_CTRL_L, GLUT_KEY_CTRL_R
+Left and right Control keys.
+.TP 8
+.B GLUT_KEY_ALT_L, GLUT_KEY_ALT_R
+Left and right Alt keys.
+.TP 8
+.B GLUT_KEY_SUPER_L, GLUT_KEY_SUPER_R
+Left and right Super (Windows/Command) keys.
+.LP
+The GLUT_KEY_SHIFT_*, GLUT_KEY_CTRL_*, GLUT_KEY_ALT_* and GLUT_KEY_SUPER_* codes
+are a \fIfreeglut\fP extension: unlike GLUT, \fIfreeglut\fP reports release of
+the modifier keys through the special up callback when they are released on
+their own, on every backend. Classic GLUT generates no callback for a lone
+modifier key; use glutGetModifiers to read modifier state during a callback
+instead.
 .LP
 Note that the escape, backspace, and delete keys are generated as an ASCII
 character.
