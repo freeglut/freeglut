@@ -356,6 +356,19 @@ argument), and a window position callback.  Unsupported callbacks are
 the two Tablet callbacks.  If the user has a need for an unsupported
 callback he should contact the *freeglut* development team.
 
+
+*freeglut* also reports the keyboard **modifier keys** themselves — Shift,
+Control, Alt and Super (the Windows / Command key) — through the special key
+press and release callbacks (`glutSpecialFunc` / `glutSpecialUpFunc`) when they
+are pressed or released on their own.  The codes `GLUT_KEY_SHIFT_L`,
+`GLUT_KEY_SHIFT_R`, `GLUT_KEY_CTRL_L`, `GLUT_KEY_CTRL_R`, `GLUT_KEY_ALT_L`,
+`GLUT_KEY_ALT_R`, `GLUT_KEY_SUPER_L` and `GLUT_KEY_SUPER_R` (defined in
+`freeglut_ext.h`) are a *freeglut* extension; classic GLUT generates no callback
+for a lone modifier press and exposes modifier state only through
+`glutGetModifiers`.  This behaviour is consistent across all *freeglut*
+backends, and `glutGetModifiers` remains available during any keyboard, special
+or mouse callback as before.
+
 #### 3.4.5 String Rendering
 
 
@@ -1327,12 +1340,22 @@ The `key` argument may take one of the following defined constant values:
 - `GLUT_KEY_HOME, GLUT_KEY_END`                 - Home and End keys
 - `GLUT_KEY_LEFT, GLUT_KEY_RIGHT, GLUT_KEY_UP, GLUT_KEY_DOWN` - Arrow keys
 - `GLUT_KEY_INSERT`                             - Insert key
+- `GLUT_KEY_SHIFT_L, GLUT_KEY_SHIFT_R`          - left/right Shift (*freeglut* extension)
+- `GLUT_KEY_CTRL_L, GLUT_KEY_CTRL_R`            - left/right Control (*freeglut* extension)
+- `GLUT_KEY_ALT_L, GLUT_KEY_ALT_R`              - left/right Alt (*freeglut* extension)
+- `GLUT_KEY_SUPER_L, GLUT_KEY_SUPER_R`          - left/right Super / Windows / Command (*freeglut* extension)
 
 
 **Changes From GLUT**
 
 
-None.
+Unlike GLUT, *freeglut* also reports the modifier keys — Shift, Control, Alt and
+Super (the Windows / Command key) — through this callback when they are pressed
+on their own, using the `GLUT_KEY_SHIFT_L`/`_R`, `GLUT_KEY_CTRL_L`/`_R`,
+`GLUT_KEY_ALT_L`/`_R` and `GLUT_KEY_SUPER_L`/`_R` codes.  Classic GLUT generates
+no callback for a lone modifier press; its modifier *state* is instead read with
+`glutGetModifiers`, which remains available during the callback.  This behaviour
+is the same on every *freeglut* backend.
 
 ### 12.8 glutKeyboardUpFunc
 
@@ -1461,6 +1484,10 @@ The `key` argument may take one of the following defined constant values:
 - `GLUT_KEY_HOME, GLUT_KEY_END`  - Home and End keys
 - `GLUT_KEY_LEFT, GLUT_KEY_RIGHT, GLUT_KEY_UP, GLUT_KEY_DOWN` - arrow keys
 - `GLUT_KEY_INSERT` - Insert key
+- `GLUT_KEY_SHIFT_L, GLUT_KEY_SHIFT_R` - left/right Shift (*freeglut* extension)
+- `GLUT_KEY_CTRL_L, GLUT_KEY_CTRL_R` - left/right Control (*freeglut* extension)
+- `GLUT_KEY_ALT_L, GLUT_KEY_ALT_R` - left/right Alt (*freeglut* extension)
+- `GLUT_KEY_SUPER_L, GLUT_KEY_SUPER_R` - left/right Super / Windows / Command (*freeglut* extension)
 
 
 **Changes From GLUT**
@@ -1471,6 +1498,13 @@ versions before Version 4.  It has been designed to be as close to GLUT
 as possible.  Users who find differences should contact the
 *freeglut* Programming Consortium  to
 have them fixed.
+
+
+As with `glutSpecialFunc`, *freeglut* also reports release of the modifier keys
+(Shift, Control, Alt and Super) through this callback, using the
+`GLUT_KEY_SHIFT_L`/`_R`, `GLUT_KEY_CTRL_L`/`_R`, `GLUT_KEY_ALT_L`/`_R` and
+`GLUT_KEY_SUPER_L`/`_R` codes — a *freeglut* extension that is consistent across
+all backends.  Classic GLUT reports modifier state only via `glutGetModifiers`.
 
 ### 12.10 glutMotionFunc, glutPassiveMotionFunc
 
