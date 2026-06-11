@@ -91,6 +91,7 @@ struct CocoaPlatformDisplay {
 struct CocoaPlatformContext {
     void *PixelFormat; /* Pixel format - NSOpenGLPixelFormat* */
     void *View;        /* This window or subwindow's view - NSOpenGLView* */
+    void *Cursor;      /* glutSetCursor cursor - NSCursor*, nil = GLUT_CURSOR_INHERIT */
 };
 
 /* Per NSWindow state info. Instanced only for new GLUT windows, referenced by subwindows */

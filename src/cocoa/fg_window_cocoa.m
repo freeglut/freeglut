@@ -29,6 +29,8 @@ void fghOnPositionNotify( SFG_Window *window, int x, int y, GLboolean forceNotif
 void fghPlatformGetCursorPos( const SFG_Window *window, GLboolean client, SFG_XYUse *mouse_pos );
 void fgPlatformPositionWindow( SFG_Window *window, int x, int y );
 
+NSCursor *fghCocoaEffectiveCursor( const SFG_Window *window ); /* see fg_cursor_cocoa.m */
+
 /* CVDisplayLink callback function */
 CVReturn fgDisplayLinkCallback( CVDisplayLinkRef displayLink,
     const CVTimeStamp                           *now,
@@ -347,6 +349,22 @@ static void fghCocoaContentOriginToFreeglut( const SFG_Window *window, NSRect co
     [self addTrackingArea:_mouseTrackingArea];
 
     [super updateTrackingAreas];
+}
+
+// Apply the glutSetCursor cursor (stored by fgPlatformSetCursor) whenever
+// AppKit rebuilds this view's cursor rects. A nil cursor (GLUT_CURSOR_INHERIT
+// all the way up) leaves the system default in place.
+- (void)resetCursorRects
+{
+    AUTORELEASE_POOL;
+
+    NSCursor *cursor = self.fgWindow ? fghCocoaEffectiveCursor( self.fgWindow ) : nil;
+    if ( cursor ) {
+        [self addCursorRect:self.bounds cursor:cursor];
+    }
+    else {
+        [super resetCursorRects];
+    }
 }
 
 #pragma mark Mouse Section
@@ -1323,11 +1341,13 @@ void fgPlatformCloseWindow( SFG_Window *window )
     }
 
     [context release];
+    [(NSCursor *)window->Window.pContext.Cursor release];
 
     window->Window.Handle               = nil;
     window->Window.Context              = nil;
     window->Window.pContext.PixelFormat = nil;
     window->Window.pContext.View        = nil;
+    window->Window.pContext.Cursor      = nil;
 }
 
 /*
