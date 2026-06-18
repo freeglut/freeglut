@@ -82,6 +82,88 @@ static NSCursor *fghEmptyCursor( void )
     return empty;
 }
 
+/* A pair of rotating arrows for GLUT_CURSOR_CYCLE. macOS has no system
+ * equivalent, so we draw one in code (cf. fghEmptyCursor). */
+static NSCursor *fghCycleCursor( void )
+{
+    static NSCursor *cycle = nil;
+
+    if ( !cycle ) {
+        const CGFloat size   = 24.0;
+        const NSPoint center = NSMakePoint( size / 2, size / 2 );
+        const CGFloat radius = 7.0;
+
+        NSImage *image = [NSImage imageWithSize:NSMakeSize( size, size )
+                                        flipped:NO
+                                 drawingHandler:^BOOL( NSRect dstRect ) {
+            (void)dstRect;
+
+            /* Two opposing arcs, each ending in an arrowhead, so the cursor
+             * reads as a continuous rotation. */
+            const CGFloat arcs[2][2] = { { 30.0, 150.0 }, { 210.0, 330.0 } };
+
+            NSMutableArray<NSBezierPath *> *arcPaths  = [NSMutableArray array];
+            NSMutableArray<NSBezierPath *> *headPaths = [NSMutableArray array];
+
+            for ( int i = 0; i < 2; ++i ) {
+                CGFloat start = arcs[i][0];
+                CGFloat end   = arcs[i][1];
+
+                NSBezierPath *arc = [NSBezierPath bezierPath];
+                [arc setLineCapStyle:NSLineCapStyleRound];
+                [arc appendBezierPathWithArcWithCenter:center
+                                                radius:radius
+                                            startAngle:start
+                                              endAngle:end]; /* counter-clockwise */
+                [arcPaths addObject:arc];
+
+                /* Arrowhead at the arc's end, pointing along the
+                 * counter-clockwise tangent (end + 90 degrees). */
+                CGFloat endRad = end * M_PI / 180.0;
+                NSPoint tip    = NSMakePoint( center.x + radius * cos( endRad ),
+                                              center.y + radius * sin( endRad ) );
+                CGFloat tanRad = endRad + M_PI_2;
+                NSPoint dir    = NSMakePoint( cos( tanRad ), sin( tanRad ) );
+                NSPoint nrm    = NSMakePoint( -dir.y, dir.x );
+
+                NSBezierPath *head = [NSBezierPath bezierPath];
+                [head moveToPoint:NSMakePoint( tip.x + dir.x * 5.0, tip.y + dir.y * 5.0 )];
+                [head lineToPoint:NSMakePoint( tip.x + nrm.x * 4.0, tip.y + nrm.y * 4.0 )];
+                [head lineToPoint:NSMakePoint( tip.x - nrm.x * 4.0, tip.y - nrm.y * 4.0 )];
+                [head closePath];
+                [headPaths addObject:head];
+            }
+
+            /* White halo first, then black on top, so the cursor stays
+             * visible over both light and dark content. */
+            [[NSColor whiteColor] set];
+            for ( NSBezierPath *arc in arcPaths ) {
+                [arc setLineWidth:4.0];
+                [arc stroke];
+            }
+            for ( NSBezierPath *head in headPaths ) {
+                [head setLineWidth:2.0];
+                [head stroke];
+                [head fill];
+            }
+
+            [[NSColor blackColor] set];
+            for ( NSBezierPath *arc in arcPaths ) {
+                [arc setLineWidth:2.0];
+                [arc stroke];
+            }
+            for ( NSBezierPath *head in headPaths ) {
+                [head fill];
+            }
+
+            return YES;
+        }];
+
+        cycle = [[NSCursor alloc] initWithImage:image hotSpot:center];
+    }
+    return cycle;
+}
+
 /* Diagonal window-resize cursors only gained public API in macOS 15 */
 static NSCursor *fghCornerCursor( int cursorID )
 {
@@ -118,10 +200,11 @@ static NSCursor *fghCursorForID( int cursorID )
         return [NSCursor pointingHandCursor];
     case GLUT_CURSOR_DESTROY:
         return [NSCursor operationNotAllowedCursor];
-    case GLUT_CURSOR_HELP:  /* TODO: no public help/cycle/wait cursors; the system */
-    case GLUT_CURSOR_CYCLE: /* TODO: shows its own busy indicator when appropriate */
-    case GLUT_CURSOR_WAIT:
+    case GLUT_CURSOR_HELP:  /* TODO: no public help/wait cursors; the system */
+    case GLUT_CURSOR_WAIT:  /* shows its own busy indicator when appropriate */
         return [NSCursor arrowCursor];
+    case GLUT_CURSOR_CYCLE:
+        return fghCycleCursor( );
     case GLUT_CURSOR_SPRAY: /* TODO */
     case GLUT_CURSOR_CROSSHAIR:
     case GLUT_CURSOR_FULL_CROSSHAIR: /* FULL_CROSSHAIR demotes to CROSSHAIR, as on X11 */
