@@ -85,6 +85,7 @@ IF(NOT WIN32)
 ENDIF()
 
 OPTION(FREEGLUT_COCOA "Build support for Cocoa" OFF)
+OPTION(FREEGLUT_COCOA_SCROLLING_DELTA "Use pixel-based scrolling deltas on Cocoa" OFF)
 
 # Eventually default to ON when Cocoa is fully supported
 # IF(APPLE)

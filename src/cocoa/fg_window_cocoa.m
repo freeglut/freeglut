@@ -40,7 +40,11 @@ CVReturn fgDisplayLinkCallback( CVDisplayLinkRef displayLink,
     void                                        *displayLinkContext );
 
 enum { FG_MOUSE_WHEEL_Y = 0, FG_MOUSE_WHEEL_X = 1 };
-static const double fgWheelThreshold = 1.0; // Threshold for mouse wheel events. TODO: decide on a suitable value
+/*
+ * XQuartz uses a 1.0 increment for its continuous scroll valuators:
+ * https://github.com/XQuartz/xorg-server/blob/0ea9b595891f2f31915538192961f3404d9ca699/hw/xquartz/darwin.c#L344-L345
+ */
+static const double fgWheelStep = 1.0;
 
 BOOL shouldQuit = NO;
 
@@ -98,6 +102,8 @@ static void fghCocoaContentOriginToFreeglut( const SFG_Window *window, NSRect co
 @property ( strong ) NSMutableSet   *pressedStandardKeys;
 @property ( strong ) NSMutableSet   *pressedSpecialKeys;
 @property ( strong ) NSTrackingArea *mouseTrackingArea;
+@property ( assign ) double          continuousWheelDeltaX;
+@property ( assign ) double          continuousWheelDeltaY;
 
 - (void)releaseAllKeys;
 @end
@@ -578,9 +584,6 @@ static void fghCocoaContentOriginToFreeglut( const SFG_Window *window, NSRect co
         fgError( "Freeglut window not set for %s", __func__ );
     }
 
-    static double FGUNUSED bufferedX = 0.0;
-    static double          bufferedY = 0.0;
-
     // Get mouse coordinates in the view
     NSPoint mouseLoc = [self mouseLocation:event fromOutsideEvent:NO];
 
@@ -588,34 +591,69 @@ static void fghCocoaContentOriginToFreeglut( const SFG_Window *window, NSRect co
     self.fgWindow->State.MouseX = (int)mouseLoc.x;
     self.fgWindow->State.MouseY = (int)mouseLoc.y;
 
-    double FGUNUSED deltaX = [event scrollingDeltaX];
-    double          deltaY = [event scrollingDeltaY];
+    double deltaX, deltaY;
+
+    /*
+     * Optionally use pixel-based scrolling deltas instead of XQuartz line
+     * deltas.  This increases trackpad sensitivity, which may require
+     * application-level tuning.
+     */
+#if defined( FREEGLUT_COCOA_SCROLLING_DELTA )
+    deltaX = [event scrollingDeltaX];
+    deltaY = [event scrollingDeltaY];
 
     if ( [event hasPreciseScrollingDeltas] ) {
         deltaX *= 0.1;
         deltaY *= 0.1;
     }
+#else
+    /*
+     * Match XQuartz's Cocoa event translation: deltaX/deltaY are forwarded
+     * as continuous scroll valuators, including momentum events.  Using
+     * scrollingDeltaX/scrollingDeltaY here exposes precise pixel distances
+     * and produces substantially more core wheel events than XQuartz.
+     * https://github.com/XQuartz/xorg-server/blob/0ea9b595891f2f31915538192961f3404d9ca699/hw/xquartz/X11Application.m#L1192-L1308
+     */
+    deltaX = [event deltaX];
+    deltaY = [event deltaY];
+#endif
+    CGEventRef       cgEvent      = [event CGEvent];
+    BOOL             isContinuous = CGEventGetIntegerValueField( cgEvent, kCGScrollWheelEventIsContinuous );
 
-    // unofficial horizontal scrolling - calls MouseWheel with wheel = fgMouseXWheel (1)
+    // A coarse scroll event corresponds to one physical wheel step.
+    if ( !isContinuous ) {
+        // unofficial horizontal scrolling - calls MouseWheel with wheel = fgMouseXWheel (1)
 #ifdef REPORT_MOUSEWHEEL_X_AXIS
-    if ( fabs( bufferedX ) > fgWheelThreshold ) {
-        int direction = ( bufferedX > 0 ) ? GLUT_UP : GLUT_DOWN;
-        INVOKE_WCB( *self.fgWindow, MouseWheel, ( fgMouseXWheel, direction, x, y ) );
-        bufferedX = 0.0;
+        if ( deltaX != 0.0 ) {
+            int direction = ( deltaX > 0.0 ) ? 1 : -1;
+            INVOKE_WCB( *self.fgWindow, MouseWheel,
+                ( FG_MOUSE_WHEEL_X, direction, mouseLoc.x, mouseLoc.y ) );
+        }
+#endif
+        if ( deltaY != 0.0 ) {
+            int direction = ( deltaY > 0.0 ) ? 1 : -1;
+            INVOKE_WCB( *self.fgWindow, MouseWheel,
+                ( FG_MOUSE_WHEEL_Y, direction, mouseLoc.x, mouseLoc.y ) );
+        }
+        return;
     }
-    else {
-        bufferedX += deltaX;
+
+#ifdef REPORT_MOUSEWHEEL_X_AXIS
+    self.continuousWheelDeltaX += deltaX;
+    while ( fabs( self.continuousWheelDeltaX ) >= fgWheelStep ) {
+        int direction = ( self.continuousWheelDeltaX > 0.0 ) ? 1 : -1;
+        INVOKE_WCB( *self.fgWindow, MouseWheel,
+            ( FG_MOUSE_WHEEL_X, direction, mouseLoc.x, mouseLoc.y ) );
+        self.continuousWheelDeltaX -= direction * fgWheelStep;
     }
 #endif
 
-    // TODO: Decide on a suitable threshold for scrolling events
-    // Macos sends a lot of small delta values, so we need to filter them if we want to match the
-    // behavior of other platforms
-    bufferedY += deltaY;
-    while ( fabs( bufferedY ) > fgWheelThreshold ) {
-        int direction = ( bufferedY > 0 ) ? 1 : -1;
-        INVOKE_WCB( *self.fgWindow, MouseWheel, ( FG_MOUSE_WHEEL_Y, direction, mouseLoc.x, mouseLoc.y ) );
-        bufferedY -= direction * fgWheelThreshold;
+    self.continuousWheelDeltaY += deltaY;
+    while ( fabs( self.continuousWheelDeltaY ) >= fgWheelStep ) {
+        int direction = ( self.continuousWheelDeltaY > 0.0 ) ? 1 : -1;
+        INVOKE_WCB( *self.fgWindow, MouseWheel,
+            ( FG_MOUSE_WHEEL_Y, direction, mouseLoc.x, mouseLoc.y ) );
+        self.continuousWheelDeltaY -= direction * fgWheelStep;
     }
 }
 
