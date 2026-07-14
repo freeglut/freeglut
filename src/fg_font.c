@@ -92,7 +92,12 @@ void FGAPIENTRY glutBitmapCharacter( void* fontID, int character )
     /* Find the character we want to draw */
     face = font->Characters[ character ];
 
-#ifdef GL_VERSION_1_1
+    /*
+     * Apple's OpenGL compatibility implementation handles the explicit
+     * pixel-store queries/restores below much more cheaply than its client
+     * attribute stack.  Only the six values changed here need preserving.
+     */
+#if defined(GL_VERSION_1_1) && !TARGET_HOST_MACOS_COCOA
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT );
 #else
 	{
@@ -117,7 +122,7 @@ void FGAPIENTRY glutBitmapCharacter( void* fontID, int character )
         ( float )( face[ 0 ] ), 0.0,  /* The raster advance -- inc. x,y */
         ( face + 1 )                  /* The packed bitmap data...      */
     );
-#ifdef GL_VERSION_1_1
+#if defined(GL_VERSION_1_1) && !TARGET_HOST_MACOS_COCOA
     glPopClientAttrib();
 #else
 	glPixelStorei(GL_UNPACK_SWAP_BYTES, swbytes);
@@ -145,7 +150,7 @@ void FGAPIENTRY glutBitmapString( void* fontID, const unsigned char *string )
     if ( !string || ! *string )
         return;
 
-#ifdef GL_VERSION_1_1
+#if defined(GL_VERSION_1_1) && !TARGET_HOST_MACOS_COCOA
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT );
 #else
 	{
@@ -190,7 +195,7 @@ void FGAPIENTRY glutBitmapString( void* fontID, const unsigned char *string )
             x += ( float )( face[ 0 ] );
         }
 
-#ifdef GL_VERSION_1_1
+#if defined(GL_VERSION_1_1) && !TARGET_HOST_MACOS_COCOA
     glPopClientAttrib();
 #else
 	glPixelStorei(GL_UNPACK_SWAP_BYTES, swbytes);
