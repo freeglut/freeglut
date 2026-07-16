@@ -366,6 +366,7 @@ struct tagSFG_State
     GLuint           SwapTime;             /* Time of last SwapBuffers       */
 
     fg_time_t        Time;                 /* Time that glutInit was called  */
+    fg_time_t        NsTime;               /* NsTime that glutInit was called */
     SFG_List         Timers;               /* The freeglut timer hooks       */
     SFG_List         FreeTimers;           /* The unused timer hooks         */
 
@@ -1120,9 +1121,11 @@ void fgDisplayMenu( void );
 
 /* Elapsed time as per glutGet(GLUT_ELAPSED_TIME). */
 fg_time_t fgElapsedTime( void );
+fg_time_t fgElapsedNsTime( void );
 
 /* System time in milliseconds */
 fg_time_t fgSystemTime(void);
+fg_time_t fgSystemNsTime(void);
 
 /* List functions */
 void fgListInit(SFG_List *list);

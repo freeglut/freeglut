@@ -50,6 +50,7 @@ SFG_State fgState = { { -1, -1, GL_FALSE },  /* Position */
                       0,                     /* SwapCount */
                       0,                     /* SwapTime */
                       0,                     /* Time */
+                      0,                     /* NsTime */
                       { NULL, NULL },         /* Timers */
                       { NULL, NULL },         /* FreeTimers */
                       NULL,                   /* IdleCallback */

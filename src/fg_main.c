@@ -43,6 +43,7 @@
 
 extern void fgProcessWork( SFG_Window *window );
 extern fg_time_t fgPlatformSystemTime( void );
+extern fg_time_t fgPlatformSystemNsTime( void );
 extern void fgPlatformSleepForEvents( fg_time_t msec );
 extern void fgPlatformProcessSingleEvent( void );
 extern void fgPlatformMainLoopPreliminaryWork( void );
@@ -230,14 +231,23 @@ static void fghCheckTimers( void )
  * which means you will still get in trouble when running the
  * application for more than 49.7 days.
  */
-fg_time_t fgSystemTime(void)
+fg_time_t fgSystemTime( void )
 {
     return fgPlatformSystemTime();
+}
+fg_time_t fgSystemNsTime( void )
+{
+    return fgPlatformSystemNsTime();
 }
 
 fg_time_t fgElapsedTime( void )
 {
     return fgSystemTime() - fgState.Time;
+}
+
+fg_time_t fgElapsedNsTime( void )
+{
+    return fgSystemNsTime() - fgState.NsTime;
 }
 
 void fgError( const char *fmt, ... )

@@ -26,7 +26,7 @@
 #include "../fg_internal.h"
 #include <errno.h>
 #include <stdarg.h>
-
+#include <time.h>
 
 /*
  * Try to get the maximum value allowed for ints, falling back to the minimum
@@ -57,12 +57,20 @@ extern void fgPlatformShowWindow( SFG_Window *window );
 /* used in the event handling code to match and discard stale mouse motion events */
 static Bool match_motion(Display *dpy, XEvent *xev, XPointer arg);
 
+fg_time_t fgPlatformSystemNsTime ( void )
+{
+#ifdef CLOCK_MONOTONIC_RAW
+	struct timespec now;
+	clock_gettime(CLOCK_MONOTONIC_RAW, &now);
+	return now.tv_sec * 1000000000 + now.tv_nsec;
+#endif
+}
 
 fg_time_t fgPlatformSystemTime ( void )
 {
-#ifdef CLOCK_MONOTONIC
+#ifdef CLOCK_MONOTONIC_RAW
     struct timespec now;
-    clock_gettime(CLOCK_MONOTONIC, &now);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &now);
     return now.tv_nsec/1000000 + now.tv_sec*1000;
 #elif defined(HAVE_GETTIMEOFDAY)
     struct timeval now;

@@ -309,6 +309,7 @@
 #define  GLUT_INIT_WINDOW_HEIGHT            0x01F7
 #define  GLUT_INIT_DISPLAY_MODE             0x01F8
 #define  GLUT_ELAPSED_TIME                  0x02BC
+#define  GLUT_ELAPSED_NS_TIME               0x02BD
 #define  GLUT_WINDOW_FORMAT_ID              0x007B
 
 /*
@@ -536,10 +537,11 @@ FGAPI void    FGAPIENTRY glutTabletButtonFunc( void (* callback)( int, int, int,
 /*
  * State setting and retrieval functions, see fg_state.c
  */
-FGAPI int     FGAPIENTRY glutGet( GLenum query );
-FGAPI int     FGAPIENTRY glutDeviceGet( GLenum query );
-FGAPI int     FGAPIENTRY glutGetModifiers( void );
-FGAPI int     FGAPIENTRY glutLayerGet( GLenum query );
+FGAPI int      FGAPIENTRY glutGet( GLenum query );
+FGAPI uint64_t FGAPIENTRY glutGet64( GLenum query );
+FGAPI int      FGAPIENTRY glutDeviceGet( GLenum query );
+FGAPI int      FGAPIENTRY glutGetModifiers( void );
+FGAPI int      FGAPIENTRY glutLayerGet( GLenum query );
 
 /*
  * Font stuff, see fg_font.c

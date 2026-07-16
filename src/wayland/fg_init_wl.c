@@ -101,6 +101,7 @@ void fgPlatformInitialize( const char* displayName )
 
     /* Get start time */
     fgState.Time = fgSystemTime();
+    fgState.NsTime = fgSystemNsTime();
 
     fgState.Initialised = GL_TRUE;
 

@@ -106,6 +106,22 @@ void FGAPIENTRY glutSetOption( GLenum eWhat, int value )
     }
 }
 
+uint64_t FGAPIENTRY glutGet64( GLenum eWhat )
+{
+	switch(eWhat)
+	{
+	case GLUT_INIT_STATE:
+		return fgState.Initialised;
+	case GLUT_ELAPSED_TIME:
+		return fgElapsedTime();
+	case GLUT_ELAPSED_NS_TIME:
+		return fgElapsedNsTime();
+	default:
+		return (uint64_t)-1;
+	}
+	FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutGet64" );
+}
+
 int FGAPIENTRY glutGet( GLenum eWhat )
 {
     switch (eWhat)

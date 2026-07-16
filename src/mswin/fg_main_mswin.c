@@ -23,6 +23,7 @@
 
 #include <GL/freeglut.h>
 #include "../fg_internal.h"
+#include <time.h>
 
 extern void fghRedrawWindow ( SFG_Window *window );
 extern void fghRedrawWindowAndChildren ( SFG_Window *window );
@@ -474,6 +475,12 @@ fg_time_t fgPlatformSystemTime ( void )
     lastTime32 = currTime32;
 
     return currTime32 | timeEpoch << 32;
+}
+fg_time_t fgPlatformSystemNsTime( void )
+{
+	struct timespec now;
+	_timespec64_get(&now, TIME_UTC);
+	return now.tv_sec * 1000000000 + now.tv_nsec;
 }
 
 
