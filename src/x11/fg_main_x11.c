@@ -59,18 +59,24 @@ static Bool match_motion(Display *dpy, XEvent *xev, XPointer arg);
 
 fg_time_t fgPlatformSystemNsTime ( void )
 {
-#ifdef CLOCK_MONOTONIC_RAW
 	struct timespec now;
-	clock_gettime(CLOCK_MONOTONIC_RAW, &now);
+	#ifdef CLOCK_TAI
+	clock_gettime(CLOCK_TAI, &now);
+	#else
+	clock_gettime(CLOCK_REALTIME_ALARM, &now);
+	#endif
 	return now.tv_sec * 1000000000 + now.tv_nsec;
-#endif
 }
 
 fg_time_t fgPlatformSystemTime ( void )
 {
-#ifdef CLOCK_MONOTONIC_RAW
+#ifdef CLOCK_TAI
     struct timespec now;
-    clock_gettime(CLOCK_MONOTONIC_RAW, &now);
+    clock_gettime(CLOCK_TAI, &now);
+    return now.tv_nsec/1000000 + now.tv_sec*1000;
+#elif defined(CLOCK_REALTIME_ALARM)
+    struct timespec now;
+    clock_gettime(CLOCK_REALTIME_ALARM, &now);
     return now.tv_nsec/1000000 + now.tv_sec*1000;
 #elif defined(HAVE_GETTIMEOFDAY)
     struct timeval now;

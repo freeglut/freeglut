@@ -116,6 +116,8 @@ uint64_t FGAPIENTRY glutGet64( GLenum eWhat )
 		return fgElapsedTime();
 	case GLUT_ELAPSED_NS_TIME:
 		return fgElapsedNsTime();
+	case GLUT_NS_TIME:
+		return fgState.NsTime;
 	default:
 		return (uint64_t)-1;
 	}

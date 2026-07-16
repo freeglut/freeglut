@@ -309,7 +309,9 @@
 #define  GLUT_INIT_WINDOW_HEIGHT            0x01F7
 #define  GLUT_INIT_DISPLAY_MODE             0x01F8
 #define  GLUT_ELAPSED_TIME                  0x02BC
-#define  GLUT_ELAPSED_NS_TIME               0x02BD
+#define  GLUT_TIME                          0x02BD
+#define  GLUT_ELAPSED_NS_TIME               0x02BE
+#define  GLUT_NS_TIME                       0x02BF
 #define  GLUT_WINDOW_FORMAT_ID              0x007B
 
 /*

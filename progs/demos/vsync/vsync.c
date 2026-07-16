@@ -11,6 +11,7 @@
 #include <math.h>
 #include <limits.h>
 #include <GL/freeglut.h>
+#include <time.h>
 
 #if defined(unix) || defined(__unix__)
 #define BUILD_UNIX
@@ -82,13 +83,14 @@ void display(void)
 	int i;
 	uint64_t upd_time;
 	uint64_t nsec = glutGet64(GLUT_ELAPSED_NS_TIME);
-	float t = (float)nsec / 1000000000.0f;
+	float t = (float)(nsec) / 1000000000.0f;
+
 
 	if((upd_time = nsec - prev_fps_upd) >= 1000000000) {
 		float fps = nframes * 1000000000.0f / (float)upd_time;
 		nframes = 0;
 		prev_fps_upd = nsec;
-		sprintf(fpsbuf, "%.1f fps", fps);
+		snprintf(fpsbuf, 127, "%.1f fps", fps);
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT);
