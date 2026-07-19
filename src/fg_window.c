@@ -144,20 +144,23 @@ void fgCloseWindow( SFG_Window* window )
 }
 
 
-int FGAPIENTRY glutCreateWindow( const char* title )
+int FGAPIENTRY glutCreateWindow(const char *title)
 {
-    /* XXX GLUT does not exit; it simply calls "glutInit" quietly if the
-     * XXX application has not already done so.  The "freeglut" community
-     * XXX decided not to go this route (freeglut-developer e-mail from
-     * XXX Steve Baker, 12/16/04, 4:22 PM CST, "Re: [Freeglut-developer]
-     * XXX Desired 'freeglut' behaviour when there is no current window")
-     */
-    FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutCreateWindow" );
+	SFG_Window *win;
 
-    return fgCreateWindow( NULL, title, 
-                           fgState.Position.Use, fgState.Position.X, fgState.Position.Y,
-                           fgState.Size.Use, fgState.Size.X, fgState.Size.Y,
-                           GL_FALSE, GL_FALSE )->ID;
+	if(!fgState.Initialised) {
+		static char *fake_argv[] = {"fgapp", 0};
+		static int fake_argc = 1;
+
+		/* if the user forgot to call glutInit, issue a warning and call it here. */
+		fgWarning("WARNING: glutCreateWindow called without first calling glutInit.");
+		glutInit(&fake_argc, fake_argv);
+	}
+
+	win = fgCreateWindow(NULL, title, fgState.Position.Use, fgState.Position.X,
+			fgState.Position.Y, fgState.Size.Use, fgState.Size.X, fgState.Size.Y,
+			GL_FALSE, GL_FALSE);
+	return win->ID;
 }
 
 int FGAPIENTRY glutCreateSubWindow( int parentID, int x, int y, int w, int h )
