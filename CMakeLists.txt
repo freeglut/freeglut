@@ -776,6 +776,7 @@ ADD_DEMO(accum           progs/demos/accum/accum.c)
 ADD_DEMO(windows         progs/demos/windows/windows.c)
 ADD_DEMO(vsync           progs/demos/vsync/vsync.c)
 ADD_DEMO(fonts           progs/demos/fonts/fonts.c)
+ADD_DEMO(cursors         progs/demos/cursors/cursors.c)
 
 #######################
 # INSTALLATION
