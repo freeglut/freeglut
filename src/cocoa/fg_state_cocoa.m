@@ -64,6 +64,11 @@ int fgPlatformGlutGet( GLenum eWhat )
 {
     AUTORELEASE_POOL;
 
+    /* Window independent checks first */
+    if ( eWhat == GLUT_DISPLAY_MODE_POSSIBLE )
+        /* TODO: Query fgState.ContextFlags to determine if display mode config is possible for now assume it is */
+        return 1;
+
     if ( !fgStructure.CurrentWindow )
         return 0;
 
@@ -221,9 +226,6 @@ int fgPlatformGlutGet( GLenum eWhat )
         /* macOS does not have a specific sRGB flag */
         return 0;
     }
-    case GLUT_DISPLAY_MODE_POSSIBLE:
-        /* TODO: Query fgState.ContextFlags to determine if display mode config is possible for now assume it is */
-        return 1;
 
     case GLUT_WINDOW_FORMAT_ID:
         /* macOS does not have a specific format ID */
