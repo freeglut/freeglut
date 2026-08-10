@@ -10,12 +10,13 @@
 
 #include <GL/freeglut.h>
 
-const float GRAB_WIDTH     = 0.06f;
-const float BORDER_WIDTH   = 0.03f;
-const float MIN_SIZE       = ( 4.0f * GRAB_WIDTH );
-const float MAX_EDGE       = ( 1.0f - GRAB_WIDTH - BORDER_WIDTH );
-const float SPIN_MS        = 1500.0f;
-const int   SPIN_ROTATIONS = 1;
+/* Use macros for constants to support MSVC */
+#define GRAB_WIDTH     0.06f
+#define BORDER_WIDTH   0.03f
+#define MIN_SIZE       ( 4.0f * GRAB_WIDTH )
+#define MAX_EDGE       ( 1.0f - GRAB_WIDTH - BORDER_WIDTH )
+#define SPIN_MS        1500.0f
+#define SPIN_ROTATIONS 1
 
 typedef struct
 {
