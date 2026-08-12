@@ -95,9 +95,9 @@ void FGAPIENTRY glutBitmapCharacter( void* fontID, int character )
     /*
      * Apple's OpenGL compatibility implementation handles the explicit
      * pixel-store queries/restores below much more cheaply than its client
-     * attribute stack.  Only the six values changed here need preserving.
+     * attribute stack.  Verified this also helps the XQuartz path on macOS.
      */
-#if defined(GL_VERSION_1_1) && !TARGET_HOST_MACOS_COCOA
+#if defined(GL_VERSION_1_1) && !defined(__APPLE__)
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT );
 #else
 	{
@@ -122,7 +122,7 @@ void FGAPIENTRY glutBitmapCharacter( void* fontID, int character )
         ( float )( face[ 0 ] ), 0.0,  /* The raster advance -- inc. x,y */
         ( face + 1 )                  /* The packed bitmap data...      */
     );
-#if defined(GL_VERSION_1_1) && !TARGET_HOST_MACOS_COCOA
+#if defined(GL_VERSION_1_1) && !defined(__APPLE__)
     glPopClientAttrib();
 #else
 	glPixelStorei(GL_UNPACK_SWAP_BYTES, swbytes);
@@ -150,7 +150,7 @@ void FGAPIENTRY glutBitmapString( void* fontID, const unsigned char *string )
     if ( !string || ! *string )
         return;
 
-#if defined(GL_VERSION_1_1) && !TARGET_HOST_MACOS_COCOA
+#if defined(GL_VERSION_1_1) && !defined(__APPLE__)
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT );
 #else
 	{
@@ -195,7 +195,7 @@ void FGAPIENTRY glutBitmapString( void* fontID, const unsigned char *string )
             x += ( float )( face[ 0 ] );
         }
 
-#if defined(GL_VERSION_1_1) && !TARGET_HOST_MACOS_COCOA
+#if defined(GL_VERSION_1_1) && !defined(__APPLE__)
     glPopClientAttrib();
 #else
 	glPixelStorei(GL_UNPACK_SWAP_BYTES, swbytes);
