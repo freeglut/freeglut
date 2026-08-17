@@ -1232,8 +1232,9 @@ void fgPlatformOpenWindow( SFG_Window *window,
     [glContext setView:openGLView];
     window->Window.Context = glContext;
 
-    // Now that the fullscreen context is created, resize and position the window to the requested frame.
-    // This triggers the reshape callback, which sets the correct viewport
+    // Now that the fullscreen context is created, resize and position the
+    // window to the requested frame.  This triggers the reshape callback
+    // asynchronously
     [nsWindow setContentSize:frame.size];
     [nsWindow setFrameOrigin:frame.origin];
 
@@ -1241,7 +1242,13 @@ void fgPlatformOpenWindow( SFG_Window *window,
     // 6. Make the context current for OpenGL rendering
     //
 
+    // Force a synchronize update to ensure the context size matches the
+    // configured size now, rather than waiting for a deferred reshape
+    // callback.  This is important for applications that query the framebuffer
+    // size immediately after window creation. (This makes the above accum
+    // buffer dance hack fully transparent to the user)
     [glContext makeCurrentContext];
+    [glContext update];
 
     //
     // 7. Show the window if not a menu and make it first responder
