@@ -29,6 +29,85 @@
 
 fg_time_t fgPlatformSystemTime( void );
 
+/*
+ * Use an application delegate to co-ordinate teardown. Quitting must unwind
+ * through glutMainLoop()
+ */
+@interface fgApplicationDelegate : NSObject <NSApplicationDelegate>
+@end
+
+@implementation fgApplicationDelegate
+
+- (BOOL)fghLeaveMainLoop
+{
+    if ( fgState.Initialised && fgState.ExecState == GLUT_EXEC_STATE_RUNNING ) {
+        fgState.ExecState = GLUT_EXEC_STATE_STOP;
+        return YES;
+    }
+    return NO;
+}
+
+- (void)fghQuit:(id)sender
+{
+    if ( ![self fghLeaveMainLoop] )
+        [NSApp terminate:sender];
+}
+
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
+{
+    /* Don't terminate if we should return control to the application. i.e. there
+     * is a fghLeaveMainLoop */
+    return [self fghLeaveMainLoop] ? NSTerminateCancel : NSTerminateNow;
+}
+
+@end
+
+/*
+ * Install a minimal application menu bar.
+ */
+static void fghInstallApplicationMenu( void )
+{
+    if ( [NSApp mainMenu] != nil )
+        return;
+
+    NSString *appName = nil;
+    if ( fgState.ProgramName )
+        appName = [[NSString stringWithUTF8String:fgState.ProgramName] lastPathComponent];
+    if ( [appName length] == 0 )
+        appName = [[NSProcessInfo processInfo] processName];
+
+    /* The first item of the main menu is always the application menu; its own
+     * title is ignored, the submenu's title is what the menu bar displays. */
+    NSMenu     *menuBar     = [[NSMenu alloc] initWithTitle:@""];
+    NSMenuItem *appMenuItem = [menuBar addItemWithTitle:@"" action:NULL keyEquivalent:@""];
+    NSMenu     *appMenu     = [[NSMenu alloc] initWithTitle:appName];
+    [appMenuItem setSubmenu:appMenu];
+
+    [appMenu addItemWithTitle:[@"Hide " stringByAppendingString:appName] action:@selector( hide: ) keyEquivalent:@"h"];
+    NSMenuItem *hideOthers = [appMenu addItemWithTitle:@"Hide Others"
+                                                action:@selector( hideOtherApplications: )
+                                         keyEquivalent:@"h"];
+    [hideOthers setKeyEquivalentModifierMask:( NSEventModifierFlagOption | NSEventModifierFlagCommand )];
+    [appMenu addItemWithTitle:@"Show All" action:@selector( unhideAllApplications: ) keyEquivalent:@""];
+    [appMenu addItem:[NSMenuItem separatorItem]];
+
+    static fgApplicationDelegate *delegate;
+    if ( delegate == nil )
+        delegate = [[fgApplicationDelegate alloc] init];
+    if ( [NSApp delegate] == nil )
+        [NSApp setDelegate:delegate];
+
+    NSMenuItem *quit = [appMenu addItemWithTitle:[@"Quit " stringByAppendingString:appName]
+                                          action:@selector( fghQuit: )
+                                   keyEquivalent:@"q"];
+    [quit setTarget:delegate];
+
+    [NSApp setMainMenu:menuBar];
+
+    [appMenu release];
+    [menuBar release];
+}
+
 void fgPlatformInitialize( const char *displayName )
 {
     AUTORELEASE_POOL;
@@ -39,6 +118,7 @@ void fgPlatformInitialize( const char *displayName )
     if ( !application_initialized ) {
         [NSApplication sharedApplication]; // This creates the singleton instance of NSApplication (NSApp)
         [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+        fghInstallApplicationMenu( );
         application_initialized = YES;
     }
 
