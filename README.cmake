@@ -92,6 +92,8 @@ FREEGLUT_WAYLAND            [ON, OFF] Link with Wayland libraries instead
 FREEGLUT_COCOA              [ON, OFF] Build support for Cocoa (macOS)
 FREEGLUT_COCOA_SCROLLING_DELTA [ON, OFF] Use pixel-based scrolling deltas
                             on Cocoa instead of line deltas
+FREEGLUT_COCOA_MOUSEWHEEL_X_AXIS [ON, OFF] Report horizontal mouse
+                            wheel movement via glutMouseWheelFunc on Cocoa
 FREEGLUT_PRINT_ERRORS       [ON, OFF] Controls whether errors are
                             default handled or not when user does not
                             provide an error callback

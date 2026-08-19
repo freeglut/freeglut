@@ -576,6 +576,43 @@ static void fghCocoaContentOriginToFreeglut( const SFG_Window *window, NSRect co
     [self mouseDragged:event];
 }
 
+- (void)handleMouseWheel:(int)wheel direction:(int)direction mouseLoc:(NSPoint)mouseLoc
+{
+    /*
+     * Execute the mouse or mouse wheel callback.
+     * If a mouse wheel callback has not been registered, forward wheel events
+     * to the mouse callback as button presses (GLUT_DOWN followed by GLUT_UP)
+     * using buttons 3/4 for wheel 0 (vertical) and buttons 5/6 for wheel 1 (horizontal).
+     *
+     * This matches XQuartz / X11 behavior (where wheel events are reported as
+     * button presses for legacy GLUT applications), though it is a divergence
+     * from native macOS GLUT which does not report wheel events via glutMouseFunc.
+     */
+
+#if !defined( FREEGLUT_COCOA_MOUSEWHEEL_X_AXIS )
+    /*
+     * By default, only vertical scroll (wheel 0) is reported to glutMouseWheelFunc.
+     * Horizontal scroll events (wheel != 0) are ignored when a mouse wheel callback
+     * is registered, but are forwarded to glutMouseFunc as buttons 5/6 when not.
+     */
+    if ( FETCH_WCB( *self.fgWindow, MouseWheel ) && wheel != 0 ) {
+        return;
+    }
+#endif
+
+    if ( FETCH_WCB( *self.fgWindow, MouseWheel ) ) {
+        INVOKE_WCB( *self.fgWindow, MouseWheel, ( wheel, direction, mouseLoc.x, mouseLoc.y ) );
+    }
+    else {
+        int button = wheel * 2 + 3;
+        if ( direction < 0 ) {
+            button++;
+        }
+        INVOKE_WCB( *self.fgWindow, Mouse, ( button, GLUT_DOWN, mouseLoc.x, mouseLoc.y ) );
+        INVOKE_WCB( *self.fgWindow, Mouse, ( button, GLUT_UP, mouseLoc.x, mouseLoc.y ) );
+    }
+}
+
 - (void)scrollWheel:(NSEvent *)event
 {
     AUTORELEASE_POOL;
@@ -622,37 +659,33 @@ static void fghCocoaContentOriginToFreeglut( const SFG_Window *window, NSRect co
 
     // A coarse scroll event corresponds to one physical wheel step.
     if ( !isContinuous ) {
-        // unofficial horizontal scrolling - calls MouseWheel with wheel = fgMouseXWheel (1)
-#ifdef REPORT_MOUSEWHEEL_X_AXIS
         if ( deltaX != 0.0 ) {
             int direction = ( deltaX > 0.0 ) ? 1 : -1;
-            INVOKE_WCB( *self.fgWindow, MouseWheel,
-                ( FG_MOUSE_WHEEL_X, direction, mouseLoc.x, mouseLoc.y ) );
+            [self handleMouseWheel:FG_MOUSE_WHEEL_X direction:direction mouseLoc:mouseLoc];
         }
-#endif
         if ( deltaY != 0.0 ) {
             int direction = ( deltaY > 0.0 ) ? 1 : -1;
-            INVOKE_WCB( *self.fgWindow, MouseWheel,
-                ( FG_MOUSE_WHEEL_Y, direction, mouseLoc.x, mouseLoc.y ) );
+            [self handleMouseWheel:FG_MOUSE_WHEEL_Y direction:direction mouseLoc:mouseLoc];
         }
         return;
     }
 
-#ifdef REPORT_MOUSEWHEEL_X_AXIS
+    /*
+     * The glutMouseWheel documentation specifies direction as +/-1 rather than
+     * reporting scroll magnitude. If the accumulated scroll delta exceeds
+     * fgWheelStep, repeatedly invoke the callback in discrete steps to drain it.
+     */
     self.continuousWheelDeltaX += deltaX;
     while ( fabs( self.continuousWheelDeltaX ) >= fgWheelStep ) {
         int direction = ( self.continuousWheelDeltaX > 0.0 ) ? 1 : -1;
-        INVOKE_WCB( *self.fgWindow, MouseWheel,
-            ( FG_MOUSE_WHEEL_X, direction, mouseLoc.x, mouseLoc.y ) );
+        [self handleMouseWheel:FG_MOUSE_WHEEL_X direction:direction mouseLoc:mouseLoc];
         self.continuousWheelDeltaX -= direction * fgWheelStep;
     }
-#endif
 
     self.continuousWheelDeltaY += deltaY;
     while ( fabs( self.continuousWheelDeltaY ) >= fgWheelStep ) {
         int direction = ( self.continuousWheelDeltaY > 0.0 ) ? 1 : -1;
-        INVOKE_WCB( *self.fgWindow, MouseWheel,
-            ( FG_MOUSE_WHEEL_Y, direction, mouseLoc.x, mouseLoc.y ) );
+        [self handleMouseWheel:FG_MOUSE_WHEEL_Y direction:direction mouseLoc:mouseLoc];
         self.continuousWheelDeltaY -= direction * fgWheelStep;
     }
 }
