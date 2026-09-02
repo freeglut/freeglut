@@ -802,6 +802,8 @@ ADD_DEMO(cursors         progs/demos/cursors/cursors.c)
 # Define static build dependencies
 IF(WIN32)
   SET(PC_LIBS_PRIVATE "-lopengl32 -lwinmm -lgdi32")
+ELSEIF(FREEGLUT_COCOA)
+  SET(PC_LIBS_PRIVATE "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -lm")
 ELSEIF(FREEGLUT_GLES)
   IF(ANDROID)
     SET(PC_LIBS_PRIVATE "-llog -landroid -lGLESv2 -lGLESv1_CM -lEGL -lm")
