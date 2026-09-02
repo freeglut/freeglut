@@ -665,6 +665,11 @@ ELSE()
 
     IF(FREEGLUT_BUILD_SHARED_LIBS)
       SET_TARGET_PROPERTIES(freeglut PROPERTIES VERSION ${SO_MAJOR}.${SO_MINOR}.${SO_REV} SOVERSION ${SO_MAJOR} OUTPUT_NAME ${LIBNAME})
+      IF(APPLE)
+        # Include the install path in lib, so it can be linked with -lglut
+        # without the need for RPATH
+        SET_TARGET_PROPERTIES(freeglut PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
+      ENDIF()
     ENDIF()
     IF(FREEGLUT_BUILD_STATIC_LIBS)
       SET_TARGET_PROPERTIES(freeglut_static PROPERTIES OUTPUT_NAME ${LIBNAME})
