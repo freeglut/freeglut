@@ -18,13 +18,51 @@ jobs:
         true
 
     - name: generate makefile
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DFREEGLUT_BUILD_DEMOS=ON -DFREEGLUT_COCOA=ON .
+      run: >-
+        cmake -S . -B build
+        -DCMAKE_BUILD_TYPE=Release
+        -DFREEGLUT_BUILD_DEMOS=ON
+        -DFREEGLUT_COCOA=ON
 
     - name: build freeglut
-      run: make
+      run: cmake --build build --config Release
 
     - name: stage install
-      run: DESTDIR=freeglut-instdir make install
+      run: DESTDIR="$PWD/freeglut-instdir" cmake --install build --config Release
+
+    - name: verify installed shared library
+      run: |
+        smoke_prefix="$RUNNER_TEMP/freeglut-prefix"
+        cmake -S . -B "$RUNNER_TEMP/freeglut-smoke-build" \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX="$smoke_prefix" \
+          -DFREEGLUT_BUILD_DEMOS=OFF \
+          -DFREEGLUT_BUILD_STATIC_LIBS=OFF \
+          -DFREEGLUT_COCOA=ON
+        cmake --build "$RUNNER_TEMP/freeglut-smoke-build" --config Release
+        cmake --install "$RUNNER_TEMP/freeglut-smoke-build" --config Release
+
+        cat > "$RUNNER_TEMP/freeglut-link-smoke.c" <<'EOF'
+        #include <GL/freeglut.h>
+
+        static void (*volatile freeglut_symbol)(int *, char **) = glutInit;
+
+        int main(void)
+        {
+            return freeglut_symbol == 0;
+        }
+        EOF
+        export PKG_CONFIG_PATH="$smoke_prefix/lib/pkgconfig"
+        cc "$RUNNER_TEMP/freeglut-link-smoke.c" \
+          $(pkg-config --cflags --libs glut) \
+          -o "$RUNNER_TEMP/freeglut-link-smoke"
+        test "$(otool -D "$smoke_prefix/lib/libglut.dylib" | tail -n 1)" = \
+          "$smoke_prefix/lib/libglut.3.dylib"
+        if otool -l "$RUNNER_TEMP/freeglut-link-smoke" | grep -q LC_RPATH; then
+          echo "unexpected LC_RPATH in pkg-config consumer"
+          exit 1
+        fi
+        "$RUNNER_TEMP/freeglut-link-smoke"
 
     - uses: actions/upload-artifact@v4
       with:
